@@ -1,0 +1,2 @@
+include ':app', ':video-compress-library'
+include ':common-library'

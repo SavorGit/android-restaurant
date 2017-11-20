@@ -1,0 +1,137 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion COMPILE_SDK_VERSION as int
+    buildToolsVersion BUILD_TOOLS_VERSION
+//    useLibrary 'org.apache.http.legacy'
+    defaultConfig {
+        applicationId "com.savor.resturant"
+        minSdkVersion MIN_SDK_VERSION as int
+        targetSdkVersion TARGET_SDK_VERSION as int
+        versionCode 2017062001
+        versionName "1.0"
+
+        flavorDimensions "versionCode"
+        multiDexEnabled true
+        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xiaoredian"]
+//        abiFilters 'armeabi'// 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+    }
+
+    //配置keystore签名
+    signingConfigs {
+        debug {
+            storeFile file("/files/SavorAds.keystore")
+            storePassword "savorAds@savor.com"
+            keyAlias "SavorADS"
+            keyPassword "savorAds@savor.com"
+        }
+
+        release {
+            storeFile file("/files/SavorAds.keystore")
+            storePassword "savorAds@savor.com"
+            keyAlias "SavorADS"
+            keyPassword "savorAds@savor.com"
+        }
+    }
+
+    buildTypes {
+        debug {
+            // 显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+
+            minifyEnabled false
+            zipAlignEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+        }
+        release {
+            // 不显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+
+            minifyEnabled false
+            zipAlignEnabled true
+            // 移除无用的resource文件
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+    productFlavors {
+        rerdian {}
+        le {}
+//        xiaomi {}
+//        openqq {}
+//        huawei {}
+//        wandoujia {}
+//        _360 {}
+//        baidu {}
+//        wostore{}
+//        anzhi{}
+//        weixin{}
+//        oppo {}
+//        vivo {}
+//        lenovo {}
+//        flyme {}
+//        pp {}
+    }
+
+    // 多渠道打包
+
+    productFlavors.all {
+        flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    // classpath排除
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+    }
+
+    dexOptions {
+        preDexLibraries false
+        jumboMode = false
+//        javaMaxHeapSize "4g"
+    }
+    buildToolsVersion '26.0.2'
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile project(':common-library')
+    compile project(':video-compress-library')
+    compile 'com.google.code.gson:gson:2.8.0'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
+    compile 'com.android.support:multidex:1.0.0'
+}
+
+
+
+
+
+
+
+
+
+

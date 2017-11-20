@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f5f5f5"
+    tools:context="com.savor.resturant.activity.LinkTvActivity">
+    <include
+        android:id="@+id/topbar"
+        layout="@layout/layout_head_title"/>
+
+   <RelativeLayout
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginRight="2dp"
+       android:layout_marginLeft="2dp"
+       android:background="@drawable/ljtvsanweishu_bg"
+       android:layout_below="@id/topbar">
+       <RelativeLayout
+           android:layout_alignParentTop="true"
+           android:id="@+id/pic_la"
+
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content">
+
+           <ImageView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_centerInParent="true"
+               android:visibility="invisible"
+               android:src="@drawable/beidishipinbg"
+               />
+
+           <ImageView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_alignParentTop="true"
+               android:layout_alignParentRight="true"
+               android:layout_marginTop="15dp"
+               android:layout_marginRight="80dp"
+               android:visibility="invisible"
+               android:src="@drawable/disbind"
+               />
+       </RelativeLayout>
+       <LinearLayout
+           android:id="@+id/input_la"
+           android:padding="6dp"
+           android:gravity="center"
+           android:layout_marginTop="68dp"
+           android:layout_below="@id/pic_la"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+           <EditText
+               android:textSize="17sp"
+               android:gravity="center"
+               android:inputType="number"
+               android:maxLength="2"
+               android:id="@+id/et_first_num"
+               android:layout_marginRight="14dp"
+               android:layout_width="60dp"
+               android:clickable="true"
+               android:layout_height="wrap_content"
+               android:background="@drawable/shuruk"
+               />
+           <EditText
+               android:gravity="center"
+               android:inputType="number"
+               android:textSize="17sp"
+               android:maxLength="2"
+               android:clickable="true"
+               android:id="@+id/et_sencond_num"
+               android:layout_marginLeft="20dp"
+               android:layout_width="60dp"
+               android:layout_height="wrap_content"
+               android:layout_marginRight="14dp"
+               android:background="@drawable/shuruk"
+               />
+           <EditText
+               android:gravity="center"
+               android:inputType="number"
+               android:textSize="17sp"
+               android:maxLength="1"
+               android:clickable="true"
+               android:id="@+id/et_third_num"
+               android:layout_marginLeft="20dp"
+               android:layout_width="60dp"
+               android:layout_height="wrap_content"
+               android:background="@drawable/shuruk"
+               />
+       </LinearLayout>
+       <TextView
+           android:id="@+id/link_status"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_centerHorizontal="true"
+           android:layout_below="@id/input_la"
+           android:layout_marginTop="2dp"
+           android:textSize="15sp"
+           android:gravity="center"
+           android:padding="1dp"
+           android:textColor="@color/title_text_color"
+           android:text="请输入电视中的三位数连接电视"
+           android:layout_marginBottom="15dp"/>
+       <RelativeLayout
+           android:visibility="invisible"
+           android:id="@+id/relink_la"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_centerHorizontal="true"
+           android:layout_below="@id/input_la"
+           android:layout_marginTop="2dp">
+           <TextView
+               android:id="@+id/la_tv"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textSize="15sp"
+               android:gravity="center"
+               android:padding="1dp"
+               android:textColor="@color/title_text_color"
+               android:layout_alignParentLeft="true"
+               android:text="连接失败，"
+               />
+           <TextView
+               android:id="@+id/relink"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textSize="15sp"
+               android:gravity="center"
+               android:padding="1dp"
+               android:layout_toRightOf="@id/la_tv"
+               android:textColor="@color/red"
+               android:text="重新连接？"
+               />
+
+       </RelativeLayout>
+
+   </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/loading"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#8c000000">
+        <RelativeLayout
+            android:layout_width="140dp"
+            android:layout_height="120dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/lianjie_bg">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/lianjie"
+                android:layout_marginBottom="20dp"
+                />
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>
