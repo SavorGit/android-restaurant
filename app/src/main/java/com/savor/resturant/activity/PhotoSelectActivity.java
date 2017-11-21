@@ -366,6 +366,7 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
                 detailIntent.putExtra(IntentUtil.KEY_TYPE, type);
                 detailIntent.putExtra(IntentUtil.KEY_SLIDE, slideInfo);
                 detailIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                detailIntent.putExtra("type",slideType);
                 startActivity(detailIntent);
                 this.finish();
                 break;

@@ -134,6 +134,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         }
     };
     private BindTvPresenter mBindTvPresenter;
+    private SlideManager.SlideType slideType;
 
     private void checkLinkStatus() {
         TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
@@ -197,6 +198,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         setContentView(R.layout.activity_slide_detail);
         mContext = SlideDetailActivity.this;
         slideInfo = (SlideSetInfo) getIntent().getSerializableExtra(IntentUtil.KEY_SLIDE);
+        slideType = (SlideManager.SlideType) getIntent().getSerializableExtra("type");
         getViews();
         setViews();
         setListeners();
@@ -327,6 +329,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                   intent.putExtra("photos",slideInfo);
                   intent.putExtra("position",i);
                   intent.setClass(SlideDetailActivity.this,SlidePreviewActivity.class);
+                  intent.putExtra("type",slideType);
                   startActivity(intent);
               }
               slideDetailAdapter.notifyDataSetChanged();
@@ -386,7 +389,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     }
 
     public void showSlideSettings() {
-        settingDialog = new SlideSettingsDialog(this);
+        settingDialog = new SlideSettingsDialog(this,slideType);
         settingDialog.builder()
         .setCancelable(false)
                 .setNegativeButton("取消", new View.OnClickListener() {
@@ -583,7 +586,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
      * 保存编辑后的幻灯片集
      */
     private void save () {
-        SlideManager instance = SlideManager.getInstance(SlideManager.SlideType.IMAGE);
+        SlideManager instance = SlideManager.getInstance(slideType);
         //添加幻灯片组至该幻灯片列表
         if (instance.containGroup(slideInfo))
             instance.removeGroup(slideInfo);

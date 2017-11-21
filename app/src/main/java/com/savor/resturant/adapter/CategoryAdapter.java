@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.savor.resturant.R;
 import com.savor.resturant.bean.CategoryItemVo;
+import com.savor.resturant.utils.ConstantValues;
 
 
 import java.util.ArrayList;
@@ -69,6 +70,17 @@ public class CategoryAdapter extends BaseAdapter {
                 holder.category_item_layout.setBackgroundColor(mContext.getResources().getColor(R.color.content_bg_gray));
                 holder.tv_category_name.setTextColor(Color.parseColor("#acacac"));
             }
+
+            int id = categoryItemVo.getId();
+            switch (id) {
+                case ConstantValues.CATEGORY_SLIDE:
+                    holder.iv_cover.setImageResource(R.drawable.ico_slide);
+                    break;
+                case ConstantValues.CATEGORY_VIDEO:
+                    holder.iv_cover.setImageResource(R.drawable.ico_slide_video);
+                    break;
+            }
+
             holder.tv_category_name.setText(categoryItemVo.getName());
         }
         return convertView;

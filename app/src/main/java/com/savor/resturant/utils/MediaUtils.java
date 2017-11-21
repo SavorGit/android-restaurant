@@ -60,7 +60,6 @@ public class MediaUtils {
     /**
      * 获取本地视频信息
      * @param context
-     * @param list
      */
     public static void getVideoInfo(Context context, HashMap<String, ArrayList<String>> map) {
         //获取视频信息表

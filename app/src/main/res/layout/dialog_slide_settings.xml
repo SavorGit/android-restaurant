@@ -8,129 +8,216 @@
     android:orientation="vertical">
 
     <TextView
-        tools:text="当前正在投屏的包间-v400"
-        android:background="@drawable/dialog_hint_text_bg"
-        android:visibility="visible"
         android:id="@+id/txt_title"
         android:layout_width="match_parent"
         android:layout_height="49dp"
+        android:background="@drawable/dialog_hint_text_bg"
         android:gravity="center"
         android:textColor="@color/white"
-        android:textSize="17sp" />
+        android:textSize="17sp"
+        android:visibility="visible"
+        tools:text="当前正在投屏的包间-v400" />
 
-    <TextView
-        android:layout_marginBottom="15dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
-        android:text="单张图片停留时间"
-        android:textColor="@color/dialog_text_black"
-        android:textSize="14sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="投屏质量"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="(高质量投屏，速度较慢)"
+            android:paddingLeft="20dp" />
+
+    </LinearLayout>
+
     <LinearLayout
-        android:layout_marginBottom="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="12dp"
+        android:paddingTop="20dp">
+
+        <RadioGroup
+            android:id="@+id/rg_video_quality"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_high_quality"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/radio_button_bg"
+                android:button="@null"
+                android:checked="true"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp"
+                android:text="高清"
+                android:textColor="@drawable/radio_text_color_selector"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/rb_low_quality"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/radio_button_bg"
+                android:button="@null"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp"
+                android:text="普通"
+                android:textColor="@drawable/radio_text_color_selector" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_image_time"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <LinearLayout
-            android:gravity="center"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/single_time_3s"
-                android:background="@drawable/bg_hollow_corner_red"
-                android:gravity="center"
-                android:text="3s"
-                android:textSize="15sp"
-                android:textColor="@color/color_red_light"
-                android:layout_width="48dp"
-                android:layout_height="28dp" />
-        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:text="单张图片停留时间"
+            android:textColor="@color/dialog_text_black"
+            android:textSize="14sp" />
 
         <LinearLayout
-            android:gravity="center"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/single_time_5s"
-                android:textColor="@color/white"
-                android:background="@drawable/bg_solid_corner_red"
-                android:gravity="center"
-                android:text="5s"
-                android:textSize="15sp"
-                android:layout_width="48dp"
-                android:layout_height="28dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:gravity="center"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/single_time_8s"
-                android:textSize="15sp"
-                android:background="@drawable/bg_hollow_corner_red"
-                android:textColor="@color/color_red_light"
-                android:gravity="center"
-                android:text="8s"
-                android:layout_width="48dp"
-                android:layout_height="28dp" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/single_time_3s"
+                    android:layout_width="48dp"
+                    android:layout_height="28dp"
+                    android:background="@drawable/bg_hollow_corner_red"
+                    android:gravity="center"
+                    android:text="3s"
+                    android:textColor="@color/color_red_light"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/single_time_5s"
+                    android:layout_width="48dp"
+                    android:layout_height="28dp"
+                    android:background="@drawable/bg_solid_corner_red"
+                    android:gravity="center"
+                    android:text="5s"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/single_time_8s"
+                    android:layout_width="48dp"
+                    android:layout_height="28dp"
+                    android:background="@drawable/bg_hollow_corner_red"
+                    android:gravity="center"
+                    android:text="8s"
+                    android:textColor="@color/color_red_light"
+                    android:textSize="15sp" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="35dp"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:paddingTop="10dp">
+
         <TextView
-            android:layout_marginRight="10dp"
-            android:text="循环播放"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="循环播放" />
+
         <ImageView
             android:id="@+id/iv_loop_off"
-            android:layout_marginRight="15dp"
-            android:src="@drawable/loop_off"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/loop_off" />
+
         <TextView
             android:id="@+id/tv_loop_time"
-            android:textSize="17sp"
-            android:textColor="@color/color_red_light"
-            android:text="30分钟"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="30分钟"
+            android:textColor="@color/color_red_light"
+            android:textSize="17sp" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/ll_seekbar_time"
-        android:gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
         <TextView
-            android:layout_marginLeft="15dp"
-            android:text="1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="1" />
+
         <SeekBar
             android:id="@+id/seekbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:max="120"
             android:progress="30"
             android:progressDrawable="@drawable/slide_settings_progressbar"
-            android:thumb="@drawable/seekbar_thumb"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:thumb="@drawable/seekbar_thumb" />
+
         <TextView
-            android:textSize="14sp"
-            android:textColor="@color/dialog_text_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="15dp"
             android:text="120分钟"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:textColor="@color/dialog_text_black"
+            android:textSize="14sp" />
     </LinearLayout>
 
 
@@ -171,6 +258,7 @@
             android:textColor="@color/actionsheet_blue"
             android:textSize="16sp"
             android:textStyle="bold" />
+
         <ImageView
             android:id="@+id/line2"
             android:layout_width="0.5dp"

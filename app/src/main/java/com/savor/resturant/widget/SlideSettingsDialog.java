@@ -2,6 +2,7 @@ package com.savor.resturant.widget;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.common.api.utils.DensityUtil;
 import com.savor.resturant.R;
 import com.savor.resturant.utils.RecordUtils;
+import com.savor.resturant.utils.SlideManager;
 import com.savor.resturant.utils.WifiUtil;
 
 import java.util.HashMap;
@@ -25,6 +27,7 @@ import java.util.HashMap;
  * Created by luminita on 16/11/21.
  */
 public class SlideSettingsDialog implements OnClickListener {
+    private final SlideManager.SlideType slideType;
     private Context context;
     private Dialog dialog;
     /**单张图片投屏时间*/
@@ -50,9 +53,11 @@ public class SlideSettingsDialog implements OnClickListener {
     private TextView mEightSecTv;
     private ImageView mLoopOffIv;
     private SeekBar mSeekBar;
+    private LinearLayout mImageLoopTimeLayout;
 
-    public SlideSettingsDialog(Context context) {
+    public SlideSettingsDialog(Context context, SlideManager.SlideType slideType) {
         this.context = context;
+        this.slideType = slideType;
     }
 
 
@@ -61,6 +66,7 @@ public class SlideSettingsDialog implements OnClickListener {
         lLayout_bg = (LinearLayout) view.findViewById(R.id.layout_bg);
         mSeekBar = (SeekBar) view.findViewById(R.id.seekbar);
         txt_title = (TextView) view.findViewById(R.id.txt_title);
+        mImageLoopTimeLayout = (LinearLayout) view.findViewById(R.id.ll_image_time);
         btn_neg = (Button) view.findViewById(R.id.btn_neg);
         btn_neg.setVisibility(View.GONE);
         btn_pos = (Button) view.findViewById(R.id.btn_pos);
@@ -116,6 +122,15 @@ public class SlideSettingsDialog implements OnClickListener {
 
             }
         });
+
+        switch (slideType) {
+            case IMAGE:
+
+                break;
+            case VIDEO:
+                mImageLoopTimeLayout.setVisibility(View.GONE);
+                break;
+        }
         return this;
     }
 

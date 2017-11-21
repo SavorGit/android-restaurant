@@ -81,7 +81,9 @@ public class SlideDetailAdapter extends BaseAdapter {
         String assetpath = mList.get(i).getAssetpath();
         File file = new File(assetpath);
         if(file!=null&&file.exists()) {
-            Glide.with(mContext).load(assetpath).diskCacheStrategy(DiskCacheStrategy.NONE).centerCrop().into(viewHolder.picture);
+            Glide.with(mContext).load(assetpath).
+                    placeholder(R.drawable.empty_slide).dontAnimate()
+                    .diskCacheStrategy(DiskCacheStrategy.NONE).centerCrop().into(viewHolder.picture);
         }else {
             viewHolder.picture.setImageResource(R.drawable.ic_deleted_hint);
         }

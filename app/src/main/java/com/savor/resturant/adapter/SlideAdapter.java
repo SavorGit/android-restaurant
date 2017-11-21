@@ -55,9 +55,9 @@ public class SlideAdapter extends PagerAdapter {
             String assetpath = pictureInfo.getAssetpath();
             File file  = new File(assetpath);
             if(file!=null&&file.exists()) {
-                Glide.with(mContext).load(pictureInfo.getAssetpath()).diskCacheStrategy(DiskCacheStrategy.NONE).into(imageView);
+                Glide.with(mContext).load(pictureInfo.getAssetpath()).placeholder(R.drawable.empty_slide).dontAnimate().diskCacheStrategy(DiskCacheStrategy.NONE).into(imageView);
             }else {
-                Glide.with(mContext).load(R.drawable.ic_deleted_hint).diskCacheStrategy(DiskCacheStrategy.NONE).into(imageView);
+                Glide.with(mContext).load(R.drawable.ic_deleted_hint).placeholder(R.drawable.empty_slide).dontAnimate().diskCacheStrategy(DiskCacheStrategy.NONE).into(imageView);
             }
         }
         container.addView(imageView, 0);

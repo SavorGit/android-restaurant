@@ -156,7 +156,12 @@ public class SlideListActivity extends BaseActivity implements View.OnClickListe
                     @Override
                     public void run() {
                         SlideSetInfo info = (SlideSetInfo) intent.getSerializableExtra(KEY_SLIDE);
-                        IntentUtil.openActivity(mContext, SlideDetailActivity.class, IntentUtil.TYPE_SLIDE_BY_LIST, info);
+                        Intent intent = new Intent(SlideListActivity.this, SlideDetailActivity.class);
+                        intent.putExtra(KEY_TYPE, IntentUtil.TYPE_SLIDE_BY_LIST);
+                        intent.putExtra(KEY_SLIDE, info);
+                        intent.putExtra("type",slideType);
+                        startActivity(intent);
+//                        IntentUtil.openActivity(mContext, SlideDetailActivity.class, IntentUtil.TYPE_SLIDE_BY_LIST, info);
                         setIntent(null);
                     }
                 },100);
@@ -309,7 +314,11 @@ public class SlideListActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void ItemClick(SlideSetInfo info) {
 
-
-        IntentUtil.openActivity(mContext, SlideDetailActivity.class, IntentUtil.TYPE_SLIDE_BY_LIST, info);
+        Intent intent = new Intent(this,SlideDetailActivity.class);
+        intent.putExtra(KEY_TYPE, IntentUtil.TYPE_SLIDE_BY_LIST);
+        intent.putExtra(KEY_SLIDE, info);
+        intent.putExtra("type",slideType);
+        startActivity(intent);
+//        IntentUtil.openActivity(mContext, SlideDetailActivity.class, IntentUtil.TYPE_SLIDE_BY_LIST, info);
     }
 }
