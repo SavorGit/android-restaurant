@@ -442,7 +442,15 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
 
     private void initCreateSlideBtn() {
         if(picCount ==0 ) {
-            add.setText(R.string.please_select_pic);
+            switch (slideType) {
+                case IMAGE:
+                    add.setText(R.string.please_select_pic);
+                    break;
+                case VIDEO:
+                    add.setText(R.string.please_select_video);
+                    break;
+            }
+
             add.setTextColor(getResources().getColor(R.color.dialog_text_black));
         }else {
             add.setText(R.string.create_slide);

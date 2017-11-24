@@ -21,36 +21,18 @@ public class SlideSetInfo implements Serializable {
     public List<MediaInfo> imageList = new ArrayList<>();
 
     @Override
-    public String toString() {
-        return "SlideSetInfo{" +
-                "isNewCreate=" + isNewCreate +
-                ", groupName='" + groupName + '\'' +
-                ", updateTime=" + updateTime +
-                ", imageList=" + imageList +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         SlideSetInfo that = (SlideSetInfo) o;
 
-        if (isNewCreate != that.isNewCreate) return false;
-        if (updateTime != that.updateTime) return false;
-        if (groupName != null ? !groupName.equals(that.groupName) : that.groupName != null)
-            return false;
-        return imageList != null ? imageList.equals(that.imageList) : that.imageList == null;
+        return groupName != null ? groupName.equals(that.groupName) : that.groupName == null;
     }
 
     @Override
     public int hashCode() {
-        int result = (isNewCreate ? 1 : 0);
-        result = 31 * result + (groupName != null ? groupName.hashCode() : 0);
-        result = 31 * result + (int) (updateTime ^ (updateTime >>> 32));
-        result = 31 * result + (imageList != null ? imageList.hashCode() : 0);
-        return result;
+        return groupName != null ? groupName.hashCode() : 0;
     }
 
     public boolean isNewCreate() {

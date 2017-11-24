@@ -146,7 +146,7 @@ public class SlideListAdapter extends BaseAdapter {
     }
 
     public interface OnItemSlideClickListener {
-        void ItemClick(SlideSetInfo info);
+        void onItemClick(SlideSetInfo info);
     }
     /**
      * 单击收藏事件监听器
@@ -160,7 +160,7 @@ public class SlideListAdapter extends BaseAdapter {
 
         @Override
         public void onClick(View view) {
-            itemSlideClickListener.ItemClick(slideSetInfo);
+            itemSlideClickListener.onItemClick(slideSetInfo);
         }
     }
 

@@ -174,11 +174,6 @@ public class PhotoActivity extends BaseActivity implements View.OnClickListener{
                             dintent.putExtra(IntentUtil.MEDIA_TYPE,slideType);
 //        intent.putStringArrayListExtra(KEY_PHOTO_LIST, picList);
                             startActivity(dintent);
-                            IntentUtil.openActivity(PhotoActivity.this,
-                                    PhotoSelectActivity.class,
-                                    IntentUtil.TYPE_SLIDE_BY_DETAIL,
-                                    slideInfo,
-                                    (ArrayList<MediaInfo>) childList);
                             break;
                     }
 

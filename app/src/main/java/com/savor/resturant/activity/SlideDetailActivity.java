@@ -290,6 +290,14 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
 
     @Override
     public void setViews() {
+        switch (slideType) {
+            case VIDEO:
+                add.setText("添加视频");
+                break;
+            case IMAGE:
+                add.setText("添加图片");
+                break;
+        }
         title.setText(slideInfo.groupName);
         picList = slideInfo.imageList;
         MediaUtils.getFolderAllNames(mContext, slideInfo.imageList,imageNameList);
@@ -353,7 +361,6 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                     return;
                 }
                 //跳转至照片列表
-//                IntentUtil.openActivity(SlideDetailActivity.this, PhotoActivity.class, IntentUtil.TYPE_SLIDE_BY_DETAIL, slideInfo);
                 Intent intent = new Intent(SlideDetailActivity.this, PhotoActivity.class);
                 intent.putExtra(KEY_TYPE, IntentUtil.TYPE_SLIDE_BY_DETAIL);
                 intent.putExtra(KEY_SLIDE, slideInfo);
@@ -377,7 +384,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                 performProjection();
                 break;
             case R.id.iv_delete:
-                delPicture();
+                delMedia();
                 break;
         }
     }
@@ -531,7 +538,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     /**
      * 从幻灯片集删除选中的照片
      */
-    private void delPicture() {
+    private void delMedia() {
         int delcount = 0; //需要删除的数量
         for (MediaInfo mediaInfo : picList) {
             if (mediaInfo.isChecked()) {
@@ -539,14 +546,39 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
             }
         }
         if (delcount == 0) {
-            ShowMessage.showToast(this, "请选择要删除的图片");
+            String msg = "";
+            switch (slideType) {
+                case IMAGE:
+                    msg = "请选择要删除的图片";
+                    break;
+                case VIDEO:
+                    msg = "请选择要删除的视频";
+                    break;
+            }
+            ShowMessage.showToast(this, msg);
             return;
         }
         String message = "";
         if(isCheckAll()) {
-            message = "将删除此幻灯片，但不会删除本地照片";
+            switch (slideType) {
+                case VIDEO:
+                    message = "将删除此幻灯片，但不会删除本地视频";
+                    break;
+                case IMAGE:
+                    message = "将删除此幻灯片，但不会删除本地照片";
+                    break;
+            }
+
         }else {
-            message = getString(R.string.confirm_delete_picture,delcount);
+            switch (slideType) {
+                case IMAGE:
+                    message = getString(R.string.confirm_delete_picture,delcount);
+                    break;
+                case VIDEO:
+                    message = getString(R.string.confirm_delete_video,delcount);
+                    break;
+            }
+
         }
         new CustomAlertDialog(this)
                 .builder()
@@ -573,8 +605,8 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
      */
     private void delForSlide() {
         if (mIsCheckAll) {    //全选删除，则删除幻灯片组
-            SlideManager.getInstance(SlideManager.SlideType.IMAGE).removeGroup(slideInfo);
-            SlideManager.getInstance(SlideManager.SlideType.IMAGE).saveSlide();
+            SlideManager.getInstance(slideType).removeGroup(slideInfo);
+            SlideManager.getInstance(slideType).saveSlide();
             finish();
         }
         Set<MediaInfo> toRemove = new HashSet<MediaInfo>();

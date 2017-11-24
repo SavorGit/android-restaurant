@@ -78,7 +78,7 @@ public class SlideManager {
      */
     public void saveSlide() {
         if (needSave) {
-            ArrayList<SlideSetInfo> toRemove = new ArrayList<SlideSetInfo>();
+            ArrayList<SlideSetInfo> toRemove = new ArrayList<>();
             for (SlideSetInfo bean : mData) {
                 if (bean.isNewCreate) {
                     if (bean.imageList.size() < 1) {

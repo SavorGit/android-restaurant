@@ -72,6 +72,7 @@
     <string name="add_lantern_slide">添加至幻灯片“%s”</string>
     <string name="confirm_select_picture">是否添加已勾选的这%d张图片</string>
     <string name="confirm_delete_picture">是否删除%1$d张图片</string>
+    <string name="confirm_delete_video">是否删除%1$d个视频</string>
     <string name="confirm_delete_lantern_slide">确认删除幻灯片%s</string>
     <string name="confirm_delete_lanternslide_msg">相片将不会从本地被删除</string>
     <string name="confirm_delete_picture_msg">相片将不会从本地被删除\n（/本幻灯片也将同时被删除）</string>
@@ -428,6 +429,7 @@
     <string name="pro_success">投屏成功</string>
     <string name="create">创建</string>
     <string name="please_select_pic">请先选择图片</string>
+    <string name="please_select_video">请先选择视频</string>
     <string name="create_slide">创建幻灯片</string>
     <string name="found_tv_hint">发现可连接电视，请连接</string>
 
