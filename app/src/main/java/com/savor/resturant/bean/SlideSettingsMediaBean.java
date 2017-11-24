@@ -3,10 +3,11 @@ package com.savor.resturant.bean;
 import java.io.Serializable;
 
 /**
+ * 幻灯片配置返回的实体类
  * Created by Administrator on 2017/6/14.
  */
 
-public class PictureBean implements Serializable{
+public class SlideSettingsMediaBean implements Serializable{
 
     private String name;
     private int exist;

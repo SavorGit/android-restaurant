@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.transition.Slide;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -23,10 +24,11 @@ import com.savor.resturant.R;
 import com.savor.resturant.adapter.SlideDetailAdapter;
 import com.savor.resturant.bean.ImageProResonse;
 import com.savor.resturant.bean.MediaInfo;
-import com.savor.resturant.bean.PictureBean;
+import com.savor.resturant.bean.SlideSettingsMediaBean;
 import com.savor.resturant.bean.SlideSetInfo;
 import com.savor.resturant.bean.TvBoxInfo;
 import com.savor.resturant.bean.TvBoxSSDPInfo;
+import com.savor.resturant.core.ApiRequestListener;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.ResponseErrorMessage;
 import com.savor.resturant.presenter.BindTvPresenter;
@@ -47,6 +49,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -65,7 +71,7 @@ import static com.savor.resturant.utils.IntentUtil.KEY_TYPE;
  */
 
 public class SlideDetailActivity extends BaseActivity implements InitViews, View.OnClickListener, IBindTvView {
-
+    public static final int BUFFER_SIZE = 1024 * 500;
     private ImageView back;
     private TextView title;
     private RelativeLayout editBar;
@@ -81,32 +87,43 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     // 所有图片名称
     public List<String> imageNameList = new ArrayList<>();
     private SlideDetailAdapter slideDetailAdapter;
-    private boolean mIsEdit =  false;
+    private boolean mIsEdit = false;
     private boolean mIsCheckAll = false;
     private TextView add;
     private SavorDialog mQrcodeDialog;
-    private List<PictureBean> pictureBeanResultList = new ArrayList<>();
-    private String currentUploadPicture=null;
-    private SlideSettingsDialog settingDialog=null;
+    private List<SlideSettingsMediaBean> slideSettingsMediaBeanResultList = new ArrayList<>();
+    private String currentUploadFile = null;
+    private SlideSettingsDialog settingDialog = null;
     /**
      * 投屏时遇到别人正在投屏，传1代表确认抢投，默认传0
      */
-    private int force=0;
+    private int force = 0;
     private CommonDialog dialog;
     private static final int TOAST_ERROR_MSG = 0x2;
     private static final int FORCE_MSG = 0x5;
     private static final int IMAGE_UPLOAD_RESPONSE = 0x6;
+    private static final int VIDEO_UPLOAD_RESPONSE = 1000;
     private static final int UPLOAD_TIMEOUT = 0x7;
     private static final int CHECK_LINK_STATUS = 0x8;
-    /**添加图片响应码*/
+    /**
+     * 添加图片响应码
+     */
     public static final int RESULT_CODE_ADD_PIC = 0x9;
-    /**当前操作类型*/
+    /**
+     * 当前操作类型
+     */
     private int mOperationType = TYPE_PRO;
-    /**当前操作点击投屏按钮*/
-    private static final int TYPE_PRO =  100;
-    /**当前操作点击幻灯片设置确定按钮去绑定*/
-    private static final int TYPE_CONFIRM=  101;
-    /**是否已经停止上传，比如上传过程中退出页面*/
+    /**
+     * 当前操作点击投屏按钮
+     */
+    private static final int TYPE_PRO = 100;
+    /**
+     * 当前操作点击幻灯片设置确定按钮去绑定
+     */
+    private static final int TYPE_CONFIRM = 101;
+    /**
+     * 是否已经停止上传，比如上传过程中退出页面
+     */
     private boolean isStopUpload;
     private Handler mHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
@@ -121,10 +138,10 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                 case TOAST_ERROR_MSG:
                     closeProgressBarDialog();
                     String messgae = (String) msg.obj;
-                    ShowMessage.showToast(SlideDetailActivity.this,messgae);
+                    ShowMessage.showToast(SlideDetailActivity.this, messgae);
                     break;
                 case FORCE_MSG:
-                    messgae = (String)msg.obj;
+                    messgae = (String) msg.obj;
                     closeProgressBarDialog();
                     showConfirm(messgae);
                     break;
@@ -136,19 +153,31 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     };
     private BindTvPresenter mBindTvPresenter;
     private SlideManager.SlideType slideType;
+    /**
+     * 视频碎片总数
+     */
+    private long count;
+    /**
+     * 当前上传视频碎片位置
+     */
+    private long offset;
+    /**当前正在上传视频第几个*/
+    private int currentOffset;
+    /**要上传的视频总数*/
+    private int currentVideoCount;
 
     private void checkLinkStatus() {
         TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
-        if(tvBoxSSDPInfo!=null && !TextUtils.isEmpty(tvBoxSSDPInfo.getBoxIp())) {
+        if (tvBoxSSDPInfo != null && !TextUtils.isEmpty(tvBoxSSDPInfo.getBoxIp())) {
             closeLinkingDialog();
             showSlideSettings();
-        }else {
+        } else {
             showLinkErrorDialog();
         }
     }
 
     public void showLinkErrorDialog() {
-        if(!this.isFinishing()){
+        if (!this.isFinishing()) {
             new HotsDialog(this)
                     .builder()
                     .setMsg("连接失败，请重新连接")
@@ -172,20 +201,29 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
 
 
     private void handleImageUploadResponse(Object obj) {
-        if (obj instanceof ImageProResonse){
+        if (obj instanceof ImageProResonse) {
             ImageProResonse resonse = (ImageProResonse) obj;
             int result = resonse.getResult();
-            if (result==0){
-                if (!TextUtils.isEmpty(currentUploadPicture)){
-                    for (PictureBean bean:pictureBeanResultList){
-                        if (bean.getName()==currentUploadPicture){
+            if (result == 0) {
+                if (!TextUtils.isEmpty(currentUploadFile)) {
+                    for (SlideSettingsMediaBean bean : slideSettingsMediaBeanResultList) {
+                        if (bean.getName() == currentUploadFile) {
                             bean.setExist(1);
                             break;
                         }
                     }
                 }
 
-                uploadPictureToServer();
+                switch (slideType) {
+                    case IMAGE:
+                        uploadPictureToServer();
+                        break;
+                    case VIDEO:
+                        currentOffset++;
+                        uploadVideoToServer();
+                        break;
+                }
+
             }
         }
     }
@@ -207,7 +245,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     }
 
     private void initPresenter() {
-        mBindTvPresenter = new BindTvPresenter(this,this);
+        mBindTvPresenter = new BindTvPresenter(this, this);
     }
 
     @Override
@@ -239,19 +277,19 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         slideInfo = (SlideSetInfo) getIntent().getSerializableExtra(KEY_SLIDE);
         refreshImageList(slideInfo);
 
-        if(slideInfo.imageList==null||slideInfo.imageList.size()==0) {
-           finish();
+        if (slideInfo.imageList == null || slideInfo.imageList.size() == 0) {
+            finish();
             return;
         }
         picList.clear();
         imageNameList.clear();
         picList = slideInfo.imageList;
-        MediaUtils.getFolderAllNames(mContext, slideInfo.imageList,imageNameList);
+        MediaUtils.getFolderAllNames(mContext, slideInfo.imageList, imageNameList);
         slideDetailAdapter.setData(picList);
         Intent intent = getIntent();
-        if(intent!=null) {
+        if (intent != null) {
             int type = intent.getIntExtra(KEY_TYPE, 0);
-            if(type == IntentUtil.TYPE_SLIDE_BY_DETAIL) {
+            if (type == IntentUtil.TYPE_SLIDE_BY_DETAIL) {
                 mIsEdit = true;
                 changeEditState();
             }
@@ -261,11 +299,11 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     private void refreshImageList(SlideSetInfo slideInfo) {
         List<MediaInfo> imageList = slideInfo.imageList;
         List<MediaInfo> tempList = new ArrayList<>();
-        if(imageList!=null&&imageList.size()>0) {
-            for(int i = 0;i<imageList.size();i++) {
+        if (imageList != null && imageList.size() > 0) {
+            for (int i = 0; i < imageList.size(); i++) {
                 MediaInfo mediaInfo = imageList.get(i);
                 String imagePath = mediaInfo.getAssetpath();
-                if(!TextUtils.isEmpty(imagePath)&&new File(imagePath).exists()) {
+                if (!TextUtils.isEmpty(imagePath) && new File(imagePath).exists()) {
                     tempList.add(mediaInfo);
                 }
             }
@@ -300,11 +338,11 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         }
         title.setText(slideInfo.groupName);
         picList = slideInfo.imageList;
-        MediaUtils.getFolderAllNames(mContext, slideInfo.imageList,imageNameList);
+        MediaUtils.getFolderAllNames(mContext, slideInfo.imageList, imageNameList);
         slideDetailAdapter = new SlideDetailAdapter(mContext);
         pictureGroup.setAdapter(slideDetailAdapter);
         slideDetailAdapter.setData(picList);
-        if(!AppUtils.isWifiNetwork(this)) {
+        if (!AppUtils.isWifiNetwork(this)) {
             showChangeWifiDialog();
         }
     }
@@ -322,29 +360,29 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         pictureGroup.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-              MediaInfo mediaInfo = picList.get(i);
-              if (mIsEdit) {
-                  mediaInfo.setChecked(!mediaInfo.isChecked());
-                  //如果照片通过单击全部选择，则相应的改变左下角全选按钮状态
-                  if (!mIsCheckAll && isCheckAll()){
-                      mIsCheckAll = true;
-                      checkAll.setText("取消全选");
-                      checkAll.setChecked(true);
-                  }
-                  if (!mediaInfo.isChecked() && mIsCheckAll) {
-                      mIsCheckAll = false;
-                      checkAll.setText("全选");
-                      checkAll.setChecked(false);
-                  }
-              } else {
-                  Intent intent = new Intent();
-                  intent.putExtra("photos",slideInfo);
-                  intent.putExtra("position",i);
-                  intent.setClass(SlideDetailActivity.this,SlidePreviewActivity.class);
-                  intent.putExtra("type",slideType);
-                  startActivity(intent);
-              }
-              slideDetailAdapter.notifyDataSetChanged();
+                MediaInfo mediaInfo = picList.get(i);
+                if (mIsEdit) {
+                    mediaInfo.setChecked(!mediaInfo.isChecked());
+                    //如果照片通过单击全部选择，则相应的改变左下角全选按钮状态
+                    if (!mIsCheckAll && isCheckAll()) {
+                        mIsCheckAll = true;
+                        checkAll.setText("取消全选");
+                        checkAll.setChecked(true);
+                    }
+                    if (!mediaInfo.isChecked() && mIsCheckAll) {
+                        mIsCheckAll = false;
+                        checkAll.setText("全选");
+                        checkAll.setChecked(false);
+                    }
+                } else {
+                    Intent intent = new Intent();
+                    intent.putExtra("photos", slideInfo);
+                    intent.putExtra("position", i);
+                    intent.setClass(SlideDetailActivity.this, SlidePreviewActivity.class);
+                    intent.putExtra("type", slideType);
+                    startActivity(intent);
+                }
+                slideDetailAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -369,8 +407,8 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                 break;
             case R.id.rl_edit:
                 changeEditState();
-                InputMethodManager imm =  (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                if(imm != null) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
                     imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(),
                             0);
                 }
@@ -391,13 +429,13 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
 
     private void performProjection() {
         isStopUpload = false;
-        if(!isFoundTv()) {
+        if (!isFoundTv()) {
             showChangeWifiDialog();
-        }else {
-            if(mSession.isBindTv()) {
+        } else {
+            if (mSession.isBindTv()) {
                 // 幻灯片设置
                 showSlideSettings();
-            }else{
+            } else {
                 // 搜索电视
                 mBindTvPresenter.bindTv();
             }
@@ -405,9 +443,9 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     }
 
     public void showSlideSettings() {
-        settingDialog = new SlideSettingsDialog(this,slideType);
+        settingDialog = new SlideSettingsDialog(this, slideType);
         settingDialog.builder()
-        .setCancelable(false)
+                .setCancelable(false)
                 .setNegativeButton("取消", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -418,13 +456,13 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                     @Override
                     public void onClick(View v) {
                         mOperationType = TYPE_CONFIRM;
-                        if(!isFoundTv()) {
+                        if (!isFoundTv()) {
                             showChangeWifiDialog();
-                        }else {
-                            if(mSession.isBindTv()) {
+                        } else {
+                            if (mSession.isBindTv()) {
                                 // 幻灯片设置
                                 performSlideSettingsConfirm();
-                            }else{
+                            } else {
                                 // 搜索电视
                                 mBindTvPresenter.bindTv();
                             }
@@ -432,18 +470,26 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
 
                     }
                 });
-        if(!settingDialog.isShowing())
-        settingDialog.show();
+        if (!settingDialog.isShowing())
+            settingDialog.show();
     }
 
     private void performSlideSettingsConfirm() {
         force = 0;
         boolean looping = settingDialog.isLooping();
         int loopTime = 0;
-        if(looping) {
-            loopTime = settingDialog.getLoopTime()*60;
+        if (looping) {
+            loopTime = settingDialog.getLoopTime() * 60;
         }
-        postSlideParamToServer(slideInfo.groupName,loopTime,settingDialog.getSingleTime(),force);
+
+        switch (slideType) {
+            case IMAGE:
+                postImageSlideParamToServer(slideInfo.groupName, loopTime, settingDialog.getSingleTime(), force);
+                break;
+            case VIDEO:
+                postVideoSlideParamToServer(slideInfo.groupName, loopTime, force);
+                break;
+        }
     }
 
     private void searchTv() {
@@ -457,23 +503,25 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
      */
     private void checkLinkStatusDelayed() {
         mHandler.removeMessages(CHECK_LINK_STATUS);
-        mHandler.sendEmptyMessageDelayed(CHECK_LINK_STATUS,15*1000);
+        mHandler.sendEmptyMessageDelayed(CHECK_LINK_STATUS, 15 * 1000);
     }
+
     /**
-     * 上传幻灯片参数到服务器端
-     * @param name 幻灯片名称
+     * 上传图片幻灯片参数到服务器端
+     *
+     * @param name     幻灯片名称
      * @param duration 总时长
      * @param interval 间隔时间
      */
-    public void postSlideParamToServer(String name,int duration,int interval,int force){
+    public void postImageSlideParamToServer(String name, int duration, int interval, int force) {
         JSONArray jsonArray = new JSONArray();
-        if (imageNameList!=null&&!imageNameList.isEmpty()){
-            for (String str:imageNameList){
+        if (imageNameList != null && !imageNameList.isEmpty()) {
+            for (String str : imageNameList) {
                 JSONObject jsonObject = new JSONObject();
                 try {
                     String picName = MediaUtils.getPicName(str);
-                    jsonObject.accumulate("name",picName);
-                    jsonObject.accumulate("exist","0");
+                    jsonObject.accumulate("name", picName);
+                    jsonObject.accumulate("exist", "0");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -481,12 +529,61 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
             }
 
         }
-        HashMap<String,Object> param = new HashMap<>();
-        param.put("name",name);
-        param.put("duration",duration+"");
-        param.put("interval",interval+"");
-        param.put("images",jsonArray);
-        AppApi.postSlideSettingToServer(mContext,mSession.getTVBoxUrl(),param,force,this);
+        HashMap<String, Object> param = new HashMap<>();
+        param.put("name", name);
+        param.put("duration", duration + "");
+        param.put("interval", interval + "");
+        param.put("images", jsonArray);
+        AppApi.postImageSlideSettingToServer(mContext, mSession.getTVBoxUrl(), param, force, this);
+    }
+
+    /**
+     * 上传图片幻灯片参数到服务器端
+     *
+     * @param name     幻灯片名称
+     * @param duration 总时长
+     */
+    public void postVideoSlideParamToServer(String name, int duration, int force) {
+        JSONArray jsonArray = new JSONArray();
+        int quality = settingDialog.getQuality();
+        long size = 0;
+        switch (quality) {
+            case SlideSettingsDialog.QUALITY_HIGH:
+                for (int i = 0; i < picList.size(); i++) {
+                    MediaInfo mediaInfo = picList.get(i);
+                    long length = mediaInfo.getSize();
+                    size += length;
+                }
+                break;
+            case SlideSettingsDialog.QUALITY_LOW:
+                for (int i = 0; i < picList.size(); i++) {
+                    MediaInfo mediaInfo = picList.get(i);
+                    long length = mediaInfo.getSize();
+                    size += length;
+                }
+                size = (long) (size / 3.0f);
+                break;
+        }
+        if (imageNameList != null && !imageNameList.isEmpty()) {
+            for (String str : imageNameList) {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    String videoName = MediaUtils.getVideoName(str, quality);
+                    jsonObject.accumulate("name", videoName);
+                    jsonObject.accumulate("length", size);
+                    jsonObject.accumulate("exist", "0");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                jsonArray.put(jsonObject);
+            }
+
+        }
+        HashMap<String, Object> param = new HashMap<>();
+        param.put("name", name);
+        param.put("duration", duration + "");
+        param.put("videos", jsonArray);
+        AppApi.postVideoSlideSettingToServer(mContext, mSession.getTVBoxUrl(), param, force, this);
     }
 
     /**
@@ -559,7 +656,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
             return;
         }
         String message = "";
-        if(isCheckAll()) {
+        if (isCheckAll()) {
             switch (slideType) {
                 case VIDEO:
                     message = "将删除此幻灯片，但不会删除本地视频";
@@ -569,13 +666,13 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                     break;
             }
 
-        }else {
+        } else {
             switch (slideType) {
                 case IMAGE:
-                    message = getString(R.string.confirm_delete_picture,delcount);
+                    message = getString(R.string.confirm_delete_picture, delcount);
                     break;
                 case VIDEO:
-                    message = getString(R.string.confirm_delete_video,delcount);
+                    message = getString(R.string.confirm_delete_video, delcount);
                     break;
             }
 
@@ -626,12 +723,12 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     /**
      * 保存编辑后的幻灯片集
      */
-    private void save () {
+    private void save() {
         SlideManager instance = SlideManager.getInstance(slideType);
         //添加幻灯片组至该幻灯片列表
         if (instance.containGroup(slideInfo))
             instance.removeGroup(slideInfo);
-        if(slideInfo!=null&&slideInfo.imageList!=null&&slideInfo.imageList.size()>0) {
+        if (slideInfo != null && slideInfo.imageList != null && slideInfo.imageList.size() > 0) {
             instance.addList(slideInfo);
             instance.saveSlide();
         }
@@ -649,48 +746,196 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     }
 
     private void showProgressBarDialog() {
-        if(this.isFinishing())
+        if (this.isFinishing())
             return;
-        if(mProgressBarDialog==null) {
+        if (mProgressBarDialog == null) {
             mProgressBarDialog = new LoadingProgressDialog(this);
         }
         mProgressBarDialog.show();
     }
 
     private void closeProgressBarDialog() {
-        if(mProgressBarDialog!=null) {
+        if (mProgressBarDialog != null) {
             mProgressBarDialog.dismiss();
+        }
+    }
+
+    /**
+     * 将幻灯片的设置信息发送给盒子以后，开始上传视频到盒子
+     */
+    private void uploadVideoToServer() {
+
+        if (slideSettingsMediaBeanResultList != null && slideSettingsMediaBeanResultList.size() > 0) {
+            updateProgress();
+
+            final boolean isUpload = false;
+            new Thread(){
+                @Override
+                public void run() {
+                    startUpload(isUpload);
+                }
+            }.start();
+
+        }
+    }
+
+    private void startUpload(boolean isUpload) {
+        for (SlideSettingsMediaBean bean : slideSettingsMediaBeanResultList) {
+            if (bean.getExist() == 0) {
+                currentVideoCount = slideInfo.imageList.size();
+
+//                for (MediaInfo mediaInfo : slideInfo.imageList) {// 遍历上传所有视频
+                    MediaInfo mediaInfo = slideInfo.imageList.get(currentOffset);
+                    final String fileUrl = mediaInfo.getAssetpath();
+                    final String videoName = MediaUtils.getVideoName(fileUrl, settingDialog.getQuality());
+                    String realName = MediaUtils.getMediaRealName(fileUrl);
+                    final long size = mediaInfo.getSize();
+                    // 首先切片然后，循环上传
+                    final String fragmentPath = mSession.getCompressPath(SlideDetailActivity.this) + File.separator + "frament";
+                    if (videoName.equals(bean.getName())) {
+                        // 如果大于切片最小单位直接上传，否则切片并上传
+                        if (size > BUFFER_SIZE) {
+//                                new Thread(){
+//                                    @Override
+//                                    public void run() {
+                            count = 0;
+                            offset = 0;
+                            if (size % BUFFER_SIZE == 0) {
+                                count = size
+                                        / BUFFER_SIZE;
+                            } else {
+                                count = (size / BUFFER_SIZE) + 1;
+                            }
+                            uploadVideoFragment(fileUrl, fragmentPath, videoName);
+//                                    }
+//                                }.start();
+                            currentUploadFile = bean.getName();
+                            break;
+                        }
+
+                    }
+
+
+//                        if (videoName.equals(bean.getName())){
+//                            isUpload = true;
+//                            String copyFileUrl = CompressImage.compressAndSaveBitmap(this, fileUrl,realName,false);
+//                            HashMap<String,Object> params = new HashMap<>();
+//                            params.put("fileName",videoName);
+//                            params.put("pptName",slideInfo.groupName);
+//                            params.put("range",slideInfo.groupName);
+//                            AppApi.updateImageFile(mContext,mSession.getTVBoxUrl(),copyFileUrl,params,this);
+//                            currentUploadFile = bean.getName();
+//                            break;
+//                        }
+//                }
+            }
+            if (isUpload) {
+                break;
+            }
+        }
+    }
+
+    private void uploadVideoFragment(final String fileUrl, final String fragmentPath, final String videoName) {
+        RandomAccessFile raf = null;
+        FileOutputStream tmpOut = null;
+        try {
+            raf = new RandomAccessFile(fileUrl, "r");
+            tmpOut = new FileOutputStream(fragmentPath);
+            raf.seek(offset * BUFFER_SIZE);
+            byte[] buffer = new byte[BUFFER_SIZE];
+            int read = raf.read(buffer);
+            tmpOut.write(buffer, 0, read);
+            final HashMap<String, Object> params = new HashMap<>();
+            params.put("fileName", videoName);
+            params.put("pptName", slideInfo.groupName);
+            params.put("range", offset * BUFFER_SIZE + "-" + (offset == count - 1 ? "" : offset * BUFFER_SIZE + BUFFER_SIZE));
+
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (offset == count - 1) {
+                        AppApi.updateVideoFile(mContext, mSession.getTVBoxUrl(), fragmentPath, params, SlideDetailActivity.this);
+                    } else {
+                        AppApi.updateVideoFile(mContext, mSession.getTVBoxUrl(), fragmentPath, params, new ApiRequestListener() {
+                            @Override
+                            public void onSuccess(AppApi.Action method, Object obj) {
+                                offset++;
+                                uploadVideoFragment(fileUrl, fragmentPath, videoName);
+                            }
+
+                            @Override
+                            public void onError(AppApi.Action method, Object obj) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        hideLoadingLayout();
+                                        ShowMessage.showToast(SlideDetailActivity.this, "上传失败");
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onNetworkFailed(AppApi.Action method) {
+
+                            }
+                        });
+
+                    }
+                }
+            });
+
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (raf != null) {
+                try {
+                    raf.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (tmpOut != null) {
+                try {
+                    tmpOut.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     /**
      * 将幻灯片的设置信息发送给盒子以后，开始上传图片到盒子
      */
-    private void uploadPictureToServer(){
+    private void uploadPictureToServer() {
 
-        if (pictureBeanResultList!=null&&pictureBeanResultList.size()>0){
+        if (slideSettingsMediaBeanResultList != null && slideSettingsMediaBeanResultList.size() > 0) {
             updateProgress();
 
-            boolean isUpload=false;
-            for (PictureBean bean:pictureBeanResultList){
-                if (bean.getExist()==0){
-                    for (MediaInfo mediaInfo:slideInfo.imageList){
+            boolean isUpload = false;
+            for (SlideSettingsMediaBean bean : slideSettingsMediaBeanResultList) {
+                if (bean.getExist() == 0) {
+                    for (MediaInfo mediaInfo : slideInfo.imageList) {
                         String fileUrl = mediaInfo.getAssetpath();
                         String picName = MediaUtils.getPicName(fileUrl);
-                        String realName = MediaUtils.getPicRealName(fileUrl);
-                        if (picName.equals(bean.getName())){
+                        String realName = MediaUtils.getMediaRealName(fileUrl);
+                        if (picName.equals(bean.getName())) {
                             isUpload = true;
-                            String copyFileUrl = CompressImage.compressAndSaveBitmap(this, fileUrl,realName,false);
-                            HashMap<String,Object> params = new HashMap<>();
-                            params.put("fileName",picName);
-                            params.put("pptName",slideInfo.groupName);
-                            AppApi.updateScreenProjectionFile(mContext,mSession.getTVBoxUrl(),copyFileUrl,params,this);
-                            currentUploadPicture = bean.getName();
+                            String copyFileUrl = CompressImage.compressAndSaveBitmap(this, fileUrl, realName, false);
+                            HashMap<String, Object> params = new HashMap<>();
+                            params.put("fileName", picName);
+                            params.put("pptName", slideInfo.groupName);
+                            AppApi.updateImageFile(mContext, mSession.getTVBoxUrl(), copyFileUrl, params, this);
+                            currentUploadFile = bean.getName();
                             break;
                         }
                     }
                 }
-                if (isUpload){
+                if (isUpload) {
                     break;
                 }
             }
@@ -699,29 +944,29 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
 
     private void updateProgress() {
         int count = 0;
-        for(int i = 0;i<pictureBeanResultList.size();i++) {
-            PictureBean pictureBean = pictureBeanResultList.get(i);
-            if(pictureBean.getExist() == 0) {
+        for (int i = 0; i < slideSettingsMediaBeanResultList.size(); i++) {
+            SlideSettingsMediaBean slideSettingsMediaBean = slideSettingsMediaBeanResultList.get(i);
+            if (slideSettingsMediaBean.getExist() == 0) {
                 count++;
             }
 
         }
-        if(count == 0) {
-            if(mProgressBarDialog!=null) {
+        if (count == 0) {
+            if (mProgressBarDialog != null) {
                 mProgressBarDialog.updatePercent(1);
             }
-            ShowMessage.showToast(this,getString(R.string.pro_success));
+            ShowMessage.showToast(this, getString(R.string.pro_success));
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     closeProgressBarDialog();
                     finish();
                 }
-            },100);
-        }else {
-            double percent = ((double)count)/pictureBeanResultList.size();
-            if(mProgressBarDialog!=null) {
-                mProgressBarDialog.updatePercent(1-percent);
+            }, 100);
+        } else {
+            double percent = ((double) count) / slideSettingsMediaBeanResultList.size();
+            if (mProgressBarDialog != null) {
+                mProgressBarDialog.updatePercent(1 - percent);
             }
         }
 
@@ -731,10 +976,22 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     public void onSuccess(AppApi.Action method, Object obj) {
         super.onSuccess(method, obj);
         switch (method) {
-            case POST_UPLOAD_SLIDESETTINGS_JSON:
-                if (obj instanceof List<?>){
-                    pictureBeanResultList = (List<PictureBean>) obj;
-                    if (settingDialog!=null&&settingDialog.isShowing()){
+            case POST_VIDEO_SLIDESETTINGS_JSON:
+                currentOffset = 0;
+                if (obj instanceof List<?>) {
+                    slideSettingsMediaBeanResultList = (List<SlideSettingsMediaBean>) obj;
+                    if (settingDialog != null && settingDialog.isShowing()) {
+                        settingDialog.dismiss();
+                    }
+                    showProgressBarDialog();
+                    force = 0;
+                    uploadVideoToServer();
+                }
+                break;
+            case POST_IMAGE_SLIDESETTINGS_JSON:
+                if (obj instanceof List<?>) {
+                    slideSettingsMediaBeanResultList = (List<SlideSettingsMediaBean>) obj;
+                    if (settingDialog != null && settingDialog.isShowing()) {
                         settingDialog.dismiss();
                     }
                     showProgressBarDialog();
@@ -743,7 +1000,15 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                 }
                 break;
             case POST_IMAGE_PROJECTION_JSON:
-                if(!isStopUpload) {
+                if (!isStopUpload) {
+                    Message message = Message.obtain();
+                    message.what = IMAGE_UPLOAD_RESPONSE;
+                    message.obj = obj;
+                    mHandler.sendMessage(message);
+                }
+                break;
+            case POST_VIDEO_PROJECTION_JSON:
+                if (!isStopUpload) {
                     Message message = Message.obtain();
                     message.what = IMAGE_UPLOAD_RESPONSE;
                     message.obj = obj;
@@ -758,44 +1023,44 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     public void onError(AppApi.Action method, Object obj) {
 
         switch (method) {
-            case POST_UPLOAD_SLIDESETTINGS_JSON:
-                if(obj instanceof ResponseErrorMessage) {
+            case POST_IMAGE_SLIDESETTINGS_JSON:
+                if (obj instanceof ResponseErrorMessage) {
                     ResponseErrorMessage message = (ResponseErrorMessage) obj;
                     int code = message.getCode();
                     String error_msg = message.getMessage();
                     Message msg = Message.obtain();
-                    if (code==4){
+                    if (code == 4) {
                         msg.what = FORCE_MSG;
                         msg.obj = error_msg;
                         mHandler.sendMessage(msg);
-                    }else {
+                    } else {
                         msg.what = TOAST_ERROR_MSG;
                         msg.obj = error_msg;
                         mHandler.sendMessage(msg);
                     }
-                }else if( obj == AppApi.ERROR_TIMEOUT) {
+                } else if (obj == AppApi.ERROR_TIMEOUT) {
                     mHandler.sendEmptyMessage(UPLOAD_TIMEOUT);
                 }
                 break;
             case POST_IMAGE_PROJECTION_JSON:
 //                mRequestScreenDialog.dismiss();
-                if(obj instanceof ResponseErrorMessage) {
+                if (obj instanceof ResponseErrorMessage) {
                     ResponseErrorMessage message = (ResponseErrorMessage) obj;
                     int code = message.getCode();
                     String error_msg = message.getMessage();
                     Message msg = Message.obtain();
-                    if (code==4){
+                    if (code == 4) {
                         msg.what = FORCE_MSG;
                         msg.obj = error_msg;
                         mHandler.sendMessage(msg);
-                    }else {
+                    } else {
                         msg.what = TOAST_ERROR_MSG;
                         msg.obj = error_msg;
                         mHandler.sendMessage(msg);
                     }
-                }else if( obj == AppApi.ERROR_TIMEOUT) {
+                } else if (obj == AppApi.ERROR_TIMEOUT) {
                     mHandler.sendEmptyMessage(UPLOAD_TIMEOUT);
-                }else if( obj == AppApi.ERROR_NETWORK_FAILED) {
+                } else if (obj == AppApi.ERROR_NETWORK_FAILED) {
                     mHandler.sendEmptyMessage(UPLOAD_TIMEOUT);
                 }
                 break;
@@ -805,22 +1070,23 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
 
     /**
      * 不好啦，别人正在投屏，弹出是否确认抢投按钮
+     *
      * @param msg
      */
-    private void showConfirm(String msg){
-        if(this.isFinishing()) {
+    private void showConfirm(String msg) {
+        if (this.isFinishing()) {
             LogUtils.d("savor:pro 当前页面已回收，不展示抢投提示");
             return;
         }
-        if (dialog!=null&&dialog.isShowing()){
+        if (dialog != null && dialog.isShowing()) {
             return;
         }
 
-        if(settingDialog!=null&&settingDialog.isShowing()) {
+        if (settingDialog != null && settingDialog.isShowing()) {
             settingDialog.dismiss();
         }
 
-        String content = "当前"+msg+"正在投屏,是否继续投屏?";
+        String content = "当前" + msg + "正在投屏,是否继续投屏?";
         dialog = new CommonDialog(this, content,
                 new CommonDialog.OnConfirmListener() {
                     @Override
@@ -828,17 +1094,25 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                         force = 1;
                         boolean looping = settingDialog.isLooping();
                         int loopTime = 0;
-                        if(looping) {
-                            loopTime = settingDialog.getLoopTime()*60;
+                        if (looping) {
+                            loopTime = settingDialog.getLoopTime() * 60;
                         }
-                        postSlideParamToServer(slideInfo.groupName,loopTime,settingDialog.getSingleTime(),force);
+                        switch (slideType) {
+                            case VIDEO:
+                                postVideoSlideParamToServer(slideInfo.groupName, loopTime, force);
+                                break;
+                            case IMAGE:
+                                postImageSlideParamToServer(slideInfo.groupName, loopTime, settingDialog.getSingleTime(), force);
+                                break;
+                        }
+
                     }
                 }, new CommonDialog.OnCancelListener() {
             @Override
             public void onCancel() {
                 dialog.cancel();
             }
-        },"继续投屏",true);
+        }, "继续投屏", true);
         dialog.show();
     }
 
@@ -854,11 +1128,11 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     protected void onDestroy() {
         super.onDestroy();
         isStopUpload = true;
-        if(mProgressBarDialog!=null) {
+        if (mProgressBarDialog != null) {
             mProgressBarDialog.dismiss();
             mProgressBarDialog = null;
         }
-        if(dialog!=null) {
+        if (dialog != null) {
             dialog.dismiss();
             dialog = null;
         }
@@ -866,8 +1140,8 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
 
     @Override
     public void readyForQrcode() {
-        if(mQrcodeDialog==null)
-            mQrcodeDialog = new SavorDialog(this,"正在呼出验证码");
+        if (mQrcodeDialog == null)
+            mQrcodeDialog = new SavorDialog(this, "正在呼出验证码");
         mQrcodeDialog.show();
     }
 
@@ -881,17 +1155,17 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
 
     @Override
     public void startLinkTv() {
-        Intent intent = new Intent(this,LinkTvActivity.class);
+        Intent intent = new Intent(this, LinkTvActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivityForResult(intent,0);
+        startActivityForResult(intent, 0);
     }
 
     @Override
     public void initBindcodeResult() {
-        ShowMessage.showToast(this,mSession.getSsid()+"连接成功，可以投屏");
-        if(mOperationType == TYPE_PRO) {
+        ShowMessage.showToast(this, mSession.getSsid() + "连接成功，可以投屏");
+        if (mOperationType == TYPE_PRO) {
             showSlideSettings();
-        }else if(mOperationType == TYPE_CONFIRM) {
+        } else if (mOperationType == TYPE_CONFIRM) {
             performSlideSettingsConfirm();
         }
     }
@@ -900,7 +1174,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == EXTRA_TV_INFO) {
-            if(data!=null) {
+            if (data != null) {
                 TvBoxInfo boxInfo = (TvBoxInfo) data.getSerializableExtra(EXRA_TV_BOX);
                 mBindTvPresenter.handleBindCodeResult(boxInfo);
             }

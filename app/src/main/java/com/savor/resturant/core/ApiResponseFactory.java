@@ -24,26 +24,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.savor.resturant.bean.BaseProResponse;
-import com.savor.resturant.bean.BottomHotelVodList;
-import com.savor.resturant.bean.CategoryBottomList;
-import com.savor.resturant.bean.CategoryItemVo;
-import com.savor.resturant.bean.CheckApInfo;
-import com.savor.resturant.bean.GameResult;
-import com.savor.resturant.bean.HotelMapBean;
-import com.savor.resturant.bean.LastTopList;
-import com.savor.resturant.bean.LocalVideoProPesponse;
-import com.savor.resturant.bean.PictureBean;
-import com.savor.resturant.bean.QuerySeekResponse;
-import com.savor.resturant.bean.RotateProResponse;
-import com.savor.resturant.bean.SeekProResponseVo;
+import com.savor.resturant.bean.SlideSettingsMediaBean;
 import com.savor.resturant.bean.SmallPlatformByGetIp;
-import com.savor.resturant.bean.StartUpSettingsBean;
-import com.savor.resturant.bean.TopHotelVodList;
 import com.savor.resturant.bean.TvBoxInfo;
 import com.savor.resturant.bean.UpgradeInfo;
-import com.savor.resturant.bean.VodListBean;
-import com.savor.resturant.bean.VodProResponse;
-import com.savor.resturant.bean.VolProResponseVo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -169,16 +153,28 @@ public class ApiResponseFactory {
                 result = gson.fromJson(info, new TypeToken<UpgradeInfo>() {
                 }.getType());
                 break;
-            case POST_UPLOAD_SLIDESETTINGS_JSON:
+            case POST_IMAGE_SLIDESETTINGS_JSON:
                 try {
                     JSONArray jsonArray = ret.getJSONArray("images");
-                    result = gson.fromJson(jsonArray.toString(), new TypeToken<List<PictureBean>>() {
+                    result = gson.fromJson(jsonArray.toString(), new TypeToken<List<SlideSettingsMediaBean>>() {
+                    }.getType());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case POST_VIDEO_SLIDESETTINGS_JSON:
+                try {
+                    JSONArray jsonArray = ret.getJSONArray("videos");
+                    result = gson.fromJson(jsonArray.toString(), new TypeToken<List<SlideSettingsMediaBean>>() {
                     }.getType());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 break;
             case POST_IMAGE_PROJECTION_JSON:
+                result = info;
+                break;
+            case POST_VIDEO_PROJECTION_JSON:
                 result = info;
                 break;
             case POST_NOTIFY_TVBOX_STOP_JSON:

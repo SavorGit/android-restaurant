@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -27,6 +28,8 @@ import java.util.HashMap;
  * Created by luminita on 16/11/21.
  */
 public class SlideSettingsDialog implements OnClickListener {
+    public static final int QUALITY_HIGH = 0x1;
+    public static final int QUALITY_LOW = 0x2;
     private final SlideManager.SlideType slideType;
     private Context context;
     private Dialog dialog;
@@ -54,6 +57,7 @@ public class SlideSettingsDialog implements OnClickListener {
     private ImageView mLoopOffIv;
     private SeekBar mSeekBar;
     private LinearLayout mImageLoopTimeLayout;
+    private RadioGroup mQualityRG;
 
     public SlideSettingsDialog(Context context, SlideManager.SlideType slideType) {
         this.context = context;
@@ -63,6 +67,7 @@ public class SlideSettingsDialog implements OnClickListener {
 
     public SlideSettingsDialog builder() {
         view = LayoutInflater.from(context).inflate(R.layout.dialog_slide_settings, null);
+        mQualityRG = (RadioGroup) view.findViewById(R.id.rg_video_quality);
         lLayout_bg = (LinearLayout) view.findViewById(R.id.layout_bg);
         mSeekBar = (SeekBar) view.findViewById(R.id.seekbar);
         txt_title = (TextView) view.findViewById(R.id.txt_title);
@@ -320,5 +325,19 @@ public class SlideSettingsDialog implements OnClickListener {
      */
     public int getLoopTime() {
         return loopTime;
+    }
+
+    /**
+     * 获取当前配置投屏质量，默认是高清
+     * @return
+     */
+    public int getQuality() {
+        int checkedRadioButtonId = mQualityRG.getCheckedRadioButtonId();
+        if(R.id.rb_high_quality == checkedRadioButtonId) {
+            return QUALITY_HIGH;
+        }else if(R.id.rb_low_quality == checkedRadioButtonId) {
+            return QUALITY_LOW;
+        }
+        return QUALITY_HIGH;
     }
 }

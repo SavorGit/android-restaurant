@@ -537,6 +537,7 @@ public class AppServiceOk {
             RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
                     .addFormDataPart("fileName", requestParams.get("fileName"))
                     .addFormDataPart("pptName", requestParams.get("pptName"))
+                    .addFormDataPart("range", requestParams.get("range"))
                     .addFormDataPart("fileUpload", srcFile.getName(), RequestBody.create(null, srcFile))
 //                    .addPart(Headers.of("Content-Disposition", "form-data; name=\"another\";filename=\"another.dex\""), RequestBody.create(MediaType.parse("application/octet-stream"), srcFile))
                     .build();

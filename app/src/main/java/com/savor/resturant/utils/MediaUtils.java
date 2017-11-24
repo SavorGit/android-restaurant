@@ -13,6 +13,7 @@ import com.savor.resturant.activity.PhotoSelectActivity;
 import com.savor.resturant.bean.MediaInfo;
 import com.savor.resturant.bean.PhotoInfo;
 import com.savor.resturant.bean.VideoInfo;
+import com.savor.resturant.widget.SlideSettingsDialog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -74,12 +75,13 @@ public class MediaUtils {
         final String orderBy = MediaStore.Video.Media.DATE_TAKEN;
         final String[] columns = {MediaStore.Video.Media._ID, MediaStore.Video.Media.DATA,
                 MediaStore.Video.Media.TITLE, MediaStore.Video.Media.DURATION,MediaStore.Video.Media.MIME_TYPE
-                ,MediaStore.Video.Thumbnails.DATA};
+                ,MediaStore.Video.Media.SIZE};
         Cursor videocursor = context.getContentResolver().query(videoUri, columns, null, null, orderBy + " DESC");
         while (videocursor.moveToNext()) {
             int dataColumnIndex = videocursor.getColumnIndex(MediaStore.Video.Media.DATA);
             int titleIndex = videocursor.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE);
             long duration = videocursor.getLong(videocursor.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION));
+            long size = videocursor.getLong(videocursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE));
             String mimeType = videocursor.getString(videocursor.getColumnIndexOrThrow(MediaStore.Video.Media.MIME_TYPE));
             String title = videocursor.getString(titleIndex);
             String imgPath = videocursor.getString(dataColumnIndex);
@@ -91,6 +93,7 @@ public class MediaUtils {
             mediaInfo.setMimeType(mimeType);
             mediaInfo.setAssetname(title);
             mediaInfo.setDuration(duration);
+            mediaInfo.setSize(size);
             if (!map.containsKey(parentPath)) {
                 ArrayList<MediaInfo> childList = new ArrayList<>();
                 childList.add(mediaInfo);
@@ -286,7 +289,24 @@ public class MediaUtils {
         return result;
     }
 
-    public static String getPicRealName(String filePath) {
+    /**
+     * 获取带有父目录的文件名称
+     * @param filePath
+     * @return
+     */
+    public static String getVideoName(String filePath,int quelity) {
+        File file = new File(filePath);
+        String parent = file.getParent();
+        int parentIndex = parent.lastIndexOf("/") + 1;
+        String substring = parent.substring(parentIndex, parent.length());
+        int startTitle = filePath.lastIndexOf("/") + 1;
+        int endTitle = filePath.lastIndexOf(".");
+        String title = (String) filePath.subSequence(startTitle, endTitle);
+        String result = substring+"_"+title+"_"+(quelity == SlideSettingsDialog.QUALITY_HIGH?"high":"low");
+        return result;
+    }
+
+    public static String getMediaRealName(String filePath) {
         int startTitle = filePath.lastIndexOf("/") + 1;
         int endTitle = filePath.lastIndexOf(".");
         String title = (String) filePath.subSequence(startTitle, endTitle);
