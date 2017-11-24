@@ -30,7 +30,7 @@
 //import com.savor.resturant.bean.BaseProReqeust;
 //import com.savor.resturant.bean.ImageProResonse;
 //import com.savor.resturant.bean.PdfInfo;
-//import com.savor.resturant.bean.PictureInfo;
+//import com.savor.resturant.bean.MediaInfo;
 //import com.savor.resturant.bean.RotateProResponse;
 //import com.savor.resturant.bean.TvBoxInfo;
 //import com.savor.resturant.core.ApiRequestListener;
@@ -143,7 +143,7 @@
 //                    String path = (String) msg.obj;
 //                    File file = new File(path);
 //                    if(file.exists()) {
-//                        final PictureInfo picInfo = new PictureInfo();
+//                        final MediaInfo picInfo = new MediaInfo();
 //                        String name = file.getName();
 //                        if(name.contains(".")) {
 //                            name = name.substring(0,name.lastIndexOf("."));
@@ -157,7 +157,7 @@
 //                    }
 //                    break;
 //                case DISPLAY:
-//                    final PictureInfo pictureInfo = (PictureInfo) msg.obj;
+//                    final MediaInfo pictureInfo = (MediaInfo) msg.obj;
 //                    mCurrentPic = pictureInfo.getAssetpath();
 //                    AppApi.updateScreenProjectionFile(PdfPreviewActivity.this, mSession.getTVBoxUrl(), getBasePrepareInfo(pictureInfo),
 //                            pictureInfo.getCompressPath(), small, force,new ApiRequestListener() {
@@ -283,7 +283,7 @@
 //    private boolean isFirst = true;
 //    private HotsDialog mChangeWifiDiallog;
 //
-//    private BaseProReqeust getBasePrepareInfo(PictureInfo pictureInfo){
+//    private BaseProReqeust getBasePrepareInfo(MediaInfo pictureInfo){
 //        String imageType = ProjectionManager.getInstance().getImageType();
 //        String seriesId = ProjectionManager.getInstance().getSeriesId();
 //        BaseProReqeust prepareInfo = new BaseProReqeust();
@@ -295,7 +295,7 @@
 //        prepareInfo.setSeriesId(seriesId);
 //        return prepareInfo;
 //    }
-//    private void showScreenShot(final PictureInfo pictureInfo) {
+//    private void showScreenShot(final MediaInfo pictureInfo) {
 //        mThreadPool.execute(new Runnable() {
 //            @Override
 //            public void run() {

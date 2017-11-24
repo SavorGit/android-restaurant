@@ -8,13 +8,15 @@ import android.widget.TextView;
 
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.SlideAdapter;
-import com.savor.resturant.bean.PictureInfo;
+import com.savor.resturant.bean.MediaInfo;
 import com.savor.resturant.bean.SlideSetInfo;
 import com.savor.resturant.utils.MediaUtils;
 import com.savor.resturant.utils.SlideManager;
 import com.savor.resturant.widget.LoopViewPager;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/3/17.
@@ -26,7 +28,7 @@ public class SlidePreviewActivity extends BaseActivity implements View.OnClickLi
     private LoopViewPager viewpager;
 
     private SlideAdapter previewAdapter;
-    private LinkedList<PictureInfo> images = new LinkedList<>();
+    private List<MediaInfo> images = new LinkedList<>();
     private SlideSetInfo slideSetInfo;
     private int position;
     private SlideManager.SlideType slideType;
@@ -49,7 +51,7 @@ public class SlidePreviewActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void getViews() {
-        mTitleTv = (TextView) findViewById(R.id.tv_center);
+        mTitleTv = (TextView) findViewById(R.id.category_name);
 
         backLayout = (LinearLayout) findViewById(R.id.back);
         viewpager = (LoopViewPager) findViewById(R.id.viewpager);
@@ -57,7 +59,8 @@ public class SlidePreviewActivity extends BaseActivity implements View.OnClickLi
         slideSetInfo = (SlideSetInfo) getIntent().getSerializableExtra("photos");
         if (slideSetInfo!=null&&slideSetInfo.imageList!=null&&slideSetInfo.imageList.size()>0){
             images.clear();
-            MediaUtils.getFolderAllImg(mContext, images, slideSetInfo.imageList);
+            images = slideSetInfo.imageList;
+//            MediaUtils.getFolderAllImg(mContext, images, slideSetInfo.imageList);
         }
         position = getIntent().getIntExtra("position",0);
     }

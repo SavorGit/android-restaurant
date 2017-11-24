@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.savor.resturant.R;
-import com.savor.resturant.bean.PictureInfo;
+import com.savor.resturant.bean.MediaInfo;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,10 +24,10 @@ import java.util.List;
 public class PhotoSelectAdapter extends BaseAdapter {
 
     private  Context mContext;
-    private List<PictureInfo> mList = new ArrayList<>();
+    private List<MediaInfo> mList = new ArrayList<>();
     private  LayoutInflater mInflater;
 
-    public PhotoSelectAdapter (Context context, List<PictureInfo> list) {
+    public PhotoSelectAdapter (Context context, List<MediaInfo> list) {
         mContext = context;
         mList = list;
         mInflater = LayoutInflater.from(context);
@@ -37,7 +37,7 @@ public class PhotoSelectAdapter extends BaseAdapter {
         mContext = context;
         mInflater = LayoutInflater.from(context);
     }
-    public void setData(List<PictureInfo> list) {
+    public void setData(List<MediaInfo> list) {
 
         if(list!=null&&list.size()>0) {
             mList.clear();
@@ -79,12 +79,12 @@ public class PhotoSelectAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) view.getTag();
         }
-        final PictureInfo pictureInfo = mList.get(i);
-        String assetpath = pictureInfo.getAssetpath();
+        final MediaInfo mediaInfo = mList.get(i);
+        String assetpath = mediaInfo.getAssetpath();
         File file = new File(assetpath);
         if(file!=null&&file.exists()) {
             Glide.with(mContext).
-                    load(pictureInfo.getAssetpath()).
+                    load(mediaInfo.getAssetpath()).
                     centerCrop().
                     placeholder(R.drawable.empty_slide)
                     .dontAnimate().
@@ -100,13 +100,13 @@ public class PhotoSelectAdapter extends BaseAdapter {
                     into(holder.imgContent);
         }
 
-        holder.check.setChecked(pictureInfo.isChecked());
+        holder.check.setChecked(mediaInfo.isChecked());
         //设置照片全屏点击事件
         holder.fullScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mOnItemFullScreenClickListener != null)
-                    mOnItemFullScreenClickListener.onItemFullScreenClick(pictureInfo);
+                    mOnItemFullScreenClickListener.onItemFullScreenClick(mediaInfo);
             }
         });
         return view;
@@ -124,7 +124,7 @@ public class PhotoSelectAdapter extends BaseAdapter {
      * 照片全屏回调接口
      */
     public interface OnItemFullScreenClickListener {
-        void onItemFullScreenClick (PictureInfo info);
+        void onItemFullScreenClick (MediaInfo info);
     }
 
     /**

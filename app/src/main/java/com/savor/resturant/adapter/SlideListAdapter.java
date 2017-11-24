@@ -98,7 +98,7 @@ public class SlideListAdapter extends BaseAdapter {
         String topImagePath = null;
         int imageCounts = 0;
         if (slideSetInfo.imageList != null && slideSetInfo.imageList.size() > 0) {
-            topImagePath = slideSetInfo.imageList.get(0);
+            topImagePath = slideSetInfo.imageList.get(0).getAssetpath();
             imageCounts = slideSetInfo.imageList.size();
         }
         File file = new File(topImagePath);

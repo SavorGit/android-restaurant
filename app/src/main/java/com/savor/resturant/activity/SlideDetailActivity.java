@@ -22,8 +22,8 @@ import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.SlideDetailAdapter;
 import com.savor.resturant.bean.ImageProResonse;
+import com.savor.resturant.bean.MediaInfo;
 import com.savor.resturant.bean.PictureBean;
-import com.savor.resturant.bean.PictureInfo;
 import com.savor.resturant.bean.SlideSetInfo;
 import com.savor.resturant.bean.TvBoxInfo;
 import com.savor.resturant.bean.TvBoxSSDPInfo;
@@ -35,7 +35,6 @@ import com.savor.resturant.utils.IntentUtil;
 import com.savor.resturant.utils.MediaUtils;
 import com.savor.resturant.utils.RecordUtils;
 import com.savor.resturant.utils.SlideManager;
-import com.savor.resturant.utils.ToastUtil;
 import com.savor.resturant.widget.CommonDialog;
 import com.savor.resturant.widget.CustomAlertDialog;
 import com.savor.resturant.widget.HotsDialog;
@@ -57,6 +56,8 @@ import java.util.Set;
 
 import static com.savor.resturant.activity.LinkTvActivity.EXRA_TV_BOX;
 import static com.savor.resturant.activity.LinkTvActivity.EXTRA_TV_INFO;
+import static com.savor.resturant.utils.IntentUtil.KEY_SLIDE;
+import static com.savor.resturant.utils.IntentUtil.KEY_TYPE;
 
 /**
  * 幻灯片详情界面
@@ -76,7 +77,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     private GridView pictureGroup;
     private SlideSetInfo slideInfo;
     private Context mContext;
-    private LinkedList<PictureInfo> picList = new LinkedList<>(); //已选择图片的集合
+    private List<MediaInfo> picList = new LinkedList<>(); //已选择图片的集合
     // 所有图片名称
     public List<String> imageNameList = new ArrayList<>();
     private SlideDetailAdapter slideDetailAdapter;
@@ -197,7 +198,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_slide_detail);
         mContext = SlideDetailActivity.this;
-        slideInfo = (SlideSetInfo) getIntent().getSerializableExtra(IntentUtil.KEY_SLIDE);
+        slideInfo = (SlideSetInfo) getIntent().getSerializableExtra(KEY_SLIDE);
         slideType = (SlideManager.SlideType) getIntent().getSerializableExtra("type");
         getViews();
         setViews();
@@ -235,7 +236,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         checkAll.setText("全选");
         mIsCheckAll = false;
         checkAll.setChecked(mIsCheckAll);
-        slideInfo = (SlideSetInfo) getIntent().getSerializableExtra(IntentUtil.KEY_SLIDE);
+        slideInfo = (SlideSetInfo) getIntent().getSerializableExtra(KEY_SLIDE);
         refreshImageList(slideInfo);
 
         if(slideInfo.imageList==null||slideInfo.imageList.size()==0) {
@@ -244,11 +245,12 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         }
         picList.clear();
         imageNameList.clear();
-        MediaUtils.getFolderAllImg(mContext, picList, slideInfo.imageList,imageNameList);
+        picList = slideInfo.imageList;
+        MediaUtils.getFolderAllImg(mContext, slideInfo.imageList,imageNameList);
         slideDetailAdapter.setData(picList);
         Intent intent = getIntent();
         if(intent!=null) {
-            int type = intent.getIntExtra(IntentUtil.KEY_TYPE, 0);
+            int type = intent.getIntExtra(KEY_TYPE, 0);
             if(type == IntentUtil.TYPE_SLIDE_BY_DETAIL) {
                 mIsEdit = true;
                 changeEditState();
@@ -257,13 +259,14 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     }
 
     private void refreshImageList(SlideSetInfo slideInfo) {
-        List<String> imageList = slideInfo.imageList;
-        List<String> tempList = new ArrayList<>();
+        List<MediaInfo> imageList = slideInfo.imageList;
+        List<MediaInfo> tempList = new ArrayList<>();
         if(imageList!=null&&imageList.size()>0) {
             for(int i = 0;i<imageList.size();i++) {
-                String imagePath = imageList.get(i);
+                MediaInfo mediaInfo = imageList.get(i);
+                String imagePath = mediaInfo.getAssetpath();
                 if(!TextUtils.isEmpty(imagePath)&&new File(imagePath).exists()) {
-                    tempList.add(imagePath);
+                    tempList.add(mediaInfo);
                 }
             }
         }
@@ -288,7 +291,8 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     @Override
     public void setViews() {
         title.setText(slideInfo.groupName);
-        MediaUtils.getFolderAllImg(mContext, picList, slideInfo.imageList,imageNameList);
+        picList = slideInfo.imageList;
+        MediaUtils.getFolderAllImg(mContext, slideInfo.imageList,imageNameList);
         slideDetailAdapter = new SlideDetailAdapter(mContext);
         pictureGroup.setAdapter(slideDetailAdapter);
         slideDetailAdapter.setData(picList);
@@ -310,16 +314,16 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         pictureGroup.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-              PictureInfo pictureInfo = picList.get(i);
+              MediaInfo mediaInfo = picList.get(i);
               if (mIsEdit) {
-                  pictureInfo.setChecked(!pictureInfo.isChecked());
+                  mediaInfo.setChecked(!mediaInfo.isChecked());
                   //如果照片通过单击全部选择，则相应的改变左下角全选按钮状态
                   if (!mIsCheckAll && isCheckAll()){
                       mIsCheckAll = true;
                       checkAll.setText("取消全选");
                       checkAll.setChecked(true);
                   }
-                  if (!pictureInfo.isChecked() && mIsCheckAll) {
+                  if (!mediaInfo.isChecked() && mIsCheckAll) {
                       mIsCheckAll = false;
                       checkAll.setText("全选");
                       checkAll.setChecked(false);
@@ -349,7 +353,12 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                     return;
                 }
                 //跳转至照片列表
-                IntentUtil.openActivity(SlideDetailActivity.this, PhotoActivity.class, IntentUtil.TYPE_SLIDE_BY_DETAIL, slideInfo);
+//                IntentUtil.openActivity(SlideDetailActivity.this, PhotoActivity.class, IntentUtil.TYPE_SLIDE_BY_DETAIL, slideInfo);
+                Intent intent = new Intent(SlideDetailActivity.this, PhotoActivity.class);
+                intent.putExtra(KEY_TYPE, IntentUtil.TYPE_SLIDE_BY_DETAIL);
+                intent.putExtra(KEY_SLIDE, slideInfo);
+                intent.putExtra(IntentUtil.MEDIA_TYPE, slideType);
+                startActivity(intent);
                 break;
             case R.id.rl_edit:
                 changeEditState();
@@ -507,13 +516,13 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         checkAll.setChecked(mIsCheckAll);
         if (mIsCheckAll) {    // 全选模式
             checkAll.setText("取消全选");
-            for (PictureInfo pictureInfo : picList) {
-                pictureInfo.setChecked(true);
+            for (MediaInfo mediaInfo : picList) {
+                mediaInfo.setChecked(true);
             }
         } else {     // 取消全选模式
             checkAll.setText("全选");
-            for (PictureInfo pictureInfo : picList) {
-                pictureInfo.setChecked(false);
+            for (MediaInfo mediaInfo : picList) {
+                mediaInfo.setChecked(false);
             }
         }
         slideDetailAdapter.notifyDataSetChanged();
@@ -524,8 +533,8 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
      */
     private void delPicture() {
         int delcount = 0; //需要删除的数量
-        for (PictureInfo pictureInfo : picList) {
-            if (pictureInfo.isChecked()) {
+        for (MediaInfo mediaInfo : picList) {
+            if (mediaInfo.isChecked()) {
                 delcount++; //记录需要删除的数量
             }
         }
@@ -568,13 +577,13 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
             SlideManager.getInstance(SlideManager.SlideType.IMAGE).saveSlide();
             finish();
         }
-        Set<PictureInfo> toRemove = new HashSet<PictureInfo>();
+        Set<MediaInfo> toRemove = new HashSet<MediaInfo>();
         //遍历该幻灯片集，把选中的添加至暂存器，并删除
-        for (PictureInfo pictureInfo : picList) {
-            if (pictureInfo.isChecked()) {
-                toRemove.add(pictureInfo);
-                slideInfo.imageList.remove(pictureInfo.getAssetpath());
-                imageNameList.remove(pictureInfo.getAssetpath());
+        for (MediaInfo mediaInfo : picList) {
+            if (mediaInfo.isChecked()) {
+                toRemove.add(mediaInfo);
+                slideInfo.imageList.remove(mediaInfo.getAssetpath());
+                imageNameList.remove(mediaInfo.getAssetpath());
             }
         }
         picList.removeAll(toRemove);
@@ -600,8 +609,8 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
      * 检查每一张照片是否是选择状态
      */
     private boolean isCheckAll() {
-        for (PictureInfo pictureInfo : picList) {
-            if (!pictureInfo.isChecked())
+        for (MediaInfo mediaInfo : picList) {
+            if (!mediaInfo.isChecked())
                 return false;
         }
         return true;
@@ -633,7 +642,8 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
             boolean isUpload=false;
             for (PictureBean bean:pictureBeanResultList){
                 if (bean.getExist()==0){
-                    for (String fileUrl:slideInfo.imageList){
+                    for (MediaInfo mediaInfo:slideInfo.imageList){
+                        String fileUrl = mediaInfo.getAssetpath();
                         String picName = MediaUtils.getPicName(fileUrl);
                         String realName = MediaUtils.getPicRealName(fileUrl);
                         if (picName.equals(bean.getName())){

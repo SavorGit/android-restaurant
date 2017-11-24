@@ -10,8 +10,8 @@ import android.provider.MediaStore;
 import com.common.api.utils.LogUtils;
 import com.savor.resturant.SavorApplication;
 import com.savor.resturant.activity.PhotoSelectActivity;
+import com.savor.resturant.bean.MediaInfo;
 import com.savor.resturant.bean.PhotoInfo;
-import com.savor.resturant.bean.PictureInfo;
 import com.savor.resturant.bean.VideoInfo;
 
 import java.io.File;
@@ -35,7 +35,7 @@ public class MediaUtils {
      * @param context
      * @param map
      */
-    public static void getImgInfo(Context context, HashMap<String, ArrayList<String>> map) {
+    public static void getImgInfo(Context context, HashMap<String, ArrayList<MediaInfo>> map) {
         //获取图片信息表
         Uri imageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         ContentResolver mContentResolver = context.getContentResolver();
@@ -44,14 +44,21 @@ public class MediaUtils {
                 new String[]{"image/jpeg", "image/png"}, MediaStore.Images.Media.DATE_TAKEN + " DESC");
         while (mCursor.moveToNext()) {
             String imgPath = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            String mimeType = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.MIME_TYPE));
+            String title = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.TITLE));
             //获取图片父路径
             String parentPath = new File(imgPath).getParentFile().getName();
+            MediaInfo mediaInfo = new MediaInfo();
+            mediaInfo.setAssetpath(imgPath);
+            mediaInfo.setMimeType(mimeType);
+            mediaInfo.setMediaType(MediaInfo.MEDIA_TYPE_PIC);
+            mediaInfo.setAssetname(title);
             if (!map.containsKey(parentPath)) {
-                ArrayList<String> childList = new ArrayList<String>();
-                childList.add(imgPath);
+                ArrayList<MediaInfo> childList = new ArrayList<>();
+                childList.add(mediaInfo);
                 map.put(parentPath, childList);
             } else {
-                map.get(parentPath).add(imgPath);
+                map.get(parentPath).add(mediaInfo);
             }
         }
         mCursor.close();
@@ -61,23 +68,34 @@ public class MediaUtils {
      * 获取本地视频信息
      * @param context
      */
-    public static void getVideoInfo(Context context, HashMap<String, ArrayList<String>> map) {
+    public static void getVideoInfo(Context context, HashMap<String, ArrayList<MediaInfo>> map) {
         //获取视频信息表
         Uri videoUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
         final String orderBy = MediaStore.Video.Media.DATE_TAKEN;
         final String[] columns = {MediaStore.Video.Media._ID, MediaStore.Video.Media.DATA,
-                MediaStore.Video.Media.TITLE, MediaStore.Video.Media.DURATION};
+                MediaStore.Video.Media.TITLE, MediaStore.Video.Media.DURATION,MediaStore.Video.Media.MIME_TYPE};
         Cursor videocursor = context.getContentResolver().query(videoUri, columns, null, null, orderBy + " DESC");
         while (videocursor.moveToNext()) {
-            String imgPath = videocursor.getString(videocursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            int dataColumnIndex = videocursor.getColumnIndex(MediaStore.Video.Media.DATA);
+            int titleIndex = videocursor.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE);
+            long duration = videocursor.getLong(videocursor.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION));
+            String mimeType = videocursor.getString(videocursor.getColumnIndexOrThrow(MediaStore.Video.Media.MIME_TYPE));
+            String title = videocursor.getString(titleIndex);
+            String imgPath = videocursor.getString(dataColumnIndex);
             //获取图片父路径
             String parentPath = new File(imgPath).getParentFile().getName();
+            MediaInfo mediaInfo = new MediaInfo();
+            mediaInfo.setAssetpath(imgPath);
+            mediaInfo.setMediaType(MediaInfo.MEDIA_TYPE_VIDEO);
+            mediaInfo.setMimeType(mimeType);
+            mediaInfo.setAssetname(title);
+            mediaInfo.setDuration(duration);
             if (!map.containsKey(parentPath)) {
-                ArrayList<String> childList = new ArrayList<String>();
-                childList.add(imgPath);
+                ArrayList<MediaInfo> childList = new ArrayList<>();
+                childList.add(mediaInfo);
                 map.put(parentPath, childList);
             } else {
-                map.get(parentPath).add(imgPath);
+                map.get(parentPath).add(mediaInfo);
             }
         }
         videocursor.close();
@@ -129,21 +147,21 @@ public class MediaUtils {
      * @param
      * @return
      */
-    public static List<PhotoInfo> subGroupOfImage(HashMap<String, ArrayList<String>> hashMap) {
+    public static List<PhotoInfo> subGroupOfImage(HashMap<String, ArrayList<MediaInfo>> hashMap) {
         if (hashMap == null || hashMap.size() == 0) {
             LogUtils.i("hashMap为空");
             return null;
         }
         List<PhotoInfo> list = new ArrayList<PhotoInfo>();
-        Iterator<Map.Entry<String, ArrayList<String>>> it = hashMap.entrySet().iterator();
+        Iterator<Map.Entry<String, ArrayList<MediaInfo>>> it = hashMap.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<String, ArrayList<String>> entry = it.next();
+            Map.Entry<String, ArrayList<MediaInfo>> entry = it.next();
             PhotoInfo mImageBean = new PhotoInfo();
             String key = entry.getKey();
-            List<String> value = entry.getValue();
+            List<MediaInfo> value = entry.getValue();
             mImageBean.setFolderName(key);
             mImageBean.setImageCounts(value.size());
-            mImageBean.setTopImagePath(value.get(0));//获取该组的第一张图片
+            mImageBean.setTopImagePath(value.get(0).getAssetpath());//获取该组的第一张图片
             list.add(mImageBean);
         }
         LogUtils.i("LIST:" + list.size());
@@ -154,23 +172,16 @@ public class MediaUtils {
      * 获取当前相册下面所有照片的信息
      * @param context
      * @param datas 用来保存图片信息集合
-     * @param childList 当前相册下所有图片的路径
      */
-    public static void getFolderAllImg(Context context, List<PictureInfo> datas, List<String> childList) {
-        for (int i = 0; i < childList.size(); i++) {
-            int startTitle = childList.get(i).lastIndexOf("/") + 1;
-            int endTitle = childList.get(i).lastIndexOf(".");
-            String title = (String) childList.get(i).subSequence(startTitle, endTitle);
-            String filename = childList.get(i);
+    public static void getFolderAllImg(Context context, List<MediaInfo> datas,  List<String> imageNames) {
+        for (int i = 0; i < datas.size(); i++) {
+            MediaInfo mediaInfo = datas.get(i);
+            String assetpath = mediaInfo.getAssetpath();
+            File file = new File(assetpath);
+            if (file.exists()){
+                imageNames.add(assetpath);
+            }
 
-            PictureInfo model = new PictureInfo();
-            model.setFunction(ConstantsWhat.FunctionsIds.PREPARE);
-            model.setAction("2screen");
-            model.setAssettype("pic");
-            model.setAssetname(title);
-            model.setAssetpath(filename);
-            model.setAsseturl(NetWorkUtil.getLocalUrl(context) + filename);
-            datas.add(model);
         }
     }
 
@@ -180,7 +191,7 @@ public class MediaUtils {
      * @param datas 用来保存图片信息集合
      * @param childList 当前相册下所有图片的路径
      */
-    public static void getFolderAllImg(Context context, List<PictureInfo> datas, List<String> childList,List<String> imageNames) {
+    public static void getFolderAllImg(Context context, List<MediaInfo> datas, List<String> childList, List<String> imageNames) {
         for (int i = 0; i < childList.size(); i++) {
             int startTitle = childList.get(i).lastIndexOf("/") + 1;
             int endTitle = childList.get(i).lastIndexOf(".");
@@ -188,7 +199,7 @@ public class MediaUtils {
             String filename = childList.get(i);
             File file = new File(filename);
             if (file.exists()){
-                PictureInfo model = new PictureInfo();
+                MediaInfo model = new MediaInfo();
                 model.setFunction(ConstantsWhat.FunctionsIds.PREPARE);
                 model.setAction("2screen");
                 model.setAssettype("pic");
@@ -202,14 +213,15 @@ public class MediaUtils {
         }
     }
 
-    public static void getFolderAllImg(Context context, List<PictureInfo> datas, List<String> childList,final Handler handler) {
+
+    public static void getFolderAllImg(Context context, List<MediaInfo> datas, List<String> childList, final Handler handler) {
         for (int i = 0; i < childList.size(); i++) {
             int startTitle = childList.get(i).lastIndexOf("/") + 1;
             int endTitle = childList.get(i).lastIndexOf(".");
             String title = (String) childList.get(i).subSequence(startTitle, endTitle);
             String filename = childList.get(i);
 
-            PictureInfo model = new PictureInfo();
+            MediaInfo model = new MediaInfo();
             model.setFunction(ConstantsWhat.FunctionsIds.PREPARE);
             model.setAction("2screen");
             model.setAssettype("pic");

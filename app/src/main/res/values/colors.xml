@@ -94,4 +94,6 @@
     <color name="btn_negative">#444444</color>
     <color name="dialog_dark">#E5000000</color>
     <color name="pro_bg">#f0ffffff</color>
+    <color name="color_3e000000">#66000000</color>
+    <color name="color_3e5d5a55">#3e5d5a55</color>
 </resources>

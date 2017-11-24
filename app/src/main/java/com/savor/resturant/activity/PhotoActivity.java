@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.PhotoAdapter;
+import com.savor.resturant.bean.MediaInfo;
 import com.savor.resturant.bean.PhotoInfo;
 import com.savor.resturant.bean.SlideSetInfo;
 import com.savor.resturant.interfaces.AsyncCallBack;
@@ -42,8 +43,8 @@ public class PhotoActivity extends BaseActivity implements View.OnClickListener{
     private ImageView back;
     private TextView title;
     private ListView photoList;
-    private List<PhotoInfo> list = new ArrayList<PhotoInfo>();
-    private HashMap<String, ArrayList<String>> photoMap = new HashMap<String, ArrayList<String>>();
+    private List<PhotoInfo> list = new ArrayList<>();
+    private HashMap<String, ArrayList<MediaInfo>> photoMap = new HashMap<>();
     private int type;
     private SlideSetInfo slideInfo;
     private SlideManager.SlideType slideType;
@@ -145,7 +146,7 @@ public class PhotoActivity extends BaseActivity implements View.OnClickListener{
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (!photoMap.isEmpty()) {
-                    ArrayList<String> childList = photoMap.get(list.get(i).getFolderName());
+                    ArrayList<MediaInfo> childList = photoMap.get(list.get(i).getFolderName());
                     if (childList.size() <= 0) {
                         ToastUtil.showToastSavor(PhotoActivity.this, "没有发现照片哦");
                         return;
@@ -166,11 +167,18 @@ public class PhotoActivity extends BaseActivity implements View.OnClickListener{
                             break;
                         case IntentUtil.TYPE_SLIDE_BY_DETAIL:
                             ProjectionManager.getInstance().setImgList(childList);
+
+                            Intent dintent = new Intent(PhotoActivity.this, PhotoSelectActivity.class);
+                            dintent.putExtra(KEY_TYPE, type);
+                            dintent.putExtra(KEY_SLIDE, slideInfo);
+                            dintent.putExtra(IntentUtil.MEDIA_TYPE,slideType);
+//        intent.putStringArrayListExtra(KEY_PHOTO_LIST, picList);
+                            startActivity(dintent);
                             IntentUtil.openActivity(PhotoActivity.this,
                                     PhotoSelectActivity.class,
                                     IntentUtil.TYPE_SLIDE_BY_DETAIL,
                                     slideInfo,
-                                    (ArrayList<String>) childList);
+                                    (ArrayList<MediaInfo>) childList);
                             break;
                     }
 

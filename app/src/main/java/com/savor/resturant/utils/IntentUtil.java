@@ -3,6 +3,7 @@ package com.savor.resturant.utils;
 import android.app.Activity;
 import android.content.Intent;
 
+import com.savor.resturant.bean.MediaInfo;
 import com.savor.resturant.bean.SlideSetInfo;
 
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ public class IntentUtil {
      * @param slideSetInfo 携带的对象
      * @param picList 传递的集合
      */
-    public static void openActivity(Activity activity, Class<?> cls, int type, SlideSetInfo slideSetInfo, ArrayList<String> picList) {
+    public static void openActivity(Activity activity, Class<?> cls, int type, SlideSetInfo slideSetInfo, ArrayList<MediaInfo> picList) {
         Intent intent = new Intent(activity, cls);
         intent.putExtra(KEY_TYPE, type);
         intent.putExtra(KEY_SLIDE, slideSetInfo);

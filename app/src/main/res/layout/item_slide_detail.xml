@@ -23,5 +23,22 @@
         android:focusable="false"  />
 
 
-
+    <TextView
+        android:layout_margin="5dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/tv_time"
+        android:visibility="gone"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
+        android:textColor="#888686"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:textSize="11sp"
+        android:paddingBottom="5dp"
+        android:background="@drawable/round_corner_time"
+        android:text="5'43''"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </RelativeLayout>

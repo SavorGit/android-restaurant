@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.savor.resturant.R;
-import com.savor.resturant.bean.PictureInfo;
+import com.savor.resturant.bean.MediaInfo;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class SlideDetailAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
     private Context mContext;
-    private List<PictureInfo> mList = new ArrayList<PictureInfo>();
+    private List<MediaInfo> mList = new ArrayList<MediaInfo>();
     private boolean mIsEdit;
 
     public SlideDetailAdapter (Context context) {
@@ -33,7 +33,7 @@ public class SlideDetailAdapter extends BaseAdapter {
         mInflater = LayoutInflater.from(context);
     }
 
-    public void setData(List<PictureInfo> list) {
+    public void setData(List<MediaInfo> list) {
         mList.clear();
         mList.addAll(list);
         notifyDataSetChanged();
