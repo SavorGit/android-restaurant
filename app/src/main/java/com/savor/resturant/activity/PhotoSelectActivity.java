@@ -168,7 +168,7 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
 //            @Override
 //            public void run() {
 //                //获取相册下所有照片，并展示
-//                MediaUtils.getFolderAllImg(mContext, imgInfoList, phoList,mHandler);
+//                MediaUtils.getFolderAllNames(mContext, imgInfoList, phoList,mHandler);
 //            }
 //        }.start();
 

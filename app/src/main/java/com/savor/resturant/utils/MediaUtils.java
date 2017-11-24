@@ -73,7 +73,8 @@ public class MediaUtils {
         Uri videoUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
         final String orderBy = MediaStore.Video.Media.DATE_TAKEN;
         final String[] columns = {MediaStore.Video.Media._ID, MediaStore.Video.Media.DATA,
-                MediaStore.Video.Media.TITLE, MediaStore.Video.Media.DURATION,MediaStore.Video.Media.MIME_TYPE};
+                MediaStore.Video.Media.TITLE, MediaStore.Video.Media.DURATION,MediaStore.Video.Media.MIME_TYPE
+                ,MediaStore.Video.Thumbnails.DATA};
         Cursor videocursor = context.getContentResolver().query(videoUri, columns, null, null, orderBy + " DESC");
         while (videocursor.moveToNext()) {
             int dataColumnIndex = videocursor.getColumnIndex(MediaStore.Video.Media.DATA);
@@ -173,7 +174,7 @@ public class MediaUtils {
      * @param context
      * @param datas 用来保存图片信息集合
      */
-    public static void getFolderAllImg(Context context, List<MediaInfo> datas,  List<String> imageNames) {
+    public static void getFolderAllNames(Context context, List<MediaInfo> datas, List<String> imageNames) {
         for (int i = 0; i < datas.size(); i++) {
             MediaInfo mediaInfo = datas.get(i);
             String assetpath = mediaInfo.getAssetpath();
@@ -191,7 +192,7 @@ public class MediaUtils {
      * @param datas 用来保存图片信息集合
      * @param childList 当前相册下所有图片的路径
      */
-    public static void getFolderAllImg(Context context, List<MediaInfo> datas, List<String> childList, List<String> imageNames) {
+    public static void getFolderAllNames(Context context, List<MediaInfo> datas, List<String> childList, List<String> imageNames) {
         for (int i = 0; i < childList.size(); i++) {
             int startTitle = childList.get(i).lastIndexOf("/") + 1;
             int endTitle = childList.get(i).lastIndexOf(".");
@@ -214,7 +215,7 @@ public class MediaUtils {
     }
 
 
-    public static void getFolderAllImg(Context context, List<MediaInfo> datas, List<String> childList, final Handler handler) {
+    public static void getFolderAllNames(Context context, List<MediaInfo> datas, List<String> childList, final Handler handler) {
         for (int i = 0; i < childList.size(); i++) {
             int startTitle = childList.get(i).lastIndexOf("/") + 1;
             int endTitle = childList.get(i).lastIndexOf(".");

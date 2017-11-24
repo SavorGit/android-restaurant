@@ -7,9 +7,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.common.api.utils.DateUtil;
 import com.savor.resturant.R;
 import com.savor.resturant.bean.MediaInfo;
 
@@ -74,6 +76,7 @@ public class PhotoSelectAdapter extends BaseAdapter {
             holder.imgContent = (ImageView) view.findViewById(R.id.iv_content);
             holder.check = (CheckBox) view.findViewById(R.id.cb_check);
             holder.fullScreen = (ImageView) view.findViewById(R.id.iv_fullscreen);
+            holder.tv_time = (TextView) view.findViewById(R.id.tv_time);
             //绘制图片大小
             view.setTag(holder);
         } else {
@@ -109,6 +112,14 @@ public class PhotoSelectAdapter extends BaseAdapter {
                     mOnItemFullScreenClickListener.onItemFullScreenClick(mediaInfo);
             }
         });
+        int mediaType = mediaInfo.getMediaType();
+        if(mediaType == MediaInfo.MEDIA_TYPE_VIDEO) {
+            holder.tv_time.setVisibility(View.VISIBLE);
+            String time = DateUtil.formatSecondsTime(String.valueOf(mediaInfo.getDuration()/1000));
+            holder.tv_time.setText(time);
+        }else {
+            holder.tv_time.setVisibility(View.GONE);
+        }
         return view;
     }
 
@@ -116,6 +127,7 @@ public class PhotoSelectAdapter extends BaseAdapter {
         public CheckBox check;
         public ImageView imgContent;
         public ImageView fullScreen;
+        public TextView tv_time;
     }
 
     private OnItemFullScreenClickListener mOnItemFullScreenClickListener = null;

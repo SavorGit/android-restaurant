@@ -246,7 +246,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         picList.clear();
         imageNameList.clear();
         picList = slideInfo.imageList;
-        MediaUtils.getFolderAllImg(mContext, slideInfo.imageList,imageNameList);
+        MediaUtils.getFolderAllNames(mContext, slideInfo.imageList,imageNameList);
         slideDetailAdapter.setData(picList);
         Intent intent = getIntent();
         if(intent!=null) {
@@ -292,7 +292,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     public void setViews() {
         title.setText(slideInfo.groupName);
         picList = slideInfo.imageList;
-        MediaUtils.getFolderAllImg(mContext, slideInfo.imageList,imageNameList);
+        MediaUtils.getFolderAllNames(mContext, slideInfo.imageList,imageNameList);
         slideDetailAdapter = new SlideDetailAdapter(mContext);
         pictureGroup.setAdapter(slideDetailAdapter);
         slideDetailAdapter.setData(picList);

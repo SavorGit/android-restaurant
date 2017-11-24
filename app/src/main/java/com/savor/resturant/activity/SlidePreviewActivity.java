@@ -60,7 +60,7 @@ public class SlidePreviewActivity extends BaseActivity implements View.OnClickLi
         if (slideSetInfo!=null&&slideSetInfo.imageList!=null&&slideSetInfo.imageList.size()>0){
             images.clear();
             images = slideSetInfo.imageList;
-//            MediaUtils.getFolderAllImg(mContext, images, slideSetInfo.imageList);
+//            MediaUtils.getFolderAllNames(mContext, images, slideSetInfo.imageList);
         }
         position = getIntent().getIntExtra("position",0);
     }

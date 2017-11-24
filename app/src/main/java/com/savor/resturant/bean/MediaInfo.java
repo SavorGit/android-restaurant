@@ -28,6 +28,8 @@ public class MediaInfo extends Base2ScreenInfo implements Serializable{
     private int mediaType;
     /**如果是视频类型，时长（毫秒）*/
     private long duration;
+    /**视频缩略图路径*/
+    private String thumbPath;
 
     @Override
     public String toString() {
@@ -39,6 +41,7 @@ public class MediaInfo extends Base2ScreenInfo implements Serializable{
                 ", mimeType='" + mimeType + '\'' +
                 ", mediaType=" + mediaType +
                 ", duration=" + duration +
+                ", thumbPath='" + thumbPath + '\'' +
                 '}';
     }
 
@@ -58,7 +61,9 @@ public class MediaInfo extends Base2ScreenInfo implements Serializable{
             return false;
         if (assetcover != null ? !assetcover.equals(mediaInfo.assetcover) : mediaInfo.assetcover != null)
             return false;
-        return mimeType != null ? mimeType.equals(mediaInfo.mimeType) : mediaInfo.mimeType == null;
+        if (mimeType != null ? !mimeType.equals(mediaInfo.mimeType) : mediaInfo.mimeType != null)
+            return false;
+        return thumbPath != null ? thumbPath.equals(mediaInfo.thumbPath) : mediaInfo.thumbPath == null;
     }
 
     @Override
@@ -70,6 +75,7 @@ public class MediaInfo extends Base2ScreenInfo implements Serializable{
         result = 31 * result + (mimeType != null ? mimeType.hashCode() : 0);
         result = 31 * result + mediaType;
         result = 31 * result + (int) (duration ^ (duration >>> 32));
+        result = 31 * result + (thumbPath != null ? thumbPath.hashCode() : 0);
         return result;
     }
 
@@ -127,5 +133,13 @@ public class MediaInfo extends Base2ScreenInfo implements Serializable{
 
     public void setDuration(long duration) {
         this.duration = duration;
+    }
+
+    public String getThumbPath() {
+        return thumbPath;
+    }
+
+    public void setThumbPath(String thumbPath) {
+        this.thumbPath = thumbPath;
     }
 }
