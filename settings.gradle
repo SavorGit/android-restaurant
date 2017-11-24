@@ -1,2 +1,2 @@
-include ':app', ':video-compress-library'
+include ':app',  ':FFmpeg4Android'
 include ':common-library'
