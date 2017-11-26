@@ -302,7 +302,7 @@ public class MediaUtils {
         int startTitle = filePath.lastIndexOf("/") + 1;
         int endTitle = filePath.lastIndexOf(".");
         String title = (String) filePath.subSequence(startTitle, endTitle);
-        String result = substring+"_"+title+"_"+(quelity == SlideSettingsDialog.QUALITY_HIGH?"high":"low");
+        String result = substring+"_"+title+"_"+(quelity == SlideSettingsDialog.QUALITY_HIGH?"high":"low")+".mp4";
         return result;
     }
 

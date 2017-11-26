@@ -22,6 +22,7 @@ public class LoadingProgressDialog extends Dialog  {
 
     private final Activity mContext;
     private TextView mPercentTv;
+    private TextView mHintTv;
 
     public LoadingProgressDialog(Activity context) {
         super(context, R.style.loading_progress_bar);
@@ -36,11 +37,13 @@ public class LoadingProgressDialog extends Dialog  {
         setContentView(R.layout.dialog_loading_progress);
         setCancelable(false);
         mPercentTv = (TextView) findViewById(R.id.tv_percent);
+        mHintTv = (TextView) findViewById(R.id.tv_loading_hint);
     }
 
-    public void updatePercent(double percent) {
+    public void updatePercent(String hint,double percent) {
+        mPercentTv.setVisibility(View.VISIBLE);
         int per = (int) (percent*100);
-        mPercentTv.setText(per+"%");
+        mPercentTv.setText(hint+per+"%");
     }
 
     @Override
@@ -48,5 +51,10 @@ public class LoadingProgressDialog extends Dialog  {
         super.onBackPressed();
         dismiss();
         mContext.finish();
+    }
+
+    public void loading(String msg) {
+        mPercentTv.setVisibility(View.GONE);
+        mHintTv.setText(msg);
     }
 }

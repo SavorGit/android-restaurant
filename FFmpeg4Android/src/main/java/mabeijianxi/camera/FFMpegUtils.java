@@ -2,6 +2,7 @@ package mabeijianxi.camera;
 
 import android.media.ExifInterface;
 import android.media.MediaMetadataRetriever;
+import android.widget.Toast;
 
 import mabeijianxi.camera.model.MediaObject.MediaPart;
 import mabeijianxi.camera.util.DeviceUtils;
@@ -18,7 +19,8 @@ import java.io.IOException;
  * 
  */
 public class FFMpegUtils {
-
+	public static final int QUALITY_HIGH = 0x1;
+	public static final int QUALITY_LOW = 0x2;
 	/** 音量 100% -vol 100 */
 	public static final float AUDIO_VOLUME_HIGH = 1F;
 	/** 音量 66% */
@@ -55,8 +57,6 @@ public class FFMpegUtils {
 	 * @param videoHeight 视频高度
 	 * @param cropX 剪切X坐标
 	 * @param cropY 剪切Y坐标
-	 * @param startTime 剪切开始时间
-	 * @param endTime 剪切介绍时间
 	 * @param hasAudio 是否包含音频
 	 * @return
 	 */
@@ -427,4 +427,74 @@ public class FFMpegUtils {
 	//		}
 	//		return result;
 	//	}
+
+	/**
+	 * 获取ffmpeg命令
+	 * @param srcPath 原视频路径
+	 * @param qulity 视频质量（高清，普通）
+	 * @param orietation 旋转角度
+	 * @param destPath 输出路径
+	 * @return 获取最终命令
+	 */
+	public static String getFFmpegCmd(String srcPath , int qulity, int orietation, String destPath) {
+		String fMsg1 = " -strict -2 -vcodec libx264 -b 1024000 ";
+//		-s 320x640 ";
+		String fMsg2 = "-acodec aac -ar 44100 -ac 1 -b:a 72k -preset ultrafast ";
+		String qStr = "";
+		StringBuilder sb = new StringBuilder();
+		sb.append("ffmpeg -y -i "+srcPath+fMsg1);
+		switch (orietation) {
+			case 0:
+				sb.append("-s 640x320 ");
+				break;
+			case 90:
+				sb.append("-s 320x640 ");
+				break;
+			case 270:
+				sb.append("-s 320x640 ");
+				break;
+			case 180:
+				sb.append("-s 640x320 ");
+				break;
+		}
+
+		switch (qulity) {
+			case QUALITY_HIGH:
+				sb.append("-crf 23 ");
+				break;
+			case QUALITY_LOW:
+				sb.append( "-crf 28 ");
+				break;
+		}
+
+		String orStr = "";
+		switch (orietation) {
+			case 0:
+				sb.append("-metadata:s:v:0 rotate=0 ");
+				break;
+			case 90:
+				sb.append("-vf transpose=2,vflip,hflip -metadata:s:v:0 rotate=0 ");
+				break;
+			case 270:
+				sb.append("-vf transpose=2 -metadata:s:v:0 rotate=0 ");
+				break;
+			case 180:
+				sb.append("-vf vflip,hflip  -metadata:s:v:0 rotate=0 ");
+				break;
+		}
+
+		sb.append(destPath);
+		return sb.toString();
+	}
+
+	public static int getRotation(String path) {
+		int oritation = 0;
+		MediaMetadataRetriever metadata = new MediaMetadataRetriever();
+		metadata.setDataSource(path);
+		try {
+			oritation = Integer.parseInt(metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION));
+		} catch (NumberFormatException e) {
+		}
+		return oritation;
+	}
 }

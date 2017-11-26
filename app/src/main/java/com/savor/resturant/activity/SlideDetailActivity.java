@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.transition.Slide;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -35,6 +34,7 @@ import com.savor.resturant.presenter.BindTvPresenter;
 import com.savor.resturant.utils.CompressImage;
 import com.savor.resturant.utils.IntentUtil;
 import com.savor.resturant.utils.MediaUtils;
+import com.savor.resturant.utils.ProgressDialogUtil;
 import com.savor.resturant.utils.RecordUtils;
 import com.savor.resturant.utils.SlideManager;
 import com.savor.resturant.widget.CommonDialog;
@@ -43,6 +43,7 @@ import com.savor.resturant.widget.HotsDialog;
 import com.savor.resturant.widget.LoadingProgressDialog;
 import com.savor.resturant.widget.SavorDialog;
 import com.savor.resturant.widget.SlideSettingsDialog;
+import com.yixia.videoeditor.adapter.UtilityAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,6 +60,9 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
+import mabeijianxi.camera.FFMpegUtils;
+import mabeijianxi.camera.VCamera;
 
 import static com.savor.resturant.activity.LinkTvActivity.EXRA_TV_BOX;
 import static com.savor.resturant.activity.LinkTvActivity.EXTRA_TV_INFO;
@@ -162,7 +166,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
      */
     private long offset;
     /**当前正在上传视频第几个*/
-    private int currentOffset;
+//    private int currentOffset;
     /**要上传的视频总数*/
     private int currentVideoCount;
 
@@ -213,16 +217,20 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                         }
                     }
                 }
-
-                switch (slideType) {
-                    case IMAGE:
-                        uploadPictureToServer();
-                        break;
-                    case VIDEO:
-                        currentOffset++;
-                        uploadVideoToServer();
-                        break;
-                }
+                mProgressBarDialog.updatePercent("上传进度",1.0f);
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        switch (slideType) {
+                            case IMAGE:
+                                uploadPictureToServer();
+                                break;
+                            case VIDEO:
+                                uploadVideoToServer();
+                                break;
+                        }
+                    }
+                },1500);
 
             }
         }
@@ -242,6 +250,14 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         setViews();
         setListeners();
         initPresenter();
+        initFFmpeg();
+    }
+
+    private void initFFmpeg() {
+        // 开启log输出,ffmpeg输出到logcat
+//        VCamera.setDebugMode(true);
+        // 初始化拍摄SDK，必须
+        VCamera.initialize(this);
     }
 
     private void initPresenter() {
@@ -772,62 +788,96 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
             new Thread(){
                 @Override
                 public void run() {
-                    startUpload(isUpload);
+                    startUploadVideo(isUpload);
                 }
             }.start();
 
         }
     }
 
-    private void startUpload(boolean isUpload) {
-        for (SlideSettingsMediaBean bean : slideSettingsMediaBeanResultList) {
+    private void startUploadVideo(boolean isUpload) {
+        for (final SlideSettingsMediaBean bean : slideSettingsMediaBeanResultList) {
             if (bean.getExist() == 0) {
                 currentVideoCount = slideInfo.imageList.size();
 
-//                for (MediaInfo mediaInfo : slideInfo.imageList) {// 遍历上传所有视频
-                    MediaInfo mediaInfo = slideInfo.imageList.get(currentOffset);
-                    final String fileUrl = mediaInfo.getAssetpath();
-                    final String videoName = MediaUtils.getVideoName(fileUrl, settingDialog.getQuality());
-                    String realName = MediaUtils.getMediaRealName(fileUrl);
-                    final long size = mediaInfo.getSize();
-                    // 首先切片然后，循环上传
-                    final String fragmentPath = mSession.getCompressPath(SlideDetailActivity.this) + File.separator + "frament";
-                    if (videoName.equals(bean.getName())) {
-                        // 如果大于切片最小单位直接上传，否则切片并上传
-                        if (size > BUFFER_SIZE) {
-//                                new Thread(){
-//                                    @Override
-//                                    public void run() {
-                            count = 0;
-                            offset = 0;
-                            if (size % BUFFER_SIZE == 0) {
-                                count = size
-                                        / BUFFER_SIZE;
-                            } else {
-                                count = (size / BUFFER_SIZE) + 1;
-                            }
-                            uploadVideoFragment(fileUrl, fragmentPath, videoName);
-//                                    }
-//                                }.start();
-                            currentUploadFile = bean.getName();
-                            break;
-                        }
+                int quality = settingDialog.getQuality();
+                final int index = slideSettingsMediaBeanResultList.indexOf(bean);
+                MediaInfo mediaInfo = slideInfo.imageList.get(index);
+//                String fileUrl = mediaInfo.getAssetpath();
+                String fileUrl = mediaInfo.getAssetpath();
 
+                final String videoName = MediaUtils.getVideoName(fileUrl, settingDialog.getQuality());
+                String realName = MediaUtils.getMediaRealName(fileUrl);
+                String mimeType = mediaInfo.getMimeType();
+
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(!SlideDetailActivity.this.isFinishing()) {
+                            ProgressDialogUtil.getInstance().showProgress(SlideDetailActivity.this,"","正在格式化第"+(index+1)+"个视频",-1);
+                        }
+                    }
+                });
+
+                int rotation = FFMpegUtils.getRotation(fileUrl);
+                if("video/mp4".equals(mimeType)) {
+                    if(rotation !=0) {
+                        fileUrl = formatVideo(quality, fileUrl, videoName, rotation);
+                    }else {
+                        if(quality == SlideSettingsDialog.QUALITY_LOW) {
+                            fileUrl = formatVideo(quality, fileUrl, videoName, rotation);
+                        }
+                    }
+                }else {
+                    fileUrl = formatVideo(quality, fileUrl, videoName, rotation);
+                }
+
+                if(TextUtils.isEmpty(fileUrl)) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ShowMessage.showToast(SlideDetailActivity.this,"格式化失败");
+                            mProgressBarDialog.dismiss();
+                        }
+                    });
+                    return;
+                }
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                // 首先切片然后，循环上传
+                final String fragmentPath = mSession.getCompressPath(SlideDetailActivity.this) + File.separator + "frament";
+                long size = new File(fileUrl).length();
+                if (videoName.equals(bean.getName())&&!isUpload) {
+                    // 如果大于切片最小单位直接上传，否则切片并上传
+                    if (size > BUFFER_SIZE) {
+                        count = 0;
+                        offset = 0;
+                        if (size % BUFFER_SIZE == 0) {
+                            count = size
+                                    / BUFFER_SIZE;
+                        } else {
+                            count = (size / BUFFER_SIZE) + 1;
+                        }
+                        uploadVideoFragment(fileUrl, fragmentPath, videoName);
+                        currentUploadFile = bean.getName();
+                        break;
+                    }else {
+                        count = 1;
+                        offset = 0;
+                        uploadVideoFragment(fileUrl, fragmentPath, videoName);
+                        currentUploadFile = bean.getName();
+                        break;
                     }
 
+                }
 
-//                        if (videoName.equals(bean.getName())){
-//                            isUpload = true;
-//                            String copyFileUrl = CompressImage.compressAndSaveBitmap(this, fileUrl,realName,false);
-//                            HashMap<String,Object> params = new HashMap<>();
-//                            params.put("fileName",videoName);
-//                            params.put("pptName",slideInfo.groupName);
-//                            params.put("range",slideInfo.groupName);
-//                            AppApi.updateImageFile(mContext,mSession.getTVBoxUrl(),copyFileUrl,params,this);
-//                            currentUploadFile = bean.getName();
-//                            break;
-//                        }
-//                }
+            }else if(!isUpload){
+                offset = 0;
             }
             if (isUpload) {
                 break;
@@ -835,7 +885,32 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         }
     }
 
+    private String formatVideo(int quality, String fileUrl, String videoName, int rotation) {
+        String destPath = getCompressVideoPath(videoName);
+        String fFmpegCmd = FFMpegUtils.getFFmpegCmd(fileUrl, quality, rotation, destPath);
+        boolean success = UtilityAdapter.FFmpegRun("", fFmpegCmd) == 0;
+        if(success) {
+            fileUrl = destPath;
+        }else {
+           fileUrl = null;
+        }
+        return fileUrl;
+    }
+
+    private String getCompressVideoPath(String videoName) {
+        return mSession.getCompressPath(this)+videoName;
+    }
+
     private void uploadVideoFragment(final String fileUrl, final String fragmentPath, final String videoName) {
+        // 更新进度
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ProgressDialogUtil.getInstance().hideProgress();
+                mProgressBarDialog.updatePercent("上传进度",(offset/(count*1.0f)));
+            }
+        });
+
         RandomAccessFile raf = null;
         FileOutputStream tmpOut = null;
         try {
@@ -855,8 +930,10 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                 @Override
                 public void run() {
                     if (offset == count - 1) {
+                        isStopUpload = false;
                         AppApi.updateVideoFile(mContext, mSession.getTVBoxUrl(), fragmentPath, params, SlideDetailActivity.this);
                     } else {
+                        isStopUpload = true;
                         AppApi.updateVideoFile(mContext, mSession.getTVBoxUrl(), fragmentPath, params, new ApiRequestListener() {
                             @Override
                             public void onSuccess(AppApi.Action method, Object obj) {
@@ -953,7 +1030,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         }
         if (count == 0) {
             if (mProgressBarDialog != null) {
-                mProgressBarDialog.updatePercent(1);
+                mProgressBarDialog.dismiss();
             }
             ShowMessage.showToast(this, getString(R.string.pro_success));
             mHandler.postDelayed(new Runnable() {
@@ -963,11 +1040,6 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                     finish();
                 }
             }, 100);
-        } else {
-            double percent = ((double) count) / slideSettingsMediaBeanResultList.size();
-            if (mProgressBarDialog != null) {
-                mProgressBarDialog.updatePercent(1 - percent);
-            }
         }
 
     }
@@ -977,7 +1049,6 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         super.onSuccess(method, obj);
         switch (method) {
             case POST_VIDEO_SLIDESETTINGS_JSON:
-                currentOffset = 0;
                 if (obj instanceof List<?>) {
                     slideSettingsMediaBeanResultList = (List<SlideSettingsMediaBean>) obj;
                     if (settingDialog != null && settingDialog.isShowing()) {
@@ -1127,6 +1198,12 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        ProgressDialogUtil.getInstance().hideProgress();
+
+        boolean isRunning = UtilityAdapter.FFmpegIsRunning("");
+        if(isRunning) {
+            UtilityAdapter.FFmpegKill("");
+        }
         isStopUpload = true;
         if (mProgressBarDialog != null) {
             mProgressBarDialog.dismiss();
