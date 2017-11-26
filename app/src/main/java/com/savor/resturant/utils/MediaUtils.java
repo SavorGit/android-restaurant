@@ -277,7 +277,7 @@ public class MediaUtils {
      * @param filePath
      * @return
      */
-    public static String getPicName(String filePath) {
+    public static String getPicName(String filePath,int quelity) {
         File file = new File(filePath);
         String parent = file.getParent();
         int parentIndex = parent.lastIndexOf("/") + 1;
@@ -285,7 +285,7 @@ public class MediaUtils {
         int startTitle = filePath.lastIndexOf("/") + 1;
         int endTitle = filePath.lastIndexOf(".");
         String title = (String) filePath.subSequence(startTitle, endTitle);
-        String result = substring+"_"+title;
+        String result = substring+"_"+title+"_"+(quelity == SlideSettingsDialog.QUALITY_HIGH?"high":"low")+".png";
         return result;
     }
 

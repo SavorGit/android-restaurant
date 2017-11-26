@@ -533,11 +533,12 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
      */
     public void postImageSlideParamToServer(String name, int duration, int interval, int force) {
         JSONArray jsonArray = new JSONArray();
+        int quality = settingDialog.getQuality();
         if (imageNameList != null && !imageNameList.isEmpty()) {
             for (String str : imageNameList) {
                 JSONObject jsonObject = new JSONObject();
                 try {
-                    String picName = MediaUtils.getPicName(str);
+                    String picName = MediaUtils.getPicName(str,quality);
                     jsonObject.accumulate("name", picName);
                     jsonObject.accumulate("exist", "0");
                 } catch (JSONException e) {
@@ -999,12 +1000,22 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
             for (SlideSettingsMediaBean bean : slideSettingsMediaBeanResultList) {
                 if (bean.getExist() == 0) {
                     for (MediaInfo mediaInfo : slideInfo.imageList) {
+                        int quality = settingDialog.getQuality();
                         String fileUrl = mediaInfo.getAssetpath();
-                        String picName = MediaUtils.getPicName(fileUrl);
+                        String picName = MediaUtils.getPicName(fileUrl,quality);
                         String realName = MediaUtils.getMediaRealName(fileUrl);
                         if (picName.equals(bean.getName())) {
                             isUpload = true;
-                            String copyFileUrl = CompressImage.compressAndSaveBitmap(this, fileUrl, realName, false);
+                            String copyFileUrl = fileUrl;
+                            switch (quality) {
+                                case SlideSettingsDialog.QUALITY_HIGH:
+                                    copyFileUrl = fileUrl;
+                                    break;
+                                case SlideSettingsDialog.QUALITY_LOW:
+                                    copyFileUrl = CompressImage.compressAndSaveBitmap(this, fileUrl, realName, false);
+                                    break;
+                            }
+
                             HashMap<String, Object> params = new HashMap<>();
                             params.put("fileName", picName);
                             params.put("pptName", slideInfo.groupName);
