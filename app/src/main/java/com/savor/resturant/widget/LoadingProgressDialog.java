@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.savor.resturant.R;
+import com.savor.resturant.utils.SlideManager;
 
 import java.text.DecimalFormat;
 
@@ -40,10 +41,18 @@ public class LoadingProgressDialog extends Dialog  {
         mHintTv = (TextView) findViewById(R.id.tv_loading_hint);
     }
 
-    public void updatePercent(String hint,double percent) {
+    public void updatePercent(String hint, double percent, SlideManager.SlideType slideType) {
         mPercentTv.setVisibility(View.VISIBLE);
         int per = (int) (percent*100);
         mPercentTv.setText(hint+per+"%");
+        switch (slideType) {
+            case IMAGE:
+                mHintTv.setVisibility(View.VISIBLE);
+                break;
+            case VIDEO:
+                mHintTv.setVisibility(View.GONE);
+                break;
+        }
     }
 
     @Override

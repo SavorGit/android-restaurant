@@ -217,7 +217,9 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                         }
                     }
                 }
-                mProgressBarDialog.updatePercent("上传进度",1.0f);
+                if(slideType == SlideManager.SlideType.VIDEO) {
+                    mProgressBarDialog.updatePercent("上传进度",1.0f, SlideManager.SlideType.VIDEO);
+                }
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -907,7 +909,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
             @Override
             public void run() {
                 ProgressDialogUtil.getInstance().hideProgress();
-                mProgressBarDialog.updatePercent("上传进度",(offset/(count*1.0f)));
+                mProgressBarDialog.updatePercent("上传进度",(offset/(count*1.0f)), SlideManager.SlideType.VIDEO);
             }
         });
 
@@ -1030,7 +1032,16 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         }
         if (count == 0) {
             if (mProgressBarDialog != null) {
-                mProgressBarDialog.dismiss();
+                switch (slideType) {
+                    case VIDEO:
+                        if(mProgressBarDialog!=null) {
+                            mProgressBarDialog.updatePercent("",1,slideType);
+                        }
+                        break;
+                    case IMAGE:
+                        mProgressBarDialog.dismiss();
+                        break;
+                }
             }
             ShowMessage.showToast(this, getString(R.string.pro_success));
             mHandler.postDelayed(new Runnable() {
@@ -1040,6 +1051,11 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                     finish();
                 }
             }, 100);
+        }else if(slideType == SlideManager.SlideType.IMAGE) {
+            double percent = ((double)count)/slideSettingsMediaBeanResultList.size();
+            if(mProgressBarDialog!=null) {
+                mProgressBarDialog.updatePercent("",1-percent, SlideManager.SlideType.IMAGE);
+            }
         }
 
     }

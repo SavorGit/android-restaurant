@@ -9,6 +9,7 @@ import com.savor.resturant.bean.SmallPlatInfoBySSDP;
 import com.savor.resturant.bean.SmallPlatformByGetIp;
 import com.savor.resturant.bean.TvBoxSSDPInfo;
 import com.savor.resturant.utils.STIDUtil;
+import com.savor.resturant.utils.SlideManager;
 
 import java.io.File;
 import java.util.HashMap;
@@ -186,7 +187,7 @@ public class AppApi {
     public static void updateImageFile(Context context, String url, String filePath, HashMap<String,Object> params, ApiRequestListener handler) {
         new AppServiceOk(context, formatImageProUrl(context,url+"/restaurant/picUpload?",
                 new HashMap<String, String>()), Action.POST_IMAGE_PROJECTION_JSON,
-                handler, params).uploadFile(filePath,true,true);
+                handler, params).uploadFile(filePath,true,true, SlideManager.SlideType.IMAGE);
 
     }
 
@@ -200,7 +201,7 @@ public class AppApi {
     public static void updateVideoFile(Context context, String url, String filePath, HashMap<String,Object> params,ApiRequestListener handler) {
         new AppServiceOk(context, formatImageProUrl(context,url+"/restaurant/vidUpload?",
                 new HashMap<String, String>()), Action.POST_VIDEO_PROJECTION_JSON,
-                handler, params).uploadFile(filePath,true,true);
+                handler, params).uploadFile(filePath,true,true, SlideManager.SlideType.VIDEO);
 
     }
 
