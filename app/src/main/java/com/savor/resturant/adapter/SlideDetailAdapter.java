@@ -7,11 +7,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.common.api.utils.DateUtil;
 import com.savor.resturant.R;
-import com.savor.resturant.bean.PictureInfo;
+import com.savor.resturant.bean.MediaInfo;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,7 +27,7 @@ public class SlideDetailAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
     private Context mContext;
-    private List<PictureInfo> mList = new ArrayList<PictureInfo>();
+    private List<MediaInfo> mList = new ArrayList<MediaInfo>();
     private boolean mIsEdit;
 
     public SlideDetailAdapter (Context context) {
@@ -33,7 +35,7 @@ public class SlideDetailAdapter extends BaseAdapter {
         mInflater = LayoutInflater.from(context);
     }
 
-    public void setData(List<PictureInfo> list) {
+    public void setData(List<MediaInfo> list) {
         mList.clear();
         mList.addAll(list);
         notifyDataSetChanged();
@@ -64,6 +66,7 @@ public class SlideDetailAdapter extends BaseAdapter {
             view = mInflater.inflate(R.layout.item_slide_detail, null);
             viewHolder.picture = (ImageView) view.findViewById(R.id.iv_picture);
             viewHolder.checkBox = (CheckBox) view.findViewById(R.id.cb_check);
+            viewHolder.tv_time = (TextView) view.findViewById(R.id.tv_time);
             //绘制图片显示的大小
            view.setTag(R.id.tag_holder, viewHolder);
 
@@ -77,8 +80,9 @@ public class SlideDetailAdapter extends BaseAdapter {
         } else {
             viewHolder.checkBox.setVisibility(View.GONE);
         }
-
-        String assetpath = mList.get(i).getAssetpath();
+        MediaInfo mediaInfo = mList.get(i);
+        int mediaType = mediaInfo.getMediaType();
+        String assetpath = mediaInfo.getAssetpath();
         File file = new File(assetpath);
         if(file!=null&&file.exists()) {
             Glide.with(mContext).load(assetpath).
@@ -88,12 +92,22 @@ public class SlideDetailAdapter extends BaseAdapter {
             viewHolder.picture.setImageResource(R.drawable.ic_deleted_hint);
         }
 
+        if(mediaType == MediaInfo.MEDIA_TYPE_VIDEO) {
+            viewHolder.tv_time.setVisibility(View.VISIBLE);
+            long duration = mediaInfo.getDuration();
+            String time = DateUtil.formatSecondsTime(String.valueOf(duration/1000));
+            viewHolder.tv_time.setText(time);
+        }else {
+            viewHolder.tv_time.setVisibility(View.GONE);
+        }
+
         return view;
     }
 
     private class ViewHolder {
         public ImageView picture;
         public CheckBox checkBox;
+        public TextView tv_time;
     }
 
     /**

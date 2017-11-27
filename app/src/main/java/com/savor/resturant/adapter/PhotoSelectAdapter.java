@@ -7,11 +7,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.common.api.utils.DateUtil;
 import com.savor.resturant.R;
-import com.savor.resturant.bean.PictureInfo;
+import com.savor.resturant.bean.MediaInfo;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,10 +26,10 @@ import java.util.List;
 public class PhotoSelectAdapter extends BaseAdapter {
 
     private  Context mContext;
-    private List<PictureInfo> mList = new ArrayList<>();
+    private List<MediaInfo> mList = new ArrayList<>();
     private  LayoutInflater mInflater;
 
-    public PhotoSelectAdapter (Context context, List<PictureInfo> list) {
+    public PhotoSelectAdapter (Context context, List<MediaInfo> list) {
         mContext = context;
         mList = list;
         mInflater = LayoutInflater.from(context);
@@ -37,7 +39,7 @@ public class PhotoSelectAdapter extends BaseAdapter {
         mContext = context;
         mInflater = LayoutInflater.from(context);
     }
-    public void setData(List<PictureInfo> list) {
+    public void setData(List<MediaInfo> list) {
 
         if(list!=null&&list.size()>0) {
             mList.clear();
@@ -74,17 +76,18 @@ public class PhotoSelectAdapter extends BaseAdapter {
             holder.imgContent = (ImageView) view.findViewById(R.id.iv_content);
             holder.check = (CheckBox) view.findViewById(R.id.cb_check);
             holder.fullScreen = (ImageView) view.findViewById(R.id.iv_fullscreen);
+            holder.tv_time = (TextView) view.findViewById(R.id.tv_time);
             //绘制图片大小
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
-        final PictureInfo pictureInfo = mList.get(i);
-        String assetpath = pictureInfo.getAssetpath();
+        final MediaInfo mediaInfo = mList.get(i);
+        String assetpath = mediaInfo.getAssetpath();
         File file = new File(assetpath);
         if(file!=null&&file.exists()) {
             Glide.with(mContext).
-                    load(pictureInfo.getAssetpath()).
+                    load(mediaInfo.getAssetpath()).
                     centerCrop().
                     placeholder(R.drawable.empty_slide)
                     .dontAnimate().
@@ -100,15 +103,23 @@ public class PhotoSelectAdapter extends BaseAdapter {
                     into(holder.imgContent);
         }
 
-        holder.check.setChecked(pictureInfo.isChecked());
+        holder.check.setChecked(mediaInfo.isChecked());
         //设置照片全屏点击事件
         holder.fullScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mOnItemFullScreenClickListener != null)
-                    mOnItemFullScreenClickListener.onItemFullScreenClick(pictureInfo);
+                    mOnItemFullScreenClickListener.onItemFullScreenClick(mediaInfo);
             }
         });
+        int mediaType = mediaInfo.getMediaType();
+        if(mediaType == MediaInfo.MEDIA_TYPE_VIDEO) {
+            holder.tv_time.setVisibility(View.VISIBLE);
+            String time = DateUtil.formatSecondsTime(String.valueOf(mediaInfo.getDuration()/1000));
+            holder.tv_time.setText(time);
+        }else {
+            holder.tv_time.setVisibility(View.GONE);
+        }
         return view;
     }
 
@@ -116,6 +127,7 @@ public class PhotoSelectAdapter extends BaseAdapter {
         public CheckBox check;
         public ImageView imgContent;
         public ImageView fullScreen;
+        public TextView tv_time;
     }
 
     private OnItemFullScreenClickListener mOnItemFullScreenClickListener = null;
@@ -124,7 +136,7 @@ public class PhotoSelectAdapter extends BaseAdapter {
      * 照片全屏回调接口
      */
     public interface OnItemFullScreenClickListener {
-        void onItemFullScreenClick (PictureInfo info);
+        void onItemFullScreenClick (MediaInfo info);
     }
 
     /**

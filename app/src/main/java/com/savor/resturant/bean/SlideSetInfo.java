@@ -16,23 +16,54 @@ public class SlideSetInfo implements Serializable {
     //文件夹名（组名）
     public String groupName;
     //文件夹创建/更新时间
-    @Override
-    public String toString() {
-        return "SlideSetInfo{" +
-                "isNewCreate=" + isNewCreate +
-                ", groupName='" + groupName + '\'' +
-                ", updateTime=" + updateTime +
-                ", imageList=" + imageList +
-                '}';
-    }
     public long updateTime;
     //该组所有图片路径集合
-    public List<String> imageList = new ArrayList<>();
-
-
+    public List<MediaInfo> imageList = new ArrayList<>();
 
     @Override
-    public boolean equals(Object obj) {
-        return this.groupName.equals(((SlideSetInfo) obj).groupName);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SlideSetInfo that = (SlideSetInfo) o;
+
+        return groupName != null ? groupName.equals(that.groupName) : that.groupName == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return groupName != null ? groupName.hashCode() : 0;
+    }
+
+    public boolean isNewCreate() {
+        return isNewCreate;
+    }
+
+    public void setNewCreate(boolean newCreate) {
+        isNewCreate = newCreate;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public long getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(long updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public List<MediaInfo> getImageList() {
+        return imageList;
+    }
+
+    public void setImageList(List<MediaInfo> imageList) {
+        this.imageList = imageList;
     }
 }

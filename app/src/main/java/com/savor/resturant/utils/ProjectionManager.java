@@ -1,5 +1,7 @@
 package com.savor.resturant.utils;
 
+import com.savor.resturant.bean.MediaInfo;
+
 import java.util.ArrayList;
 
 /**
@@ -10,7 +12,7 @@ import java.util.ArrayList;
 public class ProjectionManager {
     private static volatile ProjectionManager instance = null;
     /**当前幻灯片图片集合*/
-    private ArrayList<String> mImgList;
+    private ArrayList<MediaInfo> mImgList;
     /**当前是否正在搜索ssdp*/
     private boolean isLookingSSDP;
 
@@ -27,11 +29,11 @@ public class ProjectionManager {
     }
 
 
-    public void setImgList(ArrayList<String> imagelist) {
+    public void setImgList(ArrayList<MediaInfo> imagelist) {
         this.mImgList = imagelist;
     }
 
-    public ArrayList<String> getImgList() {
+    public ArrayList<MediaInfo> getImgList() {
         return mImgList;
     }
 

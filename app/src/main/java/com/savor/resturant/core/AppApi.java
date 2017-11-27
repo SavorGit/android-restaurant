@@ -5,18 +5,13 @@ import android.os.Build;
 import android.text.TextUtils;
 
 import com.common.api.utils.AppUtils;
-import com.savor.resturant.bean.BaseProReqeust;
-import com.savor.resturant.bean.RotateRequest;
-import com.savor.resturant.bean.SeekRequest;
 import com.savor.resturant.bean.SmallPlatInfoBySSDP;
 import com.savor.resturant.bean.SmallPlatformByGetIp;
 import com.savor.resturant.bean.TvBoxSSDPInfo;
-import com.savor.resturant.bean.VideoInfo;
 import com.savor.resturant.utils.STIDUtil;
+import com.savor.resturant.utils.SlideManager;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -55,9 +50,13 @@ public class AppApi {
         /**升级*/
         POST_UPGRADE_JSON,
         /**上传幻灯片配置*/
-        POST_UPLOAD_SLIDESETTINGS_JSON,
+        POST_IMAGE_SLIDESETTINGS_JSON,
+        /**上传视频幻灯片设置*/
+        POST_VIDEO_SLIDESETTINGS_JSON,
         /**图片投屏*/
         POST_IMAGE_PROJECTION_JSON,
+        /**视频投屏*/
+        POST_VIDEO_PROJECTION_JSON,
         /**机顶盒退出投屏*/
         POST_NOTIFY_TVBOX_STOP_JSON,
         /**获取小平台地址*/
@@ -86,8 +85,10 @@ public class AppApi {
 
             //升级
             put(Action.POST_UPGRADE_JSON, formatPhpUrl("version/HotelUpgrade/index"));
-            put(Action.POST_UPLOAD_SLIDESETTINGS_JSON,tvBoxUrl);
+            put(Action.POST_IMAGE_SLIDESETTINGS_JSON,tvBoxUrl);
+            put(Action.POST_VIDEO_SLIDESETTINGS_JSON,tvBoxUrl);
             put(Action.POST_IMAGE_PROJECTION_JSON,tvBoxUrl);
+            put(Action.POST_VIDEO_PROJECTION_JSON,tvBoxUrl);
             put(Action.POST_NOTIFY_TVBOX_STOP_JSON,tvBoxUrl);
             put(Action.GET_SAMLL_PLATFORMURL_JSON, formatPhpUrl("basedata/Ip/getIp"));
             put(Action.GET_CALL_QRCODE_JSON,tvBoxUrl);
@@ -154,17 +155,31 @@ public class AppApi {
     }
 
     /**
-     * 上传幻灯片配置信息
+     * 上传图片幻灯片配置信息
      * @param context
      * @param url
      * @param params
      * @param handler
      */
-    public static void postSlideSettingToServer(Context context, String url,HashMap<String, Object> params,int force,ApiRequestListener handler){
+    public static void postImageSlideSettingToServer(Context context, String url, HashMap<String, Object> params, int force, ApiRequestListener handler){
         HashMap<String, String> p = new HashMap<>();
         p.put("deviceName",Build.MODEL);
         p.put("force",force+"");
-        new AppServiceOk(context, formatImageProUrl(context,url+"/restaurant/ppt?",p),Action.POST_UPLOAD_SLIDESETTINGS_JSON, handler, params).post();
+        new AppServiceOk(context, formatImageProUrl(context,url+"/restaurant/ppt?",p),Action.POST_IMAGE_SLIDESETTINGS_JSON, handler, params).post();
+    }
+
+    /**
+     * 上传视频幻灯片配置信息
+     * @param context
+     * @param url
+     * @param params
+     * @param handler
+     */
+    public static void postVideoSlideSettingToServer(Context context, String url, HashMap<String, Object> params, int force, ApiRequestListener handler){
+        HashMap<String, String> p = new HashMap<>();
+        p.put("deviceName",Build.MODEL);
+        p.put("force",force+"");
+        new AppServiceOk(context, formatImageProUrl(context,url+"/restaurant/v-ppt?",p),Action.POST_VIDEO_SLIDESETTINGS_JSON, handler, params).post();
     }
 
     /**
@@ -174,8 +189,24 @@ public class AppApi {
      * @param filePath
      * @param handler
      */
-    public static void updateScreenProjectionFile(Context context, String url, String filePath, HashMap<String,Object> params,ApiRequestListener handler) {
-        new AppServiceOk(context, formatImageProUrl(context,url+"/restaurant/picUpload?",new HashMap<String, String>()),Action.POST_IMAGE_PROJECTION_JSON, handler, params).uploadFile(filePath,true,true);
+    public static void updateImageFile(Context context, String url, String filePath, HashMap<String,Object> params, ApiRequestListener handler) {
+        new AppServiceOk(context, formatImageProUrl(context,url+"/restaurant/picUpload?",
+                new HashMap<String, String>()), Action.POST_IMAGE_PROJECTION_JSON,
+                handler, params).uploadFile(filePath,true,true, SlideManager.SlideType.IMAGE);
+
+    }
+
+    /**
+     * 请求机顶盒投屏通过上传图片的方式
+     * @param context
+     * @param url
+     * @param filePath
+     * @param handler
+     */
+    public static void updateVideoFile(Context context, String url, String filePath, HashMap<String,Object> params,ApiRequestListener handler) {
+        new AppServiceOk(context, formatImageProUrl(context,url+"/restaurant/vidUpload?",
+                new HashMap<String, String>()), Action.POST_VIDEO_PROJECTION_JSON,
+                handler, params).uploadFile(filePath,true,true, SlideManager.SlideType.VIDEO);
 
     }
 

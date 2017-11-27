@@ -98,7 +98,7 @@ public class SlideListAdapter extends BaseAdapter {
         String topImagePath = null;
         int imageCounts = 0;
         if (slideSetInfo.imageList != null && slideSetInfo.imageList.size() > 0) {
-            topImagePath = slideSetInfo.imageList.get(0);
+            topImagePath = slideSetInfo.imageList.get(0).getAssetpath();
             imageCounts = slideSetInfo.imageList.size();
         }
         File file = new File(topImagePath);
@@ -146,7 +146,7 @@ public class SlideListAdapter extends BaseAdapter {
     }
 
     public interface OnItemSlideClickListener {
-        void ItemClick(SlideSetInfo info);
+        void onItemClick(SlideSetInfo info);
     }
     /**
      * 单击收藏事件监听器
@@ -160,7 +160,7 @@ public class SlideListAdapter extends BaseAdapter {
 
         @Override
         public void onClick(View view) {
-            itemSlideClickListener.ItemClick(slideSetInfo);
+            itemSlideClickListener.onItemClick(slideSetInfo);
         }
     }
 

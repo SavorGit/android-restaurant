@@ -19,7 +19,7 @@ import com.common.api.core.InitViews;
 import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.PhotoSelectAdapter;
-import com.savor.resturant.bean.PictureInfo;
+import com.savor.resturant.bean.MediaInfo;
 import com.savor.resturant.bean.SlideSetInfo;
 import com.savor.resturant.interfaces.IphotoData;
 import com.savor.resturant.utils.IntentUtil;
@@ -33,8 +33,6 @@ import com.savor.resturant.widget.CustomAlertPPtDialog;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-
-import static com.savor.resturant.activity.SlideDetailActivity.RESULT_CODE_ADD_PIC;
 
 /**
  * 幻灯片选择界面
@@ -54,15 +52,15 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
     /**
      * 当前相册下所有照片路径
      */
-    private ArrayList<String> phoList;
-    /**
-     * 当前相册下所有照片信息
-     */
-    private ArrayList<PictureInfo> imgInfoList = new ArrayList<PictureInfo>();
+    private ArrayList<MediaInfo> phoList;
+//    /**
+//     * 当前相册下所有照片信息
+//     */
+//    private ArrayList<MediaInfo> imgInfoList = new ArrayList<MediaInfo>();
     /**
      * 已选择的照片
      */
-    private LinkedList<PictureInfo> selectedImgList = new LinkedList<PictureInfo>();
+    private LinkedList<MediaInfo> selectedImgList = new LinkedList<MediaInfo>();
     private boolean isCheckAll = false;
     private int picCount;
     private PhotoSelectActivity mContext;
@@ -163,13 +161,16 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
         selectAdapter = new PhotoSelectAdapter(mContext);
         photoGroup.setAdapter(selectAdapter);
         progressBar.setVisibility(View.VISIBLE);
-        new Thread(){
-            @Override
-            public void run() {
-                //获取相册下所有照片，并展示
-                MediaUtils.getFolderAllImg(mContext, imgInfoList, phoList,mHandler);
-            }
-        }.start();
+
+        progressBar.setVisibility(View.GONE);
+        selectAdapter.setData(phoList);
+//        new Thread(){
+//            @Override
+//            public void run() {
+//                //获取相册下所有照片，并展示
+//                MediaUtils.getFolderAllNames(mContext, imgInfoList, phoList,mHandler);
+//            }
+//        }.start();
 
     }
 
@@ -291,7 +292,7 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
         checkAll.setChecked(isCheckAll);
         if (isCheckAll) {
             checkAll.setText("取消全选");
-            for (PictureInfo picInfo : imgInfoList) {
+            for (MediaInfo picInfo : phoList) {
                 if (picCount < 50) {
                     picInfo.setChecked(true);
                     if (!selectedImgList.contains(picInfo)) {
@@ -305,7 +306,7 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
         } else {
 
             checkAll.setText("全选");
-            for (PictureInfo picInfo : imgInfoList) {
+            for (MediaInfo picInfo : phoList) {
                 picInfo.setChecked(false);
                 if (selectedImgList.contains(picInfo)) {
                     selectedImgList.remove(picInfo);
@@ -315,7 +316,7 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
         }
         if (selectAdapter != null){
             selectAdapter.notifyDataSetChanged();
-            //selectAdapter.setData(imgInfoList);
+            //selectAdapter.setData(phoList);
         }
 
         if(type == IntentUtil.TYPE_SLIDE_BY_LIST) {
@@ -329,7 +330,7 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
      * @return false:有被选中照片
      */
     private boolean isChecked() {
-        for (PictureInfo picInfo : imgInfoList) {
+        for (MediaInfo picInfo : phoList) {
             if (picInfo.isChecked())
                 return false;
         }
@@ -341,7 +342,7 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
      * @return false:有被选中照片
      */
     private boolean isCheckedAll() {
-        for (PictureInfo picInfo : imgInfoList) {
+        for (MediaInfo picInfo : phoList) {
             if (!picInfo.isChecked())
                 return false;
         }
@@ -378,9 +379,9 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
      */
     private void saveSlide() {
         SlideManager instance = SlideManager.getInstance(slideType);
-        for (PictureInfo pic : selectedImgList) {
+        for (MediaInfo pic : selectedImgList) {
             //添加图片至该幻灯片组
-            slideInfo.imageList.add(pic.getAssetpath());
+            slideInfo.imageList.add(pic);
         }
         //判断是否包含该幻灯片集，如果包含则删除，并重新添加
         if (instance.containGroup(slideInfo))
@@ -393,19 +394,19 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
 
     @Override
     public void setData() {
-        selectAdapter.setData(imgInfoList);
+        selectAdapter.setData(phoList);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
         //选择与取消单张照片
-        PictureInfo pictureInfo = (PictureInfo) parent.getItemAtPosition(position);
-        if (selectedImgList.contains(pictureInfo)) {
+        MediaInfo mediaInfo = (MediaInfo) parent.getItemAtPosition(position);
+        if (selectedImgList.contains(mediaInfo)) {
             RecordUtils.onEvent(mContext, getString(R.string.slide_to_screen_select_cancel));
-            pictureInfo.setChecked(false);
-            // imgInfoList.get(i).setChecked(false);
-            selectedImgList.remove(pictureInfo);
+            mediaInfo.setChecked(false);
+            // phoList.get(i).setChecked(false);
+            selectedImgList.remove(mediaInfo);
             picCount--;
             if(isCheckAll) {
                 checkAll.setText("全选");
@@ -419,9 +420,9 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
             }
 
             RecordUtils.onEvent(mContext, getString(R.string.slide_to_screen_select));
-            pictureInfo.setChecked(true);
-            //imgInfoList.set(i,pictureInfo);
-            selectedImgList.add(pictureInfo);
+            mediaInfo.setChecked(true);
+            //phoList.set(i,mediaInfo);
+            selectedImgList.add(mediaInfo);
             picCount++;
 
             if(isCheckedAll()) {
@@ -430,7 +431,7 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
                 checkAll.setText("取消全选");
             }
         }
-        //selectAdapter.setData(imgInfoList);
+        //selectAdapter.setData(phoList);
         selectAdapter.notifyDataSetChanged();
         numMark.setText("(" + picCount + "/50)");
 
@@ -441,7 +442,15 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
 
     private void initCreateSlideBtn() {
         if(picCount ==0 ) {
-            add.setText(R.string.please_select_pic);
+            switch (slideType) {
+                case IMAGE:
+                    add.setText(R.string.please_select_pic);
+                    break;
+                case VIDEO:
+                    add.setText(R.string.please_select_video);
+                    break;
+            }
+
             add.setTextColor(getResources().getColor(R.color.dialog_text_black));
         }else {
             add.setText(R.string.create_slide);

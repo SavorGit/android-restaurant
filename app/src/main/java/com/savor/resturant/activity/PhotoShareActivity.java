@@ -36,7 +36,7 @@
 //import com.savor.resturant.bean.BaseProReqeust;
 //import com.savor.resturant.bean.ImageProResonse;
 //import com.savor.resturant.bean.ModelPic;
-//import com.savor.resturant.bean.PictureInfo;
+//import com.savor.resturant.bean.MediaInfo;
 //import com.savor.resturant.core.AppApi;
 //import com.savor.resturant.core.ResponseErrorMessage;
 //import com.savor.resturant.service.ProjectionService;
@@ -97,7 +97,7 @@
 //    /**
 //     * 当前投屏图片
 //     */
-//    private PictureInfo pictureInfo=null;
+//    private MediaInfo pictureInfo=null;
 //
 //
 //
@@ -109,7 +109,7 @@
 //                    initDatas();
 //                    break;
 //                case SHOW:
-//                    PictureInfo pictureInfo = (PictureInfo) msg.obj;
+//                    MediaInfo pictureInfo = (MediaInfo) msg.obj;
 //                    BaseProReqeust baseProReqeust = getBasePrepareInfo(pictureInfo);
 //                    AppApi.updateScreenProjectionFile(mContext,mSession.getTVBoxUrl(), baseProReqeust,pictureInfo.getCompressPath(),small,force,PhotoShareActivity.this);
 //                    break;
@@ -249,9 +249,9 @@
 //                    RecordUtils.onEvent(this,getString(R.string.picture_to_screen_photo_slide));
 //                    isSlides = true;
 //                    String json = new Gson().toJson(mCheckPicList);
-//                    Type listType = new TypeToken<LinkedList<PictureInfo>>() {
+//                    Type listType = new TypeToken<LinkedList<MediaInfo>>() {
 //                    }.getType();
-//                    List<PictureInfo> picList = new Gson().fromJson(json, listType);
+//                    List<MediaInfo> picList = new Gson().fromJson(json, listType);
 //                    if (picList != null && picList.size()>0) {
 //                        if(mRequestScreenDialog == null)
 //                            mRequestScreenDialog = new SavorDialog(this,"正在投屏…");
@@ -318,7 +318,7 @@
 //            }
 //        }
 //    }
-//    private BaseProReqeust getBasePrepareInfo(PictureInfo pictureInfo){
+//    private BaseProReqeust getBasePrepareInfo(MediaInfo pictureInfo){
 //        BaseProReqeust prepareInfo = new BaseProReqeust();
 //        prepareInfo.setAction(pictureInfo.getAction());
 //        prepareInfo.setAssetname(pictureInfo.getAssetname());
@@ -399,7 +399,7 @@
 //                mRequestScreenDialog.show();
 //                Gson gson = new Gson();
 //                String picJson = gson.toJson(modelPic);
-//                pictureInfo = gson.fromJson(picJson,PictureInfo.class);
+//                pictureInfo = gson.fromJson(picJson,MediaInfo.class);
 //                small=1;
 //                force=0;
 //                if (pictureInfo==null){
@@ -545,9 +545,9 @@
 //        if (isSlides) {
 //            Gson gson = new Gson();
 //            String json = gson.toJson(mCheckPicList);
-//            Type listType = new TypeToken<LinkedList<PictureInfo>>() {
+//            Type listType = new TypeToken<LinkedList<MediaInfo>>() {
 //            }.getType();
-//            LinkedList<PictureInfo> pictureInfos = gson.fromJson(json,listType);
+//            LinkedList<MediaInfo> pictureInfos = gson.fromJson(json,listType);
 //            ProjectionManager.getInstance().setmSlideList(pictureInfos);
 //            SlidesActivity.startSlidesActivity(this,0,json,true,ProjectionManager.getInstance().getSeriesId(),true);
 //        }else {

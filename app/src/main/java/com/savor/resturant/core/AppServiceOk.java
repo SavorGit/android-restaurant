@@ -19,6 +19,7 @@ import com.common.api.utils.AppUtils;
 import com.common.api.utils.LogUtils;
 import com.google.gson.Gson;
 import com.savor.resturant.bean.ImageProResonse;
+import com.savor.resturant.utils.SlideManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -429,7 +430,7 @@ public class AppServiceOk {
      * @param filePath 文件本地路径
      * @param isGzip
      */
-    public void uploadFile(final String filePath,boolean isGzip, boolean isNeedUserAgent) {
+    public void uploadFile(final String filePath, boolean isGzip, boolean isNeedUserAgent, SlideManager.SlideType slideType) {
         final File srcFile = new File(filePath);
         if (!srcFile.exists()) {
             return;
@@ -533,13 +534,17 @@ public class AppServiceOk {
                 }
             };
             //构造上传请求，类似web表单
-
-            RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+            MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+            builder
                     .addFormDataPart("fileName", requestParams.get("fileName"))
                     .addFormDataPart("pptName", requestParams.get("pptName"))
-                    .addFormDataPart("fileUpload", srcFile.getName(), RequestBody.create(null, srcFile))
+                    .addFormDataPart("fileUpload", srcFile.getName(), RequestBody.create(null, srcFile));
 //                    .addPart(Headers.of("Content-Disposition", "form-data; name=\"another\";filename=\"another.dex\""), RequestBody.create(MediaType.parse("application/octet-stream"), srcFile))
-                    .build();
+
+            if (slideType == SlideManager.SlideType.VIDEO) {
+                builder.addFormDataPart("range", requestParams.get("range"));
+            }
+            MultipartBody requestBody = builder.build();
             LogUtils.d("json 请求参数："+new Gson().toJson(mParameter));
             //进行包装，使其支持进度回调
             final Request request = new Request.Builder()

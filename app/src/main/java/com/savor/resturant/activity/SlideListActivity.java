@@ -207,70 +207,11 @@ public class SlideListActivity extends BaseActivity implements View.OnClickListe
     }
 
     /**
-     * 创建幻灯片弹窗
-     */
-    private void createDialog() {
-        final InputAlertDialog dialog = new InputAlertDialog(this);
-        dialog.builder()
-                .setTitle(getString(R.string.create_slide_lantern))
-                .setInputHint(getString(R.string.input_slide_lantern))
-                .setCancelable(false)
-                .setPositiveButton(getString(R.string.confirm), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String inputText = dialog.getInputText();
-                        //创建幻灯片
-                       // createSlideLantern(inputText);
-                    }
-                })
-                .setNegativeButton(getString(R.string.cancel), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                    }
-                })
-                .show();
-
-
-    }
-
-    /**
-     * 侧滑删除幻灯片集
-     * @param slideInfo
-     */
-    private void deleteSlide(final SlideSetInfo slideInfo) {
-        new InputAlertDialog(this)
-                .builder()
-                .setTitle(getString(R.string.confirm_delete_lantern_slide, slideInfo.groupName))
-                .setMsg(getString(R.string.confirm_delete_lanternslide_msg))
-                .setCancelable(false)
-                .setPositiveButton("删除", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        //删除幻灯片，存储数据
-                        SlideManager.getInstance(slideType).removeGroup(slideInfo);
-                        SlideManager.getInstance(slideType).saveSlide();
-                        initSlide();
-                    }
-                })
-                .setNegativeButton("取消", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                    }
-                })
-                .show();
-    }
-
-    /**
      * 新建幻灯片
      *
      *
      */
     private void createSlideLantern() {
-        // 创建文件夹，记录文件名
-//        if (TextUtils.isEmpty(filename)) {
-//            ToastUtil.showToastSavor(SlideListActivity.this, getString(R.string.filename_not_null));
-//            return;
-//        }
         // 新建幻灯片信息
         SlideSetInfo slideSetInfo = new SlideSetInfo();
         slideSetInfo.isNewCreate = true;
@@ -312,7 +253,7 @@ public class SlideListActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    public void ItemClick(SlideSetInfo info) {
+    public void onItemClick(SlideSetInfo info) {
 
         Intent intent = new Intent(this,SlideDetailActivity.class);
         intent.putExtra(KEY_TYPE, IntentUtil.TYPE_SLIDE_BY_LIST);

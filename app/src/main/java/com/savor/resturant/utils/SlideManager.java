@@ -78,7 +78,7 @@ public class SlideManager {
      */
     public void saveSlide() {
         if (needSave) {
-            ArrayList<SlideSetInfo> toRemove = new ArrayList<SlideSetInfo>();
+            ArrayList<SlideSetInfo> toRemove = new ArrayList<>();
             for (SlideSetInfo bean : mData) {
                 if (bean.isNewCreate) {
                     if (bean.imageList.size() < 1) {
@@ -91,15 +91,6 @@ public class SlideManager {
             mData.removeAll(toRemove);
             writeFile(type);
         }
-    }
-
-    public void addImageByGroup(SlideSetInfo group, String imagePath) {
-        needSave = true;
-        group.imageList.add(imagePath);
-    }
-
-    public boolean containImageAtGroup(SlideSetInfo group, String imagePath) {
-        return group.imageList.contains(imagePath);
     }
 
     public void removeImageByGroup(SlideSetInfo group, String imagePath) {
@@ -177,7 +168,7 @@ public class SlideManager {
                     return;
                 }
                 for (int i = bean.imageList.size() - 1; i >= 0; i--) {
-                    boolean exists = fileIsExists(bean.imageList.get(i));
+                    boolean exists = fileIsExists(bean.imageList.get(i).getAssetpath());
                     if (!exists) {
                         bean.imageList.remove(i);
                     }
