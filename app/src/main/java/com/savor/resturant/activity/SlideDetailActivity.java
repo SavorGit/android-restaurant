@@ -884,6 +884,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                         offset = 0;
                         uploadVideoFragment(fileUrl, fragmentPath, videoName);
                         currentUploadFile = bean.getName();
+                        crruntFileUrl = fileUrl;
                         break;
                     }
 
@@ -1031,6 +1032,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                             params.put("pptName", slideInfo.groupName);
                             AppApi.updateImageFile(mContext, mSession.getTVBoxUrl(), copyFileUrl, params, this);
                             currentUploadFile = bean.getName();
+                            crruntFileUrl = copyFileUrl;
                             break;
                         }
                     }
