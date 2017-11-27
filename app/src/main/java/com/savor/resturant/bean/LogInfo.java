@@ -11,7 +11,6 @@ public class LogInfo implements Serializable {
     private String signle_play;
     private String loop;
     private int loop_time;
-
     public String getSignle_play() {
         return signle_play;
     }
