@@ -200,6 +200,10 @@ public class ApiResponseFactory {
                 result = gson.fromJson(info, new TypeToken<SmallPlatformByGetIp>() {
                 }.getType());
                 break;
+            case POST_REPORT_LOG_JSON:
+                result = "success";
+                break;
+
             default:
                 break;
         }

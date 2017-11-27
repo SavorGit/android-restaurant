@@ -70,6 +70,9 @@ public class AppApi {
         POST_BOX_INFO_JSON,
         /**点对点校验三位数字*/
         GET_VERIFY_CODE_BY_BOXIP_JSON,
+        /**日志上报*/
+        POST_REPORT_LOG_JSON,
+
     }
 
     /**
@@ -91,6 +94,8 @@ public class AppApi {
             put(Action.GET_CALL_CODE_BY_BOXIP_JSON,tvBoxUrl);
             put(Action.POST_BOX_INFO_JSON,tvBoxUrl);
             put(Action.GET_VERIFY_CODE_BY_BOXIP_JSON,tvBoxUrl);
+            put(Action.POST_REPORT_LOG_JSON, formatPhpUrl("Dinnerapp/Touping/reportLog"));
+
         }
     };
 
@@ -374,6 +379,34 @@ public class AppApi {
         String serverIp = info.getServerIp();
         String commandPort = info.getCommandPort();
         return "http://"+serverIp+":"+commandPort+"/"+type.toLowerCase()+"/command/execute/";
+    }
+
+    /**升级*/
+    public static void reportLog(Context context,String ads_type,
+                                 String device_id,
+                                 String device_type,
+                                 String hotel_id,
+                                 String info,
+                                 String room_id,
+                                 String screen_num,
+                                 String screen_time,
+                                 String screen_type,
+                                 String state,
+                                 String wifi,ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("ads_type", ads_type);
+        params.put("device_id", device_id);
+        params.put("device_type", device_type);
+        params.put("hotel_id", hotel_id);
+        params.put("info", info);
+        params.put("room_id", room_id);
+        params.put("screen_num", screen_num);
+        params.put("screen_time", screen_time);
+        params.put("screen_type", screen_type);
+        params.put("state", state);
+        params.put("wifi", wifi);
+
+        new AppServiceOk(context,Action.POST_REPORT_LOG_JSON,handler,params).post();
     }
 
     // 超时（网络）异常
