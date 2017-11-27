@@ -124,6 +124,7 @@ public class MediaInfo extends Base2ScreenInfo implements Serializable{
         this.mimeType = mimeType;
     }
 
+    /**媒体类型1.图片 2 视频*/
     public int getMediaType() {
         return mediaType;
     }

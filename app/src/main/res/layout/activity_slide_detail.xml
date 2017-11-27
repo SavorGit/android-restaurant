@@ -154,4 +154,5 @@
             android:src="@drawable/delete"
             android:visibility="gone" />
     </RelativeLayout>
+
 </RelativeLayout>

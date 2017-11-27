@@ -169,6 +169,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
 //    private int currentOffset;
     /**要上传的视频总数*/
     private int currentVideoCount;
+    private String crruntFileUrl;
 
     private void checkLinkStatus() {
         TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
@@ -213,6 +214,14 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                     for (SlideSettingsMediaBean bean : slideSettingsMediaBeanResultList) {
                         if (bean.getName() == currentUploadFile) {
                             bean.setExist(1);
+                            if(!TextUtils.isEmpty(crruntFileUrl)) {
+                                String compressPath = mSession.getCompressPath(SlideDetailActivity.this);
+                                if(crruntFileUrl.contains(compressPath)) {
+                                    File file = new File(crruntFileUrl);
+                                    if(file.exists())
+                                        file.delete();
+                                }
+                            }
                             break;
                         }
                     }
@@ -868,6 +877,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                         }
                         uploadVideoFragment(fileUrl, fragmentPath, videoName);
                         currentUploadFile = bean.getName();
+                        crruntFileUrl = fileUrl;
                         break;
                     }else {
                         count = 1;

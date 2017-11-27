@@ -1,5 +1,6 @@
 package com.savor.resturant.activity;
 
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -37,6 +38,7 @@ public class SlidePreviewActivity extends BaseActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFormat(PixelFormat.TRANSLUCENT);
         setContentView(R.layout.activity_slide_preview);
 
         handleIntent();
@@ -81,7 +83,7 @@ public class SlidePreviewActivity extends BaseActivity implements View.OnClickLi
         previewAdapter.setData(images);
         viewpager.setAdapter(previewAdapter);
         viewpager.setCurrentItem(position);
-
+        viewpager.setOffscreenPageLimit(0);
     }
 
     @Override
@@ -112,5 +114,17 @@ public class SlidePreviewActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        previewAdapter.releaseALlVideo();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        viewpager.removeAllViews();
     }
 }
