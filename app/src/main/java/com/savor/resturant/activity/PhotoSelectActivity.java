@@ -144,7 +144,15 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
         }
         String name = slideInfo.groupName;
         if(type == IntentUtil.TYPE_SLIDE_BY_LIST) {
-            add.setText(R.string.please_select_pic);
+            switch (slideType) {
+                case VIDEO:
+                    add.setText(R.string.please_select_video);
+                    break;
+                case IMAGE:
+                    add.setText(R.string.please_select_pic);
+                    break;
+            }
+
             add.setTextColor(getResources().getColor(R.color.dialog_text_black));
         }else {
             if (TextUtils.isEmpty(name)) {

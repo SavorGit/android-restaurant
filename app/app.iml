@@ -165,6 +165,7 @@
     <orderEntry type="library" name="com.android.support:support-v4-25.1.1" level="project" />
     <orderEntry type="library" name="com.android.support:design-24.2.1" level="project" />
     <orderEntry type="library" name="com.android.support:support-fragment-25.1.1" level="project" />
+    <orderEntry type="library" name="com.linsea:universalvideoview-1.1.0" level="project" />
     <orderEntry type="library" name="__local_aars__:E.\Android\source\android-restaurant\app\libs\jetty-io-7.6.0.RC4.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="__local_aars__:E.\Android\source\android-restaurant\app\libs\aliyun-oss-sdk-android-2.3.0.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="com.android.support:support-core-utils-25.1.1" level="project" />

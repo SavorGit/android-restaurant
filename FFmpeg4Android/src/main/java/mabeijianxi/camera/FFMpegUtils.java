@@ -436,54 +436,106 @@ public class FFMpegUtils {
 	 * @param destPath 输出路径
 	 * @return 获取最终命令
 	 */
-	public static String getFFmpegCmd(String srcPath , int qulity, int orietation, String destPath) {
-		String fMsg1 = " -strict -2 -vcodec libx264 -b 1024000 ";
-//		-s 320x640 ";
-		String fMsg2 = "-acodec aac -ar 44100 -ac 1 -b:a 72k -preset ultrafast ";
-		String qStr = "";
+	public static String getFFmpegCmd(String srcPath , int qulity, int orietation, String destPath,String mimeType) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("ffmpeg -y -i "+srcPath+fMsg1);
-		switch (orietation) {
-			case 0:
-				sb.append("-s 640x320 ");
-				break;
-			case 90:
-				sb.append("-s 320x640 ");
-				break;
-			case 270:
-				sb.append("-s 320x640 ");
-				break;
-			case 180:
-				sb.append("-s 640x320 ");
-				break;
-		}
+//		if ("video/mp4".equals(mimeType)) {
+//			sb.append("ffmpeg  -threads 16 -y -i " + srcPath + " -vcodec libx264 -preset ultrafast ");
+//			switch (qulity) {
+//				case QUALITY_HIGH:
+//					sb.append("-crf 23 ");
+//					break;
+//				case QUALITY_LOW:
+//					sb.append("-crf 28 ");
+//					break;
+//
+//			}
+//			sb.append("-b 1024000  ");
+//			switch (orietation) {
+//				case 0:
+//					sb.append("-s 960x540 ");
+//					break;
+//				case 90:
+//					sb.append("-s 540x960 ");
+//					break;
+//				case 270:
+//					sb.append("-s 540x960 ");
+//					break;
+//				case 180:
+//					sb.append("-s 960x540 ");
+//					break;
+//			}
+//
+//			sb.append("-acodec copy");
+//
+//			switch (qulity) {
+//				case QUALITY_HIGH:
+//					sb.append(" -vbr 2  -r 20 ");
+//					break;
+//				case QUALITY_LOW:
+//					sb.append(" -vbr 4  -r 15 ");
+//					break;
+//			}
+//
+//			switch (orietation) {
+//				case 0:
+//					sb.append("");
+//					break;
+//				case 90:
+//					sb.append("-vf transpose=2,vflip,hflip -metadata:s:v:0 rotate=0 ");
+//					break;
+//				case 270:
+//					sb.append("-vf transpose=2 -metadata:s:v:0 rotate=0 ");
+//					break;
+//				case 180:
+//					sb.append("-vf vflip,hflip  -metadata:s:v:0 rotate=0 ");
+//					break;
+//			}
+//
+//			sb.append(destPath);
+//		} else {
+			sb.append("fmpeg -threads 16 -y -i " + srcPath + " -strict -2 -vcodec libx264 -acodec aac -ar 44100 -ac 1 -b:a 72k -b 1024000 ");
+			switch (orietation) {
+				case 0:
+					sb.append("-s 960x540 ");
+					break;
+				case 90:
+					sb.append("-s 540x960 ");
+					break;
+				case 270:
+					sb.append("-s 540x960 ");
+					break;
+				case 180:
+					sb.append("-s 960x540 ");
+					break;
+			}
+			sb.append("-preset ultrafast ");
+			switch (qulity) {
+				case QUALITY_HIGH:
+					sb.append("-crf 23 -vbr 2  -r 20 ");
+					break;
+				case QUALITY_LOW:
+					sb.append("-crf 28 -vbr 4  -r 15 ");
+					break;
+			}
 
-		switch (qulity) {
-			case QUALITY_HIGH:
-				sb.append("-crf 23 ");
-				break;
-			case QUALITY_LOW:
-				sb.append( "-crf 28 ");
-				break;
-		}
+			switch (orietation) {
+				case 0:
+					sb.append("");
+					break;
+				case 90:
+					sb.append("-vf transpose=2,vflip,hflip -metadata:s:v:0 rotate=0 ");
+					break;
+				case 270:
+					sb.append("-vf transpose=2 -metadata:s:v:0 rotate=0 ");
+					break;
+				case 180:
+					sb.append("-vf vflip,hflip  -metadata:s:v:0 rotate=0 ");
+					break;
+			}
 
-		String orStr = "";
-		switch (orietation) {
-			case 0:
-				sb.append("-metadata:s:v:0 rotate=0 ");
-				break;
-			case 90:
-				sb.append("-vf transpose=2,vflip,hflip -metadata:s:v:0 rotate=0 ");
-				break;
-			case 270:
-				sb.append("-vf transpose=2 -metadata:s:v:0 rotate=0 ");
-				break;
-			case 180:
-				sb.append("-vf vflip,hflip  -metadata:s:v:0 rotate=0 ");
-				break;
-		}
+			sb.append(destPath);
+//		}
 
-		sb.append(destPath);
 		return sb.toString();
 	}
 
