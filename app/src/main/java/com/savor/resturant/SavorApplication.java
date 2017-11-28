@@ -58,6 +58,7 @@ public class SavorApplication extends MultiDexApplication {
 //        initUmengPush();
     }
 
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);

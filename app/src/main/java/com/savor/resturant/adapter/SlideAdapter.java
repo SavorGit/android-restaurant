@@ -91,7 +91,7 @@ public class SlideAdapter extends PagerAdapter {
                         Uri uri = Uri.parse(assetpath);
                         videoView.setMediaController(controller);
                         videoView.setVideoURI(uri);
-                        videoView.seekTo(200);
+                        videoView.seekTo(10);
                         videoView.pause();
                     }
                     break;

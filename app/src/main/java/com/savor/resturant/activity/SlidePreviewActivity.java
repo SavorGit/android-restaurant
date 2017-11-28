@@ -2,16 +2,18 @@ package com.savor.resturant.activity;
 
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.savor.resturant.R;
+import com.savor.resturant.adapter.MediaPreviewAdapter;
 import com.savor.resturant.adapter.SlideAdapter;
 import com.savor.resturant.bean.MediaInfo;
 import com.savor.resturant.bean.SlideSetInfo;
-import com.savor.resturant.utils.MediaUtils;
+import com.savor.resturant.fragment.MediaPreViewFragment;
 import com.savor.resturant.utils.SlideManager;
 import com.savor.resturant.widget.LoopViewPager;
 
@@ -23,13 +25,14 @@ import java.util.List;
  * Created by Administrator on 2017/3/17.
  */
 
-public class SlidePreviewActivity extends BaseActivity implements View.OnClickListener,ViewPager.OnPageChangeListener{
+public class SlidePreviewActivity extends BaseFragmentActivity implements View.OnClickListener,ViewPager.OnPageChangeListener{
 
     private LinearLayout backLayout;
     private LoopViewPager viewpager;
 
     private SlideAdapter previewAdapter;
     private List<MediaInfo> images = new LinkedList<>();
+    private List<Fragment> fragments = new ArrayList<>();
     private SlideSetInfo slideSetInfo;
     private int position;
     private SlideManager.SlideType slideType;
@@ -79,11 +82,18 @@ public class SlidePreviewActivity extends BaseActivity implements View.OnClickLi
                 break;
         }
 
-        previewAdapter = new SlideAdapter(SlidePreviewActivity.this);
-        previewAdapter.setData(images);
-        viewpager.setAdapter(previewAdapter);
-        viewpager.setCurrentItem(position);
-        viewpager.setOffscreenPageLimit(0);
+        for(MediaInfo info:images) {
+            Fragment fragment = MediaPreViewFragment.newInstance(info);
+            fragments.add(fragment);
+        }
+        MediaPreviewAdapter mMediaPreviewAdapter = new MediaPreviewAdapter(getSupportFragmentManager());
+        viewpager.setAdapter(mMediaPreviewAdapter);
+        mMediaPreviewAdapter.setData(fragments);
+//        previewAdapter = new SlideAdapter(SlidePreviewActivity.this);
+//        previewAdapter.setData(images);
+//        viewpager.setAdapter(previewAdapter);
+//        viewpager.setCurrentItem(position);
+//        viewpager.setOffscreenPageLimit(0);
     }
 
     @Override

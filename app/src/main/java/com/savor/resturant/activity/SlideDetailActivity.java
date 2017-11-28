@@ -835,14 +835,14 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                 int rotation = FFMpegUtils.getRotation(fileUrl);
                 if("video/mp4".equals(mimeType)) {
                     if(rotation !=0) {
-                        fileUrl = formatVideo(quality, fileUrl, videoName, rotation);
+                        fileUrl = formatVideo(quality, fileUrl, videoName, rotation,mimeType);
                     }else {
                         if(quality == SlideSettingsDialog.QUALITY_LOW) {
-                            fileUrl = formatVideo(quality, fileUrl, videoName, rotation);
+                            fileUrl = formatVideo(quality, fileUrl, videoName, rotation,mimeType);
                         }
                     }
                 }else {
-                    fileUrl = formatVideo(quality, fileUrl, videoName, rotation);
+                    fileUrl = formatVideo(quality, fileUrl, videoName, rotation,mimeType);
                 }
 
                 if(TextUtils.isEmpty(fileUrl)) {
@@ -899,9 +899,9 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         }
     }
 
-    private String formatVideo(int quality, String fileUrl, String videoName, int rotation) {
+    private String formatVideo(int quality, String fileUrl, String videoName, int rotation,String mimeType) {
         String destPath = getCompressVideoPath(videoName);
-        String fFmpegCmd = FFMpegUtils.getFFmpegCmd(fileUrl, quality, rotation, destPath);
+        String fFmpegCmd = FFMpegUtils.getFFmpegCmd(fileUrl, quality, rotation, destPath,mimeType);
         boolean success = UtilityAdapter.FFmpegRun("", fFmpegCmd) == 0;
         if(success) {
             fileUrl = destPath;
@@ -921,7 +921,9 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
             @Override
             public void run() {
                 ProgressDialogUtil.getInstance().hideProgress();
-                mProgressBarDialog.updatePercent("上传进度",(offset/(count*1.0f)), SlideManager.SlideType.VIDEO);
+                if(mProgressBarDialog!=null) {
+                    mProgressBarDialog.updatePercent("上传进度",(offset/(count*1.0f)), SlideManager.SlideType.VIDEO);
+                }
             }
         });
 
