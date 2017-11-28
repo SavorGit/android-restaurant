@@ -7,6 +7,7 @@ import android.support.multidex.MultiDexApplication;
 import com.common.api.utils.AppUtils;
 import com.savor.resturant.core.Session;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.commonsdk.UMConfigure;
 
 import java.io.File;
 
@@ -51,9 +52,9 @@ public class SavorApplication extends MultiDexApplication {
         //初始化友盟分享
         //开启debug模式，方便定位错误，具体错误检查方式可以查看http://dev.umeng.com/social/android/quick-integration的报错必看，正式发布，请关闭该模式
 //        Config.DEBUG = true;
-//        UMShareAPI.get(this);
+//       UMShareAPI.get(this);
         initCacheFile(this);
-
+        UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, "");
 //        initUmengPush();
     }
 
