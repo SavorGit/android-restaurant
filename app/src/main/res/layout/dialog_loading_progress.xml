@@ -19,7 +19,6 @@
         />
 
     <TextView
-        android:visibility="gone"
         android:id="@+id/tv_loading_hint"
         android:layout_marginTop="16dp"
         android:layout_below="@id/tv_percent"
@@ -33,6 +32,15 @@
         android:textSize="16sp"
         />
 
-
+    <TextView
+        android:id="@+id/tv_cancel"
+        android:padding="10dp"
+        android:background="@drawable/bg_cancel_btn_gray"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/tv_loading_hint"
+        android:text="取消"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </RelativeLayout>
