@@ -54,7 +54,7 @@ public class SavorApplication extends MultiDexApplication {
 //        Config.DEBUG = true;
 //       UMShareAPI.get(this);
         initCacheFile(this);
-        UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, "");
+        //UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, "");
 //        initUmengPush();
     }
 
