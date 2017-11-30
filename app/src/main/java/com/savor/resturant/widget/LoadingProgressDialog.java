@@ -50,15 +50,10 @@ public class LoadingProgressDialog extends Dialog implements View.OnClickListene
     public void updatePercent(String hint, int progress, SlideManager.SlideType slideType) {
         mPercentTv.setVisibility(View.VISIBLE);
         mPercentTv.setText(progress+"%");
-        mHintTv.setText(hint);
-//        switch (slideType) {
-//            case IMAGE:
-//                mHintTv.setVisibility(View.VISIBLE);
-//                break;
-//            case VIDEO:
-//                mHintTv.setVisibility(View.GONE);
-//                break;
-//        }
+        if(!TextUtils.isEmpty(hint)) {
+            mHintTv.setText(hint);
+        }
+
     }
 
     @Override
@@ -80,6 +75,7 @@ public class LoadingProgressDialog extends Dialog implements View.OnClickListene
                 if(listener!=null) {
                     listener.onCancelBtnClick();
                 }
+                mPercentTv.setText("0%");
                 dismiss();
                 break;
         }
