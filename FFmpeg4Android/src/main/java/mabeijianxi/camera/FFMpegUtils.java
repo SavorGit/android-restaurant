@@ -439,7 +439,7 @@ public class FFMpegUtils {
 	 */
 	public static String getFFmpegCmd(String srcPath , int qulity, int orietation, String destPath, VideoInfo info) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("fmpeg -threads 16 -y -i " + srcPath + " -vcodec libx264 ");
+		sb.append("fmpeg -threads 16 -y -i " + srcPath + " -strict -2 -vcodec libx264 ");
 		String acodec = info.getAcodec();
 		if("aac".equals(acodec)) {
 			sb.append("-acodec copy -b 1024000 ");
