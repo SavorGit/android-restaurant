@@ -5,6 +5,7 @@ import android.media.MediaMetadataRetriever;
 import android.widget.Toast;
 
 import mabeijianxi.camera.model.MediaObject.MediaPart;
+import mabeijianxi.camera.model.VideoInfo;
 import mabeijianxi.camera.util.DeviceUtils;
 import mabeijianxi.camera.util.FileUtils;
 import mabeijianxi.camera.util.Log;
@@ -16,7 +17,7 @@ import java.io.IOException;
 
 /**
  * ffmpeg工具类
- * 
+ *
  */
 public class FFMpegUtils {
 	public static final int QUALITY_HIGH = 0x1;
@@ -50,7 +51,7 @@ public class FFMpegUtils {
 
 	/**
 	 * 导入视频
-	 * 
+	 *
 	 * @param part 分块信息
 	 * @param mWindowWidth 窗口宽度
 	 * @param videoWidth 视频宽度 
@@ -118,18 +119,18 @@ public class FFMpegUtils {
 
 				boolean hasRotation = true;
 				switch (rotation) {
-				case 90:
-					buffer.append("transpose=1[transpose];[transpose]");
-					break;
-				case 270:
-					buffer.append("transpose=2[transpose];[transpose]");
-					break;
-				case 180:
-					buffer.append("vflip[vflip];[vflip]hflip[transpose];[transpose]");
-					break;
-				default:
-					hasRotation = false;
-					break;
+					case 90:
+						buffer.append("transpose=1[transpose];[transpose]");
+						break;
+					case 270:
+						buffer.append("transpose=2[transpose];[transpose]");
+						break;
+					case 180:
+						buffer.append("vflip[vflip];[vflip]hflip[transpose];[transpose]");
+						break;
+					default:
+						hasRotation = false;
+						break;
 				}
 
 				buffer.append(" crop=480:480:");
@@ -244,15 +245,15 @@ public class FFMpegUtils {
 					scaleBuffer.append("[tmp];[tmp]");
 					// boolean hasRotation = true;
 					switch (rotation) {
-					case ExifInterface.ORIENTATION_ROTATE_90:
-						scaleBuffer.append("transpose=1[transpose];[transpose]");
-						break;
-					case ExifInterface.ORIENTATION_ROTATE_180:
-						scaleBuffer.append("transpose=2[transpose];[transpose]");
-						break;
-					case ExifInterface.ORIENTATION_ROTATE_270:
-						scaleBuffer.append("vflip[vflip];[vflip]hflip[transpose];[transpose]");
-						break;
+						case ExifInterface.ORIENTATION_ROTATE_90:
+							scaleBuffer.append("transpose=1[transpose];[transpose]");
+							break;
+						case ExifInterface.ORIENTATION_ROTATE_180:
+							scaleBuffer.append("transpose=2[transpose];[transpose]");
+							break;
+						case ExifInterface.ORIENTATION_ROTATE_270:
+							scaleBuffer.append("vflip[vflip];[vflip]hflip[transpose];[transpose]");
+							break;
 					}
 
 					scaleBuffer.append(" crop=480:480:");
@@ -308,7 +309,7 @@ public class FFMpegUtils {
 
 	/**
 	 * 视频截图
-	 * 
+	 *
 	 * @param videoPath 视频路径
 	 * @param outputPath 截图输出路径
 	 * @param wh 截图画面尺寸，例如84x84
@@ -436,104 +437,55 @@ public class FFMpegUtils {
 	 * @param destPath 输出路径
 	 * @return 获取最终命令
 	 */
-	public static String getFFmpegCmd(String srcPath , int qulity, int orietation, String destPath,String mimeType) {
+	public static String getFFmpegCmd(String srcPath , int qulity, int orietation, String destPath, VideoInfo info) {
 		StringBuilder sb = new StringBuilder();
-//		if ("video/mp4".equals(mimeType)) {
-//			sb.append("ffmpeg  -threads 16 -y -i " + srcPath + " -vcodec libx264 -preset ultrafast ");
-//			switch (qulity) {
-//				case QUALITY_HIGH:
-//					sb.append("-crf 23 ");
-//					break;
-//				case QUALITY_LOW:
-//					sb.append("-crf 28 ");
-//					break;
-//
-//			}
-//			sb.append("-b 1024000  ");
-//			switch (orietation) {
-//				case 0:
-//					sb.append("-s 960x540 ");
-//					break;
-//				case 90:
-//					sb.append("-s 540x960 ");
-//					break;
-//				case 270:
-//					sb.append("-s 540x960 ");
-//					break;
-//				case 180:
-//					sb.append("-s 960x540 ");
-//					break;
-//			}
-//
-//			sb.append("-acodec copy");
-//
-//			switch (qulity) {
-//				case QUALITY_HIGH:
-//					sb.append(" -vbr 2  -r 20 ");
-//					break;
-//				case QUALITY_LOW:
-//					sb.append(" -vbr 4  -r 15 ");
-//					break;
-//			}
-//
-//			switch (orietation) {
-//				case 0:
-//					sb.append("");
-//					break;
-//				case 90:
-//					sb.append("-vf transpose=2,vflip,hflip -metadata:s:v:0 rotate=0 ");
-//					break;
-//				case 270:
-//					sb.append("-vf transpose=2 -metadata:s:v:0 rotate=0 ");
-//					break;
-//				case 180:
-//					sb.append("-vf vflip,hflip  -metadata:s:v:0 rotate=0 ");
-//					break;
-//			}
-//
-//			sb.append(destPath);
-//		} else {
-			sb.append("fmpeg -threads 16 -y -i " + srcPath + " -strict -2 -vcodec libx264 -acodec aac -ar 44100 -ac 1 -b:a 72k -b 1024000 ");
-			switch (orietation) {
-				case 0:
-					sb.append("-s 960x540 ");
-					break;
-				case 90:
-					sb.append("-s 540x960 ");
-					break;
-				case 270:
-					sb.append("-s 540x960 ");
-					break;
-				case 180:
-					sb.append("-s 960x540 ");
-					break;
-			}
-			sb.append("-preset ultrafast ");
-			switch (qulity) {
-				case QUALITY_HIGH:
-					sb.append("-crf 23 -vbr 2  -r 20 ");
-					break;
-				case QUALITY_LOW:
-					sb.append("-crf 28 -vbr 4  -r 15 ");
-					break;
-			}
+		sb.append("fmpeg -threads 16 -y -i " + srcPath + " -vcodec libx264 ");
+		String acodec = info.getAcodec();
+		if("aac".equals(acodec)) {
+			sb.append("-acodec copy -b 1024000 ");
+		}else {
+			sb.append("-acodec aac -ar 44100 -ac 1 -b:a 72k -b 1024000 ");
+		}
+		switch (orietation) {
+			case 0:
+				sb.append("-s 640x360 ");
+				break;
+			case 90:
+				sb.append("-s 360x640 ");
+				break;
+			case 270:
+				sb.append("-s 360x640 ");
+				break;
+			case 180:
+				sb.append("-s 640x360 ");
+				break;
+		}
+		sb.append("-preset ultrafast ");
+		switch (qulity) {
+			case QUALITY_HIGH:
+				sb.append("-crf 23 -vbr 2  -r 20 ");
+				break;
+			case QUALITY_LOW:
+				sb.append("-crf 28 -vbr 4  -r 15 ");
+				break;
+		}
 
-			switch (orietation) {
-				case 0:
-					sb.append("");
-					break;
-				case 90:
-					sb.append("-vf transpose=2,vflip,hflip -metadata:s:v:0 rotate=0 ");
-					break;
-				case 270:
-					sb.append("-vf transpose=2 -metadata:s:v:0 rotate=0 ");
-					break;
-				case 180:
-					sb.append("-vf vflip,hflip  -metadata:s:v:0 rotate=0 ");
-					break;
-			}
+		switch (orietation) {
+			case 0:
+				sb.append("");
+				break;
+			case 90:
+				sb.append("-vf transpose=2,vflip,hflip -metadata:s:v:0 rotate=0 ");
+				break;
+			case 270:
+				sb.append("-vf transpose=2 -metadata:s:v:0 rotate=0 ");
+				break;
+			case 180:
+				sb.append("-vf vflip,hflip  -metadata:s:v:0 rotate=0 ");
+				break;
+		}
 
-			sb.append(destPath);
+		sb.append(destPath);
 //		}
 
 		return sb.toString();

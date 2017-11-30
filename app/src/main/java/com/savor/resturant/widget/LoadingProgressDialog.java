@@ -18,16 +18,19 @@ import java.text.DecimalFormat;
  * Created by hezd on 2016/12/26.
  */
 
-public class LoadingProgressDialog extends Dialog  {
+public class LoadingProgressDialog extends Dialog implements View.OnClickListener {
 
 
     private final Activity mContext;
+    private final OnCancelBtnClickListener listener;
     private TextView mPercentTv;
     private TextView mHintTv;
+    private TextView mCancelBtn;
 
-    public LoadingProgressDialog(Activity context) {
+    public LoadingProgressDialog(Activity context,OnCancelBtnClickListener listener) {
         super(context, R.style.loading_progress_bar);
         this.mContext = context;
+        this.listener = listener;
     }
 
 
@@ -39,20 +42,23 @@ public class LoadingProgressDialog extends Dialog  {
         setCancelable(false);
         mPercentTv = (TextView) findViewById(R.id.tv_percent);
         mHintTv = (TextView) findViewById(R.id.tv_loading_hint);
+        mCancelBtn = (TextView) findViewById(R.id.tv_cancel);
+
+        mCancelBtn.setOnClickListener(this);
     }
 
-    public void updatePercent(String hint, double percent, SlideManager.SlideType slideType) {
+    public void updatePercent(String hint, int progress, SlideManager.SlideType slideType) {
         mPercentTv.setVisibility(View.VISIBLE);
-        int per = (int) (percent*100);
-        mPercentTv.setText(hint+per+"%");
-        switch (slideType) {
-            case IMAGE:
-                mHintTv.setVisibility(View.VISIBLE);
-                break;
-            case VIDEO:
-                mHintTv.setVisibility(View.GONE);
-                break;
-        }
+        mPercentTv.setText(progress+"%");
+        mHintTv.setText(hint);
+//        switch (slideType) {
+//            case IMAGE:
+//                mHintTv.setVisibility(View.VISIBLE);
+//                break;
+//            case VIDEO:
+//                mHintTv.setVisibility(View.GONE);
+//                break;
+//        }
     }
 
     @Override
@@ -65,5 +71,23 @@ public class LoadingProgressDialog extends Dialog  {
     public void loading(String msg) {
         mPercentTv.setVisibility(View.GONE);
         mHintTv.setText(msg);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_cancel:
+                if(listener!=null) {
+                    listener.onCancelBtnClick();
+                }
+                dismiss();
+                break;
+        }
+    }
+
+
+
+    public interface OnCancelBtnClickListener {
+        void onCancelBtnClick();
     }
 }
