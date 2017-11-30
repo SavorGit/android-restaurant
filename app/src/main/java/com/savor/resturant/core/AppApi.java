@@ -436,7 +436,6 @@ public class AppApi {
         params.put("screen_type", screen_type);
         params.put("state", state);
         params.put("wifi", wifi);
-
         new AppServiceOk(context,Action.POST_REPORT_LOG_JSON,handler,params).post();
     }
 

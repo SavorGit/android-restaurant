@@ -226,11 +226,11 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                             bean.setExist(1);
                             if(!TextUtils.isEmpty(crruntFileUrl)) {
                                 String compressPath = mSession.getCompressPath(SlideDetailActivity.this);
-//                                if(crruntFileUrl.contains(compressPath)) {
-//                                    File file = new File(crruntFileUrl);
-//                                    if(file.exists())
-//                                        file.delete();
-//                                }
+                                if(crruntFileUrl.contains(compressPath)) {
+                                    File file = new File(crruntFileUrl);
+                                    if(file.exists())
+                                        file.delete();
+                                }
                             }
                             break;
                         }

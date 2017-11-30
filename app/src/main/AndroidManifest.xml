@@ -81,9 +81,6 @@
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="${UMENG_CHANNEL_VALUE}" />
-        <meta-data
-            android:name="UMENG_MESSAGE_SECRET"
-            android:value="3c7df71a0b6ea4ed2a615903dab9dd9b" />
 
         <activity
             android:name=".activity.SplashActivity"
