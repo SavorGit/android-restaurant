@@ -3,18 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/color_app_bg">
+    android:background="@color/color_eeeeee">
     <include
         android:id="@+id/head_layout"
         layout="@layout/layout_head_title"/>
-    <ListView
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:layout_weight="1"
         android:id="@+id/category_list"
         android:layout_below="@id/head_layout"
-        android:background="@color/color_app_bg"
+        android:background="@color/color_eeeeee"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     <RelativeLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
