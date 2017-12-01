@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
 import okhttp3.Call;
@@ -41,6 +42,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class AppServiceOk {
+    private static final long UPLOAD_TIMEOUT_TIME = 60;
     private Context mContext;
     private AppApi.Action action;
     private ApiRequestListener handler;
@@ -553,7 +555,8 @@ public class AppServiceOk {
                     .post(ProgressHelper
                     .addProgressRequestListener(requestBody, uiProgressRequestListener)).build();
             //开始请求
-            client.newCall(request).enqueue(callback);
+            Call call = client.newBuilder().writeTimeout(UPLOAD_TIMEOUT_TIME, TimeUnit.SECONDS).build().newCall(request);
+            call.enqueue(callback);
 //			PostFileRequest postFileRequest = new PostFileRequest(requestUrl,action,requestParams,headers,srcFile,null);
 //
 //			RequestCall requestCall = new RequestCall(postFileRequest);

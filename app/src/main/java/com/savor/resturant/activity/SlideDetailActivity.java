@@ -1351,6 +1351,12 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     @Override
     public void onCancelBtnClick() {
         isStopUpload = true;
+        String compressPath = mSession.getCompressPath(this);
+        if(!TextUtils.isEmpty(crruntFileUrl)&&crruntFileUrl.contains(compressPath)) {
+            File file = new File(crruntFileUrl);
+            if(file.exists())
+                file.delete();
+        }
         UtilityAdapter.FFmpegKill(FFMPEG_FLAG);
         OkHttpUtils.getInstance().getOkHttpClient().dispatcher().cancelAll();
     }
