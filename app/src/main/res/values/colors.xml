@@ -96,5 +96,9 @@
     <color name="pro_bg">#f0ffffff</color>
     <color name="color_3e000000">#66000000</color>
     <color name="color_3e5d5a55">#3e5d5a55</color>
+<<<<<<< HEAD
     <color name="color_eeeeee">#eeeeee</color>
+=======
+    <color name="color_fd7a40">#fd7a40</color>
+>>>>>>> 2a145a6f4aaa1480a7b526c3c1c5a11c6b92c523
 </resources>

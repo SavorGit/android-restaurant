@@ -185,6 +185,10 @@
         <activity android:name=".activity.MainActivity"
             android:screenOrientation="portrait"
             />
+        <activity android:name=".activity.LoginForCodeActivity"
+            android:screenOrientation="portrait"
+            />
+
         <activity android:name=".activity.LinkTvActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysVisible"
