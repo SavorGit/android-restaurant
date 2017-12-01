@@ -12,22 +12,26 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Process;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import com.common.api.http.callback.FileDownProgress;
 import com.common.api.utils.AppUtils;
+import com.common.api.utils.DensityUtil;
 import com.common.api.utils.LogUtils;
 import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.CategoryAdapter;
+import com.savor.resturant.adapter.FunctionAdapter;
 import com.savor.resturant.bean.CategoryItemVo;
+import com.savor.resturant.bean.FunctionItem;
 import com.savor.resturant.bean.TvBoxInfo;
 import com.savor.resturant.bean.TvBoxSSDPInfo;
 import com.savor.resturant.bean.UpgradeInfo;
@@ -46,13 +50,13 @@ import com.savor.resturant.utils.WifiUtil;
 import com.savor.resturant.widget.HotsDialog;
 import com.savor.resturant.widget.SavorDialog;
 import com.savor.resturant.widget.UpgradeDialog;
+import com.savor.resturant.widget.decoration.SpacesItemDecoration;
 
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static com.savor.resturant.activity.LinkTvActivity.EXRA_TV_BOX;
@@ -73,11 +77,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public static final String ACTION_TV_LINK = "action_tv_link";
     private TextView tv_center;
     private ImageView iv_left;
-    private ListView listView;
+    private RecyclerView listView;
     private TextView connectTipTV;
     private TextView operationBtnTV;
     private CategoryAdapter categoryAdapter=null;
-    private List<CategoryItemVo> mList = new ArrayList<>();
+    private List<FunctionItem> mList = new ArrayList<>();
     private BindTvPresenter mBindTvPresenter;
     private UpgradeInfo upGradeInfo;
     private UpgradeDialog mUpgradeDialog;
@@ -180,7 +184,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public void getViews() {
         iv_left = (ImageView) findViewById(R.id.iv_left);
         tv_center = (TextView)findViewById(R.id.tv_center);
-        listView = (ListView) findViewById(R.id.category_list);
+        listView = (RecyclerView) findViewById(R.id.category_list);
         connectTipTV = (TextView)findViewById(R.id.connect_tip);
         operationBtnTV = (TextView)findViewById(R.id.operation_btn);
     }
@@ -192,26 +196,50 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         initWIfiHint();
         mList.clear();
-        CategoryItemVo categoryItemVo = new CategoryItemVo();
-        categoryItemVo.setId(ConstantValues.CATEGORY_SLIDE);
-        categoryItemVo.setName("图片与幻灯片");
-        categoryItemVo.setState(1);
-        mList.add(categoryItemVo);
 
-        categoryItemVo = new CategoryItemVo();
-        categoryItemVo.setId(ConstantValues.CATEGORY_VIDEO);
-        categoryItemVo.setName("视频");
-        categoryItemVo.setState(1);
-        mList.add(categoryItemVo);
+        FunctionItem recommandItem = new FunctionItem();
+        recommandItem.setContent("推荐菜");
+        recommandItem.setResId(R.drawable.ico_recommand);
+        recommandItem.setType(FunctionItem.FunctionType.TYPE_RECOMMAND_GEENS);
+        mList.add(recommandItem);
 
-        categoryItemVo = new CategoryItemVo();
-        categoryItemVo.setId(ConstantValues.CATEGORY_FILE);
-        categoryItemVo.setName("文件");
-        categoryItemVo.setState(0);
-        mList.add(categoryItemVo);
+        FunctionItem advertItem = new FunctionItem();
+        advertItem.setContent("宣传片");
+        advertItem.setResId(R.drawable.ico_advert);
+        advertItem.setType(FunctionItem.FunctionType.TYPE_ADVERT);
+        mList.add(advertItem);
 
-        categoryAdapter = new CategoryAdapter(mContext,mList);
-        listView.setAdapter(categoryAdapter);
+        FunctionItem welcomeItem = new FunctionItem();
+        welcomeItem.setContent("欢迎词");
+        welcomeItem.setResId(R.drawable.ico_welcom_word);
+        welcomeItem.setType(FunctionItem.FunctionType.TYPE_WELCOME_WORD);
+        mList.add(welcomeItem);
+
+        FunctionItem picItem = new FunctionItem();
+        picItem.setContent("照片");
+        picItem.setResId(R.drawable.ico_pic);
+        picItem.setType(FunctionItem.FunctionType.TYPE_PIC);
+        mList.add(picItem);
+
+        FunctionItem videoItem = new FunctionItem();
+        videoItem.setContent("视频");
+        videoItem.setResId(R.drawable.ico_video);
+        videoItem.setType(FunctionItem.FunctionType.TYPE_VIDEO);
+        mList.add(videoItem);
+
+        FunctionAdapter mFunctionAdapter = new FunctionAdapter(this);
+        GridLayoutManager layoutManager = new GridLayoutManager(this,2);
+        layoutManager.setOrientation(GridLayoutManager.VERTICAL);
+        listView.setLayoutManager(layoutManager);
+        mFunctionAdapter.setData(mList);
+        listView.setAdapter(mFunctionAdapter);
+
+        //添加ItemDecoration，item之间的间隔
+        int leftRight = DensityUtil.dip2px(this,5);
+        int topBottom = DensityUtil.dip2px(this,15);
+
+        listView.addItemDecoration(new SpacesItemDecoration(leftRight, topBottom, getResources().getColor(R.color.color_eeeeee)));
+
     }
 
 
@@ -247,7 +275,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void setListeners() {
-        listView.setOnItemClickListener(itemClickListener);
+//        listView.setOnItemClickListener(itemClickListener);
         operationBtnTV.setOnClickListener(this);
     }
 
