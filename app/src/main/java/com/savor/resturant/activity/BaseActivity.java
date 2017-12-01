@@ -30,6 +30,7 @@ import com.savor.resturant.interfaces.IBaseView;
 import com.savor.resturant.service.SSDPService;
 import com.savor.resturant.utils.ActivitiesManager;
 import com.savor.resturant.utils.ProjectionManager;
+import com.savor.resturant.utils.StatusBarUtil;
 import com.savor.resturant.utils.WifiUtil;
 import com.savor.resturant.widget.CommonDialog;
 import com.savor.resturant.widget.HotsDialog;
@@ -89,6 +90,7 @@ public abstract class BaseActivity extends Activity implements ApiRequestListene
         mSession = Session.get(getApplicationContext());
         mContext = this;
         ActivitiesManager.getInstance().pushActivity(this);
+        StatusBarUtil.setStatusBarLightMode(getWindow());
     }
 
     @Override
