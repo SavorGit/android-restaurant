@@ -275,33 +275,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void setListeners() {
-//        listView.setOnItemClickListener(itemClickListener);
         operationBtnTV.setOnClickListener(this);
     }
-
-    AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-           CategoryItemVo categoryItemVo = (CategoryItemVo) parent.getItemAtPosition(position);
-            if (categoryItemVo!=null){
-                Intent intent;
-                switch (categoryItemVo.getId()){
-                    case ConstantValues.CATEGORY_SLIDE:
-                        intent = new Intent(mContext,SlideListActivity.class);
-                        intent.putExtra("type", SlideManager.SlideType.IMAGE);
-                        startActivity(intent);
-                    case ConstantValues.CATEGORY_VIDEO:
-                        intent = new Intent(mContext,SlideListActivity.class);
-                        intent.putExtra("type", SlideManager.SlideType.VIDEO);
-                        startActivity(intent);
-                        break;
-                    case ConstantValues.CATEGORY_FILE:
-                        ShowMessage.showToast(mContext,"该功能暂未开通,敬请期待");
-                        break;
-                }
-            }
-        }
-    };
 
     @Override
     public void onClick(View v) {
