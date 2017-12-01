@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.savor.resturant.bean.BaseProResponse;
+import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.SlideSettingsMediaBean;
 import com.savor.resturant.bean.SmallPlatformByGetIp;
 import com.savor.resturant.bean.TvBoxInfo;
@@ -199,7 +200,13 @@ public class ApiResponseFactory {
             case POST_REPORT_LOG_JSON:
                 result = "success";
                 break;
-
+            case POST_LOGIN_JSON:
+                result = gson.fromJson(info, new TypeToken<HotelBean>() {
+                }.getType());
+                break;
+            case POST_VERIFY_CODE_JSON:
+                result = "success";
+                break;
             default:
                 break;
         }

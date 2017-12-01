@@ -71,6 +71,10 @@ public class AppApi {
         GET_VERIFY_CODE_BY_BOXIP_JSON,
         /**日志上报*/
         POST_REPORT_LOG_JSON,
+        /**用户登录*/
+        POST_LOGIN_JSON,
+        /**获取手机验证码*/
+        POST_VERIFY_CODE_JSON,
 
     }
 
@@ -96,6 +100,10 @@ public class AppApi {
             put(Action.POST_BOX_INFO_JSON,tvBoxUrl);
             put(Action.GET_VERIFY_CODE_BY_BOXIP_JSON,tvBoxUrl);
             put(Action.POST_REPORT_LOG_JSON, formatPhpUrl("Dinnerapp/Touping/reportLog"));
+            put(Action.POST_LOGIN_JSON, formatPhpUrl("Dinnerapp/login/doLogin"));
+            put(Action.POST_VERIFY_CODE_JSON, formatPhpUrl("Dinnerapp/sms/getverifyCode"));
+
+
 
         }
     };
@@ -437,6 +445,23 @@ public class AppApi {
         params.put("state", state);
         params.put("wifi", wifi);
         new AppServiceOk(context,Action.POST_REPORT_LOG_JSON,handler,params).post();
+    }
+
+
+    /**用户登录*/
+    public static void doLogin(Context context,String invite_code, String mobile, String verify_code, ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("invite_code", invite_code);
+        params.put("mobile", mobile);
+        params.put("verify_code", verify_code);
+        new AppServiceOk(context,Action.POST_LOGIN_JSON,handler,params).post();
+    }
+
+    /**获取手机验证码*/
+    public static void getverifyCode(Context context, String mobile,  ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("mobile", mobile);
+        new AppServiceOk(context,Action.POST_VERIFY_CODE_JSON,handler,params).post();
     }
 
     // 超时（网络）异常
