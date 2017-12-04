@@ -9,6 +9,7 @@
         android:id="@+id/head_layout"
         layout="@layout/layout_head_title"/>
     <TextView
+        android:id="@+id/tv_wifi_hint"
         android:drawablePadding="7.5dp"
         android:textSize="16sp"
         android:textColor="#e43018"

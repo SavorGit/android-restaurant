@@ -17,6 +17,8 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
 import android.widget.TextView;
@@ -30,6 +32,7 @@ import com.savor.resturant.R;
 import com.savor.resturant.adapter.CategoryAdapter;
 import com.savor.resturant.adapter.FunctionAdapter;
 import com.savor.resturant.bean.FunctionItem;
+import com.savor.resturant.bean.LoginResponse;
 import com.savor.resturant.bean.TvBoxInfo;
 import com.savor.resturant.bean.TvBoxSSDPInfo;
 import com.savor.resturant.bean.UpgradeInfo;
@@ -61,7 +64,7 @@ import static com.savor.resturant.activity.LinkTvActivity.EXTRA_TV_INFO;
 /**
  * 首页功能操作列表
  */
-public class MainActivity extends BaseActivity implements View.OnClickListener, IBindTvView {
+public class MainActivity extends BaseActivity implements View.OnClickListener, IBindTvView, FunctionAdapter.OnNoHotelClickListener {
     public static final String SMALL_PLATFORM = "small_platform";
     /**退出投屏按钮状态，退出投屏*/
     private static final int TYPE_GO_SETTINGS = 0x1;
@@ -102,6 +105,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private SmallPlatformReciver smallPlatformReciver;
     private SavorDialog mQrcodeDialog;
     private long exitTime;
+    private TextView mHintTv;
 
 
     @Override
@@ -178,6 +182,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void getViews() {
+        mHintTv = (TextView) findViewById(R.id.tv_wifi_hint);
         iv_left = (ImageView) findViewById(R.id.iv_left);
         tv_center = (TextView)findViewById(R.id.tv_center);
         listView = (RecyclerView) findViewById(R.id.category_list);
@@ -190,7 +195,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         iv_left.setVisibility(View.GONE);
         tv_center.setText(getString(R.string.app_name));
 
-        initWIfiHint();
         mList.clear();
 
         FunctionItem recommandItem = new FunctionItem();
@@ -229,12 +233,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         listView.setLayoutManager(layoutManager);
         mFunctionAdapter.setData(mList);
         listView.setAdapter(mFunctionAdapter);
+        mFunctionAdapter.setOnNoHotelClickListener(this);
 
         //添加ItemDecoration，item之间的间隔
         int leftRight = DensityUtil.dip2px(this,5);
         int topBottom = DensityUtil.dip2px(this,15);
 
         listView.addItemDecoration(new SpacesItemDecoration(leftRight, topBottom, getResources().getColor(R.color.color_eeeeee)));
+
+        initWIfiHint();
 
     }
 
@@ -246,27 +253,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     public void initWIfiHint() {
-        String btnText = "";
-        if (isFoundTv()){
-            boolean bindTv = mSession.isBindTv();
-            if(!bindTv) {
-                mProBtnType = TYPE_LINK_TV;
-                btnText = "连接电视";
-                connectTipTV.setText(R.string.found_tv_hint);
-                connectTipTV.setOnClickListener(null);
-            }else {
-                mProBtnType = TYPE_STOP_PRO;
-                connectTipTV.setText("已连接"+ WifiUtil.getWifiName(mContext)+",点击断开连接>>");
-                btnText = "退出投屏";
-                connectTipTV.setOnClickListener(this);
-            }
-        }else {
-            mProBtnType = TYPE_GO_SETTINGS;
-            connectTipTV.setText("请连接包间WIFI后进行操作");
-            btnText = "去设置";
-            connectTipTV.setOnClickListener(null);
-        }
-        operationBtnTV.setText(btnText);
+        // 判断当前是否是酒店环境
+        int hotelid = mSession.getHotelid();
+//        // TODO: 从session获取登录结果
+//        LoginResponse loginResponse = null;
+//        String hid = loginResponse.getHotel_id();
+//        if(String.valueOf(hotelid).equals(hid)) {
+//            mHintTv.setText("当前连接酒楼\""+loginResponse.getHotel_name()+"\"");
+//            mHintTv.setTextColor(getResources().getColor(R.color.color_0da606));
+//            mHintTv.setCompoundDrawables(null,null,null,null);
+//        }else {
+//            mHintTv.setText("请链接“"+loginResponse.getHotel_name()+"”的wifi后继续操作");
+//            mHintTv.setTextColor(getResources().getColor(R.color.color_e43018));
+//            mHintTv.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ico_exe_hint),null,null,null);
+//        }
     }
 
     @Override
@@ -579,6 +579,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 mBindTvPresenter.handleBindCodeResult(boxInfo);
             }
         }
+    }
+
+    @Override
+    public void onNoHotelClick() {
+        Animation shake = AnimationUtils.loadAnimation(this, R.anim.shake);
+        mHintTv.startAnimation(shake);
     }
 
     public class SmallPlatformReciver extends BroadcastReceiver {

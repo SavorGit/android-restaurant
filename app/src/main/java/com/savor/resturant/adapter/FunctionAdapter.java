@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.savor.resturant.R;
 import com.savor.resturant.activity.SlideListActivity;
 import com.savor.resturant.bean.FunctionItem;
+import com.savor.resturant.core.Session;
 import com.savor.resturant.utils.SlideManager;
 
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.List;
 public class FunctionAdapter extends RecyclerView.Adapter<FunctionAdapter.FunctionViewHolder> {
     private Context mContext;
     private List<FunctionItem> mData;
+    private OnNoHotelClickListener listener;
 
     public FunctionAdapter(Context context) {
         this.mContext = context;
@@ -41,7 +43,7 @@ public class FunctionAdapter extends RecyclerView.Adapter<FunctionAdapter.Functi
     }
 
     @Override
-    public void onBindViewHolder(FunctionViewHolder holder, int position) {
+    public void onBindViewHolder(final FunctionViewHolder holder, int position) {
         final FunctionItem functionItem = mData.get(position);
         String content = functionItem.getContent();
         int resId = functionItem.getResId();
@@ -53,27 +55,34 @@ public class FunctionAdapter extends RecyclerView.Adapter<FunctionAdapter.Functi
         holder.ll_parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent;
-                switch (type) {
-                    case TYPE_RECOMMAND_GEENS:
+                int hotelid = Session.get(mContext).getHotelid();
+                if(hotelid<=0) {
+                    if(listener!=null) {
+                        listener.onNoHotelClick();
+                    }
+                }else {
+                    Intent intent;
+                    switch (type) {
+                        case TYPE_RECOMMAND_GEENS:
 
-                        break;
-                    case TYPE_WELCOME_WORD:
+                            break;
+                        case TYPE_WELCOME_WORD:
 
-                        break;
-                    case TYPE_ADVERT:
+                            break;
+                        case TYPE_ADVERT:
 
-                        break;
-                    case TYPE_VIDEO:
-                        intent = new Intent(mContext,SlideListActivity.class);
-                        intent.putExtra("type", SlideManager.SlideType.VIDEO);
-                        mContext.startActivity(intent);
-                        break;
-                    case TYPE_PIC:
-                        intent = new Intent(mContext,SlideListActivity.class);
-                        intent.putExtra("type", SlideManager.SlideType.IMAGE);
-                        mContext.startActivity(intent);
-                        break;
+                            break;
+                        case TYPE_VIDEO:
+                            intent = new Intent(mContext,SlideListActivity.class);
+                            intent.putExtra("type", SlideManager.SlideType.VIDEO);
+                            mContext.startActivity(intent);
+                            break;
+                        case TYPE_PIC:
+                            intent = new Intent(mContext,SlideListActivity.class);
+                            intent.putExtra("type", SlideManager.SlideType.IMAGE);
+                            mContext.startActivity(intent);
+                            break;
+                    }
                 }
             }
         });
@@ -97,4 +106,11 @@ public class FunctionAdapter extends RecyclerView.Adapter<FunctionAdapter.Functi
 
     }
 
+    public void setOnNoHotelClickListener (OnNoHotelClickListener listener) {
+        this.listener = listener;
+    }
+
+    public interface OnNoHotelClickListener {
+        void onNoHotelClick();
+    }
 }
