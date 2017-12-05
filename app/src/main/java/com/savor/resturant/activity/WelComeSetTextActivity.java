@@ -65,6 +65,7 @@ public class WelComeSetTextActivity extends BaseActivity implements View.OnClick
         tv_center.setText("欢迎词");
         tv_right.setText("下一步");
         tv_right.setVisibility(View.VISIBLE);
+        tv_right.setTextColor(context.getResources().getColor(R.color.color_ff783e));
     }
 
     @Override
@@ -83,7 +84,7 @@ public class WelComeSetTextActivity extends BaseActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv_right:
-
+                toSetBg();
                 break;
             case R.id.iv_left:
                 finish();
@@ -108,7 +109,11 @@ public class WelComeSetTextActivity extends BaseActivity implements View.OnClick
 
     private void setText(TextView t){
         greeting.setText(t.getText().toString());
-        String word = t.getText().toString();
+
+    }
+
+    private void toSetBg(){
+        String word = greeting.getText().toString();
         if (!TextUtils.isEmpty(word)) {
             Intent intent = new Intent();
             intent.putExtra("keyWord",word);
@@ -117,6 +122,5 @@ public class WelComeSetTextActivity extends BaseActivity implements View.OnClick
         }
 
     }
-
 }
 

@@ -29,6 +29,7 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome_set_bg_layout);
+        getWord();
         context = this;
         getViews();
         setViews();
@@ -52,7 +53,7 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
         t3 = (TextView) findViewById(R.id.t3);
         t4 = (TextView) findViewById(R.id.t4);
         t5 = (TextView) findViewById(R.id.t5);
-        t6 = (TextView) findViewById(R.id.t7);
+        t6 = (TextView) findViewById(R.id.t6);
         t7 = (TextView) findViewById(R.id.t7);
         t8 = (TextView) findViewById(R.id.t8);
         bg_l1 = (RelativeLayout) findViewById(R.id.bg_l1);
