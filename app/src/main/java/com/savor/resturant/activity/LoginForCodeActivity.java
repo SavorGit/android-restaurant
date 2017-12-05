@@ -140,15 +140,15 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
     private void setLoginView(){
         tel = ev_num.getText().toString();
         code = ev_code.getText().toString();
-//        if (!TextUtils.isEmpty(tel)&&!TextUtils.isEmpty(code)) {
-//            login_btn.setClickable(true);
-//            login_btn.setBackgroundResource(R.drawable.corner_remote_view);
-//            login_btn.setTextColor(getColor(R.color.color_fefefe));
-//        }else {
-//            login_btn.setClickable(false);
-//            login_btn.setBackgroundResource(R.drawable.corner_remote_view_btn);
-//            login_btn.setTextColor(getColor(R.color.color_fefefe));
-//        }
+        if (!TextUtils.isEmpty(tel)&&!TextUtils.isEmpty(code)) {
+            login_btn.setClickable(true);
+            login_btn.setBackgroundResource(R.drawable.corner_remote_view);
+            login_btn.setTextColor(context.getResources().getColor(R.color.color_fefefe));
+        }else {
+            login_btn.setClickable(false);
+            login_btn.setBackgroundResource(R.drawable.corner_remote_view_btn);
+            login_btn.setTextColor(context.getResources().getColor(R.color.color_fefefe));
+       }
     }
     @Override
     public void onClick(View v) {
