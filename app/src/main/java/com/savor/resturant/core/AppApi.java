@@ -35,6 +35,8 @@ public class AppApi {
     public static String LocalIp;
     /**这是一个临时值，以请求时传入的值为准*/
     public static String tvBoxUrl;
+    /**这是一个临时值，以请求时传入的值为准*/
+    public static String smallPlatformUrl;
     public static int hotelid;
     public static int roomid;
 
@@ -75,7 +77,8 @@ public class AppApi {
         POST_LOGIN_JSON,
         /**获取手机验证码*/
         POST_VERIFY_CODE_JSON,
-
+        /**获取酒楼包间信息*/
+        GET_HOTEL_BOX_JSON,
     }
 
     /**
@@ -102,9 +105,7 @@ public class AppApi {
             put(Action.POST_REPORT_LOG_JSON, formatPhpUrl("Dinnerapp/Touping/reportLog"));
             put(Action.POST_LOGIN_JSON, formatPhpUrl("Dinnerapp/login/doLogin"));
             put(Action.POST_VERIFY_CODE_JSON, formatPhpUrl("Dinnerapp/sms/getverifyCode"));
-
-
-
+            put(Action.GET_HOTEL_BOX_JSON,smallPlatformUrl);
         }
     };
 
@@ -455,6 +456,13 @@ public class AppApi {
         params.put("mobile", mobile);
         params.put("verify_code", verify_code);
         new AppServiceOk(context,Action.POST_LOGIN_JSON,handler,params).post();
+    }
+
+    /**获取酒楼包间列表*/
+    public static void getHotelRoomList(Context context,String url,String hotelId,ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("hotelId", hotelId);
+        new AppServiceOk(context,url,Action.GET_HOTEL_BOX_JSON,handler,params).get();
     }
 
     /**获取手机验证码*/

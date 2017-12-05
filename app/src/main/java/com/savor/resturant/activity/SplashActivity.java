@@ -79,20 +79,7 @@ public class SplashActivity extends BaseActivity {
                         homeIntent.setDataAndType(data,intent.getType());
                     }
                     startActivity(homeIntent);
-                    finish();
-
-
-//                    Intent homeIntent = new Intent(SplashActivity.this, LoginForCodeActivity.class);
-//                    Intent intent = getIntent();
-//                    if(intent!=null&&("application/pdf").equals(intent.getType())) {
-//                        Uri data = getIntent().getData();
-//                        homeIntent.setDataAndType(data,intent.getType());
-//                    }
-//                    startActivity(homeIntent);
 //                    finish();
-
-
-
                     break;
             }
         }
@@ -103,8 +90,6 @@ public class SplashActivity extends BaseActivity {
     private SurfaceView mSurfaceView;
     private MediaPlayer mp;
     private RelativeLayout mParentLayout;
-    private int uploadWaiterDataCount;
-    private String waiterData;
     private boolean isJumped;
 
     @Override
