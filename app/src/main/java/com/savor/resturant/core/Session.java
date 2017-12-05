@@ -37,6 +37,7 @@ import com.common.api.utils.AppUtils;
 import com.common.api.utils.LogUtils;
 import com.common.api.utils.Pair;
 import com.common.api.utils.SaveFileData;
+import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.HotelMapCache;
 import com.savor.resturant.bean.HotelMapListData;
 import com.savor.resturant.bean.PdfInfo;
@@ -75,7 +76,7 @@ public class Session {
     private static  Session mInstance;
     public boolean isDebug = true;
     private int interval;
-
+    private HotelBean hotelBean;
     /** 是否已经显示引导图，没有显示则显示 */
     private boolean isNeedGuide = true;
     private boolean isScanGuide = true;
@@ -110,6 +111,9 @@ public class Session {
     private static final String P_APP_FIRST_USE = "p_app_first_use";
     /**最近可投屏酒店*/
     private static final String P_APP_HOTEL_MAP = "p_app_hotel_map";
+
+    /**登录信息*/
+    private static final String P_APP_LOGIN = "p_app_login";
 
 
 
@@ -465,7 +469,7 @@ public class Session {
         lastTime = mPreference.loadLongKey(P_APP_LASTSTARTUP,0);
         isFirstPlay = mPreference.loadBooleanKey(P_APP_FIRST_PLAY,true);
         area_id = mPreference.loadStringKey(P_APP_AREA_ID, "");
-
+        hotelBean = (HotelBean) getObj(P_APP_LOGIN);
         setDeviceid(deviceid);
         getApplicationInfo();
 
@@ -948,6 +952,16 @@ public class Session {
     public void setHotelMapCache(HotelMapCache cache) {
         this.mHotelMapCache = cache;
 //        writePreference(new Pair<String, Object>(P_APP_HOTEL_MAP, cache));
+    }
+
+    public HotelBean getHotelBean() {
+        return hotelBean;
+    }
+
+    public void setHotelBean(HotelBean hotelBean) {
+        this.hotelBean = hotelBean;
+        //writePreference(new Pair<String, Object>(P_APP_LOGIN, hotelBean));
+        setObj(P_APP_LOGIN,hotelBean);
     }
 
     public HotelMapCache getmHotelMapCache() {

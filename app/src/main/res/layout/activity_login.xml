@@ -31,6 +31,8 @@
             android:paddingLeft="5dp"
             android:layout_centerInParent="true"
             android:id="@+id/ev_num"
+            android:drawablePadding="4dp"
+            android:drawableLeft="@drawable/sj"
             android:hint="请输入手机号"
             android:layout_width="350dp"
             android:layout_height="42dp"
@@ -55,6 +57,8 @@
             android:hint="请输入验证码"
             android:textSize="15sp"
             android:layout_height="42dp"
+            android:drawablePadding="4dp"
+            android:drawableLeft="@drawable/yzm"
             android:background="@drawable/bg_exit"
             />
 
@@ -87,8 +91,10 @@
             android:layout_centerInParent="true"
             android:id="@+id/invitation_num"
             android:hint="请输入邀请码"
+            android:drawableLeft="@drawable/yqm"
             android:layout_width="350dp"
             android:layout_height="42dp"
+            android:drawablePadding="4dp"
             android:textSize="15sp"
             android:background="@drawable/bg_exit"
             />
