@@ -5,6 +5,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextPaint;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,6 +31,9 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
     private TextView mTitleTv;
     private TextView mProBtn;
     private RecyclerView mRecommendFoodsRlv;
+    /**当前是否属于选择包间状态*/
+    private boolean isSelectRommState;
+    private RecyclerView mRoomListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
         mTitleTv = (TextView) findViewById(R.id.tv_center);
         mProBtn = (TextView) findViewById(R.id.tv_pro);
         mRecommendFoodsRlv = (RecyclerView) findViewById(R.id.rlv_foods);
+        mRoomListView = (RecyclerView) findViewById(R.id.rlv_room);
     }
 
     @Override
@@ -99,14 +105,71 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_left:
-                finish();
+                if(isSelectRommState) {
+                    hideRommList();
+                    isSelectRommState = false;
+                }else {
+                    finish();
+                }
                 break;
             case R.id.tv_center:
+                if(!isSelectRommState) {
+                    showRoomList();
+                    isSelectRommState  = true;
+                }
 
                 break;
             case R.id.tv_pro:
 
                 break;
         }
+    }
+
+    private void hideRommList() {
+        mTitleTv.setCompoundDrawablesWithIntrinsicBounds(null,null,getResources().getDrawable(R.drawable.ico_arrow_down),null);
+        mBackBtn.setImageResource(R.drawable.back);
+
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.actionsheet_dialog_out);
+        mRoomListView.startAnimation(animation);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                mRoomListView.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
+    private void showRoomList() {
+        mRoomListView.setVisibility(View.VISIBLE);
+        mTitleTv.setCompoundDrawablesWithIntrinsicBounds(null,null,null,null);
+        mBackBtn.setImageResource(R.drawable.ico_close);
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.actionsheet_dialog_in);
+        mRoomListView.startAnimation(animation);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                mRoomListView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 }
