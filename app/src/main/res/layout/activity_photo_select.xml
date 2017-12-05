@@ -49,7 +49,7 @@
                 android:background="@null"
                 android:button="@null"
                 android:drawablePadding="10dp"
-                android:drawableRight="@drawable/gridview_checkbox_selector"
+                android:drawableRight="@drawable/checkbox_selector"
                 android:textColor="#D48A2C"
                 android:text="全选" />
             <LinearLayout

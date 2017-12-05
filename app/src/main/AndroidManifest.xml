@@ -74,7 +74,6 @@
         <meta-data
             android:name="app_debug"
             android:value="1" />
-
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="5668f09de0f55a4c82001473" />
@@ -90,7 +89,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -119,10 +117,10 @@
             android:name=".activity.PhotoActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
-        <!--<activity-->
-            <!--android:name=".activity.VideoShareActivity"-->
-            <!--android:configChanges="orientation|screenSize"-->
-            <!--android:screenOrientation="portrait" />-->
+        <!-- <activity -->
+        <!-- android:name=".activity.VideoShareActivity" -->
+        <!-- android:configChanges="orientation|screenSize" -->
+        <!-- android:screenOrientation="portrait" /> -->
         <activity
             android:name=".activity.PhotoSelectActivity"
             android:configChanges="orientation|screenSize"
@@ -131,19 +129,19 @@
             android:name=".activity.PhotoDetailActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
-        <!--<activity-->
-            <!--android:name=".activity.LocalVideoProAcitvity"-->
-            <!--android:configChanges="orientation|screenSize"-->
-            <!--android:screenOrientation="portrait" />-->
-        <!--<activity-->
-            <!--android:name=".activity.PhotoShareActivity"-->
-            <!--android:configChanges="orientation|screenSize"-->
-            <!--android:screenOrientation="portrait" />-->
-        <!--<activity-->
-            <!--android:name=".activity.ImageGalleryActivity"-->
-            <!--android:configChanges="orientation|screenSize"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:theme="@style/AppTheme.NoActionBar" />-->
+        <!-- <activity -->
+        <!-- android:name=".activity.LocalVideoProAcitvity" -->
+        <!-- android:configChanges="orientation|screenSize" -->
+        <!-- android:screenOrientation="portrait" /> -->
+        <!-- <activity -->
+        <!-- android:name=".activity.PhotoShareActivity" -->
+        <!-- android:configChanges="orientation|screenSize" -->
+        <!-- android:screenOrientation="portrait" /> -->
+        <!-- <activity -->
+        <!-- android:name=".activity.ImageGalleryActivity" -->
+        <!-- android:configChanges="orientation|screenSize" -->
+        <!-- android:screenOrientation="portrait" -->
+        <!-- android:theme="@style/AppTheme.NoActionBar" /> -->
         <activity
             android:name=".activity.ImageEditActivity"
             android:configChanges="orientation|screenSize"
@@ -175,24 +173,24 @@
             android:enabled="true"
             android:exported="true" />
 
-        <!--<activity-->
-            <!--android:name=".activity.PdfListActivity"-->
-            <!--android:screenOrientation="portrait" />-->
-        <!--<activity-->
-            <!--android:name=".activity.PdfPreviewActivity"-->
-            <!--android:configChanges="orientation|keyboardHidden|screenSize"-->
-            <!--android:launchMode="singleTask" />-->
-        <activity android:name=".activity.MainActivity"
+        <!-- <activity -->
+        <!-- android:name=".activity.PdfListActivity" -->
+        <!-- android:screenOrientation="portrait" /> -->
+        <!-- <activity -->
+        <!-- android:name=".activity.PdfPreviewActivity" -->
+        <!-- android:configChanges="orientation|keyboardHidden|screenSize" -->
+        <!-- android:launchMode="singleTask" /> -->
+        <activity
+            android:name=".activity.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LoginForCodeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LinkTvActivity"
             android:screenOrientation="portrait"
-            />
-        <activity android:name=".activity.LoginForCodeActivity"
-            android:screenOrientation="portrait"
-            />
-
-        <activity android:name=".activity.LinkTvActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysVisible"
-            />
+            android:windowSoftInputMode="stateAlwaysVisible" />
+        <activity android:name=".activity.RecommendFoodActivity"></activity>
     </application>
 
 </manifest>

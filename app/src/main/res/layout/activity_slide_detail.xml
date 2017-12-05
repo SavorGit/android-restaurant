@@ -108,7 +108,7 @@
             android:layout_alignParentLeft="true"
             android:background="@color/pro_bg"
             android:button="@null"
-            android:drawableLeft="@drawable/gridview_checkbox_selector"
+            android:drawableLeft="@drawable/checkbox_selector"
             android:drawablePadding="10dp"
             android:text="全选"
             android:textSize="@dimen/large_text_size"

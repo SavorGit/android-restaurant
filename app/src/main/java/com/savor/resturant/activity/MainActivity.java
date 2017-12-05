@@ -32,7 +32,6 @@ import com.savor.resturant.R;
 import com.savor.resturant.adapter.CategoryAdapter;
 import com.savor.resturant.adapter.FunctionAdapter;
 import com.savor.resturant.bean.FunctionItem;
-import com.savor.resturant.bean.LoginResponse;
 import com.savor.resturant.bean.TvBoxInfo;
 import com.savor.resturant.bean.TvBoxSSDPInfo;
 import com.savor.resturant.bean.UpgradeInfo;
@@ -200,7 +199,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         FunctionItem recommandItem = new FunctionItem();
         recommandItem.setContent("推荐菜");
         recommandItem.setResId(R.drawable.ico_recommand);
-        recommandItem.setType(FunctionItem.FunctionType.TYPE_RECOMMAND_GEENS);
+        recommandItem.setType(FunctionItem.FunctionType.TYPE_RECOMMAND_FOODS);
         mList.add(recommandItem);
 
         FunctionItem advertItem = new FunctionItem();

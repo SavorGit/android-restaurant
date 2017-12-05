@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class FunctionItem implements Serializable {
     public enum FunctionType implements Serializable {
         /**推荐菜*/
-        TYPE_RECOMMAND_GEENS,
+        TYPE_RECOMMAND_FOODS,
         /**宣传片*/
         TYPE_ADVERT,
         /**欢迎词*/

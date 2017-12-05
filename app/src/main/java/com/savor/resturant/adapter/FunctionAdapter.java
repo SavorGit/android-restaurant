@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.savor.resturant.R;
+import com.savor.resturant.activity.RecommendFoodActivity;
 import com.savor.resturant.activity.SlideListActivity;
 import com.savor.resturant.bean.FunctionItem;
 import com.savor.resturant.core.Session;
@@ -56,15 +57,16 @@ public class FunctionAdapter extends RecyclerView.Adapter<FunctionAdapter.Functi
             @Override
             public void onClick(View v) {
                 int hotelid = Session.get(mContext).getHotelid();
-                if(hotelid<=0) {
-                    if(listener!=null) {
-                        listener.onNoHotelClick();
-                    }
-                }else {
+//                if(hotelid<=0) {
+//                    if(listener!=null) {
+//                        listener.onNoHotelClick();
+//                    }
+//                }else {
                     Intent intent;
                     switch (type) {
-                        case TYPE_RECOMMAND_GEENS:
-
+                        case TYPE_RECOMMAND_FOODS:
+                            intent = new Intent(mContext, RecommendFoodActivity.class);
+                            mContext.startActivity(intent);
                             break;
                         case TYPE_WELCOME_WORD:
 
@@ -83,7 +85,7 @@ public class FunctionAdapter extends RecyclerView.Adapter<FunctionAdapter.Functi
                             mContext.startActivity(intent);
                             break;
                     }
-                }
+//                }
             }
         });
     }
