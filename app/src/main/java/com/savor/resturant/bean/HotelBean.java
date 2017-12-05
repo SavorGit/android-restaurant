@@ -10,6 +10,8 @@ public class HotelBean implements Serializable {
     private static final long serialVersionUID = -1;
     private String hotel_id;
     private String hotel_name;
+    private String invitation;
+    private String tel;
 
     public String getHotel_id() {
         return hotel_id;
@@ -27,11 +29,30 @@ public class HotelBean implements Serializable {
         this.hotel_name = hotel_name;
     }
 
+
+    public String getInvitation() {
+        return invitation;
+    }
+
+    public void setInvitation(String invitation) {
+        this.invitation = invitation;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
     @Override
     public String toString() {
         return "HotelBean{" +
                 "hotel_id='" + hotel_id + '\'' +
                 ", hotel_name='" + hotel_name + '\'' +
+                ", invitation='" + invitation + '\'' +
+                ", tel='" + tel + '\'' +
                 '}';
     }
 }

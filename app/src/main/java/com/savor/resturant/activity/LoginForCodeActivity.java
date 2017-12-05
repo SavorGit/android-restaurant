@@ -49,6 +49,7 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
     private Timer mTimer;
     private TimerTask mTask;
     private long mSeconds = 60;
+    private HotelBean hotelBean;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +71,26 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void setViews() {
+        hotelBean = mSession.getHotelBean();
+        if (hotelBean != null) {
+            tel = hotelBean.getTel();
+            invitation = hotelBean.getInvitation();
 
+            if (!TextUtils.isEmpty(tel)) {
+                ev_num.setText(tel);
+                ev_num.setClickable(false);
+            }
+
+            if (!TextUtils.isEmpty(invitation)) {
+                invitation_num.setText(invitation);
+                invitation_num.setClickable(false);
+            }
+
+            if (!TextUtils.isEmpty(invitation)&&!TextUtils.isEmpty(invitation)) {
+                ev_code.setVisibility(View.GONE);
+                AppApi.doLogin(this,invitation,tel,code,this);
+            }
+        }
     }
 
     @Override
@@ -122,6 +142,30 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
             }
 
         });
+
+        invitation_num.addTextChangedListener(new TextWatcher(){
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+                //s:变化后的所有字符
+
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // TODO Auto-generated method stub
+                //s:变化前的所有字符； start:字符开始的位置； count:变化前的总字节数；after:变化后的字节数
+                //Toast.makeText(getApplicationContext(), "变化前:"+s+";"+start+";"+count+";"+after, Toast.LENGTH_SHORT).show();
+            }
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                // TODO Auto-generated method stub
+                //S：变化后的所有字符；start：字符起始的位置；before: 变化之前的总字节数；count:变化后的字节数
+                //Toast.makeText(getApplicationContext(), "变化后:"+s+";"+start+";"+before+";"+count, Toast.LENGTH_SHORT).show();
+                //setCodeView();
+                setLoginView();
+            }
+
+        });
+
     }
 
     private void setCodeView(){
@@ -140,13 +184,14 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
     private void setLoginView(){
         tel = ev_num.getText().toString();
         code = ev_code.getText().toString();
-        if (!TextUtils.isEmpty(tel)&&!TextUtils.isEmpty(code)) {
+        invitation = invitation_num.getText().toString();
+        if (!TextUtils.isEmpty(tel)&&!TextUtils.isEmpty(code)&&!TextUtils.isEmpty(invitation)) {
             login_btn.setClickable(true);
-            login_btn.setBackgroundResource(R.drawable.corner_remote_view);
+            login_btn.setBackgroundResource(R.drawable.corner_remote_view_btn);
             login_btn.setTextColor(context.getResources().getColor(R.color.color_fefefe));
         }else {
             login_btn.setClickable(false);
-            login_btn.setBackgroundResource(R.drawable.corner_remote_view_btn);
+            login_btn.setBackgroundResource(R.drawable.corner_remote_view_btn_normal);
             login_btn.setTextColor(context.getResources().getColor(R.color.color_fefefe));
        }
     }
@@ -193,6 +238,7 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
                 if (obj instanceof HotelBean) {
                     HotelBean hotelBean = (HotelBean)obj;
                     if (hotelBean != null) {
+                        hotelBean.setInvitation(invitation);
                         mSession.setHotelBean(hotelBean);
 
 
