@@ -32,6 +32,7 @@ import com.savor.resturant.R;
 import com.savor.resturant.adapter.CategoryAdapter;
 import com.savor.resturant.adapter.FunctionAdapter;
 import com.savor.resturant.bean.FunctionItem;
+import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.TvBoxInfo;
 import com.savor.resturant.bean.TvBoxSSDPInfo;
 import com.savor.resturant.bean.UpgradeInfo;
@@ -254,18 +255,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public void initWIfiHint() {
         // 判断当前是否是酒店环境
         int hotelid = mSession.getHotelid();
-//        // TODO: 从session获取登录结果
-//        LoginResponse loginResponse = null;
-//        String hid = loginResponse.getHotel_id();
-//        if(String.valueOf(hotelid).equals(hid)) {
-//            mHintTv.setText("当前连接酒楼\""+loginResponse.getHotel_name()+"\"");
-//            mHintTv.setTextColor(getResources().getColor(R.color.color_0da606));
-//            mHintTv.setCompoundDrawables(null,null,null,null);
-//        }else {
-//            mHintTv.setText("请链接“"+loginResponse.getHotel_name()+"”的wifi后继续操作");
-//            mHintTv.setTextColor(getResources().getColor(R.color.color_e43018));
-//            mHintTv.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ico_exe_hint),null,null,null);
-//        }
+        HotelBean loginResponse = null;
+        String hid = loginResponse.getHotel_id();
+        if(String.valueOf(hotelid).equals(hid)) {
+            mHintTv.setText("当前连接酒楼\""+loginResponse.getHotel_name()+"\"");
+            mHintTv.setTextColor(getResources().getColor(R.color.color_0da606));
+            mHintTv.setCompoundDrawables(null,null,null,null);
+        }else {
+            mHintTv.setText("请链接“"+loginResponse.getHotel_name()+"”的wifi后继续操作");
+            mHintTv.setTextColor(getResources().getColor(R.color.color_e43018));
+            mHintTv.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ico_exe_hint),null,null,null);
+        }
     }
 
     @Override
