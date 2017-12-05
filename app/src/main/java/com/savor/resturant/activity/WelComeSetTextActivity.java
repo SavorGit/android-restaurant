@@ -108,6 +108,14 @@ public class WelComeSetTextActivity extends BaseActivity implements View.OnClick
 
     private void setText(TextView t){
         greeting.setText(t.getText().toString());
+        String word = t.getText().toString();
+        if (!TextUtils.isEmpty(word)) {
+            Intent intent = new Intent();
+            intent.putExtra("keyWord",word);
+            intent.setClass(WelComeSetTextActivity.this,WelComeSetBgActivity.class);
+            startActivity(intent);
+        }
+
     }
 
 }
