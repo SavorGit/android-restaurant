@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -7,6 +8,21 @@
     <include
         android:id="@+id/head_layout"
         layout="@layout/layout_head_title"/>
+    <TextView
+        android:id="@+id/tv_wifi_hint"
+        android:drawablePadding="7.5dp"
+        android:textSize="16sp"
+        android:textColor="#e43018"
+        android:gravity="center_vertical"
+        android:drawableLeft="@drawable/ico_exe_hint"
+        android:text="请链接“花家怡园”的wifi后继续操作"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:background="#e9e5db"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
     <android.support.v7.widget.RecyclerView
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
