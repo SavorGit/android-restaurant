@@ -98,6 +98,7 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.GET_CALL_QRCODE_JSON
                     ||action == AppApi.Action.POST_BOX_INFO_JSON
                     || action == AppApi.Action.GET_VERIFY_CODE_BY_BOXIP_JSON
+                    || action == AppApi.Action.POST_LOGIN_JSON
                     || action == AppApi.Action.GET_SAMLL_PLATFORMURL_JSON){
                 int code = rSet.getInt("code");
                 if(rSet.has("result")) {

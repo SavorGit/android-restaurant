@@ -2,6 +2,7 @@ package com.savor.resturant.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,10 +17,13 @@ import android.widget.TextView;
 
 import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
+import com.savor.resturant.bean.HotelBean;
+import com.savor.resturant.bean.SlideSettingsMediaBean;
 import com.savor.resturant.core.ApiRequestListener;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.ResponseErrorMessage;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -41,6 +45,7 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
     private EditText invitation_num;
     private String tel = "";
     private String code = "";
+    private String invitation= "";
     private Timer mTimer;
     private TimerTask mTask;
     private long mSeconds = 60;
@@ -121,15 +126,15 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
 
     private void setCodeView(){
         tel = ev_num.getText().toString();
-//        if (!TextUtils.isEmpty(tel)) {
-//            tv_code.setClickable(true);
-//            tv_code.setBackgroundResource(R.drawable.corner_remote_view_click);
-//            tv_code.setTextColor(getColor(R.color.color_333333));
-//        }else {
-//            tv_code.setClickable(false);
-//            tv_code.setBackgroundResource(R.drawable.corner_remote_view_g);
-//            tv_code.setTextColor(getColor(R.color.color_b7b6b2));
-//        }
+        if (!TextUtils.isEmpty(tel)) {
+            tv_code.setClickable(true);
+            tv_code.setBackgroundResource(R.drawable.corner_remote_view_click);
+            tv_code.setTextColor(context.getResources().getColor(R.color.color_333333));
+        }else {
+            tv_code.setClickable(false);
+            tv_code.setBackgroundResource(R.drawable.corner_remote_view_g);
+            tv_code.setTextColor(context.getResources().getColor(R.color.color_b7b6b2));
+        }
     }
 
     private void setLoginView(){
@@ -149,7 +154,7 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv_code:
-                tv_code.setClickable(false);
+                tv_code.setClickable(true);
                 getverifyCode();
                 break;
             case R.id.login_btn:
@@ -162,28 +167,48 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
 
     private void getverifyCode(){
         String tel = ev_num.getText().toString();
-//        if (!TextUtils.isEmpty(tel)) {
-//            AppApi.getverifyCode(this,tel,this);
-//        }
+        if (!TextUtils.isEmpty(tel)) {
+            AppApi.getverifyCode(this,tel,this);
+        }
     }
 
     private void login(){
         tel = ev_num.getText().toString();
         code = ev_code.getText().toString();
+        invitation = invitation_num.getText().toString();
 //        String ptype = mSession.getProperty().getProperty()+"";
-//        if (!TextUtils.isEmpty(tel)&&!TextUtils.isEmpty(code) ) {
-//            AppApi.mobileLogin(this,"",tel,code,ptype,this);
-//        }
+        if (!TextUtils.isEmpty(tel)&&!TextUtils.isEmpty(code) ) {
+            AppApi.doLogin(this,invitation,tel,code,this);
+        }
     }
 
     @Override
     public void onSuccess(AppApi.Action method, Object obj) {
-//        switch (method) {
-//            case POST_GET_TVERIFY_CODE_JSON:
-//                //String tel = ev_num.getText().toString();
-//                countTime();
-//                break;
-//            case POST_MOBILE_LOGIN_JSON:
+        switch (method) {
+            case POST_VERIFY_CODE_JSON:
+                //String tel = ev_num.getText().toString();
+                countTime();
+                break;
+            case POST_LOGIN_JSON:
+                if (obj instanceof HotelBean) {
+                    HotelBean hotelBean = (HotelBean)obj;
+                    if (hotelBean != null) {
+                        mSession.setHotelBean(hotelBean);
+
+
+
+                        // 启动跳转到首页
+                        Intent homeIntent = new Intent(LoginForCodeActivity.this, MainActivity.class);
+                        Intent intent = getIntent();
+                        if(intent!=null&&("application/pdf").equals(intent.getType())) {
+                            Uri data = getIntent().getData();
+                            homeIntent.setDataAndType(data,intent.getType());
+                        }
+                        startActivity(homeIntent);
+                       // finish();
+                        finish();
+                    }
+                }
 //                UserBean userBean = new UserBean();
 //                userBean.setUserNum(ev_num.getText().toString());
 //                mSession.setUserBean(userBean);
@@ -193,10 +218,10 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
 //                    property.setUploadPro(true);
 //                    mSession.setProperty(property);
 //                }
-//
-//                finish();
-//                break;
-//        }
+
+                finish();
+                break;
+        }
     }
 
     @Override
