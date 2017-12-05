@@ -1,7 +1,10 @@
 package com.savor.resturant.activity;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -26,10 +29,14 @@ import com.common.api.utils.LogUtils;
 import com.savor.resturant.R;
 import com.savor.resturant.SavorApplication;
 import com.savor.resturant.bean.AliLogBean;
+import com.savor.resturant.bean.RoomInfo;
+import com.savor.resturant.bean.SmallPlatInfoBySSDP;
 import com.savor.resturant.bean.SmallPlatformByGetIp;
 import com.savor.resturant.bean.StartUpSettingsBean;
+import com.savor.resturant.bean.TvBoxSSDPInfo;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.Session;
+import com.savor.resturant.presenter.SensePresenter;
 import com.savor.resturant.service.LocalJettyService;
 import com.savor.resturant.service.SSDPService;
 import com.savor.resturant.service.UpLoadLogService;
@@ -44,6 +51,9 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+
+import static com.savor.resturant.presenter.SensePresenter.SMALL_PLATFORM;
 
 
 /**
@@ -91,6 +101,7 @@ public class SplashActivity extends BaseActivity {
     private MediaPlayer mp;
     private RelativeLayout mParentLayout;
     private boolean isJumped;
+    private SmallPlatformReciver smallPlatformReciver;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -107,6 +118,23 @@ public class SplashActivity extends BaseActivity {
         startServerDiscoveryService();
         startJettyServer();
         getSmallPlatformUrl();
+        regitsterSmallPlatformReciever();
+    }
+
+    /**
+     * 注册小平台发现广播
+     */
+    public void regitsterSmallPlatformReciever() {
+        smallPlatformReciver = new SmallPlatformReciver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(SMALL_PLATFORM);
+        mContext.registerReceiver(smallPlatformReciver,filter);
+    }
+
+    public void unregistetSpReceiver() {
+        if(smallPlatformReciver!=null) {
+            unregisterReceiver(smallPlatformReciver);
+        }
     }
 
     @Override
@@ -297,6 +325,12 @@ public class SplashActivity extends BaseActivity {
     public void onSuccess(AppApi.Action method, Object obj) {
         super.onSuccess(method, obj);
         switch (method) {
+            case GET_HOTEL_BOX_JSON:
+                if(obj instanceof List) {
+                    List<RoomInfo> roomInfos = (List<RoomInfo>) obj;
+                    mSession.setRoomList(roomInfos);
+                }
+                break;
             case GET_SAMLL_PLATFORMURL_JSON:
                 // 获取小平台地址
                 if(obj instanceof SmallPlatformByGetIp) {
@@ -315,6 +349,14 @@ public class SplashActivity extends BaseActivity {
                         // 保存云平台获取的小平台信息
                         if (!TextUtils.isEmpty(localIp)) {
                             mSession.setSmallPlatInfoByGetIp(smallPlatformByGetIp);
+                        }
+                        if(!TextUtils.isEmpty(hotelId)) {
+                            List<Object> requsetPool = mSession.getRequsetPool();
+                            if(!requsetPool.contains(smallPlatformByGetIp)) {
+                                AppApi.getHotelRoomList(this,localIp,hotelId,this);
+                                requsetPool.add(smallPlatformByGetIp);
+                                mSession.setRequestPool(requsetPool);
+                            }
                         }
                     }
                 }
@@ -365,6 +407,7 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unregistetSpReceiver();
         if(mp!=null&&mp.isPlaying()) {
             mp.stop();
             mp.release();
@@ -380,5 +423,37 @@ public class SplashActivity extends BaseActivity {
             mp = null;
         }
         super.onBackPressed();
+    }
+
+    public class SmallPlatformReciver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(SensePresenter.SMALL_PLATFORM)) {
+                LogUtils.d("savor:ssdp 收到小平台接受广播");
+                List<Object> requsetPool = mSession.getRequsetPool();
+                SmallPlatInfoBySSDP smallPlatInfoBySSDP = mSession.getSmallPlatInfoBySSDP();
+                TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
+                if(smallPlatInfoBySSDP!=null&&!requsetPool.contains(smallPlatInfoBySSDP)) {
+                    String serverIp = smallPlatInfoBySSDP.getServerIp();
+                    int hotelId = smallPlatInfoBySSDP.getHotelId();
+                    String hid = "";
+                    try {
+                        hid = String.valueOf(hotelId);
+                    }catch (Exception e) {}
+                    AppApi.getHotelRoomList(SplashActivity.this,serverIp,hid,SplashActivity.this);
+                    requsetPool.add(smallPlatInfoBySSDP);
+                    mSession.setRequestPool(requsetPool);
+                }
+
+                if(tvBoxSSDPInfo!=null&&!requsetPool.contains(tvBoxSSDPInfo)) {
+                    String serverIp = tvBoxSSDPInfo.getServerIp();
+                    String hotelId = tvBoxSSDPInfo.getHotelId();
+                    AppApi.getHotelRoomList(SplashActivity.this,serverIp,hotelId,SplashActivity.this);
+                    requsetPool.add(tvBoxSSDPInfo);
+                    mSession.setRequestPool(requsetPool);
+                }
+            }
+        }
     }
 }

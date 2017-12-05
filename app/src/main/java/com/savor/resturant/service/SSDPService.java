@@ -1,6 +1,5 @@
 package com.savor.resturant.service;
 
-import android.app.Activity;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
@@ -10,20 +9,11 @@ import android.os.Message;
 import android.text.TextUtils;
 
 import com.common.api.utils.LogUtils;
-import com.savor.resturant.SavorApplication;
-import com.savor.resturant.activity.BaseActivity;
-import com.savor.resturant.activity.MainActivity;
-import com.savor.resturant.activity.SlideDetailActivity;
-import com.savor.resturant.bean.AliLogBean;
 import com.savor.resturant.bean.SmallPlatInfoBySSDP;
-import com.savor.resturant.bean.SmallPlatformByGetIp;
 import com.savor.resturant.bean.TvBoxSSDPInfo;
 import com.savor.resturant.core.Session;
 import com.savor.resturant.presenter.SensePresenter;
-import com.savor.resturant.utils.ActivitiesManager;
-import com.savor.resturant.utils.AliLogFileUtil;
 import com.savor.resturant.utils.ProjectionManager;
-import com.savor.resturant.utils.STIDUtil;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -41,6 +31,7 @@ public class SSDPService extends IntentService {
     /**机顶盒组播*/
     private static final String TYPE_SSDP_BOX = "box";
     private static final int PORT_LISTENING = 11900;
+    private static final String IP_TARGET_TEST = "238.255.255.252";
     private static final String IP_TARGET = "238.255.255.250";
 
     private static final int DATA_RECEIVE_SIZE = 1024;

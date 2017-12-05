@@ -73,6 +73,9 @@ public class BindTvPresenter extends BasePresenter implements ApiRequestListener
                     getSmallPlatformUrl();
                     break;
                 case WifiManager.WIFI_STATE_DISABLED:
+                    List<Object> requsetPool = mSession.getRequsetPool();
+                    requsetPool.clear();
+                    mSession.setRequestPool(requsetPool);
                     LogUtils.d("savor:hotel 网络不可用重置酒店id为0");
                     resetLinkStatus();
                     break;

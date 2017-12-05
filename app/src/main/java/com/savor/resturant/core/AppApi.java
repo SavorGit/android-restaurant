@@ -462,7 +462,7 @@ public class AppApi {
     public static void getHotelRoomList(Context context,String url,String hotelId,ApiRequestListener handler) {
         final HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("hotelId", hotelId);
-        new AppServiceOk(context,url,Action.GET_HOTEL_BOX_JSON,handler,params).get();
+        new AppServiceOk(context,"http://"+url+":8080/command/getHotelBox",Action.GET_HOTEL_BOX_JSON,handler,params).get();
     }
 
     /**获取手机验证码*/
