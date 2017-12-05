@@ -189,6 +189,9 @@
         <activity
             android:name=".activity.WelComeSetTextActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.WelComeSetBgActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activity.LinkTvActivity"

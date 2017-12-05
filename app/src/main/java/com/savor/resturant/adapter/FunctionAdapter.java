@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.savor.resturant.R;
 import com.savor.resturant.activity.RecommendFoodActivity;
 import com.savor.resturant.activity.SlideListActivity;
+import com.savor.resturant.activity.WelComeSetTextActivity;
 import com.savor.resturant.bean.FunctionItem;
 import com.savor.resturant.core.Session;
 import com.savor.resturant.utils.SlideManager;
@@ -69,7 +70,8 @@ public class FunctionAdapter extends RecyclerView.Adapter<FunctionAdapter.Functi
                             mContext.startActivity(intent);
                             break;
                         case TYPE_WELCOME_WORD:
-
+                            intent = new Intent(mContext, WelComeSetTextActivity.class);
+                            mContext.startActivity(intent);
                             break;
                         case TYPE_ADVERT:
 
