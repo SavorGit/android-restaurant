@@ -33,11 +33,9 @@ import com.savor.resturant.adapter.CategoryAdapter;
 import com.savor.resturant.adapter.FunctionAdapter;
 import com.savor.resturant.bean.FunctionItem;
 import com.savor.resturant.bean.HotelBean;
-import com.savor.resturant.bean.TvBoxInfo;
 import com.savor.resturant.bean.TvBoxSSDPInfo;
 import com.savor.resturant.bean.UpgradeInfo;
 import com.savor.resturant.core.AppApi;
-import com.savor.resturant.presenter.BindTvPresenter;
 import com.savor.resturant.presenter.SensePresenter;
 import com.savor.resturant.service.ClearImageCacheService;
 import com.savor.resturant.service.LocalJettyService;
@@ -57,9 +55,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.savor.resturant.activity.LinkTvActivity.EXRA_TV_BOX;
-import static com.savor.resturant.activity.LinkTvActivity.EXTRA_TV_INFO;
 
 /**
  * 首页功能操作列表
@@ -81,7 +76,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private TextView operationBtnTV;
     private CategoryAdapter categoryAdapter=null;
     private List<FunctionItem> mList = new ArrayList<>();
-    private BindTvPresenter mBindTvPresenter;
+//    private BindTvPresenter mBindTvPresenter;
     private UpgradeInfo upGradeInfo;
     private UpgradeDialog mUpgradeDialog;
     private NotificationManager manager;
@@ -115,9 +110,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         getViews();
         setViews();
         setListeners();
-        initPresenter();
         regitsterSmallPlatformReciever();
-        registerNetWorkReceiver();
         upgrade();
     }
     /**
@@ -165,20 +158,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void reLink() {
-        linkTv();
     }
 
 
-    private void initPresenter() {
-        mBindTvPresenter = new BindTvPresenter(this,this);
-    }
+//    private void initPresenter() {
+//        mBindTvPresenter = new BindTvPresenter(this,this);
+//    }
 
-    /**
-     * 注册监控网络状态改变广播
-     */
-    private void registerNetWorkReceiver() {
-        mBindTvPresenter.registerNetWorkReceiver();
-    }
+//    /**
+//     * 注册监控网络状态改变广播
+//     */
+//    private void registerNetWorkReceiver() {
+//        mBindTvPresenter.registerNetWorkReceiver();
+//    }
 
     @Override
     public void getViews() {
@@ -279,64 +271,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.operation_btn:
-                buttonStopProClick();
-                break;
-            case R.id.connect_tip:
-                unLinkTv();
-                break;
         }
     }
 
-    private void unLinkTv() {
-        new HotsDialog(this).builder().setMsg("是否与电视断开，\n断开后将无法投屏？").setTitle("提示").setPositiveButton("断开连接", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mSession.resetPlatform();
-                initWIfiHint();
-                mBindTvPresenter.removeTvBoxInfo();
-            }
-        }) .setNegativeButton("取消", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                    }
-                }).show();
-    }
-
-
-
-    private void buttonStopProClick() {
-        if(mProBtnType==TYPE_STOP_PRO) {
-            if(AppUtils.isWifiNetwork(mContext)) {
-                TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
-                if(tvBoxSSDPInfo!=null && !TextUtils.isEmpty(tvBoxSSDPInfo.getBoxIp())) {
-                    // 退出投屏
-                    new HotsDialog(this).builder().setMsg("是否退出\""+WifiUtil.getWifiName(mContext)+"\"包间的投屏吗?").setPositiveButton("确定", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            AppApi.notifyTvBoxStop(mContext,mSession.getTVBoxUrl(),MainActivity.this);
-                        }
-                    }) .setNegativeButton("取消", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                        }
-                    }).show();
-
-                }else {
-                    // 连接电视
-                    linkTv();
-                }
-            }else {
-                showChangeWifiDialog();
-            }
-        }else if(mProBtnType == TYPE_GO_SETTINGS) {
-            Intent intent = new Intent();
-            intent.setAction("android.net.wifi.PICK_WIFI_NETWORK");
-            startActivity(intent);
-        }else if(mProBtnType == TYPE_LINK_TV){
-            mBindTvPresenter.bindTv();
-        }
-    }
 
     private void linkTv() {
 //        showLinkingDialog();
@@ -570,17 +507,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         Intent intent = new Intent(this,LinkTvActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivityForResult(intent,0);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == EXTRA_TV_INFO){
-            if(data!=null) {
-                TvBoxInfo boxInfo = (TvBoxInfo) data.getSerializableExtra(EXRA_TV_BOX);
-                mBindTvPresenter.handleBindCodeResult(boxInfo);
-            }
-        }
     }
 
     @Override

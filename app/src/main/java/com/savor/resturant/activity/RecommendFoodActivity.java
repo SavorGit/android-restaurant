@@ -11,23 +11,31 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.common.api.okhttp.OkHttpUtils;
 import com.common.api.utils.DensityUtil;
+import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.RecommendFoodAdapter;
-import com.savor.resturant.bean.HotelBean;
-import com.savor.resturant.bean.RecommendFood;
+import com.savor.resturant.adapter.RoomListAdapter;
+import com.savor.resturant.bean.RecommendFoodAdvert;
+import com.savor.resturant.bean.RoomInfo;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.widget.decoration.SpacesItemDecoration;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
 /**
- * 推荐菜
+ * 推荐菜和宣传片共用页面
  * @author hezd
  */
-public class RecommendFoodActivity extends BaseActivity implements View.OnClickListener, RecommendFoodAdapter.OnCheckStateChangeListener, RecommendFoodAdapter.OnSingleProBtnClickListener {
-
+public class RecommendFoodActivity extends BaseActivity implements View.OnClickListener, RecommendFoodAdapter.OnCheckStateChangeListener, RecommendFoodAdapter.OnSingleProBtnClickListener, RoomListAdapter.OnRoomItemClicklistener {
+    /**单张投屏*/
+    private static final int TYPE_PRO_SINGLE = 1;
+    /**多张投屏*/
+    private static final int TYPE_PRO_MULTI = 2;
+    /**当前投屏类型*/
+    private int currentProType = 0;
     private static final int COLUMN_COUNT = 2;
     private ImageView mBackBtn;
     private TextView mTitleTv;
@@ -37,12 +45,29 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
     private boolean isSelectRommState;
     private RecyclerView mRoomListView;
     private RecommendFoodAdapter mRecommendAdapter;
+    private OperationType currentType;
+    private RoomListAdapter roomListAdapter;
+    private RoomInfo currentRoom;
+    /**单个投屏的条目*/
+    private RecommendFoodAdvert currentFoodAdvert;
+
+
+    /**
+     * 操作类型，宣传片或者推荐菜
+     */
+    public enum OperationType implements Serializable{
+        /**宣传片*/
+        TYPE_ADVERT,
+        /**推荐菜*/
+        TYPE_RECOMMEND_FOODS,
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommend_food);
 
+        handleIntent();
         getViews();
         setViews();
         setListeners();
@@ -50,10 +75,22 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
         getData();
     }
 
+    private void handleIntent() {
+        currentType = (OperationType) getIntent().getSerializableExtra("type");
+    }
+
     private void getData() {
 //        HotelBean hotelBean = mSession.getHotelBean();
 //        String hotel_id = hotelBean.getHotel_id();
-        AppApi.getRecommendFoods(this,"60",this);
+        switch (currentType) {
+            case TYPE_ADVERT:
+                AppApi.getAdvertList(this,"60",this);
+                break;
+            case TYPE_RECOMMEND_FOODS:
+                AppApi.getRecommendFoods(this,"60",this);
+                break;
+        }
+
     }
 
     @Override
@@ -67,22 +104,15 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void setViews() {
-        // 测试数据
-//        List<RecommendFood> dataList = new ArrayList<>();
-//        for(int i = 0;i<20;i++) {
-//            RecommendFood food = new RecommendFood();
-//            food.setChinese_name("红烧佛跳墙");
-//            food.setOss_path("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2467154800,1064084862&fm=200&gp=0.jpg");
-//            food.setFood_id("3798");
-//            food.setFood_name("good taste!");
-//            food.setId("1");
-//            food.setMd5("a90600ac734eb705ef1c57fcf42fd39c");
-//            food.setMd5_type("easyMd5");
-//            food.setName("ATcxtWnRwb.jpg");
-//            food.setSuffix("jpg");
-//            dataList.add(food);
-//        }
+        // 初始化标题栏
+        initTitleBar();
+        // 初始化内容列表
+        initContentList();
+        // 初始化房间列表
+        initRoomList();
+    }
 
+    private void initTitleBar() {
         mTitleTv.setText("请选择投屏包间");
         TextPaint tp = mTitleTv.getPaint();
         tp.setFakeBoldText(true);
@@ -90,7 +120,9 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
         mTitleTv.setCompoundDrawablePadding(DensityUtil.dip2px(this,10));
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mBackBtn.getLayoutParams();
         layoutParams.setMargins(DensityUtil.dip2px(this,15),0,0,0);
+    }
 
+    private void initContentList() {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,COLUMN_COUNT);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         mRecommendFoodsRlv.setLayoutManager(gridLayoutManager);
@@ -103,15 +135,32 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
         int topBottom = DensityUtil.dip2px(this,15);
 
         mRecommendFoodsRlv.addItemDecoration(new SpacesItemDecoration(leftRight, topBottom, getResources().getColor(R.color.color_eeeeee)));
-//        mRecommendAdapter.setData(dataList);
+    }
+
+    private void initRoomList() {
+        //添加ItemDecoration，item之间的间隔
+        int leftRight = DensityUtil.dip2px(this,15);
+        int topBottom = DensityUtil.dip2px(this,15);
+        GridLayoutManager roomLayoutManager = new GridLayoutManager(this,3);
+        roomLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
+        mRoomListView.setLayoutManager(roomLayoutManager);
+        roomListAdapter = new RoomListAdapter(this);
+        mRoomListView.setAdapter(roomListAdapter);
+        List<RoomInfo> roomList = mSession.getRoomList();
+        mRoomListView.addItemDecoration(new SpacesItemDecoration(leftRight, topBottom, getResources().getColor(R.color.white)));
+        if(roomList!=null && roomList.size()>0) {
+            roomListAdapter.setData(roomList);
+        }
     }
 
     @Override
     public void setListeners() {
+        mProBtn.setOnClickListener(this);
         mBackBtn.setOnClickListener(this);
         mTitleTv.setOnClickListener(this);
         mRecommendAdapter.setOnCheckStateChangeListener(this);
         mRecommendAdapter.setOnSingleProBtnClickListener(this);
+        roomListAdapter.setOnRoomItemClickListener(this);
     }
 
     @Override
@@ -120,7 +169,6 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
             case R.id.iv_left:
                 if(isSelectRommState) {
                     hideRommList();
-                    isSelectRommState = false;
                 }else {
                     finish();
                 }
@@ -128,14 +176,64 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
             case R.id.tv_center:
                 if(!isSelectRommState) {
                     showRoomList();
-                    isSelectRommState  = true;
+
                 }
 
                 break;
             case R.id.tv_pro:
-
+                currentProType = TYPE_PRO_MULTI;
+                startMultiPro();
                 break;
         }
+    }
+
+    /**多选投屏*/
+    private void startMultiPro() {
+        // 1.判断是否选择包间
+        if(currentRoom == null) {
+            initRoomNotSelected();
+            return;
+        }
+        // 2.开始投屏
+        String vid = getSelectedList(mRecommendAdapter.getData());
+        switch (currentType) {
+            case TYPE_ADVERT:
+                AppApi.adverPro(this,"",currentRoom.getBox_mac(),vid,this);
+                break;
+            case TYPE_RECOMMEND_FOODS:
+                AppApi.recommendPro(this,"",currentRoom.getBox_mac(),1000*30+"",vid,this);
+                break;
+        }
+
+    }
+
+    private String getSelectedList(List<RecommendFoodAdvert> data) {
+       StringBuilder sb = new StringBuilder();
+       for(int i = 0;i<data.size();i++) {
+           RecommendFoodAdvert foodAdvert = data.get(i);
+           if(i==data.size()-1) {
+               switch (currentType) {
+                   case TYPE_RECOMMEND_FOODS:
+                       sb.append(foodAdvert.getFood_id());
+                       break;
+                   case TYPE_ADVERT:
+                       sb.append(foodAdvert.getId());
+                       break;
+               }
+
+           }else {
+               switch (currentType) {
+                   case TYPE_RECOMMEND_FOODS:
+                       sb.append(foodAdvert.getFood_id()+",");
+                       break;
+                   case TYPE_ADVERT:
+                       sb.append(foodAdvert.getId()+",");
+                       break;
+               }
+           }
+       }
+
+        return sb.toString();
     }
 
     private void hideRommList() {
@@ -160,11 +258,12 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
 
             }
         });
+        isSelectRommState = false;
     }
 
     private void showRoomList() {
         mRoomListView.setVisibility(View.VISIBLE);
-        mTitleTv.setCompoundDrawablesWithIntrinsicBounds(null,null,null,null);
+        mTitleTv.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         mBackBtn.setImageResource(R.drawable.ico_close);
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.actionsheet_dialog_in);
         mRoomListView.startAnimation(animation);
@@ -184,28 +283,17 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
 
             }
         });
-    }
 
-
-    @Override
-    public void onSuccess(AppApi.Action method, Object obj) {
-        switch (method) {
-            case GET_RECOMMEND_FOODS_JSON:
-                if(obj instanceof List) {
-                    List<RecommendFood> recommendFoodList = (List<RecommendFood>) obj;
-                    mRecommendAdapter.setData(recommendFoodList);
-                }
-                break;
-        }
+        isSelectRommState  = true;
     }
 
     @Override
     public void onCheckStateChange() {
-        List<RecommendFood> data = mRecommendAdapter.getData();
-        if(data!=null) {
-            if(isSomeOneSelected(data)) {
+        List<RecommendFoodAdvert> data = mRecommendAdapter.getData();
+        if (data != null) {
+            if (isSomeOneSelected(data)) {
                 mProBtn.setEnabled(true);
-            }else {
+            } else {
                 mProBtn.setEnabled(false);
             }
         }
@@ -213,16 +301,94 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
 
 
     @Override
-    public void onSingleProBtnClick(RecommendFood recommendFood) {
-
+    public void onSingleProBtnClick(RecommendFoodAdvert recommendFoodAdvert) {
+        currentProType = TYPE_PRO_SINGLE;
+        currentFoodAdvert = recommendFoodAdvert;
+        startSinglePro();
     }
 
-    private boolean isSomeOneSelected(List<RecommendFood> data) {
-        for(RecommendFood food : data) {
-            if(food.isSelected())
+    /**
+     * 单个投屏
+     */
+    private void startSinglePro() {
+        if (currentRoom == null) {
+            initRoomNotSelected();
+            return;
+        }
+        switch (currentType) {
+            case TYPE_RECOMMEND_FOODS:
+                AppApi.recommendPro(this, "", currentRoom.getBox_mac(), 1000 * 60 * 2 + "", currentFoodAdvert.getFood_id(), this);
+                break;
+            case TYPE_ADVERT:
+                AppApi.adverPro(this, "", currentRoom.getBox_mac(), currentFoodAdvert.getId(), this);
+                break;
+        }
+    }
+
+    private void initRoomNotSelected() {
+        ShowMessage.showToast(this, "请选择包间");
+        showRoomList();
+    }
+
+    private boolean isSomeOneSelected(List<RecommendFoodAdvert> data) {
+        for (RecommendFoodAdvert food : data) {
+            if (food.isSelected())
                 return true;
         }
         return false;
     }
 
+    @Override
+    public void onRoomItemClick(RoomInfo roomInfo) {
+        hideRommList();
+        currentRoom = roomInfo;
+        switch (currentProType) {
+            case TYPE_PRO_SINGLE:
+                startSinglePro();
+                break;
+            case TYPE_PRO_MULTI:
+                startMultiPro();
+                break;
+        }
+    }
+
+    @Override
+    public void onSuccess(AppApi.Action method, Object obj) {
+        switch (method) {
+            case GET_RECOMMEND_PRO_JSON:
+            case GET_ADVERT_PRO_JSON:
+                ShowMessage.showToast(this,"投屏成功！");
+                break;
+            case GET_ADVERT_JSON:
+            case GET_RECOMMEND_FOODS_JSON:
+                if(obj instanceof List) {
+                    List<RecommendFoodAdvert> recommendFoodAdvertList = (List<RecommendFoodAdvert>) obj;
+                    mRecommendAdapter.setData(recommendFoodAdvertList,currentType);
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onError(AppApi.Action method, Object obj) {
+        super.onError(method,obj);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        // 清楚房间选择记录
+        resetRoomList();
+        OkHttpUtils.getInstance().getOkHttpClient().dispatcher().cancelAll();
+        super.onDestroy();
+    }
+
+    private void resetRoomList() {
+        List<RoomInfo> roomList = mSession.getRoomList();
+        if(roomList!=null) {
+            for(RoomInfo info:roomList) {
+                info.setSelected(false);
+            }
+        }
+    }
 }

@@ -14,7 +14,7 @@ public interface IBindTvView extends IBaseView{
      * 2.二维码解析数据通过&符号分割不是4段
      * 3.二维码扫码结果为空
      * */
-    void showChangeWifiDialog();
+    void showChangeWifiDialog(String ssid);
 
     /**准备扫描二维码弹窗*/
     void readyForQrcode();

@@ -20,6 +20,7 @@ public class RoomInfo implements Serializable {
     private String box_ip;
     private String room_id;
     private String box_mac;
+    private boolean isSelected;
 
     @Override
     public String toString() {
@@ -28,6 +29,7 @@ public class RoomInfo implements Serializable {
                 ", box_ip='" + box_ip + '\'' +
                 ", room_id='" + room_id + '\'' +
                 ", box_mac='" + box_mac + '\'' +
+                ", isSelected=" + isSelected +
                 '}';
     }
 
@@ -38,6 +40,7 @@ public class RoomInfo implements Serializable {
 
         RoomInfo roomInfo = (RoomInfo) o;
 
+        if (isSelected != roomInfo.isSelected) return false;
         if (box_name != null ? !box_name.equals(roomInfo.box_name) : roomInfo.box_name != null)
             return false;
         if (box_ip != null ? !box_ip.equals(roomInfo.box_ip) : roomInfo.box_ip != null)
@@ -53,6 +56,7 @@ public class RoomInfo implements Serializable {
         result = 31 * result + (box_ip != null ? box_ip.hashCode() : 0);
         result = 31 * result + (room_id != null ? room_id.hashCode() : 0);
         result = 31 * result + (box_mac != null ? box_mac.hashCode() : 0);
+        result = 31 * result + (isSelected ? 1 : 0);
         return result;
     }
 
@@ -86,5 +90,13 @@ public class RoomInfo implements Serializable {
 
     public void setBox_mac(String box_mac) {
         this.box_mac = box_mac;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

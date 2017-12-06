@@ -6,8 +6,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
@@ -19,33 +23,34 @@ import android.widget.TextView;
 import com.common.api.core.InitViews;
 import com.common.api.okhttp.OkHttpUtils;
 import com.common.api.utils.AppUtils;
+import com.common.api.utils.DensityUtil;
 import com.common.api.utils.LogUtils;
 import com.common.api.utils.ShowMessage;
 import com.google.gson.Gson;
 import com.savor.resturant.R;
+import com.savor.resturant.adapter.RoomListAdapter;
 import com.savor.resturant.adapter.SlideDetailAdapter;
 import com.savor.resturant.bean.ImageProResonse;
 import com.savor.resturant.bean.MediaInfo;
-import com.savor.resturant.bean.SlideSettingsMediaBean;
+import com.savor.resturant.bean.RoomInfo;
 import com.savor.resturant.bean.SlideSetInfo;
-import com.savor.resturant.bean.TvBoxInfo;
-import com.savor.resturant.bean.TvBoxSSDPInfo;
+import com.savor.resturant.bean.SlideSettingsMediaBean;
 import com.savor.resturant.core.ApiRequestListener;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.ResponseErrorMessage;
-import com.savor.resturant.presenter.BindTvPresenter;
 import com.savor.resturant.utils.CompressImage;
 import com.savor.resturant.utils.IntentUtil;
 import com.savor.resturant.utils.MediaUtils;
 import com.savor.resturant.utils.ProgressDialogUtil;
 import com.savor.resturant.utils.RecordUtils;
 import com.savor.resturant.utils.SlideManager;
+import com.savor.resturant.utils.WifiUtil;
 import com.savor.resturant.widget.CommonDialog;
 import com.savor.resturant.widget.CustomAlertDialog;
-import com.savor.resturant.widget.HotsDialog;
 import com.savor.resturant.widget.LoadingProgressDialog;
 import com.savor.resturant.widget.SavorDialog;
 import com.savor.resturant.widget.SlideSettingsDialog;
+import com.savor.resturant.widget.decoration.SpacesItemDecoration;
 import com.yixia.videoeditor.adapter.UtilityAdapter;
 
 import org.json.JSONArray;
@@ -68,8 +73,6 @@ import mabeijianxi.camera.FFMpegUtils;
 import mabeijianxi.camera.VCamera;
 import mabeijianxi.camera.model.VideoInfo;
 
-import static com.savor.resturant.activity.LinkTvActivity.EXRA_TV_BOX;
-import static com.savor.resturant.activity.LinkTvActivity.EXTRA_TV_INFO;
 import static com.savor.resturant.utils.IntentUtil.KEY_SLIDE;
 import static com.savor.resturant.utils.IntentUtil.KEY_TYPE;
 
@@ -78,7 +81,7 @@ import static com.savor.resturant.utils.IntentUtil.KEY_TYPE;
  * Created by luminita on 2016/12/15.
  */
 
-public class SlideDetailActivity extends BaseActivity implements InitViews, View.OnClickListener, IBindTvView, LoadingProgressDialog.OnCancelBtnClickListener {
+public class SlideDetailActivity extends BaseActivity implements InitViews, View.OnClickListener, IBindTvView, LoadingProgressDialog.OnCancelBtnClickListener, RoomListAdapter.OnRoomItemClicklistener {
     public static final int BUFFER_SIZE = 1024 * 1024;
     private static final int QUERY_PROGRESS = 0x1;
     private static final String FFMPEG_FLAG = "compress";
@@ -114,7 +117,6 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     private static final int IMAGE_UPLOAD_RESPONSE = 0x6;
     private static final int VIDEO_UPLOAD_RESPONSE = 1000;
     private static final int UPLOAD_TIMEOUT = 0x7;
-    private static final int CHECK_LINK_STATUS = 0x8;
     /**
      * 添加图片响应码
      */
@@ -138,9 +140,6 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     private Handler mHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
-                case CHECK_LINK_STATUS:
-                    checkLinkStatus();
-                    break;
                 case UPLOAD_TIMEOUT:
                     closeProgressBarDialog();
                     showToast("网络错误，请重试");
@@ -161,7 +160,6 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
             }
         }
     };
-    private BindTvPresenter mBindTvPresenter;
     private SlideManager.SlideType slideType;
     /**
      * 视频碎片总数
@@ -180,40 +178,15 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     private HandlerThread mCompressThread;
     private boolean isUpload;
     private SlideSettingsMediaBean currentSLideBean;
-
-    private void checkLinkStatus() {
-        TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
-        if (tvBoxSSDPInfo != null && !TextUtils.isEmpty(tvBoxSSDPInfo.getBoxIp())) {
-            closeLinkingDialog();
-            showSlideSettings();
-        } else {
-            showLinkErrorDialog();
-        }
-    }
-
-    public void showLinkErrorDialog() {
-        if (!this.isFinishing()) {
-            new HotsDialog(this)
-                    .builder()
-                    .setMsg("连接失败，请重新连接")
-                    .setCancelable(false)
-                    .setPositiveButton("重新连接", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            searchTv();
-                        }
-                    })
-                    .setNegativeButton("取消", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            closeLinkingDialog();
-                        }
-                    })
-                    .show();
-        }
-
-    }
-
+    /**当前选择的包间*/
+    private RoomInfo currentRoom;
+    /**当前是否是选择房间模式*/
+    private boolean isSelectRoomState;
+    private RecyclerView mRoomListView;
+    private RoomListAdapter roomListAdapter;
+    private String needLinkWifi;
+    /**是否在前台*/
+    private boolean isForground;
 
     private void handleImageUploadResponse(Object obj) {
         if (obj instanceof ImageProResonse) {
@@ -270,7 +243,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         getViews();
         setViews();
         setListeners();
-        initPresenter();
+//        initPresenter();
         initFFmpeg();
         initCompressThread();
     }
@@ -338,20 +311,18 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         VCamera.initialize(this);
     }
 
-    private void initPresenter() {
-        mBindTvPresenter = new BindTvPresenter(this, this);
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
         RecordUtils.onPageStart(this, getString(R.string.slide_to_screen_open_album));
+        isForground = true;
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         RecordUtils.onPageEndAndPause(this, this);
+        isForground = false;
     }
 
     @Override
@@ -418,6 +389,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         toScreen = (RelativeLayout) findViewById(R.id.rl_toscreen);
         delete = (ImageView) findViewById(R.id.iv_delete);
         pictureGroup = (GridView) findViewById(R.id.gv_picture);
+        mRoomListView = (RecyclerView) findViewById(R.id.rlv_room);
     }
 
     @Override
@@ -437,12 +409,31 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         pictureGroup.setAdapter(slideDetailAdapter);
         slideDetailAdapter.setData(picList);
         if (!AppUtils.isWifiNetwork(this)) {
-            showChangeWifiDialog();
+            showChangeWifiDialog("");
+        }
+
+        initRoomList();
+    }
+
+    private void initRoomList() {
+        //添加ItemDecoration，item之间的间隔
+        int leftRight = DensityUtil.dip2px(this,15);
+        int topBottom = DensityUtil.dip2px(this,15);
+        GridLayoutManager roomLayoutManager = new GridLayoutManager(this,3);
+        roomLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
+        mRoomListView.setLayoutManager(roomLayoutManager);
+        roomListAdapter = new RoomListAdapter(this);
+        mRoomListView.setAdapter(roomListAdapter);
+        List<RoomInfo> roomList = mSession.getRoomList();
+        mRoomListView.addItemDecoration(new SpacesItemDecoration(leftRight, topBottom, getResources().getColor(R.color.white)));
+        if(roomList!=null && roomList.size()>0) {
+            roomListAdapter.setData(roomList);
         }
     }
 
     @Override
     public void setListeners() {
+        roomListAdapter.setOnRoomItemClickListener(this);
         back.setOnClickListener(this);
         title.setOnClickListener(this);
         editBar.setOnClickListener(this);
@@ -485,7 +476,11 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
-                onBackPressed();
+                if(isSelectRoomState) {
+                    hideRoomList();
+                }else {
+                    onBackPressed();
+                }
                 break;
             case R.id.add:
                 if (picList.size() >= 50) {
@@ -521,19 +516,96 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         }
     }
 
+    private void hideRoomList() {
+        back.setImageResource(R.drawable.back);
+        title.setText(slideInfo.groupName);
+        editBar.setVisibility(View.VISIBLE);
+
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.actionsheet_dialog_out);
+        mRoomListView.startAnimation(animation);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                mRoomListView.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        isSelectRoomState = false;
+    }
+
     private void performProjection() {
         isStopUpload = false;
-        if (!isFoundTv()) {
-            showChangeWifiDialog();
-        } else {
-            if (mSession.isBindTv()) {
-                // 幻灯片设置
-                showSlideSettings();
-            } else {
-                // 搜索电视
-                mBindTvPresenter.bindTv();
-            }
+        // 判断是否选择了包间
+        // 1.选择包间
+        // 2.向盒子发投屏请求
+        if(currentRoom == null) {
+            showRoomList();
+            ShowMessage.showToast(this,"请选择包间");
+            return;
         }
+
+//        String box_ip = currentRoom.getBox_ip();
+
+        String wifiName = WifiUtil.getWifiName(this);
+        String box_name = currentRoom.getBox_name();
+        String box_ip = currentRoom.getBox_ip();
+        String localIp = WifiUtil.getLocalIp(this);
+        if(!TextUtils.isEmpty(wifiName)&&wifiName.equals(box_name)&&!TextUtils.isEmpty(localIp)&&WifiUtil.isInSameNetwork(localIp,box_ip)) {
+            showSlideSettings();
+        }else {
+            needLinkWifi = box_name;
+            showChangeWifiDialog(box_name);
+        }
+
+
+//        if (!isFoundTv()) {
+//            showChangeWifiDialog();
+//        } else {
+//            if (mSession.isBindTv()) {
+//                // 幻灯片设置
+//                showSlideSettings();
+//            } else {
+//                // 搜索电视
+//                mBindTvPresenter.bindTv();
+//            }
+//        }
+    }
+
+    private void showRoomList() {
+        isSelectRoomState = true;
+        back.setImageResource(R.drawable.ico_close);
+        title.setText("选择投屏房间");
+        editBar.setVisibility(View.GONE);
+
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.actionsheet_dialog_in);
+        mRoomListView.startAnimation(animation);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                mRoomListView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        isSelectRoomState  = true;
     }
 
     public void showSlideSettings() {
@@ -547,20 +619,22 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                     }
                 })
                 .setPositiveButton("确定", new View.OnClickListener() {
+
                     @Override
                     public void onClick(View v) {
-                        mOperationType = TYPE_CONFIRM;
-                        if (!isFoundTv()) {
-                            showChangeWifiDialog();
-                        } else {
-                            if (mSession.isBindTv()) {
-                                // 幻灯片设置
-                                performSlideSettingsConfirm();
-                            } else {
-                                // 搜索电视
-                                mBindTvPresenter.bindTv();
-                            }
-                        }
+                        performSlideSettingsConfirm();
+//                        mOperationType = TYPE_CONFIRM;
+//                        if (!isFoundTv()) {
+//                            showChangeWifiDialog();
+//                        } else {
+//                            if (mSession.isBindTv()) {
+//                                // 幻灯片设置
+//                                performSlideSettingsConfirm();
+//                            } else {
+//                                // 搜索电视
+//                                mBindTvPresenter.bindTv();
+//                            }
+//                        }
 
                     }
                 });
@@ -586,19 +660,6 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         }
     }
 
-    private void searchTv() {
-        showLinkingDialog();
-        startSSDPServiceInOperation();
-        checkLinkStatusDelayed();
-    }
-
-    /**
-     * 15秒以后如果还没有收到ssdp，提示连接失败，重新连接
-     */
-    private void checkLinkStatusDelayed() {
-        mHandler.removeMessages(CHECK_LINK_STATUS);
-        mHandler.sendEmptyMessageDelayed(CHECK_LINK_STATUS, 15 * 1000);
-    }
 
     /**
      * 上传图片幻灯片参数到服务器端
@@ -629,7 +690,8 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         param.put("duration", duration + "");
         param.put("interval", interval + "");
         param.put("images", jsonArray);
-        AppApi.postImageSlideSettingToServer(mContext, mSession.getTVBoxUrl(), param, force, this);
+        String url = "http://"+currentRoom.getBox_ip()+":8080";
+        AppApi.postImageSlideSettingToServer(mContext, url, param, force, this);
     }
 
     /**
@@ -678,7 +740,8 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         param.put("name", name);
         param.put("duration", duration + "");
         param.put("videos", jsonArray);
-        AppApi.postVideoSlideSettingToServer(mContext, mSession.getTVBoxUrl(), param, force, this);
+        String url = "http://"+currentRoom.getBox_ip()+":8080";
+        AppApi.postVideoSlideSettingToServer(mContext, url, param, force, this);
     }
 
     /**
@@ -985,16 +1048,16 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
             params.put("pptName", slideInfo.groupName);
             params.put("range", offset * BUFFER_SIZE + "-" + (offset == count - 1 ? "" : offset * BUFFER_SIZE + BUFFER_SIZE));
 
-
+            final String url = "http://"+currentRoom.getBox_ip()+":8080";
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     if (offset == count - 1) {
                         isStopUpload = false;
-                        AppApi.updateVideoFile(mContext, mSession.getTVBoxUrl(), fragmentPath, params, SlideDetailActivity.this);
+                        AppApi.updateVideoFile(mContext, url, fragmentPath, params, SlideDetailActivity.this);
                     } else {
                         isStopUpload = true;
-                        AppApi.updateVideoFile(mContext, mSession.getTVBoxUrl(), fragmentPath, params, new ApiRequestListener() {
+                        AppApi.updateVideoFile(mContext, url, fragmentPath, params, new ApiRequestListener() {
                             @Override
                             public void onSuccess(AppApi.Action method, Object obj) {
                                 offset++;
@@ -1076,7 +1139,8 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                             HashMap<String, Object> params = new HashMap<>();
                             params.put("fileName", picName);
                             params.put("pptName", slideInfo.groupName);
-                            AppApi.updateImageFile(mContext, mSession.getTVBoxUrl(), copyFileUrl, params, this);
+                            String url = "http://"+currentRoom.getBox_ip()+":8080";
+                            AppApi.updateImageFile(mContext, url, copyFileUrl, params, this);
                             currentUploadFile = bean.getName();
                             crruntFileUrl = copyFileUrl;
                             break;
@@ -1281,9 +1345,22 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         finish();
     }
 
+    private void resetRoomList() {
+        List<RoomInfo> roomList = mSession.getRoomList();
+        if(roomList!=null) {
+            for(RoomInfo info:roomList) {
+                info.setSelected(false);
+            }
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        // 清楚房间选择记录
+        resetRoomList();
+        OkHttpUtils.getInstance().getOkHttpClient().dispatcher().cancelAll();
+
         if(mCompressThread!=null) {
             mCompressThread.quit();
         }
@@ -1336,19 +1413,6 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == EXTRA_TV_INFO) {
-            if (data != null) {
-                TvBoxInfo boxInfo = (TvBoxInfo) data.getSerializableExtra(EXRA_TV_BOX);
-                mBindTvPresenter.handleBindCodeResult(boxInfo);
-            }
-
-        }
-    }
-
-
-    @Override
     public void onCancelBtnClick() {
         isStopUpload = true;
         String compressPath = mSession.getCompressPath(this);
@@ -1360,4 +1424,34 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         UtilityAdapter.FFmpegKill(FFMPEG_FLAG);
         OkHttpUtils.getInstance().getOkHttpClient().dispatcher().cancelAll();
     }
+
+    @Override
+    public void onRoomItemClick(RoomInfo roomInfo) {
+        currentRoom = roomInfo;
+        hideRoomList();
+
+        // 判断是否连接同一个wifi并且同一网段
+        String wifiName = WifiUtil.getWifiName(this);
+        String box_name = roomInfo.getBox_name();
+        String box_ip = roomInfo.getBox_ip();
+        String localIp = WifiUtil.getLocalIp(this);
+        if(!TextUtils.isEmpty(wifiName)&&wifiName.equals(box_name)&&!TextUtils.isEmpty(localIp)&&WifiUtil.isInSameNetwork(localIp,box_ip)) {
+            showSlideSettings();
+        }else {
+            needLinkWifi = box_name;
+            showChangeWifiDialog(box_name);
+        }
+    }
+
+    @Override
+    protected void checkWifiLinked() {
+        if (!TextUtils.isEmpty(needLinkWifi) && needLinkWifi.equals(WifiUtil.getWifiName(this))&&isForground) {
+            cancelWifiCheck();
+            needLinkWifi = null;
+            showSlideSettings();
+        }else {
+            startCheckWifiLinkedTimer();
+        }
+    }
+
 }

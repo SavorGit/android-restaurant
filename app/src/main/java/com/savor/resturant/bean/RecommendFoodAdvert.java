@@ -3,11 +3,11 @@ package com.savor.resturant.bean;
 import java.io.Serializable;
 
 /**
- * 推荐菜
+ * 推荐菜和宣传片共用实体类
  * Created by hezd on 2017/12/4.
  */
 
-public class RecommendFood implements Serializable {
+public class RecommendFoodAdvert implements Serializable {
 
     /**
      * food_id : 1
@@ -30,11 +30,13 @@ public class RecommendFood implements Serializable {
     private String md5_type;
     private String suffix;
     private String name;
+    private String duration;
+    private String img_url;
     private boolean isSelected;
 
     @Override
     public String toString() {
-        return "RecommendFood{" +
+        return "RecommendFoodAdvert{" +
                 "food_id='" + food_id + '\'' +
                 ", id='" + id + '\'' +
                 ", food_name='" + food_name + '\'' +
@@ -44,6 +46,8 @@ public class RecommendFood implements Serializable {
                 ", md5_type='" + md5_type + '\'' +
                 ", suffix='" + suffix + '\'' +
                 ", name='" + name + '\'' +
+                ", duration='" + duration + '\'' +
+                ", img_url='" + img_url + '\'' +
                 ", isSelected=" + isSelected +
                 '}';
     }
@@ -53,22 +57,25 @@ public class RecommendFood implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RecommendFood food = (RecommendFood) o;
+        RecommendFoodAdvert that = (RecommendFoodAdvert) o;
 
-        if (isSelected != food.isSelected) return false;
-        if (food_id != null ? !food_id.equals(food.food_id) : food.food_id != null) return false;
-        if (id != null ? !id.equals(food.id) : food.id != null) return false;
-        if (food_name != null ? !food_name.equals(food.food_name) : food.food_name != null)
+        if (isSelected != that.isSelected) return false;
+        if (food_id != null ? !food_id.equals(that.food_id) : that.food_id != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (food_name != null ? !food_name.equals(that.food_name) : that.food_name != null)
             return false;
-        if (oss_path != null ? !oss_path.equals(food.oss_path) : food.oss_path != null)
+        if (oss_path != null ? !oss_path.equals(that.oss_path) : that.oss_path != null)
             return false;
-        if (chinese_name != null ? !chinese_name.equals(food.chinese_name) : food.chinese_name != null)
+        if (chinese_name != null ? !chinese_name.equals(that.chinese_name) : that.chinese_name != null)
             return false;
-        if (md5 != null ? !md5.equals(food.md5) : food.md5 != null) return false;
-        if (md5_type != null ? !md5_type.equals(food.md5_type) : food.md5_type != null)
+        if (md5 != null ? !md5.equals(that.md5) : that.md5 != null) return false;
+        if (md5_type != null ? !md5_type.equals(that.md5_type) : that.md5_type != null)
             return false;
-        if (suffix != null ? !suffix.equals(food.suffix) : food.suffix != null) return false;
-        return name != null ? name.equals(food.name) : food.name == null;
+        if (suffix != null ? !suffix.equals(that.suffix) : that.suffix != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (duration != null ? !duration.equals(that.duration) : that.duration != null)
+            return false;
+        return img_url != null ? img_url.equals(that.img_url) : that.img_url == null;
     }
 
     @Override
@@ -82,6 +89,8 @@ public class RecommendFood implements Serializable {
         result = 31 * result + (md5_type != null ? md5_type.hashCode() : 0);
         result = 31 * result + (suffix != null ? suffix.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (duration != null ? duration.hashCode() : 0);
+        result = 31 * result + (img_url != null ? img_url.hashCode() : 0);
         result = 31 * result + (isSelected ? 1 : 0);
         return result;
     }
@@ -156,6 +165,22 @@ public class RecommendFood implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public String getImg_url() {
+        return img_url;
+    }
+
+    public void setImg_url(String img_url) {
+        this.img_url = img_url;
     }
 
     public boolean isSelected() {

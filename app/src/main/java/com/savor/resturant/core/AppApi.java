@@ -81,6 +81,12 @@ public class AppApi {
         GET_HOTEL_BOX_JSON,
         /**获取推荐菜*/
         GET_RECOMMEND_FOODS_JSON,
+        /**获取宣传片*/
+        GET_ADVERT_JSON,
+        /**宣传片投屏*/
+        GET_ADVERT_PRO_JSON,
+        /**推荐菜投屏*/
+        GET_RECOMMEND_PRO_JSON,
     }
 
     /**
@@ -109,6 +115,9 @@ public class AppApi {
             put(Action.POST_VERIFY_CODE_JSON, formatPhpUrl("Dinnerapp/sms/getverifyCode"));
             put(Action.GET_HOTEL_BOX_JSON,smallPlatformUrl);
             put(Action.GET_RECOMMEND_FOODS_JSON, formatPhpUrl("Dinnerapp/Recfood/getHotelRecFoods"));
+            put(Action.GET_ADVERT_JSON, formatPhpUrl("Dinnerapp/Adv/getAdvList"));
+            put(Action.GET_ADVERT_PRO_JSON,smallPlatformUrl);
+            put(Action.GET_RECOMMEND_PRO_JSON,smallPlatformUrl);
         }
     };
 
@@ -463,16 +472,10 @@ public class AppApi {
 
     /**获取酒楼包间列表*/
     public static void getHotelRoomList(Context context,String url,String hotelId,ApiRequestListener handler) {
-//        String type = smallPlatInfoBySSDP.getType();
-//        String serverIp = smallPlatInfoBySSDP.getServerIp();
-//        String commandPort = smallPlatInfoBySSDP.getCommandPort();
-//        String url = "http://"+serverIp+":"+commandPort+"/"+type.toLowerCase()+"/command/box-info/"+number;
-////            String url = "http://192.168.2.154:"+commandPort+"/small/command/box-info/"+number;
-//        new AppServiceOk(context,url,Action.POST_BOX_INFO_JSON,handler,params).get();
-
+        url = "http://192.168.1.104:8080";
         final HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("hotelId", "60");
-        new AppServiceOk(context,"http://192.168.1.104:8080/small/command/getHotelBox",Action.GET_HOTEL_BOX_JSON,handler,params).get();
+        new AppServiceOk(context,url+"/small/command/getHotelBox",Action.GET_HOTEL_BOX_JSON,handler,params).get();
 //        new AppServiceOk(context,"http://"+url+":8080/command/getHotelBox",Action.GET_HOTEL_BOX_JSON,handler,params).get();
     }
 
@@ -488,6 +491,38 @@ public class AppApi {
         final HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("hotel_id", hotel_id);
         new AppServiceOk(context,Action.GET_RECOMMEND_FOODS_JSON,handler,params).post();
+    }
+
+    /**获取推荐菜*/
+    public static void getAdvertList(Context context, String hotel_id,  ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("hotel_id", hotel_id);
+        new AppServiceOk(context,Action.GET_ADVERT_JSON,handler,params).post();
+    }
+
+    /**宣传片投屏*/
+    public static void adverPro(Context context,String url,String boxMac,String vid,ApiRequestListener handler) {
+        url = "http://192.168.1.104:8080";
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("deviceId", STIDUtil.getDeviceId(context));
+        params.put("boxMac", boxMac);
+        params.put("deviceName", Build.MODEL);
+        params.put("vid", vid);
+        new AppServiceOk(context,url+"/small/command/screend/vid",Action.GET_ADVERT_PRO_JSON,handler,params).get();
+//        new AppServiceOk(context,"http://"+url+":8080/command/getHotelBox",Action.GET_HOTEL_BOX_JSON,handler,params).get();
+    }
+
+    /**推荐菜投屏*/
+    public static void recommendPro(Context context,String url,String boxMac,String interval,String specialtyId,ApiRequestListener handler) {
+        url = "http://192.168.1.104:8080";
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("deviceId", STIDUtil.getDeviceId(context));
+        params.put("boxMac", boxMac);
+        params.put("deviceName", Build.MODEL);
+        params.put("vid", specialtyId);
+        params.put("interval", interval);
+        new AppServiceOk(context,url+"/small/command/screend/recommend",Action.GET_RECOMMEND_PRO_JSON,handler,params).get();
+//        new AppServiceOk(context,"http://"+url+":8080/command/getHotelBox",Action.GET_HOTEL_BOX_JSON,handler,params).get();
     }
 
     // 超时（网络）异常
