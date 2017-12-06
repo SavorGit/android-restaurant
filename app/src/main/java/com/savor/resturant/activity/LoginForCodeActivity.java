@@ -173,7 +173,7 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
         if (!TextUtils.isEmpty(tel)) {
             tv_code.setClickable(true);
             tv_code.setBackgroundResource(R.drawable.corner_remote_view_click);
-            tv_code.setTextColor(context.getResources().getColor(R.color.color_333333));
+            tv_code.setTextColor(context.getResources().getColor(R.color.color_fd7a40));
         }else {
             tv_code.setClickable(false);
             tv_code.setBackgroundResource(R.drawable.corner_remote_view_g);
@@ -239,6 +239,7 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
                     HotelBean hotelBean = (HotelBean)obj;
                     if (hotelBean != null) {
                         hotelBean.setInvitation(invitation);
+                        hotelBean.setTel(tel);
                         mSession.setHotelBean(hotelBean);
 
 

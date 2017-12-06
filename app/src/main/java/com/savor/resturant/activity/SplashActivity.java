@@ -111,14 +111,21 @@ public class SplashActivity extends BaseActivity {
                     break;
                 case SWITCH_HOME:
                     // 启动跳转到首页
-                    Intent homeIntent = new Intent(SplashActivity.this, MainActivity.class);
-                    Intent intent = getIntent();
-                    if(intent!=null&&("application/pdf").equals(intent.getType())) {
-                        Uri data = getIntent().getData();
-                        homeIntent.setDataAndType(data,intent.getType());
-                    }
-                    startActivity(homeIntent);
+//                    Intent homeIntent = new Intent(SplashActivity.this, MainActivity.class);
+//                    Intent intent = getIntent();
+//                    if(intent!=null&&("application/pdf").equals(intent.getType())) {
+//                        Uri data = getIntent().getData();
+//                        homeIntent.setDataAndType(data,intent.getType());
+//                    }
+//                    startActivity(homeIntent);
 //                    finish();
+                    Intent homeIntent = new Intent(SplashActivity.this, LoginForCodeActivity.class);
+                    Intent intent = getIntent();
+//                    if(intent!=null&&("application/pdf").equals(intent.getType())) {
+//                        Uri data = getIntent().getData();
+//                        homeIntent.setDataAndType(data,intent.getType());
+//                    }
+                    startActivity(homeIntent);
                     break;
             }
         }
