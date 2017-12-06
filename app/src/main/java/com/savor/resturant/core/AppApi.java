@@ -460,9 +460,17 @@ public class AppApi {
 
     /**获取酒楼包间列表*/
     public static void getHotelRoomList(Context context,String url,String hotelId,ApiRequestListener handler) {
+//        String type = smallPlatInfoBySSDP.getType();
+//        String serverIp = smallPlatInfoBySSDP.getServerIp();
+//        String commandPort = smallPlatInfoBySSDP.getCommandPort();
+//        String url = "http://"+serverIp+":"+commandPort+"/"+type.toLowerCase()+"/command/box-info/"+number;
+////            String url = "http://192.168.2.154:"+commandPort+"/small/command/box-info/"+number;
+//        new AppServiceOk(context,url,Action.POST_BOX_INFO_JSON,handler,params).get();
+
         final HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("hotelId", hotelId);
-        new AppServiceOk(context,"http://"+url+":8080/command/getHotelBox",Action.GET_HOTEL_BOX_JSON,handler,params).get();
+        params.put("hotelId", "60");
+        new AppServiceOk(context,"http://192.168.1.104:8080/small/command/getHotelBox",Action.GET_HOTEL_BOX_JSON,handler,params).get();
+//        new AppServiceOk(context,"http://"+url+":8080/command/getHotelBox",Action.GET_HOTEL_BOX_JSON,handler,params).get();
     }
 
     /**获取手机验证码*/

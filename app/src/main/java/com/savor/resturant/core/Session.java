@@ -461,7 +461,7 @@ public class Session {
 
     private void readSettings() {
 //        mHotelMapCache = (HotelMapCache) getObj(P_APP_HOTEL_MAP);
-        roomList = (List<RoomInfo>) getObj(P_ROMM_LIST);
+//        roomList = (List<RoomInfo>) getObj(P_ROMM_LIST);
         mUploadFirstUse = mPreference.loadBooleanKey(P_APP_FIRST_USE,false);
         mWaiterData = mPreference.loadStringKey(P_APP_WAITER_DATA,null);
         mPdfList = (List<PdfInfo>) getObj(P_APP_PDF_LIST);
@@ -992,7 +992,7 @@ public class Session {
 
     public void setRoomList(List<RoomInfo> roomInfos) {
         this.roomList = roomInfos;
-        setObj(P_ROMM_LIST,roomInfos);
+//        setObj(P_ROMM_LIST,roomInfos);
     }
 
     public List<RoomInfo> getRoomList() {

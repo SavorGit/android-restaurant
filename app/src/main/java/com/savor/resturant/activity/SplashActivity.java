@@ -146,7 +146,7 @@ public class SplashActivity extends BaseActivity {
     private void getSmallPlatformUrl() {
         //  判断是否获取到小平台地址，如果没有获取到请求云平台（小平台是局域网）获取小平台ip
         if(AppUtils.isWifiNetwork(this)) {
-            LogUtils.d("savor:sp 当前wifi不可用不请求getip");
+            LogUtils.d("savor:sp 当前wifi可用请求getip");
             AppApi.getSmallPlatformIp(this,this);
         }else {
             LogUtils.d("savor:sp 当前wifi状态不可用不请求getip");
