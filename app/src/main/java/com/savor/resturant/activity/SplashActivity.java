@@ -101,6 +101,7 @@ public class SplashActivity extends BaseActivity {
                     List<Object> requsetPool = mSession.getRequsetPool();
                     requsetPool.clear();
                     mSession.setRequestPool(requsetPool);
+                    mSession.setHotelid(0);
                     LogUtils.d("savor:hotel 网络不可用重置酒店id为0");
                     resetLinkStatus();
                     mHandler.removeMessages(MSG_STOP_SSDP);
@@ -386,6 +387,7 @@ public class SplashActivity extends BaseActivity {
                             Integer hid = Integer.valueOf(hotelId);
                             if(hid>0) {
                                 mSession.setHotelid(hid);
+                                resetLinkStatus();
                             }
                         }catch (Exception e) {
                         }
