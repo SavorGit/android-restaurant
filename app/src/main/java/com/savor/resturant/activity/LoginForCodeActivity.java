@@ -239,6 +239,7 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
                     HotelBean hotelBean = (HotelBean)obj;
                     if (hotelBean != null) {
                         hotelBean.setInvitation(invitation);
+                        hotelBean.setTel(tel);
                         mSession.setHotelBean(hotelBean);
 
 
