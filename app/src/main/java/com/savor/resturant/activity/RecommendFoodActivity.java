@@ -14,7 +14,9 @@ import android.widget.TextView;
 import com.common.api.utils.DensityUtil;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.RecommendFoodAdapter;
+import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.RecommendFood;
+import com.savor.resturant.core.AppApi;
 import com.savor.resturant.widget.decoration.SpacesItemDecoration;
 
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ import java.util.List;
  * 推荐菜
  * @author hezd
  */
-public class RecommendFoodActivity extends BaseActivity implements View.OnClickListener {
+public class RecommendFoodActivity extends BaseActivity implements View.OnClickListener, RecommendFoodAdapter.OnCheckStateChangeListener, RecommendFoodAdapter.OnSingleProBtnClickListener {
 
     private static final int COLUMN_COUNT = 2;
     private ImageView mBackBtn;
@@ -34,6 +36,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
     /**当前是否属于选择包间状态*/
     private boolean isSelectRommState;
     private RecyclerView mRoomListView;
+    private RecommendFoodAdapter mRecommendAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,14 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
         getViews();
         setViews();
         setListeners();
+
+        getData();
+    }
+
+    private void getData() {
+//        HotelBean hotelBean = mSession.getHotelBean();
+//        String hotel_id = hotelBean.getHotel_id();
+        AppApi.getRecommendFoods(this,"60",this);
     }
 
     @Override
@@ -57,20 +68,20 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
     @Override
     public void setViews() {
         // 测试数据
-        List<RecommendFood> dataList = new ArrayList<>();
-        for(int i = 0;i<20;i++) {
-            RecommendFood food = new RecommendFood();
-            food.setChinese_name("红烧佛跳墙");
-            food.setOss_path("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2467154800,1064084862&fm=200&gp=0.jpg");
-            food.setFood_id("3798");
-            food.setFood_name("good taste!");
-            food.setId("1");
-            food.setMd5("a90600ac734eb705ef1c57fcf42fd39c");
-            food.setMd5_type("easyMd5");
-            food.setName("ATcxtWnRwb.jpg");
-            food.setSuffix("jpg");
-            dataList.add(food);
-        }
+//        List<RecommendFood> dataList = new ArrayList<>();
+//        for(int i = 0;i<20;i++) {
+//            RecommendFood food = new RecommendFood();
+//            food.setChinese_name("红烧佛跳墙");
+//            food.setOss_path("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2467154800,1064084862&fm=200&gp=0.jpg");
+//            food.setFood_id("3798");
+//            food.setFood_name("good taste!");
+//            food.setId("1");
+//            food.setMd5("a90600ac734eb705ef1c57fcf42fd39c");
+//            food.setMd5_type("easyMd5");
+//            food.setName("ATcxtWnRwb.jpg");
+//            food.setSuffix("jpg");
+//            dataList.add(food);
+//        }
 
         mTitleTv.setText("请选择投屏包间");
         TextPaint tp = mTitleTv.getPaint();
@@ -84,7 +95,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         mRecommendFoodsRlv.setLayoutManager(gridLayoutManager);
 
-        RecommendFoodAdapter mRecommendAdapter = new RecommendFoodAdapter(this);
+        mRecommendAdapter = new RecommendFoodAdapter(this);
         mRecommendFoodsRlv.setAdapter(mRecommendAdapter);
 
         //添加ItemDecoration，item之间的间隔
@@ -92,13 +103,15 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
         int topBottom = DensityUtil.dip2px(this,15);
 
         mRecommendFoodsRlv.addItemDecoration(new SpacesItemDecoration(leftRight, topBottom, getResources().getColor(R.color.color_eeeeee)));
-        mRecommendAdapter.setData(dataList);
+//        mRecommendAdapter.setData(dataList);
     }
 
     @Override
     public void setListeners() {
         mBackBtn.setOnClickListener(this);
         mTitleTv.setOnClickListener(this);
+        mRecommendAdapter.setOnCheckStateChangeListener(this);
+        mRecommendAdapter.setOnSingleProBtnClickListener(this);
     }
 
     @Override
@@ -172,4 +185,44 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
             }
         });
     }
+
+
+    @Override
+    public void onSuccess(AppApi.Action method, Object obj) {
+        switch (method) {
+            case GET_RECOMMEND_FOODS_JSON:
+                if(obj instanceof List) {
+                    List<RecommendFood> recommendFoodList = (List<RecommendFood>) obj;
+                    mRecommendAdapter.setData(recommendFoodList);
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onCheckStateChange() {
+        List<RecommendFood> data = mRecommendAdapter.getData();
+        if(data!=null) {
+            if(isSomeOneSelected(data)) {
+                mProBtn.setEnabled(true);
+            }else {
+                mProBtn.setEnabled(false);
+            }
+        }
+    }
+
+
+    @Override
+    public void onSingleProBtnClick(RecommendFood recommendFood) {
+
+    }
+
+    private boolean isSomeOneSelected(List<RecommendFood> data) {
+        for(RecommendFood food : data) {
+            if(food.isSelected())
+                return true;
+        }
+        return false;
+    }
+
 }

@@ -79,6 +79,8 @@ public class AppApi {
         POST_VERIFY_CODE_JSON,
         /**获取酒楼包间信息*/
         GET_HOTEL_BOX_JSON,
+        /**获取推荐菜*/
+        GET_RECOMMEND_FOODS_JSON,
     }
 
     /**
@@ -106,6 +108,7 @@ public class AppApi {
             put(Action.POST_LOGIN_JSON, formatPhpUrl("Dinnerapp/login/doLogin"));
             put(Action.POST_VERIFY_CODE_JSON, formatPhpUrl("Dinnerapp/sms/getverifyCode"));
             put(Action.GET_HOTEL_BOX_JSON,smallPlatformUrl);
+            put(Action.GET_RECOMMEND_FOODS_JSON, formatPhpUrl("Dinnerapp/Recfood/getHotelRecFoods"));
         }
     };
 
@@ -478,6 +481,13 @@ public class AppApi {
         final HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("mobile", mobile);
         new AppServiceOk(context,Action.POST_VERIFY_CODE_JSON,handler,params).post();
+    }
+
+    /**获取推荐菜*/
+    public static void getRecommendFoods(Context context, String hotel_id,  ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("hotel_id", hotel_id);
+        new AppServiceOk(context,Action.GET_RECOMMEND_FOODS_JSON,handler,params).post();
     }
 
     // 超时（网络）异常

@@ -25,6 +25,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.savor.resturant.bean.BaseProResponse;
 import com.savor.resturant.bean.HotelBean;
+import com.savor.resturant.bean.RecommendFood;
 import com.savor.resturant.bean.RoomInfo;
 import com.savor.resturant.bean.SlideSettingsMediaBean;
 import com.savor.resturant.bean.SmallPlatformByGetIp;
@@ -102,6 +103,7 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.POST_LOGIN_JSON
                     || action == AppApi.Action.GET_SAMLL_PLATFORMURL_JSON
                     || action == AppApi.Action.GET_HOTEL_BOX_JSON
+                    || action == AppApi.Action.GET_RECOMMEND_FOODS_JSON
                     ){
                 int code = rSet.getInt("code");
                 if(rSet.has("result")) {
@@ -213,6 +215,10 @@ public class ApiResponseFactory {
                 break;
             case GET_HOTEL_BOX_JSON:
                 result = gson.fromJson(info, new TypeToken<List<RoomInfo>>() {
+                }.getType());
+                break;
+            case GET_RECOMMEND_FOODS_JSON:
+                result = gson.fromJson(info, new TypeToken<List<RecommendFood>>() {
                 }.getType());
                 break;
             default:

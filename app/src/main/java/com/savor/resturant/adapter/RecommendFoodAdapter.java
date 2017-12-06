@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,6 +29,8 @@ public class RecommendFoodAdapter extends RecyclerView.Adapter<RecommendFoodAdap
     private final Context mContext;
     private List<RecommendFood> mData;
     private static final double IMAGE_SCALE = 0.7164179104477612;
+    private OnSingleProBtnClickListener onSingleProBtnClickListener;
+    private OnCheckStateChangeListener onCheckStateChangeListener;
 
     public RecommendFoodAdapter(Context context) {
         this.mContext = context;
@@ -35,6 +39,10 @@ public class RecommendFoodAdapter extends RecyclerView.Adapter<RecommendFoodAdap
     public void setData(List<RecommendFood> data) {
         this.mData = data;
         notifyDataSetChanged();
+    }
+
+    public List<RecommendFood> getData() {
+        return mData;
     }
 
     @Override
@@ -53,7 +61,7 @@ public class RecommendFoodAdapter extends RecyclerView.Adapter<RecommendFoodAdap
 
     @Override
     public void onBindViewHolder(final RecommendHolder holder, int position) {
-        RecommendFood recommendFood = mData.get(position);
+        final RecommendFood recommendFood = mData.get(position);
         final String oss_path = recommendFood.getOss_path();
         String chinese_name = recommendFood.getChinese_name();
 
@@ -67,7 +75,22 @@ public class RecommendFoodAdapter extends RecyclerView.Adapter<RecommendFoodAdap
         holder.proBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(onSingleProBtnClickListener!=null) {
+                    onSingleProBtnClickListener.onSingleProBtnClick(recommendFood);
+                }
+            }
+        });
 
+        holder.cb_select.setTag(position);
+        holder.cb_select.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                int position = (int) holder.cb_select.getTag();
+                mData.get(position).setSelected(isChecked);
+
+                if(onCheckStateChangeListener!=null) {
+                    onCheckStateChangeListener.onCheckStateChange();
+                }
             }
         });
     }
@@ -81,11 +104,29 @@ public class RecommendFoodAdapter extends RecyclerView.Adapter<RecommendFoodAdap
         public ImageView imageView;
         public TextView foodNameTv;
         public TextView proBtn;
+        public CheckBox cb_select;
         public RecommendHolder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.iv_image);
             foodNameTv = (TextView) itemView.findViewById(R.id.tv_food_name);
             proBtn = (TextView) itemView.findViewById(R.id.tv_pro_single);
+            cb_select = (CheckBox) itemView.findViewById(R.id.cb_select);
         }
+    }
+
+    public void setOnSingleProBtnClickListener(OnSingleProBtnClickListener onSingleProBtnClickListener) {
+        this.onSingleProBtnClickListener = onSingleProBtnClickListener;
+    }
+
+    public interface OnSingleProBtnClickListener {
+        void onSingleProBtnClick(RecommendFood recommendFood);
+    }
+
+    public void setOnCheckStateChangeListener(OnCheckStateChangeListener onCheckStateChangeListener) {
+        this.onCheckStateChangeListener = onCheckStateChangeListener;
+    }
+
+    public interface OnCheckStateChangeListener {
+        void onCheckStateChange();
     }
 }

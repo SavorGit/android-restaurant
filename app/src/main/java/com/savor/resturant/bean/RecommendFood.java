@@ -30,6 +30,7 @@ public class RecommendFood implements Serializable {
     private String md5_type;
     private String suffix;
     private String name;
+    private boolean isSelected;
 
     @Override
     public String toString() {
@@ -43,6 +44,7 @@ public class RecommendFood implements Serializable {
                 ", md5_type='" + md5_type + '\'' +
                 ", suffix='" + suffix + '\'' +
                 ", name='" + name + '\'' +
+                ", isSelected=" + isSelected +
                 '}';
     }
 
@@ -51,21 +53,22 @@ public class RecommendFood implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RecommendFood that = (RecommendFood) o;
+        RecommendFood food = (RecommendFood) o;
 
-        if (food_id != null ? !food_id.equals(that.food_id) : that.food_id != null) return false;
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (food_name != null ? !food_name.equals(that.food_name) : that.food_name != null)
+        if (isSelected != food.isSelected) return false;
+        if (food_id != null ? !food_id.equals(food.food_id) : food.food_id != null) return false;
+        if (id != null ? !id.equals(food.id) : food.id != null) return false;
+        if (food_name != null ? !food_name.equals(food.food_name) : food.food_name != null)
             return false;
-        if (oss_path != null ? !oss_path.equals(that.oss_path) : that.oss_path != null)
+        if (oss_path != null ? !oss_path.equals(food.oss_path) : food.oss_path != null)
             return false;
-        if (chinese_name != null ? !chinese_name.equals(that.chinese_name) : that.chinese_name != null)
+        if (chinese_name != null ? !chinese_name.equals(food.chinese_name) : food.chinese_name != null)
             return false;
-        if (md5 != null ? !md5.equals(that.md5) : that.md5 != null) return false;
-        if (md5_type != null ? !md5_type.equals(that.md5_type) : that.md5_type != null)
+        if (md5 != null ? !md5.equals(food.md5) : food.md5 != null) return false;
+        if (md5_type != null ? !md5_type.equals(food.md5_type) : food.md5_type != null)
             return false;
-        if (suffix != null ? !suffix.equals(that.suffix) : that.suffix != null) return false;
-        return name != null ? name.equals(that.name) : that.name == null;
+        if (suffix != null ? !suffix.equals(food.suffix) : food.suffix != null) return false;
+        return name != null ? name.equals(food.name) : food.name == null;
     }
 
     @Override
@@ -79,6 +82,7 @@ public class RecommendFood implements Serializable {
         result = 31 * result + (md5_type != null ? md5_type.hashCode() : 0);
         result = 31 * result + (suffix != null ? suffix.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (isSelected ? 1 : 0);
         return result;
     }
 
@@ -152,6 +156,14 @@ public class RecommendFood implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }
 
