@@ -41,6 +41,7 @@ import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.HotelMapCache;
 import com.savor.resturant.bean.HotelMapListData;
 import com.savor.resturant.bean.PdfInfo;
+import com.savor.resturant.bean.RoomInfo;
 import com.savor.resturant.bean.SmallPlatInfoBySSDP;
 import com.savor.resturant.bean.SmallPlatformByGetIp;
 import com.savor.resturant.bean.StartUpSettingsBean;
@@ -114,6 +115,7 @@ public class Session {
 
     /**登录信息*/
     private static final String P_APP_LOGIN = "p_app_login";
+    private static final String P_ROMM_LIST = "p_romm_list";
 
 
 
@@ -223,6 +225,9 @@ public class Session {
     private HotelMapCache mHotelMapCache;
     private HotelMapListData hotelMapListData;
     private TvBoxInfo mTvboxInfo;
+
+    private List<Object> requestPool = new ArrayList<>();
+    private List<RoomInfo> roomList;
 
     private Session(Context context) {
 
@@ -456,6 +461,7 @@ public class Session {
 
     private void readSettings() {
 //        mHotelMapCache = (HotelMapCache) getObj(P_APP_HOTEL_MAP);
+//        roomList = (List<RoomInfo>) getObj(P_ROMM_LIST);
         mUploadFirstUse = mPreference.loadBooleanKey(P_APP_FIRST_USE,false);
         mWaiterData = mPreference.loadStringKey(P_APP_WAITER_DATA,null);
         mPdfList = (List<PdfInfo>) getObj(P_APP_PDF_LIST);
@@ -974,5 +980,22 @@ public class Session {
 
     public HotelMapListData getHotelMapList() {
         return hotelMapListData;
+    }
+
+    public void setRequestPool(List<Object> requestPool) {
+        this.requestPool = requestPool;
+    }
+
+    public List<Object> getRequsetPool() {
+        return requestPool;
+    }
+
+    public void setRoomList(List<RoomInfo> roomInfos) {
+        this.roomList = roomInfos;
+//        setObj(P_ROMM_LIST,roomInfos);
+    }
+
+    public List<RoomInfo> getRoomList() {
+        return roomList;
     }
 }
