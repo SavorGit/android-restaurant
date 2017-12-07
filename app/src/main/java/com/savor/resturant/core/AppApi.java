@@ -537,6 +537,7 @@ public class AppApi {
         params.put("deviceName", Build.MODEL);
         params.put("templateId", templateId);
         params.put("word", word);
+
         new AppServiceOk(context,url+"/small/command/screend/word",Action.GET_WORD_PRO_JSON,handler,params).get();
 //        new AppServiceOk(context,"http://"+url+":8080/command/getHotelBox",Action.GET_HOTEL_BOX_JSON,handler,params).get();
     }
