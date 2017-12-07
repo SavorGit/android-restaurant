@@ -6,10 +6,7 @@
     <include
         android:id="@+id/head_layout"
         layout="@layout/layout_head_title"/>
-    <!--包间列表-->
-    <include
-        layout="@layout/include_room_list"
-        android:visibility="gone" />
+
     <ScrollView
         android:layout_below="@+id/head_layout"
         android:layout_width="match_parent"
@@ -217,5 +214,9 @@
         </RelativeLayout>
 
     </ScrollView>
+    <!--包间列表-->
+    <include
+        layout="@layout/include_room_list"
+        android:visibility="gone" />
 
 </RelativeLayout>

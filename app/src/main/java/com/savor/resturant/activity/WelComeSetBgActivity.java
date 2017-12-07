@@ -40,6 +40,8 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
     private String keyWord;
     private RecyclerView mRoomListView;
     private RoomListAdapter roomListAdapter;
+    private RoomInfo currentRoom;
+    private boolean isSelectRommState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,12 +99,14 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
             t8.setText(keyWord);
         }
         initTitleBar();
+        initRoomList();
     }
 
     @Override
     public void setListeners() {
 
         iv_left.setOnClickListener(this);
+        tv_center.setOnClickListener(this);
         bg_l1.setOnClickListener(this);
         bg_l2.setOnClickListener(this);
         bg_l3.setOnClickListener(this);
@@ -120,7 +124,11 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.iv_left:
-                finish();
+                if(isSelectRommState) {
+                    hideRommList();
+                }else {
+                    finish();
+                }
                 break;
             case R.id.bg_l1:
                 setText();
@@ -146,6 +154,13 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
             case R.id.bg_l8:
                 setText();
                 break;
+            case R.id.tv_center:
+                if(!isSelectRommState) {
+                    showRoomList();
+
+                }
+
+                break;
             default:
                 break;
         }
@@ -164,10 +179,47 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
         tv_center.setCompoundDrawablePadding(DensityUtil.dip2px(this,10));
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) iv_left.getLayoutParams();
         layoutParams.setMargins(DensityUtil.dip2px(this,15),0,0,0);
+
+        RoomInfo bindRoom = mSession.getBindRoom();
+        if(bindRoom!=null&&!TextUtils.isEmpty(bindRoom.getBox_name())) {
+            tv_center.setText(bindRoom.getBox_name());
+        }
+        currentRoom = bindRoom;
     }
 
+    private void showRoomList() {
+        tv_center.setText("请选择投屏包间");
+        mRoomListView.setVisibility(View.VISIBLE);
+        tv_center.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+        iv_left.setImageResource(R.drawable.ico_close);
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.actionsheet_dialog_in);
+        mRoomListView.startAnimation(animation);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                mRoomListView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        isSelectRommState  = true;
+    }
     private void initRoomList() {
         //添加ItemDecoration，item之间的间隔
+        if(currentRoom!=null) {
+            tv_center.setText(currentRoom.getBox_name());
+        }else {
+            tv_center.setText("请选择投屏包间");
+        }
         int leftRight = DensityUtil.dip2px(this,15);
         int topBottom = DensityUtil.dip2px(this,15);
         GridLayoutManager roomLayoutManager = new GridLayoutManager(this,3);
@@ -185,7 +237,7 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void onRoomItemClick(RoomInfo roomInfo) {
         hideRommList();
-//        currentRoom = roomInfo;
+        currentRoom = roomInfo;
 //        switch (currentProType) {
 //            case TYPE_PRO_SINGLE:
 //                startSinglePro();
@@ -197,6 +249,12 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void hideRommList() {
+
+        if(currentRoom!=null) {
+            tv_center.setText(currentRoom.getBox_name());
+        }else {
+            tv_center.setText("请选择投屏包间");
+        }
         tv_center.setCompoundDrawablesWithIntrinsicBounds(null,null,getResources().getDrawable(R.drawable.ico_arrow_down),null);
         iv_left.setImageResource(R.drawable.back);
 
@@ -218,7 +276,7 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
 
             }
         });
-        //isSelectRommState = false;
+        isSelectRommState = false;
     }
 
 }

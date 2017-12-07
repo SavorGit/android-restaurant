@@ -39,7 +39,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.List;
 
-import okhttp3.Response;
 
 import static com.savor.resturant.core.AppApi.Action.POST_UPGRADE_JSON;
 
@@ -108,6 +107,7 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.GET_ADVERT_JSON
                     || action == AppApi.Action.GET_ADVERT_PRO_JSON
                     || action == AppApi.Action.GET_RECOMMEND_PRO_JSON
+                    || action == AppApi.Action.GET_WORD_PRO_JSON
                     ){
                 int code = rSet.getInt("code");
                 if(rSet.has("result")) {
@@ -233,6 +233,9 @@ public class ApiResponseFactory {
                 result = "success";
                 break;
             case GET_RECOMMEND_PRO_JSON:
+                result = "success";
+                break;
+            case GET_WORD_PRO_JSON:
                 result = "success";
                 break;
             default:
