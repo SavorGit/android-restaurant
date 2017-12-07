@@ -109,6 +109,7 @@ public class MediaPreViewFragment extends BaseFragment {
                         public void run() {
                             videoView.setUp(assetpath
                                     , JZVideoPlayerStandard.SCREEN_WINDOW_NORMAL, "");
+                            Glide.with(getContext()).load(assetpath).centerCrop().into(videoView.thumbImageView);
                         }
                     });
 

@@ -36,9 +36,9 @@ public class SlidePreviewActivity extends BaseFragmentActivity implements View.O
     private List<MediaInfo> images = new LinkedList<>();
     private List<Fragment> fragments = new ArrayList<>();
     private SlideSetInfo slideSetInfo;
-    private int position;
     private SlideManager.SlideType slideType;
     private TextView mTitleTv;
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +54,7 @@ public class SlidePreviewActivity extends BaseFragmentActivity implements View.O
 
     private void handleIntent() {
         slideType = (SlideManager.SlideType) getIntent().getSerializableExtra("type");
+        position = getIntent().getIntExtra("position",0);
     }
 
     @Override
@@ -69,7 +70,6 @@ public class SlidePreviewActivity extends BaseFragmentActivity implements View.O
             images = slideSetInfo.imageList;
 //            MediaUtils.getFolderAllNames(mContext, images, slideSetInfo.imageList);
         }
-        position = getIntent().getIntExtra("position",0);
     }
 
     @Override
@@ -91,6 +91,7 @@ public class SlidePreviewActivity extends BaseFragmentActivity implements View.O
         MediaPreviewAdapter mMediaPreviewAdapter = new MediaPreviewAdapter(getSupportFragmentManager());
         viewpager.setAdapter(mMediaPreviewAdapter);
         mMediaPreviewAdapter.setData(fragments);
+        viewpager.setCurrentItem(position);
 //        previewAdapter = new SlideAdapter(SlidePreviewActivity.this);
 //        previewAdapter.setData(images);
 //        viewpager.setAdapter(previewAdapter);

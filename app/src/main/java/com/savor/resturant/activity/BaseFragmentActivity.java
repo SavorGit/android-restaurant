@@ -17,6 +17,7 @@ import com.savor.resturant.core.ResponseErrorMessage;
 import com.savor.resturant.core.Session;
 import com.savor.resturant.interfaces.IBaseView;
 import com.savor.resturant.utils.ActivitiesManager;
+import com.savor.resturant.utils.StatusBarUtil;
 
 
 public abstract class BaseFragmentActivity extends FragmentActivity implements IBaseView,ApiRequestListener {
@@ -42,6 +43,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements I
 		mSession = Session.get(getApplicationContext());
 		mContext = this;
 		ActivitiesManager.getInstance().pushActivity(this);
+		StatusBarUtil.setStatusBarLightMode(getWindow());
 //		EtagoClientApplication.setApplicationContext(this);
 	}
 
