@@ -85,7 +85,7 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
                 invitation_num.setClickable(false);
             }
 
-            if (!TextUtils.isEmpty(invitation)&&!TextUtils.isEmpty(invitation)) {
+            if (!TextUtils.isEmpty(invitation)&&!TextUtils.isEmpty(tel)) {
                 ev_code.setVisibility(View.GONE);
                 AppApi.doLogin(this,invitation,tel,code,this);
             }
@@ -278,14 +278,37 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
             int code = message.getCode();
             ShowMessage.showToast(LoginForCodeActivity.this,message.getMessage());
         }
-//        switch (method) {
-//            case POST_GET_TVERIFY_CODE_JSON:
-//                setCodeView();
-//                break;
-//            case POST_MOBILE_LOGIN_JSON:
-//
-//                break;
-//        }
+        switch (method) {
+            case POST_LOGIN_JSON:
+                if (hotelBean != null) {
+                    tel = hotelBean.getTel();
+                    invitation = hotelBean.getInvitation();
+                    if (!TextUtils.isEmpty(tel)) {
+                        ev_num.setText(tel);
+                        ev_num.setClickable(false);
+                    }
+
+                    if (!TextUtils.isEmpty(invitation)) {
+                        invitation_num.setText(invitation);
+                        invitation_num.setClickable(false);
+                    }
+
+                    if (!TextUtils.isEmpty(invitation)&&!TextUtils.isEmpty(tel)) {
+                        ev_code.setVisibility(View.GONE);
+                    }
+                }else {
+                    ev_num.setClickable(true);
+                    invitation_num.setClickable(true);
+                    ev_code.setVisibility(View.VISIBLE);
+                    ev_num.setVisibility(View.VISIBLE);
+                    invitation_num.setVisibility(View.VISIBLE);
+                }
+                login_btn.setClickable(true);
+                login_btn.setBackgroundResource(R.drawable.corner_remote_view_btn);
+                login_btn.setTextColor(context.getResources().getColor(R.color.color_fefefe));
+                break;
+
+        }
 
     }
 
