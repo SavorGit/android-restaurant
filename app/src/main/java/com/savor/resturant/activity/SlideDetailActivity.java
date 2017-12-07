@@ -1242,6 +1242,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     public void onError(AppApi.Action method, Object obj) {
 
         switch (method) {
+            case POST_VIDEO_SLIDESETTINGS_JSON:
             case POST_IMAGE_SLIDESETTINGS_JSON:
                 if (obj instanceof ResponseErrorMessage) {
                     ResponseErrorMessage message = (ResponseErrorMessage) obj;
@@ -1261,6 +1262,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                     mHandler.sendEmptyMessage(UPLOAD_TIMEOUT);
                 }
                 break;
+            case POST_VIDEO_PROJECTION_JSON:
             case POST_IMAGE_PROJECTION_JSON:
 //                mRequestScreenDialog.dismiss();
                 if (obj instanceof ResponseErrorMessage) {
@@ -1283,6 +1285,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                     mHandler.sendEmptyMessage(UPLOAD_TIMEOUT);
                 }
                 break;
+
         }
     }
 
