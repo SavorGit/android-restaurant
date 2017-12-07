@@ -21,9 +21,11 @@ import com.savor.resturant.adapter.RoomListAdapter;
 import com.savor.resturant.bean.RecommendFoodAdvert;
 import com.savor.resturant.bean.RoomInfo;
 import com.savor.resturant.core.AppApi;
+import com.savor.resturant.core.ResponseErrorMessage;
 import com.savor.resturant.widget.decoration.SpacesItemDecoration;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -384,7 +386,75 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void onError(AppApi.Action method, Object obj) {
-        super.onError(method,obj);
+        switch (method) {
+            case GET_RECOMMEND_PRO_JSON:
+                if(obj instanceof ResponseErrorMessage) {
+                    ResponseErrorMessage message = (ResponseErrorMessage) obj;
+                    int code = message.getCode();
+                    String msg = message.getMessage();
+                    if(10008 == code) {
+                        String[] split = msg.split(",");
+                        List<String> ids = Arrays.asList(split);
+                        StringBuilder sb = new StringBuilder();
+                        List<RecommendFoodAdvert> data = mRecommendAdapter.getData();
+                        if(ids.size()>0&&data!=null&&data.size()>0) {
+                            for(int m = 0;m<ids.size();m++) {
+                                String id = ids.get(m);
+                                for(int i = 0;i<data.size();i++) {
+                                    RecommendFoodAdvert foodAdvert = data.get(i);
+                                    if(id.equals(foodAdvert.getFood_id())) {
+                                        if(m==ids.size()-1) {
+                                            sb.append(foodAdvert.getFood_name());
+                                        }else {
+                                            sb.append(foodAdvert.getFood_name()+",");
+                                        }
+                                    }
+                                }
+                            }
+                            String hint = "您选择的\""+sb.toString()+"\"在电视中不存在，无法进行投屏";
+                            showToast(hint);
+                        }
+                    }else{
+                        showToast(msg);
+                    }
+                }
+                break;
+            case GET_ADVERT_PRO_JSON:
+                if(obj instanceof ResponseErrorMessage) {
+                    ResponseErrorMessage message = (ResponseErrorMessage) obj;
+                    int code = message.getCode();
+                    String msg = message.getMessage();
+                    if(10008 == code) {
+                        String[] split = msg.split(",");
+                        List<String> ids = Arrays.asList(split);
+                        StringBuilder sb = new StringBuilder();
+                        List<RecommendFoodAdvert> data = mRecommendAdapter.getData();
+                        if(ids.size()>0&&data!=null&&data.size()>0) {
+                            for(int m = 0;m<ids.size();m++) {
+                                String id = ids.get(m);
+                                for(int i = 0;i<data.size();i++) {
+                                    RecommendFoodAdvert foodAdvert = data.get(i);
+                                    if(id.equals(foodAdvert.getId())) {
+                                        if(m==ids.size()-1) {
+                                            sb.append(foodAdvert.getChinese_name());
+                                        }else {
+                                            sb.append(foodAdvert.getChinese_name()+",");
+                                        }
+                                    }
+                                }
+                            }
+                            String hint = "您选择的\""+sb.toString()+"\"在电视中不存在，无法进行投屏";
+                            showToast(hint);
+                        }
+                    }else{
+                        showToast(msg);
+                    }
+                }
+                break;
+                default:
+                    super.onError(method,obj);
+                    break;
+        }
     }
 
 
