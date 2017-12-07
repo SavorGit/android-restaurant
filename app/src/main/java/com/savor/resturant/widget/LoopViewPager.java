@@ -22,56 +22,80 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-
 /**
  * A ViewPager subclass enabling infinte scrolling of the viewPager elements
- * 
+ *
  * When used for paginating views (in opposite to fragments), no code changes
  * should be needed only change xml's from <android.support.v4.view.ViewPager>
- * to <com.imbryk.viewPager.LoopViewPager>
- * 
+ * to <com.tracy.viewPager.LoopViewPager>
+ *
  * If "blinking" can be seen when paginating to first or last view, simply call
  * seBoundaryCaching( true ), or change DEFAULT_BOUNDARY_CASHING to true
- * 
- * When using a FragmentPagerAdapter or FragmentStatePagerAdapter, additional
- * changes in the adapter must be done. The adapter must be prepared to create 2
- * extra items e.g.:
- * 
- * The original adapter creates 4 items: [0,1,2,3] The modified adapter will
- * have to create 6 items [0,1,2,3,4,5] with mapping
- * realPosition=(position-1)%count [0->3, 1->0, 2->1, 3->2, 4->3, 5->0]
+ *
+ * When using a FragmentPagerAdapter or FragmentStatePagerAdapter,
+ * additional changes in the adapter must be done.
+ * The adapter must be prepared to create 2 extra items e.g.:
+ *
+ * The original adapter creates 4 items: [0,1,2,3]
+ * The modified adapter will have to create 6 items [0,1,2,3,4,5]
+ * with mapping realPosition=(position-1)%count
+ * [0->3, 1->0, 2->1, 3->2, 4->3, 5->0]
  */
 public class LoopViewPager extends ViewPager {
 
-	private static final boolean DEFAULT_BOUNDARY_CASHING = false;
-	private static final String TAG = "LoopViewPager";
+	private static final boolean DEFAULT_BOUNDARY_CASHING = true;
+
 	OnPageChangeListener mOuterPageChangeListener;
 	private LoopPagerAdapterWrapper mAdapter;
 	private boolean mBoundaryCaching = DEFAULT_BOUNDARY_CASHING;
-	private boolean isPagingEnabled = true;
-	private boolean mScrollEnable = true;
+	private boolean isCanScroll = true;
+
+	public boolean isCanScroll() {
+		return isCanScroll;
+	}
+
+	public void setCanScroll(boolean isCanScroll) {
+		this.isCanScroll = isCanScroll;
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent ev) {
+		if(isCanScroll)
+			return super.onTouchEvent(ev);
+		else
+			return false;
+	}
+
+	@Override
+	public boolean onInterceptTouchEvent(MotionEvent ev) {
+		if(isCanScroll)
+			return super.onInterceptTouchEvent(ev);
+		else
+			return false;
+	}
+
 
 	/**
 	 * helper function which may be used when implementing FragmentPagerAdapter
-	 * 
+	 *
 	 * @param position
 	 * @param count
 	 * @return (position-1)%count
 	 */
-	public static int toRealPosition(int position, int count) {
-		position = position - 1;
-		if (position < 0) {
+	public static int toRealPosition( int position, int count ){
+		position = position-1;
+		if( position < 0 ){
 			position += count;
-		} else {
-			position = position % count;
+		}else{
+			position = position%count;
 		}
 		return position;
 	}
 
 	/**
-	 * If set to true, the boundary views (i.e. first and last) will never be
-	 * destroyed This may help to prevent "blinking" of some views
-	 * 
+	 * If set to true, the boundary views (i.e. first and last) will never be destroyed
+	 * This may help to prevent "blinking" of some views
+	 *
 	 * @param flag
 	 */
 	public void setBoundaryCaching(boolean flag) {
@@ -81,31 +105,17 @@ public class LoopViewPager extends ViewPager {
 		}
 	}
 
-	public void setScrollEnable(boolean enable) {
-		this.mScrollEnable = enable;
-	}
-
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		if(!mScrollEnable)
-			return false;
-		return this.isPagingEnabled && super.onTouchEvent(event);
-	}
-
-	@Override
-	public boolean onInterceptTouchEvent(MotionEvent event) {
-		return this.isPagingEnabled && super.onInterceptTouchEvent(event);
-	}
-
-	public void setPagingEnabled(boolean b) {
-		this.isPagingEnabled = b;
-	}
 	@Override
 	public void setAdapter(PagerAdapter adapter) {
 		mAdapter = new LoopPagerAdapterWrapper(adapter);
 		mAdapter.setBoundaryCaching(mBoundaryCaching);
 		super.setAdapter(mAdapter);
-		setCurrentItem(0, false);
+		//fix blinking issue when item is scrolling from first to last,cause ViewPager instance item left current right at least,see more at setOffScreenLimit()
+		setCurrentItem(mAdapter.getRealCount(), false);
+		//disable scroll when realCount<2
+		if(mAdapter.getRealCount()<2){
+			setCanScroll(false);
+		}
 	}
 
 	@Override
@@ -115,8 +125,7 @@ public class LoopViewPager extends ViewPager {
 
 	@Override
 	public int getCurrentItem() {
-		return mAdapter != null ? mAdapter.toRealPosition(super
-				.getCurrentItem()) : 0;
+		return mAdapter != null ? mAdapter.toRealPosition(super.getCurrentItem()) : 0;
 	}
 
 	public void setCurrentItem(int item, boolean smoothScroll) {
@@ -126,7 +135,6 @@ public class LoopViewPager extends ViewPager {
 
 	@Override
 	public void setCurrentItem(int item) {
-
 		if (getCurrentItem() != item) {
 			setCurrentItem(item, true);
 		}
@@ -169,7 +177,7 @@ public class LoopViewPager extends ViewPager {
 
 		@Override
 		public void onPageScrolled(int position, float positionOffset,
-				int positionOffsetPixels) {
+								   int positionOffsetPixels) {
 			int realPosition = position;
 			if (mAdapter != null) {
 				realPosition = mAdapter.toRealPosition(position);

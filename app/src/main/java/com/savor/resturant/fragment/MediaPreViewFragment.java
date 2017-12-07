@@ -9,10 +9,11 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.savor.resturant.R;
 import com.savor.resturant.bean.MediaInfo;
-import com.universalvideoview.UniversalMediaController;
-import com.universalvideoview.UniversalVideoView;
 
 import java.io.File;
+
+import cn.jzvd.JZVideoPlayer;
+import cn.jzvd.JZVideoPlayerStandard;
 
 /**
  * 图片，视频预览
@@ -26,9 +27,8 @@ public class MediaPreViewFragment extends BaseFragment {
     private MediaInfo mMediaInfo;
     private View mParentLayout;
     private ImageView mImageView;
-    private UniversalVideoView videoView;
-    private UniversalMediaController mMediaController;
     private int mSeekPosition;
+    private JZVideoPlayerStandard videoView;
 
     public MediaPreViewFragment() {
         // Required empty public constructor
@@ -68,23 +68,16 @@ public class MediaPreViewFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        videoView.seekTo(mSeekPosition);
-        videoView.resume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (videoView != null && videoView.isPlaying()) {
-            mSeekPosition = videoView.getCurrentPosition();
-            videoView.pause();
-        }
     }
 
     private void initViews(View parent) {
         mImageView = (ImageView) parent.findViewById(R.id.image);
-        videoView = (UniversalVideoView) parent.findViewById(R.id.videoview);
-        mMediaController = (UniversalMediaController) parent.findViewById(R.id.media_controller);
+        videoView = (JZVideoPlayerStandard) parent.findViewById(R.id.videoView);
     }
 
     @Override
@@ -102,7 +95,6 @@ public class MediaPreViewFragment extends BaseFragment {
             switch (mediaType) {
                 case MEDIA_TYPE_IMAGE:
                     videoView.setVisibility(View.GONE);
-                    mMediaController.setVisibility(View.GONE);
                     File file = new File(assetpath);
                     if (file.exists()) {
                         Glide.with(this).load(assetpath).centerCrop().placeholder(R.drawable.empty_slide).into(mImageView);
@@ -112,12 +104,11 @@ public class MediaPreViewFragment extends BaseFragment {
                     break;
                 case MEDIA_TYPE_VIDEO:
                     videoView.setVisibility(View.VISIBLE);
-                    mMediaController.setVisibility(View.VISIBLE);
                     videoView.post(new Runnable() {
                         @Override
                         public void run() {
-                            videoView.setVideoPath(assetpath);
-                            videoView.pause();
+                            videoView.setUp(assetpath
+                                    , JZVideoPlayerStandard.SCREEN_WINDOW_NORMAL, "");
                         }
                     });
 
@@ -135,14 +126,10 @@ public class MediaPreViewFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(videoView!=null) {
-            videoView.closePlayer();
-            videoView = null;
-        }
-
-        if(mMediaController!=null) {
-            mMediaController.hide();
-            mMediaController = null;
-        }
+//        if(videoView!=null) {
+//            videoView.closePlayer();
+//            videoView = null;
+//        }
+//
     }
 }
