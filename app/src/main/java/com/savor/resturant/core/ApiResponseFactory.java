@@ -17,6 +17,7 @@ package com.savor.resturant.core;
  */
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 
 import com.common.api.utils.DesUtils;
 import com.common.api.utils.LogUtils;
@@ -38,8 +39,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
-
 import okhttp3.Response;
+
 
 import static com.savor.resturant.core.AppApi.Action.POST_UPGRADE_JSON;
 
@@ -54,6 +55,7 @@ public class ApiResponseFactory {
     // 当前服务器时间
     private static String webtime = "";
 
+    @Nullable
     public static Object getResponse(Context context, AppApi.Action action,
                                      Response response, String key, boolean isCache, String payType) {
         //转换器
@@ -108,6 +110,7 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.GET_ADVERT_JSON
                     || action == AppApi.Action.GET_ADVERT_PRO_JSON
                     || action == AppApi.Action.GET_RECOMMEND_PRO_JSON
+                    || action == AppApi.Action.GET_WORD_PRO_JSON
                     ){
                 int code = rSet.getInt("code");
                 if(rSet.has("result")) {
@@ -233,6 +236,9 @@ public class ApiResponseFactory {
                 result = "success";
                 break;
             case GET_RECOMMEND_PRO_JSON:
+                result = "success";
+                break;
+            case GET_WORD_PRO_JSON:
                 result = "success";
                 break;
             default:

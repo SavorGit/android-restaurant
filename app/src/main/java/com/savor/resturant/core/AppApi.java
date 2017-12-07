@@ -87,6 +87,9 @@ public class AppApi {
         GET_ADVERT_PRO_JSON,
         /**推荐菜投屏*/
         GET_RECOMMEND_PRO_JSON,
+        /**欢迎词投屏*/
+        GET_WORD_PRO_JSON,
+
     }
 
     /**
@@ -118,6 +121,7 @@ public class AppApi {
             put(Action.GET_ADVERT_JSON, formatPhpUrl("Dinnerapp/Adv/getAdvList"));
             put(Action.GET_ADVERT_PRO_JSON,smallPlatformUrl);
             put(Action.GET_RECOMMEND_PRO_JSON,smallPlatformUrl);
+            put(Action.GET_WORD_PRO_JSON,smallPlatformUrl);
         }
     };
 
@@ -522,6 +526,18 @@ public class AppApi {
         params.put("vid", specialtyId);
         params.put("interval", interval);
         new AppServiceOk(context,url+"/small/command/screend/recommend",Action.GET_RECOMMEND_PRO_JSON,handler,params).get();
+//        new AppServiceOk(context,"http://"+url+":8080/command/getHotelBox",Action.GET_HOTEL_BOX_JSON,handler,params).get();
+    }
+    /**欢迎词投屏*/
+    public static void wordPro(Context context,String url,String boxMac,String templateId,String word,ApiRequestListener handler) {
+        url = "http://192.168.1.104:8080";
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("deviceId", STIDUtil.getDeviceId(context));
+        params.put("boxMac", boxMac);
+        params.put("deviceName", Build.MODEL);
+        params.put("templateId", templateId);
+        params.put("word", word);
+        new AppServiceOk(context,url+"/small/command/screend/word",Action.GET_WORD_PRO_JSON,handler,params).get();
 //        new AppServiceOk(context,"http://"+url+":8080/command/getHotelBox",Action.GET_HOTEL_BOX_JSON,handler,params).get();
     }
 
