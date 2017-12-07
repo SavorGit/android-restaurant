@@ -10,18 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitCenter" />
-    <com.universalvideoview.UniversalVideoView
+    <cn.jzvd.JZVideoPlayerStandard
         android:id="@+id/videoView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="center"
-        app:uvv_autoRotation="true"
-        app:uvv_fitXY="false" />
-
-    <com.universalvideoview.UniversalMediaController
-        android:id="@+id/media_controller"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        app:uvv_scalable="true" />
+         />
 
 </RelativeLayout>

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,10 +21,16 @@ import com.savor.resturant.adapter.RecommendFoodAdapter;
 import com.savor.resturant.adapter.RoomListAdapter;
 import com.savor.resturant.bean.RecommendFoodAdvert;
 import com.savor.resturant.bean.RoomInfo;
+import com.savor.resturant.bean.SmallPlatInfoBySSDP;
+import com.savor.resturant.bean.SmallPlatformByGetIp;
+import com.savor.resturant.bean.TvBoxSSDPInfo;
 import com.savor.resturant.core.AppApi;
+import com.savor.resturant.core.ResponseErrorMessage;
+import com.savor.resturant.widget.LoadingDialog;
 import com.savor.resturant.widget.decoration.SpacesItemDecoration;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -51,6 +58,9 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
     private RoomInfo currentRoom;
     /**单个投屏的条目*/
     private RecommendFoodAdvert currentFoodAdvert;
+    private LoadingDialog mLoadingDialog;
+    /**投屏发送3个请求如果错误3次认为请求失败*/
+    private int erroCount;
 
 
     /**
@@ -81,8 +91,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
     }
 
     private void getData() {
-//        HotelBean hotelBean = mSession.getHotelBean();
-//        String hotel_id = hotelBean.getHotel_id();
+        showLoadingLayout();
         switch (currentType) {
             case TYPE_ADVERT:
                 AppApi.getAdvertList(this,"60",this);
@@ -203,15 +212,80 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
         }
         // 2.开始投屏
         String vid = getSelectedList(mRecommendAdapter.getData());
+        SmallPlatformByGetIp smallPlatformByGetIp = mSession.getmSmallPlatInfoByIp();
+        SmallPlatInfoBySSDP smallPlatInfoBySSDP = mSession.getSmallPlatInfoBySSDP();
+        TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
+        showLoadingLayout();
         switch (currentType) {
             case TYPE_ADVERT:
-                AppApi.adverPro(this,"",currentRoom.getBox_mac(),vid,this);
+                proAdvert(vid, smallPlatformByGetIp, smallPlatInfoBySSDP, tvBoxSSDPInfo);
                 break;
             case TYPE_RECOMMEND_FOODS:
-                AppApi.recommendPro(this,"",currentRoom.getBox_mac(),1000*30+"",vid,this);
+                proRecmmend(vid, smallPlatformByGetIp, smallPlatInfoBySSDP, tvBoxSSDPInfo);
+//                AppApi.recommendPro(this,"",currentRoom.getBox_mac(),1000*30+"",vid,this);
                 break;
         }
 
+    }
+
+    private void proAdvert(String vid, SmallPlatformByGetIp smallPlatformByGetIp, SmallPlatInfoBySSDP smallPlatInfoBySSDP, TvBoxSSDPInfo tvBoxSSDPInfo) {
+        erroCount = 0;
+        // 1.通过getIp获取的小平台地址进行投屏
+        if(smallPlatformByGetIp!=null&&!TextUtils.isEmpty(smallPlatformByGetIp.getLocalIp())) {
+            String localIp = smallPlatformByGetIp.getLocalIp();
+            String url = "http://"+localIp+":8080";
+            AppApi.adverPro(this,url,currentRoom.getBox_mac(),vid,this);
+        }else {
+            erroCount++;
+        }
+
+        // 2.通过小平台ssdp获取小平台地址进行投屏
+        if(smallPlatInfoBySSDP!=null&&!TextUtils.isEmpty(smallPlatInfoBySSDP.getServerIp())) {
+            String serverIp = smallPlatInfoBySSDP.getServerIp();
+            String url = "http://"+serverIp+":8080";
+            AppApi.adverPro(this,url,currentRoom.getBox_mac(),vid,this);
+        }else {
+            erroCount++;
+        }
+
+        // 3.通过盒子ssdp获取小平台地址进行投屏
+        if(tvBoxSSDPInfo!=null&&!TextUtils.isEmpty(tvBoxSSDPInfo.getServerIp())) {
+            String serverIp = tvBoxSSDPInfo.getServerIp();
+            String url = "http://"+serverIp+":8080";
+            AppApi.adverPro(this,url,currentRoom.getBox_mac(),vid,this);
+        }else {
+            erroCount++;
+        }
+    }
+
+    private void proRecmmend(String vid, SmallPlatformByGetIp smallPlatformByGetIp, SmallPlatInfoBySSDP smallPlatInfoBySSDP, TvBoxSSDPInfo tvBoxSSDPInfo) {
+        erroCount = 0;
+        // 1.通过getIp获取的小平台地址进行投屏
+        if(smallPlatformByGetIp!=null&&!TextUtils.isEmpty(smallPlatformByGetIp.getLocalIp())) {
+            String localIp = smallPlatformByGetIp.getLocalIp();
+            String url = "http://"+localIp+":8080";
+            AppApi.recommendPro(this,url,currentRoom.getBox_mac(),1000*30+"",vid,this);
+        }else {
+            erroCount++;
+        }
+
+        // 2.通过小平台ssdp获取小平台地址进行投屏
+        if(smallPlatInfoBySSDP!=null&&!TextUtils.isEmpty(smallPlatInfoBySSDP.getServerIp())) {
+            String serverIp = smallPlatInfoBySSDP.getServerIp();
+            String url = "http://"+serverIp+":8080";
+            AppApi.recommendPro(this,url,currentRoom.getBox_mac(),1000*30+"",vid,this);
+        }else {
+            erroCount++;
+        }
+
+        // 3.通过盒子ssdp获取小平台地址进行投屏
+        if(tvBoxSSDPInfo!=null&&!TextUtils.isEmpty(tvBoxSSDPInfo.getServerIp())) {
+            String serverIp = tvBoxSSDPInfo.getServerIp();
+            String url = "http://"+serverIp+":8080";
+            AppApi.recommendPro(this,url,currentRoom.getBox_mac(),1000*30+"",vid,this);
+        }else {
+            erroCount++;
+        }
     }
 
     private String getSelectedList(List<RecommendFoodAdvert> data) {
@@ -317,6 +391,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
     public void onSingleProBtnClick(RecommendFoodAdvert recommendFoodAdvert) {
         currentProType = TYPE_PRO_SINGLE;
         currentFoodAdvert = recommendFoodAdvert;
+
         startSinglePro();
     }
 
@@ -328,12 +403,18 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
             initRoomNotSelected();
             return;
         }
+        showLoadingLayout();
+        SmallPlatformByGetIp smallPlatformByGetIp = mSession.getmSmallPlatInfoByIp();
+        SmallPlatInfoBySSDP smallPlatInfoBySSDP = mSession.getSmallPlatInfoBySSDP();
+        TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
         switch (currentType) {
             case TYPE_RECOMMEND_FOODS:
-                AppApi.recommendPro(this, "", currentRoom.getBox_mac(), 1000 * 60 * 2 + "", currentFoodAdvert.getFood_id(), this);
+                proRecmmend(currentFoodAdvert.getId(),smallPlatformByGetIp,smallPlatInfoBySSDP,tvBoxSSDPInfo);
+//                AppApi.recommendPro(this, "", currentRoom.getBox_mac(), 1000 * 60 * 2 + "", currentFoodAdvert.getFood_id(), this);
                 break;
             case TYPE_ADVERT:
-                AppApi.adverPro(this, "", currentRoom.getBox_mac(), currentFoodAdvert.getId(), this);
+                proAdvert(currentFoodAdvert.getId(), smallPlatformByGetIp, smallPlatInfoBySSDP, tvBoxSSDPInfo);
+//                AppApi.adverPro(this, "", currentRoom.getBox_mac(), currentFoodAdvert.getId(), this);
                 break;
         }
     }
@@ -370,10 +451,12 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
         switch (method) {
             case GET_RECOMMEND_PRO_JSON:
             case GET_ADVERT_PRO_JSON:
+                hideLoadingLayout();
                 ShowMessage.showToast(this,"投屏成功！");
                 break;
             case GET_ADVERT_JSON:
             case GET_RECOMMEND_FOODS_JSON:
+                hideLoadingLayout();
                 if(obj instanceof List) {
                     List<RecommendFoodAdvert> recommendFoodAdvertList = (List<RecommendFoodAdvert>) obj;
                     mRecommendAdapter.setData(recommendFoodAdvertList,currentType);
@@ -384,7 +467,88 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void onError(AppApi.Action method, Object obj) {
-        super.onError(method,obj);
+
+        switch (method) {
+            case GET_RECOMMEND_PRO_JSON:
+                erroCount++;
+                if(erroCount<3)
+                    return;
+                hideLoadingLayout();
+                if(obj instanceof ResponseErrorMessage) {
+                    ResponseErrorMessage message = (ResponseErrorMessage) obj;
+                    int code = message.getCode();
+                    String msg = message.getMessage();
+                    if(10008 == code) {
+                        String[] split = msg.split(",");
+                        List<String> ids = Arrays.asList(split);
+                        StringBuilder sb = new StringBuilder();
+                        List<RecommendFoodAdvert> data = mRecommendAdapter.getData();
+                        if(ids.size()>0&&data!=null&&data.size()>0) {
+                            for(int m = 0;m<ids.size();m++) {
+                                String id = ids.get(m);
+                                for(int i = 0;i<data.size();i++) {
+                                    RecommendFoodAdvert foodAdvert = data.get(i);
+                                    if(id.equals(foodAdvert.getFood_id())) {
+                                        if(m==ids.size()-1) {
+                                            sb.append(foodAdvert.getFood_name());
+                                        }else {
+                                            sb.append(foodAdvert.getFood_name()+",");
+                                        }
+                                    }
+                                }
+                            }
+                            String hint = "您选择的\""+sb.toString()+"\"在电视中不存在，无法进行投屏";
+                            showToast(hint);
+                        }
+                    }else{
+                        showToast(msg);
+                    }
+                }else if(obj == AppApi.ERROR_TIMEOUT) {
+                    showToast("请求超时");
+                }
+                break;
+            case GET_ADVERT_PRO_JSON:
+                erroCount++;
+                if(erroCount<3)
+                    return;
+                hideLoadingLayout();
+                if(obj instanceof ResponseErrorMessage) {
+                    ResponseErrorMessage message = (ResponseErrorMessage) obj;
+                    int code = message.getCode();
+                    String msg = message.getMessage();
+                    if(10008 == code) {
+                        String[] split = msg.split(",");
+                        List<String> ids = Arrays.asList(split);
+                        StringBuilder sb = new StringBuilder();
+                        List<RecommendFoodAdvert> data = mRecommendAdapter.getData();
+                        if(ids.size()>0&&data!=null&&data.size()>0) {
+                            for(int m = 0;m<ids.size();m++) {
+                                String id = ids.get(m);
+                                for(int i = 0;i<data.size();i++) {
+                                    RecommendFoodAdvert foodAdvert = data.get(i);
+                                    if(id.equals(foodAdvert.getId())) {
+                                        if(m==ids.size()-1) {
+                                            sb.append(foodAdvert.getChinese_name());
+                                        }else {
+                                            sb.append(foodAdvert.getChinese_name()+",");
+                                        }
+                                    }
+                                }
+                            }
+                            String hint = "您选择的\""+sb.toString()+"\"在电视中不存在，无法进行投屏";
+                            showToast(hint);
+                        }
+                    }else{
+                        showToast(msg);
+                    }
+                }else if(obj == AppApi.ERROR_TIMEOUT) {
+                    showToast("请求超时");
+                }
+                break;
+                default:
+                    super.onError(method,obj);
+                    break;
+        }
     }
 
 
@@ -402,6 +566,21 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
             for(RoomInfo info:roomList) {
                 info.setSelected(false);
             }
+        }
+    }
+
+    @Override
+    public void showLoadingLayout() {
+        if(mLoadingDialog == null) {
+            mLoadingDialog = new LoadingDialog(this);
+        }
+        mLoadingDialog.show();
+    }
+
+    @Override
+    public void hideLoadingLayout() {
+        if(mLoadingDialog!=null) {
+            mLoadingDialog.dismiss();
         }
     }
 }

@@ -17,6 +17,7 @@
         <include
             layout="@layout/include_room_list"
             android:visibility="gone" />
+
     </RelativeLayout>
 
 </LinearLayout>

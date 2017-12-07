@@ -123,7 +123,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.1.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
     compile 'com.android.support:multidex:1.0.0'
-    compile 'com.linsea:universalvideoview:1.1.0@aar'
+    compile 'cn.jzvd:jiaozivideoplayer:6.2.1'
     implementation project(':FFmpeg4Android')
 }
 

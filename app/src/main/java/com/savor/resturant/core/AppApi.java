@@ -512,7 +512,7 @@ public class AppApi {
         params.put("boxMac", boxMac);
         params.put("deviceName", Build.MODEL);
         params.put("vid", vid);
-        new AppServiceOk(context,url+"/small/command/screend/vid",Action.GET_ADVERT_PRO_JSON,handler,params).get();
+        new AppServiceOk(context,url+"/small/command/screend/adv",Action.GET_ADVERT_PRO_JSON,handler,params).get();
 //        new AppServiceOk(context,"http://"+url+":8080/command/getHotelBox",Action.GET_HOTEL_BOX_JSON,handler,params).get();
     }
 
@@ -523,7 +523,7 @@ public class AppApi {
         params.put("deviceId", STIDUtil.getDeviceId(context));
         params.put("boxMac", boxMac);
         params.put("deviceName", Build.MODEL);
-        params.put("vid", specialtyId);
+        params.put("specialtyId", specialtyId);
         params.put("interval", interval);
         new AppServiceOk(context,url+"/small/command/screend/recommend",Action.GET_RECOMMEND_PRO_JSON,handler,params).get();
 //        new AppServiceOk(context,"http://"+url+":8080/command/getHotelBox",Action.GET_HOTEL_BOX_JSON,handler,params).get();

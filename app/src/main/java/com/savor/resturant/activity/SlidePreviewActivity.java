@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import cn.jzvd.JZVideoPlayer;
+
 /**
  * Created by Administrator on 2017/3/17.
  */
@@ -28,15 +30,15 @@ import java.util.List;
 public class SlidePreviewActivity extends BaseFragmentActivity implements View.OnClickListener,ViewPager.OnPageChangeListener{
 
     private LinearLayout backLayout;
-    private LoopViewPager viewpager;
+    private ViewPager viewpager;
 
     private SlideAdapter previewAdapter;
     private List<MediaInfo> images = new LinkedList<>();
     private List<Fragment> fragments = new ArrayList<>();
     private SlideSetInfo slideSetInfo;
-    private int position;
     private SlideManager.SlideType slideType;
     private TextView mTitleTv;
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class SlidePreviewActivity extends BaseFragmentActivity implements View.O
 
     private void handleIntent() {
         slideType = (SlideManager.SlideType) getIntent().getSerializableExtra("type");
+        position = getIntent().getIntExtra("position",0);
     }
 
     @Override
@@ -59,7 +62,7 @@ public class SlidePreviewActivity extends BaseFragmentActivity implements View.O
         mTitleTv = (TextView) findViewById(R.id.category_name);
 
         backLayout = (LinearLayout) findViewById(R.id.back);
-        viewpager = (LoopViewPager) findViewById(R.id.viewpager);
+        viewpager = (ViewPager) findViewById(R.id.viewpager);
 
         slideSetInfo = (SlideSetInfo) getIntent().getSerializableExtra("photos");
         if (slideSetInfo!=null&&slideSetInfo.imageList!=null&&slideSetInfo.imageList.size()>0){
@@ -67,7 +70,6 @@ public class SlidePreviewActivity extends BaseFragmentActivity implements View.O
             images = slideSetInfo.imageList;
 //            MediaUtils.getFolderAllNames(mContext, images, slideSetInfo.imageList);
         }
-        position = getIntent().getIntExtra("position",0);
     }
 
     @Override
@@ -89,6 +91,7 @@ public class SlidePreviewActivity extends BaseFragmentActivity implements View.O
         MediaPreviewAdapter mMediaPreviewAdapter = new MediaPreviewAdapter(getSupportFragmentManager());
         viewpager.setAdapter(mMediaPreviewAdapter);
         mMediaPreviewAdapter.setData(fragments);
+        viewpager.setCurrentItem(position);
 //        previewAdapter = new SlideAdapter(SlidePreviewActivity.this);
 //        previewAdapter.setData(images);
 //        viewpager.setAdapter(previewAdapter);
@@ -129,12 +132,12 @@ public class SlidePreviewActivity extends BaseFragmentActivity implements View.O
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        previewAdapter.releaseALlVideo();
+//        previewAdapter.releaseALlVideo();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        viewpager.removeAllViews();
+        JZVideoPlayer.releaseAllVideos();
     }
 }
