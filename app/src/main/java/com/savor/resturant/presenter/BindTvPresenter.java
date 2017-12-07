@@ -56,7 +56,7 @@
 //                    if(obj instanceof TvBoxInfo) {
 //                        TvBoxInfo tvBoxInfo = (TvBoxInfo) obj;
 //                        mSession.setTvBoxUrl(tvBoxInfo);
-////                        mBindTvView.initBindcodeResult();
+//                        mBindTvView.initBindcodeResult();
 //                    }
 //                    break;
 //                case REMOVE_BOX_INFO:
@@ -124,7 +124,7 @@
 //        if (TextUtils.isEmpty(ipStr)||!localIp.substring(0,localIp.lastIndexOf(".")).equals(ipStr.substring(0, ipStr.lastIndexOf(".")))
 //                ||TextUtils.isEmpty(wifiName)
 //                ||!wifiName.equals(sid)) {
-//            mBindTvView.showChangeWifiDialog();
+//            mBindTvView.showChangeWifiDialog(mSession.getSsid());
 //            return;
 //        }
 //
@@ -199,7 +199,7 @@
 //            mBindTvView.readyForQrcode();
 //            callQrcode();
 //        }else {
-//            mBindTvView.showChangeWifiDialog();
+//            mBindTvView.showChangeWifiDialog(mSession.getSsid());
 //        }
 //    }
 //

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -120,6 +121,12 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
         mTitleTv.setCompoundDrawablePadding(DensityUtil.dip2px(this,10));
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mBackBtn.getLayoutParams();
         layoutParams.setMargins(DensityUtil.dip2px(this,15),0,0,0);
+
+        RoomInfo bindRoom = mSession.getBindRoom();
+        if(bindRoom!=null&&!TextUtils.isEmpty(bindRoom.getBox_name())) {
+            mTitleTv.setText(bindRoom.getBox_name());
+        }
+        currentRoom = bindRoom;
     }
 
     private void initContentList() {
@@ -237,6 +244,11 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
     }
 
     private void hideRommList() {
+        if(currentRoom!=null) {
+            mTitleTv.setText(currentRoom.getBox_name());
+        }else {
+            mTitleTv.setText("请选择投屏包间");
+        }
         mTitleTv.setCompoundDrawablesWithIntrinsicBounds(null,null,getResources().getDrawable(R.drawable.ico_arrow_down),null);
         mBackBtn.setImageResource(R.drawable.back);
 
@@ -262,6 +274,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
     }
 
     private void showRoomList() {
+        mTitleTv.setText("请选择投屏包间");
         mRoomListView.setVisibility(View.VISIBLE);
         mTitleTv.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         mBackBtn.setImageResource(R.drawable.ico_close);
@@ -340,8 +353,8 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void onRoomItemClick(RoomInfo roomInfo) {
-        hideRommList();
         currentRoom = roomInfo;
+        hideRommList();
         switch (currentProType) {
             case TYPE_PRO_SINGLE:
                 startSinglePro();

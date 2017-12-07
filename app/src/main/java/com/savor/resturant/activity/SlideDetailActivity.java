@@ -547,24 +547,21 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         // 判断是否选择了包间
         // 1.选择包间
         // 2.向盒子发投屏请求
-        if(currentRoom == null) {
-            showRoomList();
-            ShowMessage.showToast(this,"请选择包间");
-            return;
-        }
+        showRoomList();
+        ShowMessage.showToast(this,"请选择包间");
 
 //        String box_ip = currentRoom.getBox_ip();
-
-        String wifiName = WifiUtil.getWifiName(this);
-        String box_name = currentRoom.getBox_name();
-        String box_ip = currentRoom.getBox_ip();
-        String localIp = WifiUtil.getLocalIp(this);
-        if(!TextUtils.isEmpty(wifiName)&&wifiName.equals(box_name)&&!TextUtils.isEmpty(localIp)&&WifiUtil.isInSameNetwork(localIp,box_ip)) {
-            showSlideSettings();
-        }else {
-            needLinkWifi = box_name;
-            showChangeWifiDialog(box_name);
-        }
+//
+//        String wifiName = WifiUtil.getWifiName(this);
+//        String box_name = currentRoom.getBox_name();
+//        String box_ip = currentRoom.getBox_ip();
+//        String localIp = WifiUtil.getLocalIp(this);
+//        if(!TextUtils.isEmpty(wifiName)&&wifiName.equals(box_name)&&!TextUtils.isEmpty(localIp)&&WifiUtil.isInSameNetwork(localIp,box_ip)) {
+//            showSlideSettings();
+//        }else {
+//            needLinkWifi = box_name;
+//            showChangeWifiDialog(box_name);
+//        }
 
 
 //        if (!isFoundTv()) {
