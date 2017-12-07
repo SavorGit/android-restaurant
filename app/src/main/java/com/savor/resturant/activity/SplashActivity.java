@@ -106,6 +106,7 @@ public class SplashActivity extends BaseActivity {
                     resetLinkStatus();
                     mHandler.removeMessages(MSG_STOP_SSDP);
                     stopSSdpService();
+                    mSession.resetPlatform();
                     break;
                 case CHECK_START_UP:
                     getStartUpSettings();
