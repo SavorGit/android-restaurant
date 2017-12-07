@@ -17,6 +17,7 @@ package com.savor.resturant.core;
  */
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 
 import com.common.api.utils.DesUtils;
 import com.common.api.utils.LogUtils;
@@ -38,6 +39,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
+import okhttp3.Response;
 
 
 import static com.savor.resturant.core.AppApi.Action.POST_UPGRADE_JSON;
@@ -53,6 +55,7 @@ public class ApiResponseFactory {
     // 当前服务器时间
     private static String webtime = "";
 
+    @Nullable
     public static Object getResponse(Context context, AppApi.Action action,
                                      Response response, String key, boolean isCache, String payType) {
         //转换器
