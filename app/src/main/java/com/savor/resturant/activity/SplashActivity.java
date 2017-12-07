@@ -48,6 +48,7 @@ import com.savor.resturant.utils.ImageCacheUtils;
 import com.savor.resturant.utils.ProjectionManager;
 import com.savor.resturant.utils.RecordUtils;
 import com.savor.resturant.utils.STIDUtil;
+import com.savor.resturant.utils.WifiUtil;
 import com.savor.resturant.widget.SplashDialog;
 
 import org.json.JSONException;
@@ -98,6 +99,7 @@ public class SplashActivity extends BaseActivity {
                     getSmallPlatformUrl();
                     break;
                 case WifiManager.WIFI_STATE_DISABLED:
+                    mSession.setBindRoom(null);
                     List<Object> requsetPool = mSession.getRequsetPool();
                     requsetPool.clear();
                     mSession.setRequestPool(requsetPool);
@@ -374,6 +376,14 @@ public class SplashActivity extends BaseActivity {
                 if(obj instanceof List) {
                     List<RoomInfo> roomInfos = (List<RoomInfo>) obj;
                     mSession.setRoomList(roomInfos);
+                    for(RoomInfo info : roomInfos) {
+                        String wifiName = WifiUtil.getWifiName(this);
+                        if(info.getBox_name().equals(wifiName)) {
+                            mSession.setBindRoom(info);
+                            break;
+                        }
+                    }
+
                 }
                 break;
             case GET_SAMLL_PLATFORMURL_JSON:

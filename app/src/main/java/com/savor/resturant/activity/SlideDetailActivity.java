@@ -35,11 +35,9 @@ import com.savor.resturant.bean.MediaInfo;
 import com.savor.resturant.bean.RoomInfo;
 import com.savor.resturant.bean.SlideSetInfo;
 import com.savor.resturant.bean.SlideSettingsMediaBean;
-import com.savor.resturant.bean.TvBoxInfo;
 import com.savor.resturant.core.ApiRequestListener;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.ResponseErrorMessage;
-import com.savor.resturant.presenter.BindTvPresenter;
 import com.savor.resturant.utils.CompressImage;
 import com.savor.resturant.utils.IntentUtil;
 import com.savor.resturant.utils.MediaUtils;
@@ -75,8 +73,6 @@ import mabeijianxi.camera.FFMpegUtils;
 import mabeijianxi.camera.VCamera;
 import mabeijianxi.camera.model.VideoInfo;
 
-import static com.savor.resturant.activity.LinkTvActivity.EXRA_TV_BOX;
-import static com.savor.resturant.activity.LinkTvActivity.EXTRA_TV_INFO;
 import static com.savor.resturant.utils.IntentUtil.KEY_SLIDE;
 import static com.savor.resturant.utils.IntentUtil.KEY_TYPE;
 
@@ -182,6 +178,8 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     private HandlerThread mCompressThread;
     private boolean isUpload;
     private SlideSettingsMediaBean currentSLideBean;
+    /**当前选择的包间*/
+    private RoomInfo currentRoom;
     /**当前是否是选择房间模式*/
     private boolean isSelectRoomState;
     private RecyclerView mRoomListView;
@@ -189,7 +187,6 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     private String needLinkWifi;
     /**是否在前台*/
     private boolean isForground;
-    private BindTvPresenter mBindTvPresenter;
 
     private void handleImageUploadResponse(Object obj) {
         if (obj instanceof ImageProResonse) {
@@ -246,13 +243,9 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         getViews();
         setViews();
         setListeners();
-        initPresenter();
+//        initPresenter();
         initFFmpeg();
         initCompressThread();
-    }
-
-    private void initPresenter() {
-        mBindTvPresenter = new BindTvPresenter(this, this);
     }
 
     private void initCompressThread() {
@@ -515,8 +508,6 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
             case R.id.rl_toscreen:
                 mOperationType = TYPE_PRO;
                 // 投屏
-                resetRoomList();
-                roomListAdapter.notifyDataSetChanged();
                 performProjection();
                 break;
             case R.id.iv_delete:
@@ -553,13 +544,14 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
 
     private void performProjection() {
         isStopUpload = false;
+        // 判断是否选择了包间
         // 1.选择包间
         // 2.向盒子发投屏请求
         showRoomList();
         ShowMessage.showToast(this,"请选择包间");
 
 //        String box_ip = currentRoom.getBox_ip();
-
+//
 //        String wifiName = WifiUtil.getWifiName(this);
 //        String box_name = currentRoom.getBox_name();
 //        String box_ip = currentRoom.getBox_ip();
@@ -627,16 +619,19 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
 
                     @Override
                     public void onClick(View v) {
-//                        performSlideSettingsConfirm();
-                        mOperationType = TYPE_CONFIRM;
-                        if (mSession.isBindTv()) {
-                            // 幻灯片设置
-                            performSlideSettingsConfirm();
-                        } else {
-                            // 搜索电视
-                            mBindTvPresenter.bindTv();
-                        }
-                        settingDialog.dismiss();
+                        performSlideSettingsConfirm();
+//                        mOperationType = TYPE_CONFIRM;
+//                        if (!isFoundTv()) {
+//                            showChangeWifiDialog();
+//                        } else {
+//                            if (mSession.isBindTv()) {
+//                                // 幻灯片设置
+//                                performSlideSettingsConfirm();
+//                            } else {
+//                                // 搜索电视
+//                                mBindTvPresenter.bindTv();
+//                            }
+//                        }
 
                     }
                 });
@@ -692,7 +687,8 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         param.put("duration", duration + "");
         param.put("interval", interval + "");
         param.put("images", jsonArray);
-        AppApi.postImageSlideSettingToServer(mContext,mSession.getTVBoxUrl(), param, force, this);
+        String url = "http://"+currentRoom.getBox_ip()+":8080";
+        AppApi.postImageSlideSettingToServer(mContext, url, param, force, this);
     }
 
     /**
@@ -741,7 +737,8 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         param.put("name", name);
         param.put("duration", duration + "");
         param.put("videos", jsonArray);
-        AppApi.postVideoSlideSettingToServer(mContext,mSession.getTVBoxUrl(), param, force, this);
+        String url = "http://"+currentRoom.getBox_ip()+":8080";
+        AppApi.postVideoSlideSettingToServer(mContext, url, param, force, this);
     }
 
     /**
@@ -1048,15 +1045,16 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
             params.put("pptName", slideInfo.groupName);
             params.put("range", offset * BUFFER_SIZE + "-" + (offset == count - 1 ? "" : offset * BUFFER_SIZE + BUFFER_SIZE));
 
+            final String url = "http://"+currentRoom.getBox_ip()+":8080";
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     if (offset == count - 1) {
                         isStopUpload = false;
-                        AppApi.updateVideoFile(mContext,mSession.getTVBoxUrl(), fragmentPath, params, SlideDetailActivity.this);
+                        AppApi.updateVideoFile(mContext, url, fragmentPath, params, SlideDetailActivity.this);
                     } else {
                         isStopUpload = true;
-                        AppApi.updateVideoFile(mContext,mSession.getTVBoxUrl(), fragmentPath, params, new ApiRequestListener() {
+                        AppApi.updateVideoFile(mContext, url, fragmentPath, params, new ApiRequestListener() {
                             @Override
                             public void onSuccess(AppApi.Action method, Object obj) {
                                 offset++;
@@ -1138,7 +1136,8 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                             HashMap<String, Object> params = new HashMap<>();
                             params.put("fileName", picName);
                             params.put("pptName", slideInfo.groupName);
-                            AppApi.updateImageFile(mContext,mSession.getTVBoxUrl(), copyFileUrl, params, this);
+                            String url = "http://"+currentRoom.getBox_ip()+":8080";
+                            AppApi.updateImageFile(mContext, url, copyFileUrl, params, this);
                             currentUploadFile = bean.getName();
                             crruntFileUrl = copyFileUrl;
                             break;
@@ -1242,7 +1241,6 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     public void onError(AppApi.Action method, Object obj) {
 
         switch (method) {
-            case POST_VIDEO_SLIDESETTINGS_JSON:
             case POST_IMAGE_SLIDESETTINGS_JSON:
                 if (obj instanceof ResponseErrorMessage) {
                     ResponseErrorMessage message = (ResponseErrorMessage) obj;
@@ -1262,7 +1260,6 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                     mHandler.sendEmptyMessage(UPLOAD_TIMEOUT);
                 }
                 break;
-            case POST_VIDEO_PROJECTION_JSON:
             case POST_IMAGE_PROJECTION_JSON:
 //                mRequestScreenDialog.dismiss();
                 if (obj instanceof ResponseErrorMessage) {
@@ -1285,7 +1282,6 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                     mHandler.sendEmptyMessage(UPLOAD_TIMEOUT);
                 }
                 break;
-
         }
     }
 
@@ -1428,6 +1424,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
 
     @Override
     public void onRoomItemClick(RoomInfo roomInfo) {
+        currentRoom = roomInfo;
         hideRoomList();
 
         // 判断是否连接同一个wifi并且同一网段
@@ -1454,16 +1451,4 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         }
     }
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == EXTRA_TV_INFO) {
-            if (data != null) {
-                TvBoxInfo boxInfo = (TvBoxInfo) data.getSerializableExtra(EXRA_TV_BOX);
-                mBindTvPresenter.handleBindCodeResult(boxInfo);
-            }
-
-        }
-    }
 }

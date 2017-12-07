@@ -228,6 +228,7 @@ public class Session {
 
     private List<Object> requestPool = new ArrayList<>();
     private List<RoomInfo> roomList;
+    private RoomInfo info;
 
     private Session(Context context) {
 
@@ -408,6 +409,10 @@ public class Session {
         setWifiSsid(ssid);
         setBoxMac(box_mac);
         this.mTVBoxUrl = tvBoxUrl;
+    }
+
+    public void setBoxUrl(String boxUrl) {
+        this.mTVBoxUrl = boxUrl;
     }
 
 
@@ -997,5 +1002,13 @@ public class Session {
 
     public List<RoomInfo> getRoomList() {
         return roomList;
+    }
+
+    public void setBindRoom(RoomInfo info) {
+        this.info = info;
+    }
+
+    public  RoomInfo getBindRoom() {
+        return info;
     }
 }
