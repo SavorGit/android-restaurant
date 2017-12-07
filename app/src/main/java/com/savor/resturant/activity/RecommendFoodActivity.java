@@ -409,7 +409,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
         TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
         switch (currentType) {
             case TYPE_RECOMMEND_FOODS:
-                proRecmmend(currentFoodAdvert.getId(),smallPlatformByGetIp,smallPlatInfoBySSDP,tvBoxSSDPInfo);
+                proRecmmend(currentFoodAdvert.getFood_id(),smallPlatformByGetIp,smallPlatInfoBySSDP,tvBoxSSDPInfo);
 //                AppApi.recommendPro(this, "", currentRoom.getBox_mac(), 1000 * 60 * 2 + "", currentFoodAdvert.getFood_id(), this);
                 break;
             case TYPE_ADVERT:
@@ -452,7 +452,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
             case GET_RECOMMEND_PRO_JSON:
             case GET_ADVERT_PRO_JSON:
                 hideLoadingLayout();
-                ShowMessage.showToast(this,"投屏成功！");
+                showToast("投屏成功！");
                 break;
             case GET_ADVERT_JSON:
             case GET_RECOMMEND_FOODS_JSON:
