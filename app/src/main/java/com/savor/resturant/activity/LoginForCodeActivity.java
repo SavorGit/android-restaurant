@@ -75,7 +75,6 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
         if (hotelBean != null) {
             tel = hotelBean.getTel();
             invitation = hotelBean.getInvitation();
-
             if (!TextUtils.isEmpty(tel)) {
                 ev_num.setText(tel);
                 ev_num.setClickable(false);
