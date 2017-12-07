@@ -172,6 +172,10 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
 
 
     private void setPro(String templateId){
+        if(currentRoom == null) {
+            initRoomNotSelected();
+            return;
+        }
         AppApi.wordPro(this,"",currentRoom.getBox_mac(),templateId,keyWord,this);
     }
 
@@ -307,5 +311,9 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
         super.onDestroy();
     }
 
+    private void initRoomNotSelected() {
+        ShowMessage.showToast(this, "请选择包间");
+        showRoomList();
+    }
 }
 
