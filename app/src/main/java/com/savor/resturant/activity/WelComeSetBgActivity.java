@@ -15,12 +15,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.common.api.okhttp.OkHttpUtils;
 import com.common.api.utils.DensityUtil;
+import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.RecommendFoodAdapter;
 import com.savor.resturant.adapter.RoomListAdapter;
 import com.savor.resturant.bean.RecommendFoodAdvert;
 import com.savor.resturant.bean.RoomInfo;
+import com.savor.resturant.core.AppApi;
 import com.savor.resturant.widget.decoration.SpacesItemDecoration;
 
 import java.util.List;
@@ -83,11 +86,14 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
         bg_l6 = (RelativeLayout) findViewById(R.id.bg_l6);
         bg_l7 = (RelativeLayout) findViewById(R.id.bg_l7);
         bg_l8 = (RelativeLayout) findViewById(R.id.bg_l8);
+
     }
 
     @Override
     public void setViews() {
-        tv_center.setText("请选择背景");
+        initTitleBar();
+        initRoomList();
+        //tv_center.setText("请选择背景");
         if (!TextUtils.isEmpty(keyWord)) {
             t1.setText(keyWord);
             t2.setText(keyWord);
@@ -98,8 +104,7 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
             t7.setText(keyWord);
             t8.setText(keyWord);
         }
-        initTitleBar();
-        initRoomList();
+
     }
 
     @Override
@@ -131,33 +136,32 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
                 }
                 break;
             case R.id.bg_l1:
-                setText();
+                setPro("1");
                 break;
             case R.id.bg_l2:
-                setText();
+                setPro("2");
                 break;
             case R.id.bg_l3:
-                setText();
+                setPro("3");
                 break;
             case R.id.bg_l4:
-                setText();
+                setPro("4");
                 break;
             case R.id.bg_l5:
-                setText();
+                setPro("5");
                 break;
             case R.id.bg_l6:
-                setText();
+                setPro("6");
                 break;
             case R.id.bg_l7:
-                setText();
+                setPro("7");
                 break;
             case R.id.bg_l8:
-                setText();
+                setPro("8");
                 break;
             case R.id.tv_center:
                 if(!isSelectRommState) {
                     showRoomList();
-
                 }
 
                 break;
@@ -167,8 +171,8 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
     }
 
 
-    private void setText(){
-
+    private void setPro(String templateId){
+        AppApi.wordPro(this,"",currentRoom.getBox_mac(),templateId,keyWord,this);
     }
 
     private void initTitleBar() {
@@ -188,7 +192,11 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void showRoomList() {
-        tv_center.setText("请选择投屏包间");
+        if(currentRoom!=null) {
+            tv_center.setText(currentRoom.getBox_name());
+        }else {
+            tv_center.setText("请选择投屏包间");
+        }
         mRoomListView.setVisibility(View.VISIBLE);
         tv_center.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         iv_left.setImageResource(R.drawable.ico_close);
@@ -215,11 +223,6 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
     }
     private void initRoomList() {
         //添加ItemDecoration，item之间的间隔
-        if(currentRoom!=null) {
-            tv_center.setText(currentRoom.getBox_name());
-        }else {
-            tv_center.setText("请选择投屏包间");
-        }
         int leftRight = DensityUtil.dip2px(this,15);
         int topBottom = DensityUtil.dip2px(this,15);
         GridLayoutManager roomLayoutManager = new GridLayoutManager(this,3);
@@ -236,16 +239,9 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onRoomItemClick(RoomInfo roomInfo) {
-        hideRommList();
         currentRoom = roomInfo;
-//        switch (currentProType) {
-//            case TYPE_PRO_SINGLE:
-//                startSinglePro();
-//                break;
-//            case TYPE_PRO_MULTI:
-//                startMultiPro();
-//                break;
-//        }
+        hideRommList();
+
     }
 
     private void hideRommList() {
@@ -277,6 +273,38 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
             }
         });
         isSelectRommState = false;
+    }
+
+    @Override
+    public void onSuccess(AppApi.Action method, Object obj) {
+        switch (method) {
+            case GET_WORD_PRO_JSON:
+                ShowMessage.showToast(this,"投屏成功！");
+                break;
+
+        }
+    }
+
+    @Override
+    public void onError(AppApi.Action method, Object obj) {
+        super.onError(method,obj);
+    }
+
+    private void resetRoomList() {
+        List<RoomInfo> roomList = mSession.getRoomList();
+        if(roomList!=null) {
+            for(RoomInfo info:roomList) {
+                info.setSelected(false);
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        // 清楚房间选择记录
+        resetRoomList();
+        OkHttpUtils.getInstance().getOkHttpClient().dispatcher().cancelAll();
+        super.onDestroy();
     }
 
 }
