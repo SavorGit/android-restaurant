@@ -192,7 +192,7 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
         if(smallPlatformByGetIp!=null&&!TextUtils.isEmpty(smallPlatformByGetIp.getLocalIp())) {
             String localIp = smallPlatformByGetIp.getLocalIp();
             String url = "http://"+localIp+":8080";
-            AppApi.wordPro(this,"",currentRoom.getBox_mac(),templateId,keyWord,this);
+            AppApi.wordPro(this,url,currentRoom.getBox_mac(),templateId,keyWord,this);
         }else {
             erroCount++;
         }
@@ -201,7 +201,7 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
         if(smallPlatInfoBySSDP!=null&&!TextUtils.isEmpty(smallPlatInfoBySSDP.getServerIp())) {
             String serverIp = smallPlatInfoBySSDP.getServerIp();
             String url = "http://"+serverIp+":8080";
-            AppApi.wordPro(this,"",currentRoom.getBox_mac(),templateId,keyWord,this);
+            AppApi.wordPro(this,url,currentRoom.getBox_mac(),templateId,keyWord,this);
         }else {
             erroCount++;
         }
@@ -210,7 +210,7 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
         if(tvBoxSSDPInfo!=null&&!TextUtils.isEmpty(tvBoxSSDPInfo.getServerIp())) {
             String serverIp = tvBoxSSDPInfo.getServerIp();
             String url = "http://"+serverIp+":8080";
-            AppApi.wordPro(this,"",currentRoom.getBox_mac(),templateId,keyWord,this);
+            AppApi.wordPro(this,url,currentRoom.getBox_mac(),templateId,keyWord,this);
         }else {
             erroCount++;
         }
