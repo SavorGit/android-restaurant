@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <GridView
+        android:layout_weight="1"
+        android:id="@+id/gv_picture"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#f5f5f5"
+        android:divider="@android:color/transparent"
+        android:fadingEdge="none"
+        android:horizontalSpacing="1dp"
+        android:numColumns="3"
+        android:paddingLeft="1dp"
+        android:paddingRight="1dp"
+        android:paddingBottom="1dp"
+        android:paddingTop="1dp"
+        android:scrollbars="none"
+        android:verticalSpacing="1dp"/>
+
+
+    <RelativeLayout
+        android:id="@+id/tv_complete"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:background="@color/pro_bg"
+        android:gravity="center_vertical"
+        android:paddingBottom="5dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="5dp"
+        >
+
+        <CheckBox
+            android:id="@+id/cb_checkall"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:background="@color/pro_bg"
+            android:button="@null"
+            android:drawableLeft="@drawable/checkbox_selector"
+            android:drawablePadding="10dp"
+            android:text="全选"
+            android:textSize="@dimen/large_text_size"
+            android:textColor="@color/color_red_light"
+            android:visibility="gone" />
+        <TextView
+            android:background="@color/pro_bg"
+            android:id="@+id/add"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:textColor="@color/color_red_light"
+            android:textSize="@dimen/large_text_size"
+            android:drawableLeft="@drawable/tianjia"
+            android:drawablePadding="3dp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="添加图片"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_toscreen"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:layout_centerInParent="true"
+            android:background="@color/pro_bg"
+            >
+
+            <ImageView
+                android:layout_centerInParent="true"
+                android:src="@drawable/icon_pro_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </RelativeLayout>
+
+        <ImageView
+            android:paddingLeft="10dp"
+            android:id="@+id/iv_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/delete"
+            android:visibility="gone" />
+    </RelativeLayout>
+</LinearLayout>

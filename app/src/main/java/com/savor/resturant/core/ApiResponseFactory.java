@@ -25,6 +25,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.savor.resturant.bean.BaseProResponse;
 import com.savor.resturant.bean.HotelBean;
+import com.savor.resturant.bean.RecommendFoodAdvert;
 import com.savor.resturant.bean.RoomInfo;
 import com.savor.resturant.bean.SlideSettingsMediaBean;
 import com.savor.resturant.bean.SmallPlatformByGetIp;
@@ -103,6 +104,10 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.POST_VERIFY_CODE_JSON
                     || action == AppApi.Action.GET_SAMLL_PLATFORMURL_JSON
                     || action == AppApi.Action.GET_HOTEL_BOX_JSON
+                    || action == AppApi.Action.GET_RECOMMEND_FOODS_JSON
+                    || action == AppApi.Action.GET_ADVERT_JSON
+                    || action == AppApi.Action.GET_ADVERT_PRO_JSON
+                    || action == AppApi.Action.GET_RECOMMEND_PRO_JSON
                     ){
                 int code = rSet.getInt("code");
                 if(rSet.has("result")) {
@@ -215,6 +220,20 @@ public class ApiResponseFactory {
             case GET_HOTEL_BOX_JSON:
                 result = gson.fromJson(info, new TypeToken<List<RoomInfo>>() {
                 }.getType());
+                break;
+            case GET_RECOMMEND_FOODS_JSON:
+                result = gson.fromJson(info, new TypeToken<List<RecommendFoodAdvert>>() {
+                }.getType());
+                break;
+            case GET_ADVERT_JSON:
+                result = gson.fromJson(info, new TypeToken<List<RecommendFoodAdvert>>() {
+                }.getType());
+                break;
+            case GET_ADVERT_PRO_JSON:
+                result = "success";
+                break;
+            case GET_RECOMMEND_PRO_JSON:
+                result = "success";
                 break;
             default:
                 break;

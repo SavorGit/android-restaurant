@@ -67,6 +67,7 @@ public class FunctionAdapter extends RecyclerView.Adapter<FunctionAdapter.Functi
                     switch (type) {
                         case TYPE_RECOMMAND_FOODS:
                             intent = new Intent(mContext, RecommendFoodActivity.class);
+                            intent.putExtra("type", RecommendFoodActivity.OperationType.TYPE_RECOMMEND_FOODS);
                             mContext.startActivity(intent);
                             break;
                         case TYPE_WELCOME_WORD:
@@ -74,7 +75,9 @@ public class FunctionAdapter extends RecyclerView.Adapter<FunctionAdapter.Functi
                             mContext.startActivity(intent);
                             break;
                         case TYPE_ADVERT:
-
+                            intent = new Intent(mContext, RecommendFoodActivity.class);
+                            intent.putExtra("type", RecommendFoodActivity.OperationType.TYPE_ADVERT);
+                            mContext.startActivity(intent);
                             break;
                         case TYPE_VIDEO:
                             intent = new Intent(mContext,SlideListActivity.class);

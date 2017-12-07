@@ -6,6 +6,9 @@ import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,6 +30,7 @@ import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.ResponseErrorMessage;
 import com.savor.resturant.core.Session;
 import com.savor.resturant.interfaces.IBaseView;
+import com.savor.resturant.receiver.NetworkConnectChangedReceiver;
 import com.savor.resturant.service.SSDPService;
 import com.savor.resturant.utils.ActivitiesManager;
 import com.savor.resturant.utils.ProjectionManager;
@@ -66,22 +70,15 @@ public abstract class BaseActivity extends Activity implements ApiRequestListene
                     stopSSdpService();
                     break;
                 case CANCEL_CHECK_WIFI:
-                    mSession.setTvBoxUrl(null);
-                    mHandler.removeMessages(CHECK_WIFI_LINKED);
+                    cancelWifiCheck();
                     break;
                 case CHECK_WIFI_LINKED:
-                    if(!mSession.isBindTv()) {
-                        TvBoxInfo tvboxInfo = mSession.getTvboxInfo();
-                        if(tvboxInfo!=null) {
-                            checkWifiLinked(tvboxInfo);
-                        }
-                    }else {
-                        mHandler.removeMessages(CANCEL_CHECK_WIFI);
-                    }
+                    checkWifiLinked();
                     break;
             }
         }
     };
+    protected NetworkConnectChangedReceiver mChangedReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,8 +104,8 @@ public abstract class BaseActivity extends Activity implements ApiRequestListene
         }
     }
 
-    public void showChangeWifiDialog() {
-        String hint = TextUtils.isEmpty(mSession.getSsid())?getString(R.string.tv_bind_wifi):"请将wifi连接至"+mSession.getSsid();
+    public void showChangeWifiDialog(String ssid) {
+        String hint = TextUtils.isEmpty(ssid)?getString(R.string.tv_bind_wifi):"请将wifi连接至"+ssid;
         new HotsDialog(this)
                 .builder()
                 .setMsg(hint)
@@ -116,6 +113,9 @@ public abstract class BaseActivity extends Activity implements ApiRequestListene
                 .setPositiveButton("去设置", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        startCheckWifiLinkedTimer();
+
+                        cancelWifiCheckDelayed();
                         Intent intent = new Intent();
                         intent.setAction("android.net.wifi.PICK_WIFI_NETWORK");
                         startActivity(intent);
@@ -129,29 +129,20 @@ public abstract class BaseActivity extends Activity implements ApiRequestListene
                 .show();
     }
 
-//    public void showLinkErrorDialog() {
-//        if(!this.isFinishing()){
-//            new HotsDialog(this)
-//                    .builder()
-//                    .setMsg("连接失败，请重新连接")
-//                    .setCancelable(false)
-//                    .setPositiveButton("重新连接", new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            reLink();
-//                        }
-//                    })
-//                    .setNegativeButton("取消", new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            closeLinkingDialog();
-//                        }
-//                    })
-//                    .show();
-//        }
-//
-//    }
+    private void cancelWifiCheckDelayed() {
+        mHandler.removeMessages(CANCEL_CHECK_WIFI);
+        mHandler.sendEmptyMessageDelayed(CANCEL_CHECK_WIFI,1000*60*3);
+    }
 
+    public void registerNetWorkReceiver(Handler handler) {
+        if(mChangedReceiver==null)
+            mChangedReceiver = new NetworkConnectChangedReceiver(handler);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        mContext.registerReceiver(mChangedReceiver, filter);
+    }
     public void reLink() {}
 
     public void stopSSdpService() {
@@ -270,6 +261,8 @@ public abstract class BaseActivity extends Activity implements ApiRequestListene
             int code = message.getCode();
             String msg = message.getMessage();
             showToast(msg);
+        }else if(obj == AppApi.ERROR_TIMEOUT) {
+            showToast("请求超时");
         }
     }
 
@@ -287,38 +280,23 @@ public abstract class BaseActivity extends Activity implements ApiRequestListene
     @Override
     protected void onRestart() {
         super.onRestart();
-        // 判断如果为绑定并且当前ssid与缓存机顶盒ssid相同提示绑定成功
-        if(!mSession.isBindTv()) {
-            TvBoxInfo tvBoxInfo = mSession.getTvboxInfo();
-            if(tvBoxInfo!=null) {
-                checkWifiLinked(tvBoxInfo);
-            }
-        }
+//        // 判断如果为绑定并且当前ssid与缓存机顶盒ssid相同提示绑定成功
+//        if(!mSession.isBindTv()) {
+//            TvBoxInfo tvBoxInfo = mSession.getTvboxInfo();
+//            if(tvBoxInfo!=null) {
+//                checkWifiLinked(tvBoxInfo);
+//            }
+//        }
     }
 
     /**
      * 检查是否在同一wifi，如果三分钟内连接到同一wifi提示连接成功
      */
-    private void checkWifiLinked(TvBoxInfo tvBoxInfo) {
-        String ssid = tvBoxInfo.getSsid();
-        String localSSid = WifiUtil.getWifiName(this);
-        if(!TextUtils.isEmpty(ssid)) {
-            if(ssid.endsWith(localSSid)) {
-                mSession.setWifiSsid(ssid);
-                mSession.setTvBoxUrl(tvBoxInfo);
-                initBindcodeResult();
-                mHandler.removeMessages(CANCEL_CHECK_WIFI);
-            }else {
-                startCheckWifiLinkedTimer();
-            }
-        }else {
-            // 每隔一秒检测是否已连接同一wifi
-            startCheckWifiLinkedTimer();
-        }
+    protected void checkWifiLinked() {
     }
 
     /**开启检查是否是同一wifi定时器每隔一秒检查一次*/
-    private void startCheckWifiLinkedTimer() {
+    protected void startCheckWifiLinkedTimer() {
         mHandler.removeMessages(CHECK_WIFI_LINKED);
         mHandler.sendEmptyMessageDelayed(CHECK_WIFI_LINKED,1000);
     }
@@ -332,5 +310,9 @@ public abstract class BaseActivity extends Activity implements ApiRequestListene
         ShowMessage.showToast(this,mSession.getSsid()+"连接成功，可以投屏");
     }
 
+    protected void cancelWifiCheck(){
+        mHandler.removeMessages(CHECK_WIFI_LINKED);
+        mHandler.removeMessages(CANCEL_CHECK_WIFI);
+    }
 
 }

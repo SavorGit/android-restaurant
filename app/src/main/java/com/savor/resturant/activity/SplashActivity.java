@@ -1,6 +1,7 @@
 package com.savor.resturant.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -40,8 +42,10 @@ import com.savor.resturant.presenter.SensePresenter;
 import com.savor.resturant.service.LocalJettyService;
 import com.savor.resturant.service.SSDPService;
 import com.savor.resturant.service.UpLoadLogService;
+import com.savor.resturant.utils.ActivitiesManager;
 import com.savor.resturant.utils.AliLogFileUtil;
 import com.savor.resturant.utils.ImageCacheUtils;
+import com.savor.resturant.utils.ProjectionManager;
 import com.savor.resturant.utils.RecordUtils;
 import com.savor.resturant.utils.STIDUtil;
 import com.savor.resturant.widget.SplashDialog;
@@ -66,6 +70,7 @@ public class SplashActivity extends BaseActivity {
 
     private static final int CHECK_START_UP = 4;
     private static final int CLOSE_FIRSTUSE_SERVICE = 0x3;
+    private static final int MSG_STOP_SSDP = 0x5;
     private final int FIRST_START = 1;
     private final int SWITCH_HOME = 2;
 
@@ -77,6 +82,31 @@ public class SplashActivity extends BaseActivity {
     private Handler mHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
+                case MSG_STOP_SSDP:
+                    if(ProjectionManager.getInstance().isLookingSSDP()) {
+                        stopSSdpService();
+                    }
+                    break;
+                case WifiManager.WIFI_STATE_ENABLED:
+                    LogUtils.d("savor:网络变为可用");
+                    // 为了解决多次重复发送请求利用延时发送方式
+                    if(ProjectionManager.getInstance().isLookingSSDP()) {
+                        mHandler.removeMessages(MSG_STOP_SSDP);
+                        stopSSdpService();
+                    }
+                    startServerDiscoveryService();
+                    getSmallPlatformUrl();
+                    break;
+                case WifiManager.WIFI_STATE_DISABLED:
+                    List<Object> requsetPool = mSession.getRequsetPool();
+                    requsetPool.clear();
+                    mSession.setRequestPool(requsetPool);
+                    mSession.setHotelid(0);
+                    LogUtils.d("savor:hotel 网络不可用重置酒店id为0");
+                    resetLinkStatus();
+                    mHandler.removeMessages(MSG_STOP_SSDP);
+                    stopSSdpService();
+                    break;
                 case CHECK_START_UP:
                     getStartUpSettings();
                     break;
@@ -91,7 +121,7 @@ public class SplashActivity extends BaseActivity {
 //                    startActivity(homeIntent);
 //                    finish();
                     Intent homeIntent = new Intent(SplashActivity.this, LoginForCodeActivity.class);
-                    Intent intent = getIntent();
+//                    Intent intent = getIntent();
 //                    if(intent!=null&&("application/pdf").equals(intent.getType())) {
 //                        Uri data = getIntent().getData();
 //                        homeIntent.setDataAndType(data,intent.getType());
@@ -101,6 +131,14 @@ public class SplashActivity extends BaseActivity {
             }
         }
     };
+
+    private void resetLinkStatus() {
+        MainActivity specialActivity = (MainActivity) ActivitiesManager.getInstance().getSpecialActivity(MainActivity.class);
+        if(specialActivity!=null) {
+            specialActivity.initWIfiHint();
+        }
+    }
+
     private StartUpSettingsBean latestSettingsBean;
     private ImageView mStartUpImageView;
     private long delayedTime = 1500;
@@ -122,9 +160,8 @@ public class SplashActivity extends BaseActivity {
         getViews();
         setViews();
         setListeners();
-        startServerDiscoveryService();
+        registerNetWorkReceiver(mHandler);
         startJettyServer();
-        getSmallPlatformUrl();
         regitsterSmallPlatformReciever();
     }
 
@@ -350,6 +387,7 @@ public class SplashActivity extends BaseActivity {
                             Integer hid = Integer.valueOf(hotelId);
                             if(hid>0) {
                                 mSession.setHotelid(hid);
+                                resetLinkStatus();
                             }
                         }catch (Exception e) {
                         }
@@ -385,14 +423,12 @@ public class SplashActivity extends BaseActivity {
 
     /**组播阻塞方式获取小平台发送的本身地址*/
     private void startServerDiscoveryService() {
-        if(!AppUtils.isWifiNetwork(this)) {
-            LogUtils.d("savor:sp 当前网络不可用不接受ssdp");
-        }else {
-            LogUtils.d("savor:sp 当前wifi状态接受ssdp");
-            Intent intent = new Intent(this, SSDPService.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startService(intent);
-        }
+        LogUtils.d("savor:sp 当前wifi状态接受ssdp");
+        Intent intent = new Intent(this, SSDPService.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startService(intent);
+
+        mHandler.sendEmptyMessageDelayed(MSG_STOP_SSDP,1000*15);
     }
 
     @Override
@@ -415,10 +451,17 @@ public class SplashActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         unregistetSpReceiver();
+        mHandler.removeMessages(MSG_STOP_SSDP);
+        mHandler.removeCallbacksAndMessages(null);
+
         if(mp!=null&&mp.isPlaying()) {
             mp.stop();
             mp.release();
             mp = null;
+        }
+
+        if(mChangedReceiver!=null) {
+            unregisterReceiver(mChangedReceiver);
         }
     }
 

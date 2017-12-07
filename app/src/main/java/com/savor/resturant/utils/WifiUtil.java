@@ -10,6 +10,28 @@ import android.text.TextUtils;
  */
 
 public class WifiUtil {
+
+    /**
+     * 本机ip地址跟盒子是否同一网段
+     * @param locaIp
+     * @param boxIp
+     * @return
+     */
+    public static boolean isInSameNetwork(String locaIp,String boxIp) {
+        // 如果判断不在一个网段或者wifi不是同一个提示切换wifi
+        if (TextUtils.isEmpty(boxIp)||!locaIp.substring(0,locaIp.lastIndexOf(".")).equals(boxIp.substring(0, boxIp.lastIndexOf(".")))) {
+            return false;
+        }
+        return true;
+    }
+
+    public static String getLocalIp(Context context) {
+        WifiManager wifiManger = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiInfo wifiInfo = wifiManger.getConnectionInfo();
+        String localIp = intToIp(wifiInfo.getIpAddress());
+        return localIp;
+    }
+
     public  static String getWifiName(Context context) {
         WifiManager wifiMgr = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo info = wifiMgr.getConnectionInfo();
