@@ -183,7 +183,7 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
         SmallPlatformByGetIp smallPlatformByGetIp = mSession.getmSmallPlatInfoByIp();
         SmallPlatInfoBySSDP smallPlatInfoBySSDP = mSession.getSmallPlatInfoBySSDP();
         TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
-
+        proWord(templateId,smallPlatformByGetIp,smallPlatInfoBySSDP,tvBoxSSDPInfo);
     }
 
     private void proWord(String templateId,SmallPlatformByGetIp smallPlatformByGetIp, SmallPlatInfoBySSDP smallPlatInfoBySSDP, TvBoxSSDPInfo tvBoxSSDPInfo){
