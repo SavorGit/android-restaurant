@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Process;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -22,6 +23,11 @@ import com.savor.resturant.bean.SlideSettingsMediaBean;
 import com.savor.resturant.core.ApiRequestListener;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.ResponseErrorMessage;
+import com.savor.resturant.service.ClearImageCacheService;
+import com.savor.resturant.service.LocalJettyService;
+import com.savor.resturant.service.SSDPService;
+import com.savor.resturant.utils.ActivitiesManager;
+import com.savor.resturant.utils.GlideImageLoader;
 import com.savor.resturant.widget.LoginDialog;
 
 import java.util.List;
@@ -388,6 +394,20 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
         if (!TextUtils.isEmpty(tel)&&!TextUtils.isEmpty(code) ) {
             AppApi.doLogin(this,invitation,tel,code,this);
         }
+    }
+
+    private void exitApp() {
+
+
+        finish();
+        Process.killProcess(android.os.Process.myPid());
+
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        exitApp();
     }
 }
 
