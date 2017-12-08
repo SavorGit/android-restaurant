@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/ts"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        android:text="提示" />
+
+
+    <TextView
+        android:layout_below="@id/ts"
+        android:text="展示内容"
+        android:gravity="center"
+        android:id="@+id/tv_content"
+        android:padding="5dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:layout_weight="1" />
+    <View
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_2" />
+    <LinearLayout
+        android:layout_below="@+id/tv_content"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_weight="1"
+            android:id="@+id/tv_cancel"
+            android:padding="10dp"
+            android:gravity="center"
+            android:text="取消"
+            android:textSize="16sp"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <View
+            android:id="@+id/view_divider"
+            android:visibility="gone"
+            android:background="@color/gray_2"
+            android:layout_width="1dp"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_weight="1"
+            android:id="@+id/tv_confirm"
+            android:padding="10dp"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:text="绑定"
+            android:textColor="@color/head_title_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</RelativeLayout>

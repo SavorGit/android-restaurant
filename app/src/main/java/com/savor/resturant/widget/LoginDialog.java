@@ -70,7 +70,7 @@ public class LoginDialog extends Dialog implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_common_dialog);
+        setContentView(R.layout.layout_login_dialog);
         getViews();
         setViews();
         setListeners();
