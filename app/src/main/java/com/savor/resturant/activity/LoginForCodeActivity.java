@@ -397,16 +397,14 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void exitApp() {
-
-
         finish();
         Process.killProcess(android.os.Process.myPid());
-
 
     }
 
     @Override
     public void onBackPressed() {
+        ActivitiesManager.getInstance().popAllActivities();
         exitApp();
     }
 }
