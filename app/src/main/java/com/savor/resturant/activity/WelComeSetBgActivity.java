@@ -23,7 +23,11 @@ import com.savor.resturant.adapter.RecommendFoodAdapter;
 import com.savor.resturant.adapter.RoomListAdapter;
 import com.savor.resturant.bean.RecommendFoodAdvert;
 import com.savor.resturant.bean.RoomInfo;
+import com.savor.resturant.bean.SmallPlatInfoBySSDP;
+import com.savor.resturant.bean.SmallPlatformByGetIp;
+import com.savor.resturant.bean.TvBoxSSDPInfo;
 import com.savor.resturant.core.AppApi;
+import com.savor.resturant.core.ResponseErrorMessage;
 import com.savor.resturant.widget.decoration.SpacesItemDecoration;
 
 import java.util.List;
@@ -45,7 +49,7 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
     private RoomListAdapter roomListAdapter;
     private RoomInfo currentRoom;
     private boolean isSelectRommState;
-
+    private int erroCount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -176,9 +180,41 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
             initRoomNotSelected();
             return;
         }
-        AppApi.wordPro(this,"",currentRoom.getBox_mac(),templateId,keyWord,this);
+        SmallPlatformByGetIp smallPlatformByGetIp = mSession.getmSmallPlatInfoByIp();
+        SmallPlatInfoBySSDP smallPlatInfoBySSDP = mSession.getSmallPlatInfoBySSDP();
+        TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
+
     }
 
+    private void proWord(String templateId,SmallPlatformByGetIp smallPlatformByGetIp, SmallPlatInfoBySSDP smallPlatInfoBySSDP, TvBoxSSDPInfo tvBoxSSDPInfo){
+        erroCount = 0;
+        // 1.通过getIp获取的小平台地址进行投屏
+        if(smallPlatformByGetIp!=null&&!TextUtils.isEmpty(smallPlatformByGetIp.getLocalIp())) {
+            String localIp = smallPlatformByGetIp.getLocalIp();
+            String url = "http://"+localIp+":8080";
+            AppApi.wordPro(this,url,currentRoom.getBox_mac(),templateId,keyWord,this);
+        }else {
+            erroCount++;
+        }
+
+        // 2.通过小平台ssdp获取小平台地址进行投屏
+        if(smallPlatInfoBySSDP!=null&&!TextUtils.isEmpty(smallPlatInfoBySSDP.getServerIp())) {
+            String serverIp = smallPlatInfoBySSDP.getServerIp();
+            String url = "http://"+serverIp+":8080";
+            AppApi.wordPro(this,url,currentRoom.getBox_mac(),templateId,keyWord,this);
+        }else {
+            erroCount++;
+        }
+
+        // 3.通过盒子ssdp获取小平台地址进行投屏
+        if(tvBoxSSDPInfo!=null&&!TextUtils.isEmpty(tvBoxSSDPInfo.getServerIp())) {
+            String serverIp = tvBoxSSDPInfo.getServerIp();
+            String url = "http://"+serverIp+":8080";
+            AppApi.wordPro(this,url,currentRoom.getBox_mac(),templateId,keyWord,this);
+        }else {
+            erroCount++;
+        }
+    }
     private void initTitleBar() {
         tv_center.setText("请选择投屏包间");
         TextPaint tp = tv_center.getPaint();
@@ -291,7 +327,25 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onError(AppApi.Action method, Object obj) {
-        super.onError(method,obj);
+
+        switch (method) {
+            case GET_RECOMMEND_PRO_JSON:
+                erroCount++;
+                if(erroCount<3)
+                    return;
+                if(obj instanceof ResponseErrorMessage) {
+                    ResponseErrorMessage message = (ResponseErrorMessage) obj;
+                    int code = message.getCode();
+                    String msg = message.getMessage();
+                    showToast(msg);
+                }else if(obj == AppApi.ERROR_TIMEOUT) {
+                    showToast("请求超时");
+                }
+                break;
+                default:
+                    super.onError(method,obj);
+                    break;
+        }
     }
 
     private void resetRoomList() {
