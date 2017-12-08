@@ -18,7 +18,8 @@
         android:paddingTop="3dp"
         android:paddingLeft="3dp"
         android:textSize="15sp"
-        android:textColor="#999999"
+        android:textColorHint="#999999"
+        android:textColor="#666666"
         android:layout_height="80dp" />
     <TextView
         android:id="@+id/t1"
