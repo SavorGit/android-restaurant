@@ -22,6 +22,7 @@ import com.savor.resturant.bean.SlideSettingsMediaBean;
 import com.savor.resturant.core.ApiRequestListener;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.ResponseErrorMessage;
+import com.savor.resturant.widget.LoginDialog;
 
 import java.util.List;
 import java.util.Timer;
@@ -33,7 +34,8 @@ import java.util.TimerTask;
  * 登录页面
  */
 public class LoginForCodeActivity extends BaseActivity implements View.OnClickListener,
-        ApiRequestListener {
+        ApiRequestListener,
+        LoginDialog.OnConfirmListener {
 
     private Context context;
 
@@ -50,6 +52,7 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
     private TimerTask mTask;
     private long mSeconds = 60;
     private HotelBean hotelBean;
+    private LoginDialog loginDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -217,13 +220,13 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void login(){
-        tel = ev_num.getText().toString();
-        code = ev_code.getText().toString();
         invitation = invitation_num.getText().toString();
-//        String ptype = mSession.getProperty().getProperty()+"";
-        if (!TextUtils.isEmpty(tel)&&!TextUtils.isEmpty(code) ) {
-            AppApi.doLogin(this,invitation,tel,code,this);
+        if (!TextUtils.isEmpty(invitation)) {
+            loginDialog = new LoginDialog(context,
+                    "您正在使用"+invitation+"的邀请码\n"+"确认无误，我们将为您的手机号与次酒楼进行绑定！",this);
+            loginDialog.show();
         }
+
     }
 
     @Override
@@ -376,5 +379,15 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
     }
 
 
+    @Override
+    public void onConfirm() {
+        tel = ev_num.getText().toString();
+        code = ev_code.getText().toString();
+        invitation = invitation_num.getText().toString();
+//        String ptype = mSession.getProperty().getProperty()+"";
+        if (!TextUtils.isEmpty(tel)&&!TextUtils.isEmpty(code) ) {
+            AppApi.doLogin(this,invitation,tel,code,this);
+        }
+    }
 }
 

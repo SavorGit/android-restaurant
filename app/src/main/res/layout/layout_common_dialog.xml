@@ -46,7 +46,7 @@
             android:gravity="center"
             android:text="取消"
             android:textSize="16sp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <View
@@ -61,7 +61,7 @@
             android:padding="10dp"
             android:gravity="center"
             android:textSize="16sp"
-            android:text="我知道了"
+            android:text="绑定"
             android:textColor="@color/head_title_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
