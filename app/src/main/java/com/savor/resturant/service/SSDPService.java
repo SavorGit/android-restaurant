@@ -223,8 +223,7 @@ public class SSDPService extends IntentService {
     public void onDestroy() {
         LogUtils.d("savor:ssdp onDestroy关闭ssdp服务");
         super.onDestroy();
-        if(multicastLock!=null)
-            multicastLock.release();
+        isLooping = false;
         ProjectionManager.getInstance().setLookingSSDP(false);
     }
 }
