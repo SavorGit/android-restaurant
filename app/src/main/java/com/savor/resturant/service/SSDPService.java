@@ -31,8 +31,8 @@ public class SSDPService extends IntentService {
     /**机顶盒组播*/
     private static final String TYPE_SSDP_BOX = "box";
     private static final int PORT_LISTENING = 11900;
+//    private static final String IP_TARGET = "238.255.255.252";
     private static final String IP_TARGET = "238.255.255.252";
-//    private static final String IP_TARGET = "238.255.255.250";
 
     private static final int DATA_RECEIVE_SIZE = 1024;
 
@@ -81,13 +81,13 @@ public class SSDPService extends IntentService {
     }
     private void stopFirstUserServiceDelayed() {
         mHandler.removeMessages(CLOSE_FIRSTUSE_SERVICE);
-        mHandler.sendEmptyMessageDelayed(CLOSE_FIRSTUSE_SERVICE,15*1000);
+        mHandler.sendEmptyMessageDelayed(CLOSE_FIRSTUSE_SERVICE,20*1000);
     }
 
     private void startReceive() {
         WifiManager wm = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
         multicastLock = wm.createMulticastLock("multicastLock");
-        multicastLock.setReferenceCounted(false);
+//        multicastLock.setReferenceCounted(false);
         multicastLock.acquire();
 
         mSocketReceive = null;
@@ -95,7 +95,7 @@ public class SSDPService extends IntentService {
         try {
             mSocketReceive = new MulticastSocket(PORT_LISTENING);
             mSocketReceive.setLoopbackMode(true);
-            mSocketReceive.setTimeToLive(0);
+//            mSocketReceive.setTimeToLive(0);
 //            mSocketReceive.setSoTimeout(1000*12);
             mSocketReceive.joinGroup(InetAddress.getByName(IP_TARGET));
 
@@ -223,6 +223,8 @@ public class SSDPService extends IntentService {
     public void onDestroy() {
         LogUtils.d("savor:ssdp onDestroy关闭ssdp服务");
         super.onDestroy();
+        if(multicastLock!=null)
+            multicastLock.release();
         ProjectionManager.getInstance().setLookingSSDP(false);
     }
 }

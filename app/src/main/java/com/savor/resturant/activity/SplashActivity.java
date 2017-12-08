@@ -409,7 +409,8 @@ public class SplashActivity extends BaseActivity {
                         if(!TextUtils.isEmpty(hotelId)) {
                             List<Object> requsetPool = mSession.getRequsetPool();
                             if(!requsetPool.contains(smallPlatformByGetIp)) {
-                                AppApi.getHotelRoomList(this,localIp,hotelId,this);
+                                String url = "http://"+localIp+":8080";
+                                AppApi.getHotelRoomList(this,url,hotelId,this);
                                 requsetPool.add(smallPlatformByGetIp);
                                 mSession.setRequestPool(requsetPool);
                             }
@@ -439,7 +440,7 @@ public class SplashActivity extends BaseActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startService(intent);
 
-        mHandler.sendEmptyMessageDelayed(MSG_STOP_SSDP,1000*15);
+        mHandler.sendEmptyMessageDelayed(MSG_STOP_SSDP,1000*20);
     }
 
     @Override

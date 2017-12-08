@@ -476,9 +476,9 @@ public class AppApi {
 
     /**获取酒楼包间列表*/
     public static void getHotelRoomList(Context context,String url,String hotelId,ApiRequestListener handler) {
-        url = "http://192.168.1.104:8080";
+//        url = "http://192.168.1.104:8080";
         final HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("hotelId", "60");
+        params.put("hotelId", hotelId);
         new AppServiceOk(context,url+"/small/command/getHotelBox",Action.GET_HOTEL_BOX_JSON,handler,params).get();
 //        new AppServiceOk(context,"http://"+url+":8080/command/getHotelBox",Action.GET_HOTEL_BOX_JSON,handler,params).get();
     }
@@ -506,7 +506,7 @@ public class AppApi {
 
     /**宣传片投屏*/
     public static void adverPro(Context context,String url,String boxMac,String vid,ApiRequestListener handler) {
-        url = "http://192.168.1.104:8080";
+//        url = "http://192.168.1.104:8080";
         final HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("deviceId", STIDUtil.getDeviceId(context));
         params.put("boxMac", boxMac);
@@ -518,7 +518,7 @@ public class AppApi {
 
     /**推荐菜投屏*/
     public static void recommendPro(Context context,String url,String boxMac,String interval,String specialtyId,ApiRequestListener handler) {
-        url = "http://192.168.1.104:8080";
+//        url = "http://192.168.1.104:8080";
         final HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("deviceId", STIDUtil.getDeviceId(context));
         params.put("boxMac", boxMac);
@@ -530,7 +530,7 @@ public class AppApi {
     }
     /**欢迎词投屏*/
     public static void wordPro(Context context,String url,String boxMac,String templateId,String word,ApiRequestListener handler) {
-        url = "http://192.168.1.104:8080";
+//        url = "http://192.168.1.104:8080";
         final HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("deviceId", STIDUtil.getDeviceId(context));
         params.put("boxMac", boxMac);
