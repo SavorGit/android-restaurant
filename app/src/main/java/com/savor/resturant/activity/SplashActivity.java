@@ -503,7 +503,8 @@ public class SplashActivity extends BaseActivity {
                     try {
                         hid = String.valueOf(hotelId);
                     }catch (Exception e) {}
-                    AppApi.getHotelRoomList(SplashActivity.this,serverIp,hid,SplashActivity.this);
+                    String url = "http://"+serverIp+":8080";
+                    AppApi.getHotelRoomList(SplashActivity.this,url,hid,SplashActivity.this);
                     requsetPool.add(smallPlatInfoBySSDP);
                     mSession.setRequestPool(requsetPool);
                 }
@@ -511,7 +512,8 @@ public class SplashActivity extends BaseActivity {
                 if(tvBoxSSDPInfo!=null&&!requsetPool.contains(tvBoxSSDPInfo)) {
                     String serverIp = tvBoxSSDPInfo.getServerIp();
                     String hotelId = tvBoxSSDPInfo.getHotelId();
-                    AppApi.getHotelRoomList(SplashActivity.this,serverIp,hotelId,SplashActivity.this);
+                    String url = "http://"+serverIp+":8080";
+                    AppApi.getHotelRoomList(SplashActivity.this,url,hotelId,SplashActivity.this);
                     requsetPool.add(tvBoxSSDPInfo);
                     mSession.setRequestPool(requsetPool);
                 }
