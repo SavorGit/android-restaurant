@@ -61,7 +61,7 @@
             android:padding="10dp"
             android:gravity="center"
             android:textSize="16sp"
-            android:text="绑定"
+            android:text="确定"
             android:textColor="@color/head_title_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
