@@ -21,12 +21,46 @@
         android:textColorHint="#999999"
         android:textColor="#666666"
         android:layout_height="80dp" />
+
+    <RelativeLayout
+        android:id="@+id/text_la"
+        android:layout_width="match_parent"
+        android:layout_below="@id/greeting"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_height="20dp">
+        <TextView
+            android:id="@+id/text_inter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_centerInParent="true"
+            android:textColor="@color/color_333333"
+            android:text="快捷输入"
+            />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:src="@color/color_333333"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="6dp"
+            android:layout_toLeftOf="@id/text_inter"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:src="@color/color_333333"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="6dp"
+            android:layout_toRightOf="@id/text_inter"/>
+    </RelativeLayout>
+
     <TextView
         android:id="@+id/t1"
         android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/greeting"
+        android:layout_below="@id/text_la"
         android:background="@drawable/bg_exit"
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
