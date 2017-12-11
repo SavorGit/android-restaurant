@@ -92,12 +92,13 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
 
     private void getData() {
         showLoadingLayout();
+        int hotelid = mSession.getHotelid();
         switch (currentType) {
             case TYPE_ADVERT:
-                AppApi.getAdvertList(this,"60",this);
+                AppApi.getAdvertList(this,hotelid+"",this);
                 break;
             case TYPE_RECOMMEND_FOODS:
-                AppApi.getRecommendFoods(this,"60",this);
+                AppApi.getRecommendFoods(this,hotelid+"",this);
                 break;
         }
 

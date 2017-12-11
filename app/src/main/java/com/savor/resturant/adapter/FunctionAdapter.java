@@ -58,11 +58,11 @@ public class FunctionAdapter extends RecyclerView.Adapter<FunctionAdapter.Functi
             @Override
             public void onClick(View v) {
                 int hotelid = Session.get(mContext).getHotelid();
-//                if(hotelid<=0) {
-//                    if(listener!=null) {
-//                        listener.onNoHotelClick();
-//                    }
-//                }else {
+                if(hotelid<=0) {
+                    if(listener!=null) {
+                        listener.onNoHotelClick();
+                    }
+                }else {
                     Intent intent;
                     switch (type) {
                         case TYPE_RECOMMAND_FOODS:
@@ -90,7 +90,7 @@ public class FunctionAdapter extends RecyclerView.Adapter<FunctionAdapter.Functi
                             mContext.startActivity(intent);
                             break;
                     }
-//                }
+                }
             }
         });
     }
