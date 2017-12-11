@@ -195,7 +195,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         FunctionItem advertItem = new FunctionItem();
         advertItem.setContent("宣传片");
-        advertItem.setResId(R.drawable.ico_advert);
+        advertItem.setResId(R.drawable.ico_xcp);
         advertItem.setType(FunctionItem.FunctionType.TYPE_ADVERT);
         mList.add(advertItem);
 

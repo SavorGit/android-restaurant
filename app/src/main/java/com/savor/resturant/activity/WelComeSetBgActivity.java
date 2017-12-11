@@ -28,6 +28,7 @@ import com.savor.resturant.bean.SmallPlatformByGetIp;
 import com.savor.resturant.bean.TvBoxSSDPInfo;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.ResponseErrorMessage;
+import com.savor.resturant.widget.LoadingDialog;
 import com.savor.resturant.widget.decoration.SpacesItemDecoration;
 
 import java.util.List;
@@ -50,6 +51,7 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
     private RoomInfo currentRoom;
     private boolean isSelectRommState;
     private int erroCount;
+    private LoadingDialog mLoadingDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -192,6 +194,7 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
         if(smallPlatformByGetIp!=null&&!TextUtils.isEmpty(smallPlatformByGetIp.getLocalIp())) {
             String localIp = smallPlatformByGetIp.getLocalIp();
             String url = "http://"+localIp+":8080";
+            showLoadingLayout();
             AppApi.wordPro(this,url,currentRoom.getBox_mac(),templateId,keyWord,this);
         }else {
             erroCount++;
@@ -201,6 +204,7 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
         if(smallPlatInfoBySSDP!=null&&!TextUtils.isEmpty(smallPlatInfoBySSDP.getServerIp())) {
             String serverIp = smallPlatInfoBySSDP.getServerIp();
             String url = "http://"+serverIp+":8080";
+            showLoadingLayout();
             AppApi.wordPro(this,url,currentRoom.getBox_mac(),templateId,keyWord,this);
         }else {
             erroCount++;
@@ -210,6 +214,7 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
         if(tvBoxSSDPInfo!=null&&!TextUtils.isEmpty(tvBoxSSDPInfo.getServerIp())) {
             String serverIp = tvBoxSSDPInfo.getServerIp();
             String url = "http://"+serverIp+":8080";
+            showLoadingLayout();
             AppApi.wordPro(this,url,currentRoom.getBox_mac(),templateId,keyWord,this);
         }else {
             erroCount++;
@@ -317,6 +322,7 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onSuccess(AppApi.Action method, Object obj) {
+        hideLoadingLayout();
         switch (method) {
             case GET_WORD_PRO_JSON:
                 ShowMessage.showToast(this,"投屏成功！");
@@ -327,7 +333,7 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onError(AppApi.Action method, Object obj) {
-
+        hideLoadingLayout();
         switch (method) {
             case GET_RECOMMEND_PRO_JSON:
                 erroCount++;
@@ -368,6 +374,21 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
     private void initRoomNotSelected() {
         ShowMessage.showToast(this, "请选择包间");
         showRoomList();
+    }
+
+    @Override
+    public void showLoadingLayout() {
+        if(mLoadingDialog == null) {
+            mLoadingDialog = new LoadingDialog(this);
+        }
+        mLoadingDialog.show();
+    }
+
+    @Override
+    public void hideLoadingLayout() {
+        if(mLoadingDialog!=null) {
+            mLoadingDialog.dismiss();
+        }
     }
 }
 
