@@ -294,23 +294,27 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
        for(int i = 0;i<data.size();i++) {
            RecommendFoodAdvert foodAdvert = data.get(i);
            if(i==data.size()-1) {
-               switch (currentType) {
-                   case TYPE_RECOMMEND_FOODS:
-                       sb.append(foodAdvert.getFood_id());
-                       break;
-                   case TYPE_ADVERT:
-                       sb.append(foodAdvert.getId());
-                       break;
+               if(foodAdvert.isSelected()) {
+                   switch (currentType) {
+                       case TYPE_RECOMMEND_FOODS:
+                           sb.append(foodAdvert.getFood_id());
+                           break;
+                       case TYPE_ADVERT:
+                           sb.append(foodAdvert.getId());
+                           break;
+                   }
                }
 
            }else {
-               switch (currentType) {
-                   case TYPE_RECOMMEND_FOODS:
-                       sb.append(foodAdvert.getFood_id()+",");
-                       break;
-                   case TYPE_ADVERT:
-                       sb.append(foodAdvert.getId()+",");
-                       break;
+               if(foodAdvert.isSelected()) {
+                   switch (currentType) {
+                       case TYPE_RECOMMEND_FOODS:
+                           sb.append(foodAdvert.getFood_id()+",");
+                           break;
+                       case TYPE_ADVERT:
+                           sb.append(foodAdvert.getId()+",");
+                           break;
+                   }
                }
            }
        }
@@ -453,7 +457,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
             case GET_RECOMMEND_PRO_JSON:
             case GET_ADVERT_PRO_JSON:
                 hideLoadingLayout();
-                showToast("投屏成功！");
+                ShowMessage.showToast(this,"投屏成功！");
                 break;
             case GET_ADVERT_JSON:
             case GET_RECOMMEND_FOODS_JSON:
