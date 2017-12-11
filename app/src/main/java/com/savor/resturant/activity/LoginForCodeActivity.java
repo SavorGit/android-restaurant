@@ -96,6 +96,7 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
 
             if (!TextUtils.isEmpty(invitation)&&!TextUtils.isEmpty(tel)) {
                 ev_code.setVisibility(View.GONE);
+                tv_code.setVisibility(View.GONE);
                 AppApi.doLogin(this,invitation,tel,code,this);
             }
         }
@@ -304,11 +305,13 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
 
                     if (!TextUtils.isEmpty(invitation)&&!TextUtils.isEmpty(tel)) {
                         ev_code.setVisibility(View.GONE);
+                        tv_code.setVisibility(View.GONE);
                     }
                 }else {
                     ev_num.setClickable(true);
                     invitation_num.setClickable(true);
                     ev_code.setVisibility(View.VISIBLE);
+                    tv_code.setVisibility(View.VISIBLE);
                     ev_num.setVisibility(View.VISIBLE);
                     invitation_num.setVisibility(View.VISIBLE);
                 }
