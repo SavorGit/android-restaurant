@@ -119,7 +119,7 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
                 ts.setText("抢投提示");
             }
         }else {
-            mDividerView.setVisibility(View.GONE);
+            mDividerView.setVisibility(View.VISIBLE);
             mCancelBtn.setVisibility(View.GONE);
         }
         if (!TextUtils.isEmpty(confirm)) {
