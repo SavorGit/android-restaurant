@@ -121,17 +121,17 @@ public class CompressImage {
         // isSampleSize是表示对图片的缩放程度，比如值为2图片的宽度和高度都变为以前的1/2
         opt.inSampleSize = 1;
         // 根据屏的大小和图片大小计算出缩放比例
-        if (picWidth > picHeight) {
-            if (picWidth > screenWidth)
-                opt.inSampleSize = picWidth / screenWidth;
-        } else {
-            if (picHeight > screenHeight)
-                opt.inSampleSize = picHeight / screenHeight;
-        }
+//        if (picWidth > picHeight) {
+//            if (picWidth > screenWidth)
+//                opt.inSampleSize = picWidth / screenWidth;
+//        } else {
+//            if (picHeight > screenHeight)
+//                opt.inSampleSize = picHeight / screenHeight;
+//        }
         if(isSmall)
-            opt.inSampleSize*=9;
+            opt.inSampleSize*=4;
         else {
-            opt.inSampleSize*= 2;
+            opt.inSampleSize*= 1;
         }
         // 这次再真正地生成一个有像素的，经过缩放了的bitmap
         opt.inJustDecodeBounds = false;

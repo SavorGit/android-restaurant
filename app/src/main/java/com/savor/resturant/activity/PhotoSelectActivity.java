@@ -388,6 +388,7 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
     private void saveSlide() {
         SlideManager instance = SlideManager.getInstance(slideType);
         for (MediaInfo pic : selectedImgList) {
+            pic.setChecked(false);
             //添加图片至该幻灯片组
             slideInfo.imageList.add(pic);
         }
