@@ -65,7 +65,7 @@ public class WelComeSetTextActivity extends BaseActivity implements View.OnClick
         tv_center.setText("欢迎词");
         tv_right.setText("下一步");
         tv_right.setVisibility(View.VISIBLE);
-        tv_right.setTextColor(context.getResources().getColor(R.color.color_ff783e));
+        tv_right.setTextColor(context.getResources().getColor(R.color.color_3e000000));
     }
 
     @Override
@@ -76,9 +76,43 @@ public class WelComeSetTextActivity extends BaseActivity implements View.OnClick
         t2.setOnClickListener(this);
         t3.setOnClickListener(this);
         t4.setOnClickListener(this);
+        greeting.addTextChangedListener(new TextWatcher(){
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+                //s:变化后的所有字符
+
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // TODO Auto-generated method stub
+                //s:变化前的所有字符； start:字符开始的位置； count:变化前的总字节数；after:变化后的字节数
+                //Toast.makeText(getApplicationContext(), "变化前:"+s+";"+start+";"+count+";"+after, Toast.LENGTH_SHORT).show();
+            }
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                // TODO Auto-generated method stub
+                //S：变化后的所有字符；start：字符起始的位置；before: 变化之前的总字节数；count:变化后的字节数
+                //Toast.makeText(getApplicationContext(), "变化后:"+s+";"+start+";"+before+";"+count, Toast.LENGTH_SHORT).show();
+                //setCodeView();
+                checkNextBut();
+            }
+
+        });
+
 
     }
 
+
+    private void checkNextBut(){
+        String word = greeting.getText().toString();
+        if (!TextUtils.isEmpty(word)) {
+            tv_right.setTextColor(context.getResources().getColor(R.color.color_ff783e));
+            tv_right.setClickable(true);
+        }else {
+            tv_right.setTextColor(context.getResources().getColor(R.color.color_3e000000));
+            tv_right.setClickable(false);
+        }
+    }
 
     @Override
     public void onClick(View v) {
