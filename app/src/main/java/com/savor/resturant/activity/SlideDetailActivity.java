@@ -519,6 +519,9 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     }
 
     private void hideRoomList() {
+        // 清楚房间选择记录
+        resetRoomList();
+
         back.setImageResource(R.drawable.back);
         title.setText(slideInfo.groupName);
         editBar.setVisibility(View.VISIBLE);
@@ -1128,10 +1131,10 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                             String copyFileUrl = fileUrl;
                             switch (quality) {
                                 case SlideSettingsDialog.QUALITY_HIGH:
-                                    copyFileUrl = fileUrl;
+                                    copyFileUrl = CompressImage.compressAndSaveBitmap(this, fileUrl, realName, false);
                                     break;
                                 case SlideSettingsDialog.QUALITY_LOW:
-                                    copyFileUrl = CompressImage.compressAndSaveBitmap(this, fileUrl, realName, false);
+                                    copyFileUrl = CompressImage.compressAndSaveBitmap(this, fileUrl, realName, true);
                                     break;
                             }
 
@@ -1421,6 +1424,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
             if(file.exists())
                 file.delete();
         }
+        mProgressBarDialog.loading("0%");
         UtilityAdapter.FFmpegKill(FFMPEG_FLAG);
         OkHttpUtils.getInstance().getOkHttpClient().dispatcher().cancelAll();
     }
