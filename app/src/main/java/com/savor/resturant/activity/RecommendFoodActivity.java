@@ -222,7 +222,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
                 proAdvert(vid, smallPlatformByGetIp, smallPlatInfoBySSDP, tvBoxSSDPInfo);
                 break;
             case TYPE_RECOMMEND_FOODS:
-                proRecmmend(vid, smallPlatformByGetIp, smallPlatInfoBySSDP, tvBoxSSDPInfo);
+                proRecmmend(vid, smallPlatformByGetIp, smallPlatInfoBySSDP, tvBoxSSDPInfo,30+"");
 //                AppApi.recommendPro(this,"",currentRoom.getBox_mac(),1000*30+"",vid,this);
                 break;
         }
@@ -259,13 +259,13 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
         }
     }
 
-    private void proRecmmend(String vid, SmallPlatformByGetIp smallPlatformByGetIp, SmallPlatInfoBySSDP smallPlatInfoBySSDP, TvBoxSSDPInfo tvBoxSSDPInfo) {
+    private void proRecmmend(String vid, SmallPlatformByGetIp smallPlatformByGetIp, SmallPlatInfoBySSDP smallPlatInfoBySSDP, TvBoxSSDPInfo tvBoxSSDPInfo,String time) {
         erroCount = 0;
         // 1.通过getIp获取的小平台地址进行投屏
         if(smallPlatformByGetIp!=null&&!TextUtils.isEmpty(smallPlatformByGetIp.getLocalIp())) {
             String localIp = smallPlatformByGetIp.getLocalIp();
             String url = "http://"+localIp+":8080";
-            AppApi.recommendPro(this,url,currentRoom.getBox_mac(),1000*30+"",vid,this);
+            AppApi.recommendPro(this,url,currentRoom.getBox_mac(),time,vid,this);
         }else {
             erroCount++;
         }
@@ -274,7 +274,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
         if(smallPlatInfoBySSDP!=null&&!TextUtils.isEmpty(smallPlatInfoBySSDP.getServerIp())) {
             String serverIp = smallPlatInfoBySSDP.getServerIp();
             String url = "http://"+serverIp+":8080";
-            AppApi.recommendPro(this,url,currentRoom.getBox_mac(),1000*30+"",vid,this);
+            AppApi.recommendPro(this,url,currentRoom.getBox_mac(),time,vid,this);
         }else {
             erroCount++;
         }
@@ -283,7 +283,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
         if(tvBoxSSDPInfo!=null&&!TextUtils.isEmpty(tvBoxSSDPInfo.getServerIp())) {
             String serverIp = tvBoxSSDPInfo.getServerIp();
             String url = "http://"+serverIp+":8080";
-            AppApi.recommendPro(this,url,currentRoom.getBox_mac(),1000*30+"",vid,this);
+            AppApi.recommendPro(this,url,currentRoom.getBox_mac(),time,vid,this);
         }else {
             erroCount++;
         }
@@ -410,7 +410,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
         TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
         switch (currentType) {
             case TYPE_RECOMMEND_FOODS:
-                proRecmmend(currentFoodAdvert.getFood_id(),smallPlatformByGetIp,smallPlatInfoBySSDP,tvBoxSSDPInfo);
+                proRecmmend(currentFoodAdvert.getFood_id(),smallPlatformByGetIp,smallPlatInfoBySSDP,tvBoxSSDPInfo,60*2+"");
 //                AppApi.recommendPro(this, "", currentRoom.getBox_mac(), 1000 * 60 * 2 + "", currentFoodAdvert.getFood_id(), this);
                 break;
             case TYPE_ADVERT:
