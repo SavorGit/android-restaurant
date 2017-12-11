@@ -3,6 +3,8 @@ package com.savor.resturant.widget;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.view.KeyEvent;
 import android.widget.TextView;
 
 import com.savor.resturant.R;
@@ -34,4 +36,11 @@ public class LoadingDialog extends Dialog {
         setCancelable(false);
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            dismiss();
+        }
+        return true;
+    }
 }
