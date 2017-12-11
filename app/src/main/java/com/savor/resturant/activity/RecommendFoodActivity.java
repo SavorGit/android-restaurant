@@ -132,11 +132,11 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mBackBtn.getLayoutParams();
         layoutParams.setMargins(DensityUtil.dip2px(this,15),0,0,0);
 
-        RoomInfo bindRoom = mSession.getBindRoom();
-        if(bindRoom!=null&&!TextUtils.isEmpty(bindRoom.getBox_name())) {
-            mTitleTv.setText(bindRoom.getBox_name());
-        }
-        currentRoom = bindRoom;
+//        RoomInfo bindRoom = mSession.getBindRoom();
+//        if(bindRoom!=null&&!TextUtils.isEmpty(bindRoom.getBox_name())) {
+//            mTitleTv.setText(bindRoom.getBox_name());
+//        }
+//        currentRoom = bindRoom;
     }
 
     private void initContentList() {
