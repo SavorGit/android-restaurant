@@ -46,6 +46,13 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
         this.mCancelListener = cancelListener;
         this.confirm = confirm;
 
+        if(mCancelListener!=null) {
+            mDividerView.setVisibility(View.VISIBLE);
+            mCancelBtn.setVisibility(View.VISIBLE);
+        }else {
+            mDividerView.setVisibility(View.GONE);
+            mCancelBtn.setVisibility(View.GONE);
+        }
     }
     public CommonDialog(Context context, String content,OnConfirmListener confirmListener,OnCancelListener cancelListener,String confirm,boolean iscolor) {
         super(context, R.style.loading_dialog);
@@ -54,6 +61,13 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
         this.mCancelListener = cancelListener;
         this.confirm = confirm;
         this.iscolor = iscolor;
+        if(mCancelListener!=null) {
+            mDividerView.setVisibility(View.VISIBLE);
+            mCancelBtn.setVisibility(View.VISIBLE);
+        }else {
+            mDividerView.setVisibility(View.GONE);
+            mCancelBtn.setVisibility(View.GONE);
+        }
 
     }
 
@@ -64,6 +78,9 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
         if(mCancelListener!=null) {
             mDividerView.setVisibility(View.VISIBLE);
             mCancelBtn.setVisibility(View.VISIBLE);
+        }else {
+            mDividerView.setVisibility(View.GONE);
+            mCancelBtn.setVisibility(View.GONE);
         }
     }
 
@@ -101,6 +118,9 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
                 mCancelBtn.setTextColor(getContext().getResources().getColor(R.color.head_title_text));
                 ts.setText("抢投提示");
             }
+        }else {
+            mDividerView.setVisibility(View.GONE);
+            mCancelBtn.setVisibility(View.GONE);
         }
         if (!TextUtils.isEmpty(confirm)) {
             mConfirmBtn.setText(confirm);
