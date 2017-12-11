@@ -277,7 +277,9 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mProgressBarDialog.updatePercent("正在加载第"+(index+1)+"个视频", finalProgress,slideType);
+                                    if(mProgressBarDialog!=null) {
+                                        mProgressBarDialog.updatePercent("正在加载第"+(index+1)+"个视频", finalProgress,slideType);
+                                    }
                                 }
                             });
                         }
@@ -1248,10 +1250,11 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                     String error_msg = message.getMessage();
                     Message msg = Message.obtain();
                     if (code == 4) {
-                        msg.what = FORCE_MSG;
-                        msg.obj = error_msg;
-                        mHandler.sendMessage(msg);
-                    } else {
+//                        msg.what = FORCE_MSG;
+//                        msg.obj = error_msg;
+//                        mHandler.sendMessage(msg);
+//                    } else {
+                        error_msg = "其他用户正在投屏，请稍后再试";
                         msg.what = TOAST_ERROR_MSG;
                         msg.obj = error_msg;
                         mHandler.sendMessage(msg);
