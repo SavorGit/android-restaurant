@@ -2,7 +2,9 @@ package com.savor.resturant.widget;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,6 +18,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.common.api.utils.DensityUtil;
+import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
 import com.savor.resturant.utils.RecordUtils;
 import com.savor.resturant.utils.SlideManager;
@@ -263,6 +266,16 @@ public class SlideSettingsDialog implements OnClickListener {
             btn_neg.setVisibility(View.VISIBLE);
             btn_neg.setBackgroundResource(R.drawable.alertdialog_single_selector);
         }
+
+        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    dismiss();
+                }
+                return true;
+            }
+        });
     }
 
     public void show() {

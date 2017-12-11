@@ -1249,16 +1249,16 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                     int code = message.getCode();
                     String error_msg = message.getMessage();
                     Message msg = Message.obtain();
-                    if (code == 4) {
+//                    if (code == 4) {
 //                        msg.what = FORCE_MSG;
 //                        msg.obj = error_msg;
 //                        mHandler.sendMessage(msg);
 //                    } else {
-                        error_msg = "其他用户正在投屏，请稍后再试";
+//                        error_msg = "用户正在投屏，请稍后再试";
                         msg.what = TOAST_ERROR_MSG;
                         msg.obj = error_msg;
                         mHandler.sendMessage(msg);
-                    }
+//                    }
                 } else if (obj == AppApi.ERROR_TIMEOUT) {
                     mHandler.sendEmptyMessage(UPLOAD_TIMEOUT);
                 }
