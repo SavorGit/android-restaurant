@@ -18,7 +18,7 @@
         android:paddingTop="3dp"
         android:paddingLeft="3dp"
         android:textSize="15sp"
-        android:maxEms="18"
+        android:maxLength="18"
         android:textColorHint="#999999"
         android:textColor="#666666"
         android:layout_height="80dp" />
