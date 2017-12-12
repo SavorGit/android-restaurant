@@ -1,6 +1,8 @@
 package com.savor.resturant.activity;
 
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextPaint;
@@ -61,6 +63,8 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
     private LoadingDialog mLoadingDialog;
     /**投屏发送3个请求如果错误3次认为请求失败*/
     private int erroCount;
+    private ConstraintLayout mEmptyLayout;
+    private TextView mEmptyHintTv;
 
 
     /**
@@ -106,6 +110,8 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void getViews() {
+        mEmptyLayout = (ConstraintLayout) findViewById(R.id.empty_layout);
+        mEmptyHintTv = (TextView) findViewById(R.id.tv_hint);
         mBackBtn = (ImageView) findViewById(R.id.iv_left);
         mTitleTv = (TextView) findViewById(R.id.tv_center);
         mProBtn = (TextView) findViewById(R.id.tv_pro);
@@ -550,7 +556,42 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
                     showToast("请求超时");
                 }
                 break;
+            case GET_ADVERT_JSON:
+                hideLoadingLayout();
+                if(obj instanceof ResponseErrorMessage) {
+                    ResponseErrorMessage message = (ResponseErrorMessage) obj;
+                    int code = message.getCode();
+                    String msg = message.getMessage();
+                    if(code == 60013) {
+                        mEmptyLayout.setVisibility(View.VISIBLE);
+                        mEmptyHintTv.setText(msg);
+                    }else {
+                        showToast(msg);
+                    }
+
+                }else if(obj == AppApi.ERROR_TIMEOUT) {
+                    showToast("请求超时");
+                }
+                break;
+            case GET_RECOMMEND_FOODS_JSON:
+                hideLoadingLayout();
+                if(obj instanceof ResponseErrorMessage) {
+                    ResponseErrorMessage message = (ResponseErrorMessage) obj;
+                    int code = message.getCode();
+                    String msg = message.getMessage();
+                    if(code == 60007) {
+                        mEmptyLayout.setVisibility(View.VISIBLE);
+                        mEmptyHintTv.setText(msg);
+                    }else {
+                        showToast(msg);
+                    }
+
+                }else if(obj == AppApi.ERROR_TIMEOUT) {
+                    showToast("请求超时");
+                }
+                break;
                 default:
+                    hideLoadingLayout();
                     super.onError(method,obj);
                     break;
         }
