@@ -132,11 +132,11 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mBackBtn.getLayoutParams();
         layoutParams.setMargins(DensityUtil.dip2px(this,15),0,0,0);
 
-        RoomInfo bindRoom = mSession.getBindRoom();
-        if(bindRoom!=null&&!TextUtils.isEmpty(bindRoom.getBox_name())) {
-            mTitleTv.setText(bindRoom.getBox_name());
-        }
-        currentRoom = bindRoom;
+//        RoomInfo bindRoom = mSession.getBindRoom();
+//        if(bindRoom!=null&&!TextUtils.isEmpty(bindRoom.getBox_name())) {
+//            mTitleTv.setText(bindRoom.getBox_name());
+//        }
+//        currentRoom = bindRoom;
     }
 
     private void initContentList() {
@@ -222,7 +222,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
                 proAdvert(vid, smallPlatformByGetIp, smallPlatInfoBySSDP, tvBoxSSDPInfo);
                 break;
             case TYPE_RECOMMEND_FOODS:
-                proRecmmend(vid, smallPlatformByGetIp, smallPlatInfoBySSDP, tvBoxSSDPInfo);
+                proRecmmend(vid, smallPlatformByGetIp, smallPlatInfoBySSDP, tvBoxSSDPInfo,30+"");
 //                AppApi.recommendPro(this,"",currentRoom.getBox_mac(),1000*30+"",vid,this);
                 break;
         }
@@ -259,13 +259,13 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
         }
     }
 
-    private void proRecmmend(String vid, SmallPlatformByGetIp smallPlatformByGetIp, SmallPlatInfoBySSDP smallPlatInfoBySSDP, TvBoxSSDPInfo tvBoxSSDPInfo) {
+    private void proRecmmend(String vid, SmallPlatformByGetIp smallPlatformByGetIp, SmallPlatInfoBySSDP smallPlatInfoBySSDP, TvBoxSSDPInfo tvBoxSSDPInfo,String time) {
         erroCount = 0;
         // 1.通过getIp获取的小平台地址进行投屏
         if(smallPlatformByGetIp!=null&&!TextUtils.isEmpty(smallPlatformByGetIp.getLocalIp())) {
             String localIp = smallPlatformByGetIp.getLocalIp();
             String url = "http://"+localIp+":8080";
-            AppApi.recommendPro(this,url,currentRoom.getBox_mac(),1000*30+"",vid,this);
+            AppApi.recommendPro(this,url,currentRoom.getBox_mac(),time,vid,this);
         }else {
             erroCount++;
         }
@@ -274,7 +274,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
         if(smallPlatInfoBySSDP!=null&&!TextUtils.isEmpty(smallPlatInfoBySSDP.getServerIp())) {
             String serverIp = smallPlatInfoBySSDP.getServerIp();
             String url = "http://"+serverIp+":8080";
-            AppApi.recommendPro(this,url,currentRoom.getBox_mac(),1000*30+"",vid,this);
+            AppApi.recommendPro(this,url,currentRoom.getBox_mac(),time,vid,this);
         }else {
             erroCount++;
         }
@@ -283,7 +283,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
         if(tvBoxSSDPInfo!=null&&!TextUtils.isEmpty(tvBoxSSDPInfo.getServerIp())) {
             String serverIp = tvBoxSSDPInfo.getServerIp();
             String url = "http://"+serverIp+":8080";
-            AppApi.recommendPro(this,url,currentRoom.getBox_mac(),1000*30+"",vid,this);
+            AppApi.recommendPro(this,url,currentRoom.getBox_mac(),time,vid,this);
         }else {
             erroCount++;
         }
@@ -294,23 +294,27 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
        for(int i = 0;i<data.size();i++) {
            RecommendFoodAdvert foodAdvert = data.get(i);
            if(i==data.size()-1) {
-               switch (currentType) {
-                   case TYPE_RECOMMEND_FOODS:
-                       sb.append(foodAdvert.getFood_id());
-                       break;
-                   case TYPE_ADVERT:
-                       sb.append(foodAdvert.getId());
-                       break;
+               if(foodAdvert.isSelected()) {
+                   switch (currentType) {
+                       case TYPE_RECOMMEND_FOODS:
+                           sb.append(foodAdvert.getFood_id());
+                           break;
+                       case TYPE_ADVERT:
+                           sb.append(foodAdvert.getId());
+                           break;
+                   }
                }
 
            }else {
-               switch (currentType) {
-                   case TYPE_RECOMMEND_FOODS:
-                       sb.append(foodAdvert.getFood_id()+",");
-                       break;
-                   case TYPE_ADVERT:
-                       sb.append(foodAdvert.getId()+",");
-                       break;
+               if(foodAdvert.isSelected()) {
+                   switch (currentType) {
+                       case TYPE_RECOMMEND_FOODS:
+                           sb.append(foodAdvert.getFood_id()+",");
+                           break;
+                       case TYPE_ADVERT:
+                           sb.append(foodAdvert.getId()+",");
+                           break;
+                   }
                }
            }
        }
@@ -410,7 +414,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
         TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
         switch (currentType) {
             case TYPE_RECOMMEND_FOODS:
-                proRecmmend(currentFoodAdvert.getFood_id(),smallPlatformByGetIp,smallPlatInfoBySSDP,tvBoxSSDPInfo);
+                proRecmmend(currentFoodAdvert.getFood_id(),smallPlatformByGetIp,smallPlatInfoBySSDP,tvBoxSSDPInfo,60*2+"");
 //                AppApi.recommendPro(this, "", currentRoom.getBox_mac(), 1000 * 60 * 2 + "", currentFoodAdvert.getFood_id(), this);
                 break;
             case TYPE_ADVERT:
@@ -453,7 +457,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
             case GET_RECOMMEND_PRO_JSON:
             case GET_ADVERT_PRO_JSON:
                 hideLoadingLayout();
-                showToast("投屏成功！");
+                ShowMessage.showToast(this,"投屏成功！");
                 break;
             case GET_ADVERT_JSON:
             case GET_RECOMMEND_FOODS_JSON:

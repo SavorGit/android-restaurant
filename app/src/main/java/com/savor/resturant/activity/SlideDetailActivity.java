@@ -1442,8 +1442,12 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         if(!TextUtils.isEmpty(wifiName)&&wifiName.equals(box_name)&&!TextUtils.isEmpty(localIp)&&WifiUtil.isInSameNetwork(localIp,box_ip)) {
             showSlideSettings();
         }else {
-            needLinkWifi = box_name;
-            showChangeWifiDialog(box_name);
+            if(TextUtils.isEmpty(box_ip)) {
+                showToast("与盒子失去联系");
+            }else {
+                needLinkWifi = box_name;
+                showChangeWifiDialog(box_name);
+            }
         }
     }
 

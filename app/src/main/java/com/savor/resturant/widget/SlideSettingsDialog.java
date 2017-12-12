@@ -61,6 +61,7 @@ public class SlideSettingsDialog implements OnClickListener {
     private SeekBar mSeekBar;
     private LinearLayout mImageLoopTimeLayout;
     private RadioGroup mQualityRG;
+    private TextView mQualityHint;
 
     public SlideSettingsDialog(Context context, SlideManager.SlideType slideType) {
         this.context = context;
@@ -91,6 +92,7 @@ public class SlideSettingsDialog implements OnClickListener {
         mThreeSecTv = (TextView) view.findViewById(R.id.single_time_3s);
         mFiveSecTv = (TextView) view.findViewById(R.id.single_time_5s);
         mEightSecTv = (TextView) view.findViewById(R.id.single_time_8s);
+        mQualityHint = (TextView) view.findViewById(R.id.tv_qulity_hint);
         dialog = new Dialog(context, R.style.AlertDialogStyle);
         dialog.setContentView(view);
 
@@ -274,6 +276,20 @@ public class SlideSettingsDialog implements OnClickListener {
                     dismiss();
                 }
                 return true;
+            }
+        });
+
+        mQualityRG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_high_quality:
+                        mQualityHint.setText("(高质量投屏，速度较慢)");
+                        break;
+                    case R.id.rb_low_quality:
+                        mQualityHint.setText("(投屏质量一般，速度较快)");
+                        break;
+                }
             }
         });
     }

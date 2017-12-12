@@ -32,6 +32,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tv_qulity_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="(高质量投屏，速度较慢)"
