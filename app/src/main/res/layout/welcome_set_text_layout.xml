@@ -20,7 +20,7 @@
         android:textSize="15sp"
         android:maxLength="18"
         android:textColorHint="#999999"
-        android:textColor="#666666"
+        android:textColor="@color/black"
         android:layout_height="80dp" />
 
     <RelativeLayout
