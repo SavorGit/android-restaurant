@@ -108,6 +108,9 @@ public class RecommendFoodAdapter extends RecyclerView.Adapter<RecommendFoodAdap
                 }
             }
         });
+
+        boolean selected = recommendFoodAdvert.isSelected();
+        holder.cb_select.setChecked(selected);
     }
 
     @Override

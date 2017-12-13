@@ -2,7 +2,6 @@ package com.savor.resturant.activity;
 
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextPaint;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,7 +19,10 @@ import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.RecommendFoodAdapter;
 import com.savor.resturant.adapter.RoomListAdapter;
+import com.savor.resturant.bean.AdvertProHistory;
+import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.RecommendFoodAdvert;
+import com.savor.resturant.bean.RecommendProHistory;
 import com.savor.resturant.bean.RoomInfo;
 import com.savor.resturant.bean.SmallPlatInfoBySSDP;
 import com.savor.resturant.bean.SmallPlatformByGetIp;
@@ -32,6 +33,7 @@ import com.savor.resturant.widget.LoadingDialog;
 import com.savor.resturant.widget.decoration.SpacesItemDecoration;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -218,7 +220,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
             return;
         }
         // 2.开始投屏
-        String vid = getSelectedList(mRecommendAdapter.getData());
+        String vid = getSelectedListIds(mRecommendAdapter.getData());
         SmallPlatformByGetIp smallPlatformByGetIp = mSession.getmSmallPlatInfoByIp();
         SmallPlatInfoBySSDP smallPlatInfoBySSDP = mSession.getSmallPlatInfoBySSDP();
         TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
@@ -295,7 +297,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
         }
     }
 
-    private String getSelectedList(List<RecommendFoodAdvert> data) {
+    private String getSelectedListIds(List<RecommendFoodAdvert> data) {
        StringBuilder sb = new StringBuilder();
        for(int i = 0;i<data.size();i++) {
            RecommendFoodAdvert foodAdvert = data.get(i);
@@ -326,6 +328,18 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
        }
 
         return sb.toString();
+    }
+
+    private List<RecommendFoodAdvert> getSelectedList(List<RecommendFoodAdvert> data) {
+        List<RecommendFoodAdvert> temp = new ArrayList<>();
+        for(int i = 0;i<data.size();i++) {
+            RecommendFoodAdvert foodAdvert = data.get(i);
+            if(foodAdvert.isSelected()) {
+                temp.add(foodAdvert);
+            }
+        }
+
+        return temp;
     }
 
     private void hideRommList() {
@@ -459,17 +473,91 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void onSuccess(AppApi.Action method, Object obj) {
+        HotelBean hotelBean  = null;
         switch (method) {
             case GET_RECOMMEND_PRO_JSON:
             case GET_ADVERT_PRO_JSON:
                 hideLoadingLayout();
+                List<RecommendFoodAdvert> data = mRecommendAdapter.getData();
+                List<RecommendFoodAdvert> selectedList = getSelectedList(data);
+                hotelBean = mSession.getHotelBean();
+                if(currentProType == TYPE_PRO_MULTI) {
+                    switch (currentType) {
+                        case TYPE_ADVERT:
+                            AdvertProHistory advertProHistory = new AdvertProHistory();
+                            advertProHistory.setAdvertList(selectedList);
+                            advertProHistory.setHotelBean(hotelBean);
+                            mSession.setAdvertHistory(advertProHistory);
+                            break;
+                        case TYPE_RECOMMEND_FOODS:
+                            RecommendProHistory recommendProHistory = new RecommendProHistory();
+                            recommendProHistory.setHotelBean(hotelBean);
+                            recommendProHistory.setRecmmendList(selectedList);
+                            mSession.setRecommendListHistory(recommendProHistory);
+                            break;
+                    }
+                }
+
                 ShowMessage.showToast(this,"投屏成功！");
                 break;
             case GET_ADVERT_JSON:
             case GET_RECOMMEND_FOODS_JSON:
                 hideLoadingLayout();
+                hotelBean = mSession.getHotelBean();
                 if(obj instanceof List) {
                     List<RecommendFoodAdvert> recommendFoodAdvertList = (List<RecommendFoodAdvert>) obj;
+                    // 判断如果上次投屏过的要回显已选择
+
+                    switch (currentType) {
+                        case TYPE_RECOMMEND_FOODS:
+                            RecommendProHistory recommendListHistory = mSession.getRecommendListHistory();
+                            if(recommendListHistory!=null) {
+                                HotelBean hBean = recommendListHistory.getHotelBean();
+                                List<RecommendFoodAdvert> recmmendHistoryList = recommendListHistory.getRecmmendList();
+                                if(hBean!=null&&recmmendHistoryList!=null&&recmmendHistoryList.size()>0) {
+                                    String hotel_id = hBean.getHotel_id();
+                                    if(hotelBean.getHotel_id().equals(hotel_id)) {
+                                        for(int i = 0;i<recmmendHistoryList.size();i++) {
+                                            for(int j = 0;j<recommendFoodAdvertList.size();j++) {
+                                                RecommendFoodAdvert historyAdvert = recmmendHistoryList.get(i);
+                                                RecommendFoodAdvert foodAdvert = recommendFoodAdvertList.get(j);
+                                                if(historyAdvert!=null&&foodAdvert!=null) {
+                                                    if(historyAdvert.getFood_id().equals(foodAdvert.getFood_id())) {
+                                                        foodAdvert.setSelected(true);
+                                                    }
+                                                }
+                                            }
+                                        }
+//                                        mRecommendAdapter.notifyDataSetChanged();
+                                    }
+                                }
+                            }
+                            break;
+                        case TYPE_ADVERT:
+                            AdvertProHistory advertProHistory = mSession.getAdvertProHistory();
+                            if(advertProHistory!=null) {
+                                HotelBean hBean = advertProHistory.getHotelBean();
+                                List<RecommendFoodAdvert> advertHistoryList = advertProHistory.getAdvertList();
+                                if(hBean!=null&&advertHistoryList!=null&&advertHistoryList.size()>0) {
+                                    String hotel_id = hBean.getHotel_id();
+                                    if(hotelBean.getHotel_id().equals(hotel_id)) {
+                                        for(int i = 0;i<advertHistoryList.size();i++) {
+                                            for(int j = 0;j<recommendFoodAdvertList.size();j++) {
+                                                RecommendFoodAdvert historyAdvert = advertHistoryList.get(i);
+                                                RecommendFoodAdvert foodAdvert = recommendFoodAdvertList.get(j);
+                                                if(historyAdvert!=null&&foodAdvert!=null) {
+                                                    if(historyAdvert.getId().equals(foodAdvert.getId())) {
+                                                        foodAdvert.setSelected(true);
+                                                    }
+                                                }
+                                            }
+                                        }
+//                                        mRecommendAdapter.notifyDataSetChanged();
+                                    }
+                                }
+                            }
+                            break;
+                    }
                     mRecommendAdapter.setData(recommendFoodAdvertList,currentType);
                 }
                 break;

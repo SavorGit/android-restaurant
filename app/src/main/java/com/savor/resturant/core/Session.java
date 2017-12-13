@@ -23,7 +23,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -37,10 +36,12 @@ import com.common.api.utils.AppUtils;
 import com.common.api.utils.LogUtils;
 import com.common.api.utils.Pair;
 import com.common.api.utils.SaveFileData;
+import com.savor.resturant.bean.AdvertProHistory;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.HotelMapCache;
 import com.savor.resturant.bean.HotelMapListData;
 import com.savor.resturant.bean.PdfInfo;
+import com.savor.resturant.bean.RecommendProHistory;
 import com.savor.resturant.bean.RoomInfo;
 import com.savor.resturant.bean.SmallPlatInfoBySSDP;
 import com.savor.resturant.bean.SmallPlatformByGetIp;
@@ -116,6 +117,10 @@ public class Session {
     /**登录信息*/
     private static final String P_APP_LOGIN = "p_app_login";
     private static final String P_ROMM_LIST = "p_romm_list";
+    /**宣传片历史*/
+    private static final String P_ADVERT_HISTORY_LIST = "p_advert_history_list";
+    /**推荐菜历史*/
+    private static final String P_RECOMEND_HISTORY_LIST = "p_recomend_history_list";
 
 
 
@@ -229,6 +234,8 @@ public class Session {
     private List<Object> requestPool = new ArrayList<>();
     private List<RoomInfo> roomList;
     private RoomInfo info;
+    private AdvertProHistory advertProHistory;
+    private RecommendProHistory recommendListHistory;
 
     private Session(Context context) {
 
@@ -467,6 +474,8 @@ public class Session {
     private void readSettings() {
 //        mHotelMapCache = (HotelMapCache) getObj(P_APP_HOTEL_MAP);
 //        roomList = (List<RoomInfo>) getObj(P_ROMM_LIST);
+        recommendListHistory = (RecommendProHistory) getObj(P_RECOMEND_HISTORY_LIST);
+        advertProHistory = (AdvertProHistory) getObj(P_ADVERT_HISTORY_LIST);
         mUploadFirstUse = mPreference.loadBooleanKey(P_APP_FIRST_USE,false);
         mWaiterData = mPreference.loadStringKey(P_APP_WAITER_DATA,null);
         mPdfList = (List<PdfInfo>) getObj(P_APP_PDF_LIST);
@@ -1010,5 +1019,23 @@ public class Session {
 
     public  RoomInfo getBindRoom() {
         return info;
+    }
+
+    public void setAdvertHistory(AdvertProHistory advertProHistory) {
+        this.advertProHistory = advertProHistory;
+        setObj(P_ADVERT_HISTORY_LIST,advertProHistory);
+    }
+
+    public AdvertProHistory getAdvertProHistory() {
+        return this.advertProHistory;
+    }
+
+    public void setRecommendListHistory(RecommendProHistory recommendListHistory) {
+        this.recommendListHistory = recommendListHistory;
+        setObj(P_RECOMEND_HISTORY_LIST,recommendListHistory);
+    }
+
+    public RecommendProHistory getRecommendListHistory() {
+        return this.recommendListHistory;
     }
 }
