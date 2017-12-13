@@ -447,6 +447,8 @@ public class AppApi {
                                  String screen_result,
                                  String screen_time,
                                  String screen_type,
+                                 String welcome_template,
+                                 String welcome_word,
                                 ApiRequestListener handler) {
         final HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("hotel_id", hotel_id);
@@ -458,6 +460,8 @@ public class AppApi {
         params.put("screen_result", screen_result);
         params.put("screen_time", screen_time);
         params.put("screen_type", screen_type);
+        params.put("welcome_template", welcome_template);
+        params.put("welcome_word", welcome_word);
         new AppServiceOk(context,Action.POST_REPORT_LOG_JSON,handler,params).post();
     }
 
