@@ -143,7 +143,13 @@ public class WelComeSetTextActivity extends BaseActivity implements View.OnClick
 
     private void setText(TextView t){
         greeting.setText(t.getText().toString());
-        greeting.setSelection(t.getText().toString().length());
+        int size = t.getText().toString().length();
+        if (size >=18) {
+            greeting.setSelection(18);
+        }else {
+            greeting.setSelection(size);
+        }
+
 
     }
 
