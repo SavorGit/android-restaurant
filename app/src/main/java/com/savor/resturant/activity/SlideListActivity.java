@@ -131,7 +131,7 @@ public class SlideListActivity extends BaseActivity implements View.OnClickListe
     public void setViews() {
         switch (slideType) {
             case IMAGE:
-                title.setText("幻灯片");
+                title.setText("图片与幻灯片");
                 break;
             case VIDEO:
                 title.setText("视频");

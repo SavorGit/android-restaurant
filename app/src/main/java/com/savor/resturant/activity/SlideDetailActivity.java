@@ -624,7 +624,9 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
 
                     @Override
                     public void onClick(View v) {
-                        performSlideSettingsConfirm();
+                        if(!AppUtils.isFastDoubleClick(1)) {
+                            performSlideSettingsConfirm();
+                        }
 //                        mOperationType = TYPE_CONFIRM;
 //                        if (!isFoundTv()) {
 //                            showChangeWifiDialog();
