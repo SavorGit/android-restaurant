@@ -438,29 +438,26 @@ public class AppApi {
     }
 
     /**升级*/
-    public static void reportLog(Context context,String ads_type,
-                                 String device_id,
-                                 String device_type,
-                                 String hotel_id,
+    public static void reportLog(Context context,String hotel_id,
                                  String info,
+                                 String invite_code,
+                                 String mobile,
                                  String room_id,
                                  String screen_num,
+                                 String screen_result,
                                  String screen_time,
                                  String screen_type,
-                                 String state,
-                                 String wifi,ApiRequestListener handler) {
+                                ApiRequestListener handler) {
         final HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("ads_type", ads_type);
-        params.put("device_id", device_id);
-        params.put("device_type", device_type);
         params.put("hotel_id", hotel_id);
         params.put("info", info);
+        params.put("invite_code", invite_code);
+        params.put("mobile", mobile);
         params.put("room_id", room_id);
         params.put("screen_num", screen_num);
+        params.put("screen_result", screen_result);
         params.put("screen_time", screen_time);
         params.put("screen_type", screen_type);
-        params.put("state", state);
-        params.put("wifi", wifi);
         new AppServiceOk(context,Action.POST_REPORT_LOG_JSON,handler,params).post();
     }
 
