@@ -97,9 +97,9 @@ public class MediaPreViewFragment extends BaseFragment {
                     videoView.setVisibility(View.GONE);
                     File file = new File(assetpath);
                     if (file.exists()) {
-                        Glide.with(this).load(assetpath).centerCrop().placeholder(R.drawable.empty_slide).into(mImageView);
+                        Glide.with(this).load(assetpath).placeholder(R.drawable.empty_slide).into(mImageView);
                     } else {
-                        Glide.with(this).load(assetpath).centerCrop().placeholder(R.drawable.ic_deleted_hint).into(mImageView);
+                        Glide.with(this).load(assetpath).placeholder(R.drawable.ic_deleted_hint).into(mImageView);
                     }
                     break;
                 case MEDIA_TYPE_VIDEO:
