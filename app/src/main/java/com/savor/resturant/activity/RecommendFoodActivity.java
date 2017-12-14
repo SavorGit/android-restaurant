@@ -304,7 +304,6 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
             AppApi.recommendPro(this,url,currentRoom.getBox_mac(),time,vid,this);
         }else {
             erroCount++;
-            erroCount++;
             if(erroCount>=3) {
                 hideLoadingLayout();
                 if(AppUtils.isNetworkAvailable(this)) {
