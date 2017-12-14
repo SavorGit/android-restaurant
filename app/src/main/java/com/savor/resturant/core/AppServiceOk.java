@@ -156,6 +156,14 @@ public class AppServiceOk {
                 headers.put("des", "true");
             }
 
+            if (!AppUtils.isNetworkAvailable(mContext)) {
+                ResponseErrorMessage error = new ResponseErrorMessage();
+                // 没有返回code只返回null
+                error.setCode(Integer.valueOf(AppApi.ERROR_NETWORK_FAILED));
+                handler.onError(action, error);
+                return;
+            }
+
             /**
              * 1.通过一个requrest构造方法将参数传入
              * 2.
@@ -232,6 +240,15 @@ public class AppServiceOk {
         headers.put("traceinfo", appSession.getDeviceInfo());
         headers.put("version","1.0");
         LogUtils.d("traceinfo-->" + appSession.getDeviceInfo());
+
+        if (!AppUtils.isNetworkAvailable(mContext)) {
+            ResponseErrorMessage error = new ResponseErrorMessage();
+            // 没有返回code只返回null
+            error.setCode(Integer.valueOf(AppApi.ERROR_NETWORK_FAILED));
+            handler.onError(action, error);
+            return;
+        }
+
         Callback<Object> callback = new Callback<Object>() {
 
             @Override

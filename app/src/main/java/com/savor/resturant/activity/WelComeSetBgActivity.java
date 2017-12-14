@@ -345,7 +345,9 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
                     String msg = message.getMessage();
                     showToast(msg);
                 }else if(obj == AppApi.ERROR_TIMEOUT) {
-                    showToast("请求超时");
+                    showToast("网络超时，请重试");
+                }else if(obj == AppApi.ERROR_NETWORK_FAILED) {
+                    showToast("网络已断开，请检查");
                 }
                 break;
                 default:

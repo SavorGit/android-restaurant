@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.common.api.okhttp.OkHttpUtils;
+import com.common.api.utils.AppUtils;
 import com.common.api.utils.DensityUtil;
 import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
@@ -264,6 +265,15 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
             AppApi.adverPro(this,url,currentRoom.getBox_mac(),vid,this);
         }else {
             erroCount++;
+            if(erroCount>=3) {
+                hideLoadingLayout();
+                if(AppUtils.isNetworkAvailable(this)) {
+                    showToast("网络超时，请重试");
+                }else {
+                    showToast("网络已断开，请检查");
+                }
+
+            }
         }
     }
 
@@ -294,6 +304,16 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
             AppApi.recommendPro(this,url,currentRoom.getBox_mac(),time,vid,this);
         }else {
             erroCount++;
+            erroCount++;
+            if(erroCount>=3) {
+                hideLoadingLayout();
+                if(AppUtils.isNetworkAvailable(this)) {
+                    showToast("网络超时，请重试");
+                }else {
+                    showToast("网络已断开，请检查");
+                }
+
+            }
         }
     }
 
@@ -446,7 +466,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
 
     private void initRoomNotSelected() {
         ShowMessage.showToast(this, "请选择包间");
-        showRoomList();
+//        showRoomList();
     }
 
     private boolean isSomeOneSelected(List<RecommendFoodAdvert> data) {
@@ -603,7 +623,9 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
                         showToast(msg);
                     }
                 }else if(obj == AppApi.ERROR_TIMEOUT) {
-                    showToast("请求超时");
+                    showToast("网络超时，请重试");
+                }else if(obj == AppApi.ERROR_NETWORK_FAILED) {
+                    showToast("网络已断开，请检查");
                 }
                 break;
             case GET_ADVERT_PRO_JSON:
@@ -641,7 +663,9 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
                         showToast(msg);
                     }
                 }else if(obj == AppApi.ERROR_TIMEOUT) {
-                    showToast("请求超时");
+                    showToast("网络超时，请重试");
+                }else if(obj == AppApi.ERROR_NETWORK_FAILED) {
+                    showToast("网络已断开，请检查");
                 }
                 break;
             case GET_ADVERT_JSON:
@@ -658,7 +682,9 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
                     }
 
                 }else if(obj == AppApi.ERROR_TIMEOUT) {
-                    showToast("请求超时");
+                    showToast("网络超时，请重试");
+                }else if(obj == AppApi.ERROR_NETWORK_FAILED) {
+                    showToast("网络已断开，请检查");
                 }
                 break;
             case GET_RECOMMEND_FOODS_JSON:
@@ -675,7 +701,9 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
                     }
 
                 }else if(obj == AppApi.ERROR_TIMEOUT) {
-                    showToast("请求超时");
+                    showToast("网络超时，请重试");
+                }else if(obj == AppApi.ERROR_NETWORK_FAILED) {
+                    showToast("网络已断开，请检查");
                 }
                 break;
                 default:

@@ -243,6 +243,7 @@ public class SlideListActivity extends BaseActivity implements View.OnClickListe
                 SlideManager.getInstance(slideType).removeGroup(info);
                 SlideManager.getInstance(slideType).saveSlide();
                 initSlide();
+                ShowMessage.showToast(SlideListActivity.this,"删除成功");
             }
         }, new CommonDialog.OnCancelListener() {
             @Override

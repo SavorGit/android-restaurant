@@ -362,6 +362,7 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
      */
     private void SlideSaveAndSkip () {
         saveSlide();
+        ShowMessage.showToast(this,"添加成功");
         switch (type) {
             case IntentUtil.TYPE_SLIDE_BY_LIST:
                 RecordUtils.onEvent(mContext, getString(R.string.slide_to_screen_click_album));
