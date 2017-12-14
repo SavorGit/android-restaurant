@@ -66,10 +66,15 @@
     <string name="null_storage">暂无外部存储</string>
     <string name="create_slide_lantern">新建幻灯片</string>
     <string name="input_slide_lantern">输入幻灯片名称，最多20个字</string>
+    <string name="input_video_lantern">输入视频列表名称，最多20个字</string>
     <string name="slidename_not_null">幻灯片名称不能为空</string>
+    <string name="video_slidename_not_null">视频列表名称不能为空</string>
     <string name="create_more">最多创建50个幻灯片</string>
+    <string name="create_video_more">最多创建50个视频列表</string>
     <string name="create_exist">已经存在相同名称的幻灯片</string>
+    <string name="create_video_exist">已经存在相同名称的视频列表</string>
     <string name="add_lantern_slide">添加至幻灯片“%s”</string>
+    <string name="add_video_slide">添加至视频列表“%s”</string>
     <string name="confirm_select_picture">是否添加已勾选的这%d张图片</string>
     <string name="confirm_delete_picture">是否删除%1$d张图片</string>
     <string name="confirm_delete_video">是否删除%1$d个视频</string>
@@ -431,6 +436,7 @@
     <string name="please_select_pic">请先选择图片</string>
     <string name="please_select_video">请先选择视频</string>
     <string name="create_slide">创建幻灯片</string>
+    <string name="create_video">创建视频列表</string>
     <string name="found_tv_hint">发现可连接电视，请连接</string>
 
 

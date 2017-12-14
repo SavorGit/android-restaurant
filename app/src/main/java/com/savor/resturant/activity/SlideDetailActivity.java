@@ -489,6 +489,8 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                     ShowMessage.showToast(mContext, "最多只能添加50张");
                     return;
                 }
+
+                resetMediaList(picList);
                 //跳转至照片列表
                 Intent intent = new Intent(SlideDetailActivity.this, PhotoActivity.class);
                 intent.putExtra(KEY_TYPE, IntentUtil.TYPE_SLIDE_BY_DETAIL);
@@ -516,6 +518,13 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                 delMedia();
                 break;
         }
+    }
+
+    private void resetMediaList(List<MediaInfo> picList) {
+        for(MediaInfo info:picList) {
+            info.setChecked(false);
+        }
+        slideDetailAdapter.notifyDataSetChanged();
     }
 
     private void hideRoomList() {
@@ -770,6 +779,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
             checkAll.setVisibility(View.VISIBLE);
             delete.setVisibility(View.VISIBLE);
             add.setVisibility(View.VISIBLE);
+            resetMediaList(picList);
         } else {    //进入非编辑状态，点击完成保存数据
             save();
             slideDetailAdapter.setEditState(false);
@@ -830,7 +840,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         if (isCheckAll()) {
             switch (slideType) {
                 case VIDEO:
-                    message = "将删除此幻灯片，但不会删除本地视频";
+                    message = "将删除此视频列表，但不会删除本地视频";
                     break;
                 case IMAGE:
                     message = "将删除此幻灯片，但不会删除本地照片";

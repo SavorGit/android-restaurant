@@ -53,6 +53,7 @@ public class SlideListActivity extends BaseActivity implements View.OnClickListe
     private Handler mHandler = new Handler();
     private SlideManager.SlideType slideType;
     private TextView mHintTv;
+    private TextView mFootHintTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +124,7 @@ public class SlideListActivity extends BaseActivity implements View.OnClickListe
         mPullTorefreshListView = (PullToRefreshListView) findViewById(R.id.main_list);
         mListView = mPullTorefreshListView.getRefreshableView();
         mFooterView = LayoutInflater.from(mContext).inflate(R.layout.slide_footer_layout, null);
-
+        mFootHintTv = (TextView) mFooterView.findViewById(R.id.tv_load_hint);
     }
 
     /**
@@ -133,10 +134,12 @@ public class SlideListActivity extends BaseActivity implements View.OnClickListe
     public void setViews() {
         switch (slideType) {
             case IMAGE:
+                mFootHintTv.setText("最多可以创建50个幻灯片");
                 title.setText("图片与幻灯片");
                 break;
             case VIDEO:
-                title.setText("视频");
+                title.setText("视频列表");
+                mFootHintTv.setText("最多可以创建50组视频列表");
                 break;
         }
         add.setImageResource(R.drawable.tianjia_w);
@@ -203,7 +206,7 @@ public class SlideListActivity extends BaseActivity implements View.OnClickListe
                     mHintTv.setText("去创建您的第一个幻灯片吧");
                     break;
                 case VIDEO:
-                    mHintTv.setText("去创建您的第一个视频吧~");
+                    mHintTv.setText("去创建您的第一个视频列表吧~");
                     break;
             }
         } else {
@@ -246,7 +249,16 @@ public class SlideListActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onItemLongClick(final SlideSetInfo info) {
-        new CommonDialog(this, "是否删除幻灯片？", new CommonDialog.OnConfirmListener() {
+        String hint = "";
+        switch (slideType) {
+            case VIDEO:
+                hint = "是否删除该视频列表？";
+                break;
+            case IMAGE:
+                hint = "是否删除幻灯片？";
+                break;
+        }
+        new CommonDialog(this, hint, new CommonDialog.OnConfirmListener() {
             @Override
             public void onConfirm() {
                 //删除幻灯片，存储数据

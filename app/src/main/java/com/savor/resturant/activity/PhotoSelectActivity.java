@@ -156,12 +156,31 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
             add.setTextColor(getResources().getColor(R.color.dialog_text_black));
         }else {
             if (TextUtils.isEmpty(name)) {
-                add.setText("添加至幻灯片");
+                switch (slideType) {
+                    case IMAGE:
+                        add.setText("添加至幻灯片");
+                        break;
+
+                    case VIDEO:
+                        add.setText("添加至视频列表");
+                        break;
+                }
+
             }else {
                 if(name.length()>8) {
                     name = name.substring(0,8)+"...";
                 }
-                add.setText(getString(R.string.add_lantern_slide, name));
+                switch (slideType) {
+                    case VIDEO:
+                        add.setText(getString(R.string.add_video_slide, name));
+                        break;
+
+                    case IMAGE:
+                        add.setText(getString(R.string.add_lantern_slide, name));
+                        break;
+                }
+
+
             }
         }
 
@@ -232,9 +251,19 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
      * 创建幻灯片弹窗
      */
     private void createDialog() {
+        String hint = "";
+        switch (slideType) {
+            case VIDEO:
+                hint = getString(R.string.input_video_lantern);
+                break;
+
+            case IMAGE:
+                hint = getString(R.string.input_slide_lantern);
+                break;
+        }
         final CustomAlertPPtDialog dialog = new CustomAlertPPtDialog(this);
         dialog.builder()
-                .setInputHint(getString(R.string.input_slide_lantern))
+                .setInputHint(hint)
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.create), new View.OnClickListener() {
                     @Override
@@ -269,7 +298,15 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
         RecordUtils.onEvent(this,getString(R.string.slide_to_screen_creat),hashMap);
         // 创建文件夹，记录文件名
         if (TextUtils.isEmpty(filename)) {
-            ToastUtil.showToastSavor(PhotoSelectActivity.this, getString(R.string.slidename_not_null));
+            switch (slideType) {
+                case IMAGE:
+                    ToastUtil.showToastSavor(PhotoSelectActivity.this, getString(R.string.slidename_not_null));
+                    break;
+                case VIDEO:
+                    ToastUtil.showToastSavor(PhotoSelectActivity.this, getString(R.string.video_slidename_not_null));
+                    break;
+            }
+
             return;
         }
         // 新建幻灯片信息
@@ -281,11 +318,29 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
         int size = SlideManager.getInstance(SlideManager.SlideType.IMAGE).getSize();
         boolean isExist = SlideManager.getInstance(SlideManager.SlideType.IMAGE).containGroup(slideInfo);
         if (size >= 50) {
-            ToastUtil.showToastSavor(PhotoSelectActivity.this, getString(R.string.create_more));
+            switch (slideType) {
+                case IMAGE:
+                    ToastUtil.showToastSavor(PhotoSelectActivity.this, getString(R.string.create_more));
+                    break;
+
+                case VIDEO:
+                    ToastUtil.showToastSavor(PhotoSelectActivity.this, getString(R.string.create_video_more));
+                    break;
+            }
+
             return;
         }
         if (isExist) {
-            ToastUtil.showToastSavor(PhotoSelectActivity.this, getString(R.string.create_exist));
+            switch (slideType) {
+                case VIDEO:
+                    ToastUtil.showToastSavor(PhotoSelectActivity.this, getString(R.string.create_video_exist));
+                    break;
+
+                case IMAGE:
+                    ToastUtil.showToastSavor(PhotoSelectActivity.this, getString(R.string.create_exist));
+                    break;
+            }
+
             return;
         }
 
@@ -463,7 +518,16 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
 
             add.setTextColor(getResources().getColor(R.color.dialog_text_black));
         }else {
-            add.setText(R.string.create_slide);
+            switch (slideType) {
+                case IMAGE:
+                    add.setText(R.string.create_slide);
+                    break;
+
+                case VIDEO:
+                    add.setText(R.string.create_video);
+                    break;
+            }
+
             add.setTextColor(getResources().getColor(R.color.head_title_text));
         }
     }
