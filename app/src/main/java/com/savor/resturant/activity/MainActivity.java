@@ -26,7 +26,6 @@ import android.widget.TextView;
 import com.common.api.http.callback.FileDownProgress;
 import com.common.api.utils.AppUtils;
 import com.common.api.utils.DensityUtil;
-import com.common.api.utils.FileUtils;
 import com.common.api.utils.LogUtils;
 import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
@@ -49,6 +48,9 @@ import com.savor.resturant.widget.HotsDialog;
 import com.savor.resturant.widget.SavorDialog;
 import com.savor.resturant.widget.UpgradeDialog;
 import com.savor.resturant.widget.decoration.SpacesItemDecoration;
+
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
