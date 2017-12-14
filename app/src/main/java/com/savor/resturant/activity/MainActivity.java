@@ -472,6 +472,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     closeLinkingDialog();
                     ShowMessage.showToast(this,"网络超时，请重试");
                     return;
+                }else if(obj == AppApi.ERROR_NETWORK_FAILED) {
+                    closeLinkingDialog();
+                    ShowMessage.showToast(this,"网络已断开，请检查");
+                    return;
                 }
                 closeLinkingDialog();
                 if(obj instanceof String ) {

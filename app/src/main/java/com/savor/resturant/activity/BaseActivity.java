@@ -262,7 +262,9 @@ public abstract class BaseActivity extends Activity implements ApiRequestListene
             String msg = message.getMessage();
             showToast(msg);
         }else if(obj == AppApi.ERROR_TIMEOUT) {
-            showToast("请求超时");
+            showToast("网络连接超时，请重试");
+        }else if(obj == AppApi.ERROR_NETWORK_FAILED) {
+            showToast("网络已断开请检查");
         }
     }
 
