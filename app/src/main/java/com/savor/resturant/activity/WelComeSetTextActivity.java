@@ -35,7 +35,7 @@ public class WelComeSetTextActivity extends BaseActivity implements View.OnClick
     private TextView tv_center;
     private TextView tv_right;
     private EditText greeting;
-    private TextView t1,t2,t3,t4;
+    private TextView t1,t2,t3,t4,t5;
 
 
     @Override
@@ -57,6 +57,7 @@ public class WelComeSetTextActivity extends BaseActivity implements View.OnClick
         t2 = (TextView) findViewById(R.id.t2);
         t3 = (TextView) findViewById(R.id.t3);
         t4 = (TextView) findViewById(R.id.t4);
+        t5 = (TextView) findViewById(R.id.t5);
         greeting = (EditText) findViewById(R.id.greeting);
     }
 
@@ -76,6 +77,7 @@ public class WelComeSetTextActivity extends BaseActivity implements View.OnClick
         t2.setOnClickListener(this);
         t3.setOnClickListener(this);
         t4.setOnClickListener(this);
+        t5.setOnClickListener(this);
         greeting.addTextChangedListener(new TextWatcher(){
             public void afterTextChanged(Editable s) {
                 // TODO Auto-generated method stub
@@ -135,6 +137,9 @@ public class WelComeSetTextActivity extends BaseActivity implements View.OnClick
             case R.id.t4:
                 setText(t4);
                 break;
+            case R.id.t5:
+                setText(t4);
+                break;
             default:
                 break;
         }
@@ -144,7 +149,7 @@ public class WelComeSetTextActivity extends BaseActivity implements View.OnClick
     private void setText(TextView t){
         greeting.setText(t.getText().toString());
         int size = t.getText().toString().length();
-        if (size >=18) {
+        if (size >18) {
             greeting.setSelection(18);
         }else {
             greeting.setSelection(size);
