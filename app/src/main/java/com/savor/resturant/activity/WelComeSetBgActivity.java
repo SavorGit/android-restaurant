@@ -52,6 +52,7 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
     private boolean isSelectRommState;
     private int erroCount;
     private LoadingDialog mLoadingDialog;
+    private String CurrentTemplateId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +100,7 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
     public void setViews() {
         initTitleBar();
         initRoomList();
-        //tv_center.setText("请选择背景");
+        tv_center.setText("请选择背景");
         if (!TextUtils.isEmpty(keyWord)) {
             t1.setText(keyWord);
             t2.setText(keyWord);
@@ -166,9 +167,9 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
                 setPro("8");
                 break;
             case R.id.tv_center:
-                if(!isSelectRommState) {
-                    showRoomList();
-                }
+//                if(!isSelectRommState) {
+//                    showRoomList();
+//                }
 
                 break;
             default:
@@ -178,14 +179,15 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
 
 
     private void setPro(String templateId){
-        if(currentRoom == null) {
-            initRoomNotSelected();
-            return;
+//        if(currentRoom == null) {
+//            initRoomNotSelected();
+//            return;
+//        }
+        CurrentTemplateId = templateId;
+        if(!isSelectRommState) {
+            showRoomList();
         }
-        SmallPlatformByGetIp smallPlatformByGetIp = mSession.getmSmallPlatInfoByIp();
-        SmallPlatInfoBySSDP smallPlatInfoBySSDP = mSession.getSmallPlatInfoBySSDP();
-        TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
-        proWord(templateId,smallPlatformByGetIp,smallPlatInfoBySSDP,tvBoxSSDPInfo);
+
     }
 
     private void proWord(String templateId,SmallPlatformByGetIp smallPlatformByGetIp, SmallPlatInfoBySSDP smallPlatInfoBySSDP, TvBoxSSDPInfo tvBoxSSDPInfo){
@@ -221,11 +223,11 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
         }
     }
     private void initTitleBar() {
-        tv_center.setText("请选择投屏包间");
+       // tv_center.setText("请选择投屏包间");
         TextPaint tp = tv_center.getPaint();
         tp.setFakeBoldText(true);
-        tv_center.setCompoundDrawablesWithIntrinsicBounds(null,null,getResources().getDrawable(R.drawable.ico_arrow_down),null);
-        tv_center.setCompoundDrawablePadding(DensityUtil.dip2px(this,10));
+//        tv_center.setCompoundDrawablesWithIntrinsicBounds(null,null,getResources().getDrawable(R.drawable.ico_arrow_down),null);
+//        tv_center.setCompoundDrawablePadding(DensityUtil.dip2px(this,10));
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) iv_left.getLayoutParams();
         layoutParams.setMargins(DensityUtil.dip2px(this,15),0,0,0);
 
@@ -237,11 +239,11 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void showRoomList() {
-        if(currentRoom!=null) {
-            tv_center.setText(currentRoom.getBox_name());
-        }else {
-            tv_center.setText("请选择投屏包间");
-        }
+//        if(currentRoom!=null) {
+//            tv_center.setText(currentRoom.getBox_name());
+//        }else {
+//            tv_center.setText("请选择投屏包间");
+//        }
         mRoomListView.setVisibility(View.VISIBLE);
         tv_center.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         iv_left.setImageResource(R.drawable.ico_close);
@@ -285,18 +287,22 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void onRoomItemClick(RoomInfo roomInfo) {
         currentRoom = roomInfo;
+        SmallPlatformByGetIp smallPlatformByGetIp = mSession.getmSmallPlatInfoByIp();
+        SmallPlatInfoBySSDP smallPlatInfoBySSDP = mSession.getSmallPlatInfoBySSDP();
+        TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
+        proWord(CurrentTemplateId,smallPlatformByGetIp,smallPlatInfoBySSDP,tvBoxSSDPInfo);
         hideRommList();
 
     }
 
     private void hideRommList() {
 
-        if(currentRoom!=null) {
-            tv_center.setText(currentRoom.getBox_name());
-        }else {
-            tv_center.setText("请选择投屏包间");
-        }
-        tv_center.setCompoundDrawablesWithIntrinsicBounds(null,null,getResources().getDrawable(R.drawable.ico_arrow_down),null);
+//        if(currentRoom!=null) {
+//            tv_center.setText(currentRoom.getBox_name());
+//        }else {
+//            tv_center.setText("请选择投屏包间");
+//        }
+//        tv_center.setCompoundDrawablesWithIntrinsicBounds(null,null,getResources().getDrawable(R.drawable.ico_arrow_down),null);
         iv_left.setImageResource(R.drawable.back);
 
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.actionsheet_dialog_out);
