@@ -138,7 +138,7 @@ public class WelComeSetTextActivity extends BaseActivity implements View.OnClick
                 setText(t4);
                 break;
             case R.id.t5:
-                setText(t4);
+                setText(t5);
                 break;
             default:
                 break;

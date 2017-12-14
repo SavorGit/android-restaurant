@@ -230,7 +230,7 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
         invitation = invitation_num.getText().toString();
         if (!TextUtils.isEmpty(invitation)) {
             loginDialog = new LoginDialog(context,
-                    "您正在使用"+invitation+"的邀请码\n"+"确认无误，我们将为您的手机号与次酒楼进行绑定！",this);
+                    "您正在使用"+invitation+"的邀请码\n"+"确认无误，我们将为您的手机号与此酒楼进行绑定！",this);
             loginDialog.show();
         }
 
