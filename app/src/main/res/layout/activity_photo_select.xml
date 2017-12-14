@@ -92,6 +92,7 @@
             android:background="@color/pro_bg"
             android:ellipsize="end"
             android:maxLines="1"
+            android:textAllCaps="false"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:textColor="@color/dialog_text_black"
