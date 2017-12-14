@@ -480,14 +480,14 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
     public void onRoomItemClick(RoomInfo roomInfo) {
         currentRoom = roomInfo;
         hideRommList();
-        switch (currentProType) {
-            case TYPE_PRO_SINGLE:
-                startSinglePro();
-                break;
-            case TYPE_PRO_MULTI:
-                startMultiPro();
-                break;
-        }
+//        switch (currentProType) {
+//            case TYPE_PRO_SINGLE:
+//                startSinglePro();
+//                break;
+//            case TYPE_PRO_MULTI:
+//                startMultiPro();
+//                break;
+//        }
     }
 
     @Override

@@ -22,6 +22,7 @@
             android:layout_height="104dp"
             android:src="@drawable/ico_slide_empty"/>
         <TextView
+            android:id="@+id/tv_hint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18sp"

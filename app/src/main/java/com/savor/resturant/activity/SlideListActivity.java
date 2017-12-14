@@ -52,6 +52,7 @@ public class SlideListActivity extends BaseActivity implements View.OnClickListe
     private View mFooterView;
     private Handler mHandler = new Handler();
     private SlideManager.SlideType slideType;
+    private TextView mHintTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +114,7 @@ public class SlideListActivity extends BaseActivity implements View.OnClickListe
      */
     @Override
     public void getViews() {
+        mHintTv = (TextView) findViewById(R.id.tv_hint);
         back = (ImageView) findViewById(R.id.iv_left);
         title = (TextView) findViewById(R.id.tv_center);
         add = (ImageView) findViewById(R.id.iv_right);
@@ -196,6 +198,14 @@ public class SlideListActivity extends BaseActivity implements View.OnClickListe
             ll_create.setVisibility(View.VISIBLE);
             mPullTorefreshListView.setVisibility(View.GONE);
             add.setVisibility(View.GONE);
+            switch (slideType) {
+                case IMAGE:
+                    mHintTv.setText("去创建您的第一个幻灯片吧");
+                    break;
+                case VIDEO:
+                    mHintTv.setText("去创建您的第一个视频吧~");
+                    break;
+            }
         } else {
             mPullTorefreshListView.getRefreshableView().removeFooterView(mFooterView);
             ll_create.setVisibility(View.GONE);
