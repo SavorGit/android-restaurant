@@ -210,7 +210,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                     }
                 }
                 if(slideType == SlideManager.SlideType.VIDEO) {
-                    mProgressBarDialog.updatePercent("上传进度",100, SlideManager.SlideType.VIDEO);
+                    mProgressBarDialog.updatePercent("正在上传",100, SlideManager.SlideType.VIDEO);
                 }
                 mHandler.postDelayed(new Runnable() {
                     @Override
@@ -278,7 +278,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                                 @Override
                                 public void run() {
                                     if(mProgressBarDialog!=null) {
-                                        mProgressBarDialog.updatePercent("正在加载第"+(index+1)+"个视频", finalProgress,slideType);
+                                        mProgressBarDialog.updatePercent("正在转化第"+(index+1)+"个视频", finalProgress,slideType);
                                     }
                                 }
                             });
@@ -624,9 +624,18 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
 
                     @Override
                     public void onClick(View v) {
-                        if(!AppUtils.isFastDoubleClick(1)) {
-                            performSlideSettingsConfirm();
+
+                        if(AppUtils.isNetworkAvailable(SlideDetailActivity.this)) {
+                            if(!AppUtils.isFastDoubleClick(1)) {
+                                settingDialog.dismiss();
+                                showProgressBarDialog();
+                                performSlideSettingsConfirm();
+                            }
+                        }else {
+                            settingDialog.dismiss();
+                            showToast("网络已断开，请检查");
                         }
+
 //                        mOperationType = TYPE_CONFIRM;
 //                        if (!isFoundTv()) {
 //                            showChangeWifiDialog();
@@ -1033,7 +1042,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
             public void run() {
                 ProgressDialogUtil.getInstance().hideProgress();
                 if(mProgressBarDialog!=null) {
-                    mProgressBarDialog.updatePercent("上传进度", (int) ((offset/(count*1.0f))*100), SlideManager.SlideType.VIDEO);
+                    mProgressBarDialog.updatePercent("正在上传", (int) ((offset/(count*1.0f))*100), SlideManager.SlideType.VIDEO);
                 }
             }
         });
@@ -1248,6 +1257,26 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     public void onError(AppApi.Action method, Object obj) {
 
         switch (method) {
+            case POST_VIDEO_SLIDESETTINGS_JSON:
+                if (obj instanceof ResponseErrorMessage) {
+                    ResponseErrorMessage message = (ResponseErrorMessage) obj;
+                    int code = message.getCode();
+                    String error_msg = message.getMessage();
+                    Message msg = Message.obtain();
+//                    if (code == 4) {
+//                        msg.what = FORCE_MSG;
+//                        msg.obj = error_msg;
+//                        mHandler.sendMessage(msg);
+//                    } else {
+//                        error_msg = "用户正在投屏，请稍后再试";
+                    msg.what = TOAST_ERROR_MSG;
+                    msg.obj = error_msg;
+                    mHandler.sendMessage(msg);
+//                    }
+                } else if (obj == AppApi.ERROR_TIMEOUT) {
+                    mHandler.sendEmptyMessage(UPLOAD_TIMEOUT);
+                }
+                break;
             case POST_IMAGE_SLIDESETTINGS_JSON:
                 if (obj instanceof ResponseErrorMessage) {
                     ResponseErrorMessage message = (ResponseErrorMessage) obj;

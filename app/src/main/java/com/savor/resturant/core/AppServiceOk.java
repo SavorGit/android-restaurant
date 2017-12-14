@@ -157,10 +157,10 @@ public class AppServiceOk {
             }
 
             if (!AppUtils.isNetworkAvailable(mContext)) {
-                ResponseErrorMessage error = new ResponseErrorMessage();
-                // 没有返回code只返回null
-                error.setCode(Integer.valueOf(AppApi.ERROR_NETWORK_FAILED));
-                handler.onError(action, error);
+//                ResponseErrorMessage error = new ResponseErrorMessage();
+//                // 没有返回code只返回null
+//                error.setCode(Integer.valueOf(AppApi.ERROR_NETWORK_FAILED));
+                handler.onError(action, AppApi.ERROR_NETWORK_FAILED);
                 return;
             }
 
@@ -242,10 +242,10 @@ public class AppServiceOk {
         LogUtils.d("traceinfo-->" + appSession.getDeviceInfo());
 
         if (!AppUtils.isNetworkAvailable(mContext)) {
-            ResponseErrorMessage error = new ResponseErrorMessage();
-            // 没有返回code只返回null
-            error.setCode(Integer.valueOf(AppApi.ERROR_NETWORK_FAILED));
-            handler.onError(action, error);
+//            ResponseErrorMessage error = new ResponseErrorMessage();
+//            // 没有返回code只返回null
+//            error.setCode(Integer.valueOf(AppApi.ERROR_NETWORK_FAILED));
+            handler.onError(action, AppApi.ERROR_NETWORK_FAILED);
             return;
         }
 
