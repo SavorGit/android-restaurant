@@ -70,7 +70,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:paddingLeft="4dp"
-        android:text="祝“”与“”新婚快乐"
+        android:text="欢迎李总莅临本店，祝您用餐愉快！"
         />
     <TextView
         android:id="@+id/t2"
@@ -86,7 +86,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:paddingLeft="4dp"
-        android:text="欢迎刘总到本店用餐，祝您用餐愉快！"
+        android:text="祝彤彤小宝贝百天快乐！"
         />
 
     <TextView
@@ -103,7 +103,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:paddingLeft="4dp"
-        android:text="本店10周年店庆，推出充2000送200活动"
+        android:text="祝韩梅梅女士生日快乐！"
         />
 
     <TextView
@@ -120,7 +120,24 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:paddingLeft="4dp"
-        android:text="祝“”生日快乐！"
+        android:text="祝李雷先生与韩梅梅女生新婚快乐！"
+        />
+
+    <TextView
+        android:id="@+id/t5"
+        android:layout_marginTop="6dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/t4"
+        android:background="@drawable/bg_exit"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:textColor="#666666"
+        android:textSize="14sp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:paddingLeft="4dp"
+        android:text="中秋阳澄湖大闸蟹特惠礼包，限时优惠！"
         />
 
 </RelativeLayout>
