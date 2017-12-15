@@ -324,6 +324,7 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
             }
         });
         isSelectRommState = false;
+        resetRoomList();
     }
 
     @Override
