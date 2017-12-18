@@ -21,6 +21,7 @@ import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.RecommendFoodAdapter;
 import com.savor.resturant.adapter.RoomListAdapter;
+import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.RecommendFoodAdvert;
 import com.savor.resturant.bean.RoomInfo;
 import com.savor.resturant.bean.SmallPlatInfoBySSDP;
@@ -332,7 +333,21 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
         hideLoadingLayout();
         switch (method) {
             case GET_WORD_PRO_JSON:
+                HotelBean hotel = mSession.getHotelBean();
                 ShowMessage.showToast(this,"投屏成功！");
+                AppApi.reportLog(context,
+                        hotel.getHotel_id()+"",
+                        "",hotel.getInvitation(),
+                        hotel.getTel(),
+                        currentRoom.getRoom_id(),
+                        "1",
+                        "1",
+                        "120",
+                        "5",
+                        CurrentTemplateId,
+                        keyWord,
+                        this
+                        );
                 break;
 
         }
@@ -347,14 +362,19 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
                 if(erroCount<3)
                     return;
                 if(obj instanceof ResponseErrorMessage) {
+
                     ResponseErrorMessage message = (ResponseErrorMessage) obj;
                     int code = message.getCode();
                     String msg = message.getMessage();
                     showToast(msg);
+                    errorLog();
+
                 }else if(obj == AppApi.ERROR_TIMEOUT) {
-                    showToast("网络超时，请重试");
+                    //showToast("网络超时，请重试");
+                    errorLog();
                 }else if(obj == AppApi.ERROR_NETWORK_FAILED) {
-                    showToast("网络已断开，请检查");
+                    //showToast("网络已断开，请检查");
+                    errorLog();
                 }
                 break;
                 default:
@@ -398,6 +418,23 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
         if(mLoadingDialog!=null) {
             mLoadingDialog.dismiss();
         }
+    }
+
+    private void errorLog(){
+        HotelBean hotel = mSession.getHotelBean();
+        AppApi.reportLog(context,
+                hotel.getHotel_id()+"",
+                "",hotel.getInvitation(),
+                hotel.getTel(),
+                currentRoom.getRoom_id(),
+                "1",
+                "0",
+                "120",
+                "5",
+                CurrentTemplateId,
+                keyWord,
+                this
+        );
     }
 }
 

@@ -437,7 +437,7 @@ public class AppApi {
         return "http://"+serverIp+":"+commandPort+"/"+type.toLowerCase()+"/command/execute/";
     }
 
-    /**升级*/
+    /**日志上传*/
     public static void reportLog(Context context,String hotel_id,
                                  String info,
                                  String invite_code,
