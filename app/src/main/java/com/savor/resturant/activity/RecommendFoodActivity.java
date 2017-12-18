@@ -499,6 +499,17 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
                 hideLoadingLayout();
                 List<RecommendFoodAdvert> data = mRecommendAdapter.getData();
                 List<RecommendFoodAdvert> selectedList = getSelectedList(data);
+                if(method == AppApi.Action.GET_RECOMMEND_PRO_JSON) {
+                    String time;
+                    if(currentProType == TYPE_PRO_MULTI) {
+                        time = "30";
+                    }else {
+                        time = 60*2+"";
+                    }
+                    setLog(selectedList.size()+"","1",time+"","3");
+                }else if(method == AppApi.Action.GET_ADVERT_PRO_JSON) {
+                    setLog(selectedList.size()+"","1","","3");
+                }
                 hotelBean = mSession.getHotelBean();
                 if(currentProType == TYPE_PRO_MULTI) {
                     switch (currentType) {
@@ -591,6 +602,20 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
                 erroCount++;
                 if(erroCount<3)
                     return;
+
+                List<RecommendFoodAdvert> selectedList = getSelectedList(mRecommendAdapter.getData());
+                if(method == AppApi.Action.GET_RECOMMEND_PRO_JSON) {
+                    String time;
+                    if(currentProType == TYPE_PRO_MULTI) {
+                        time = "30";
+                    }else {
+                        time = 60*2+"";
+                    }
+                    setLog(selectedList.size()+"","0",time+"","3");
+                }else if(method == AppApi.Action.GET_ADVERT_PRO_JSON) {
+                    setLog(selectedList.size()+"","0","","3");
+                }
+
                 hideLoadingLayout();
                 if(obj instanceof ResponseErrorMessage) {
                     ResponseErrorMessage message = (ResponseErrorMessage) obj;
@@ -745,20 +770,33 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
         }
     }
 
-    private void setLog(){
+    private void setLog(String count,String result,String length,String type){
         HotelBean hotel = mSession.getHotelBean();
         AppApi.reportLog(mContext,
                 hotel.getHotel_id()+"",
                 "",hotel.getInvitation(),
                 hotel.getTel(),
                 currentRoom.getRoom_id(),
-                "1",//文件个数
-                "0",//投屏结果 1 成功；0失败
-                "120",//总时长
-                "5",//1视频 2照片 3特色菜 4宣传片 5欢迎词
+                count,//文件个数
+                result,//投屏结果 1 成功；0失败
+                length,//总时长
+                type,//1视频 2照片 3特色菜 4宣传片 5欢迎词
                 "",
                 "",
                 this
         );
+//        AppApi.reportLog(mContext,
+//                hotel.getHotel_id()+"",
+//                "",hotel.getInvitation(),
+//                hotel.getTel(),
+//                currentRoom.getRoom_id(),
+//                "1",//文件个数
+//                "0",//投屏结果 1 成功；0失败
+//                "120",//总时长
+//                "5",//1视频 2照片 3特色菜 4宣传片 5欢迎词
+//                "",
+//                "",
+//                this
+//        );
     }
 }
