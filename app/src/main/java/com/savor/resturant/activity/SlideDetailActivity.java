@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.RoomListAdapter;
 import com.savor.resturant.adapter.SlideDetailAdapter;
+import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.ImageProResonse;
 import com.savor.resturant.bean.MediaInfo;
 import com.savor.resturant.bean.RoomInfo;
@@ -1501,6 +1502,24 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         }else {
             startCheckWifiLinkedTimer();
         }
+    }
+
+
+    private void setLog(){
+        HotelBean hotel = mSession.getHotelBean();
+        AppApi.reportLog(mContext,
+                hotel.getHotel_id()+"",
+                "",hotel.getInvitation(),
+                hotel.getTel(),
+                currentRoom.getRoom_id(),
+                "1",//文件个数
+                "0",//投屏结果 1 成功；0失败
+                "120",//总时长
+                "5",//1视频 2照片 3特色菜 4宣传片 5欢迎词
+                "",
+                "",
+                this
+        );
     }
 
 }
