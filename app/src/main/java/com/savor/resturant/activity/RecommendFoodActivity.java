@@ -744,4 +744,21 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
             mLoadingDialog.dismiss();
         }
     }
+
+    private void setLog(){
+        HotelBean hotel = mSession.getHotelBean();
+        AppApi.reportLog(mContext,
+                hotel.getHotel_id()+"",
+                "",hotel.getInvitation(),
+                hotel.getTel(),
+                currentRoom.getRoom_id(),
+                "1",//文件个数
+                "0",//投屏结果 1 成功；0失败
+                "120",//总时长
+                "5",//1视频 2照片 3特色菜 4宣传片 5欢迎词
+                "",
+                "",
+                this
+        );
+    }
 }
