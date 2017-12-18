@@ -111,6 +111,7 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.GET_ADVERT_PRO_JSON
                     || action == AppApi.Action.GET_RECOMMEND_PRO_JSON
                     || action == AppApi.Action.GET_WORD_PRO_JSON
+                    || action == AppApi.Action.POST_REPORT_LOG_JSON
                     ){
                 int code = rSet.getInt("code");
                 if(rSet.has("result")) {

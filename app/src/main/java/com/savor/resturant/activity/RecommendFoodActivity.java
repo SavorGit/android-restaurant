@@ -508,7 +508,13 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
                     }
                     setLog(selectedList.size()+"","1",time+"","3");
                 }else if(method == AppApi.Action.GET_ADVERT_PRO_JSON) {
-                    setLog(selectedList.size()+"","1","","3");
+                    String time;
+                    if(currentProType == TYPE_PRO_MULTI) {
+                        time = "30";
+                    }else {
+                        time = 60*2+"";
+                    }
+                    setLog(selectedList.size()+"","1",time,"3");
                 }
                 hotelBean = mSession.getHotelBean();
                 if(currentProType == TYPE_PRO_MULTI) {
@@ -732,7 +738,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
                 break;
                 default:
                     hideLoadingLayout();
-                    super.onError(method,obj);
+//                    super.onError(method,obj);
                     break;
         }
     }

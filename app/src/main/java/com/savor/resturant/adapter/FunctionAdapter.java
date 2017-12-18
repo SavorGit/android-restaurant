@@ -15,6 +15,7 @@ import com.savor.resturant.activity.RecommendFoodActivity;
 import com.savor.resturant.activity.SlideListActivity;
 import com.savor.resturant.activity.WelComeSetTextActivity;
 import com.savor.resturant.bean.FunctionItem;
+import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.core.Session;
 import com.savor.resturant.utils.SlideManager;
 
@@ -58,39 +59,48 @@ public class FunctionAdapter extends RecyclerView.Adapter<FunctionAdapter.Functi
             @Override
             public void onClick(View v) {
                 int hotelid = Session.get(mContext).getHotelid();
-                if(hotelid<=0) {
+                HotelBean loginResponse = Session.get(mContext).getHotelBean();
+                if(loginResponse!=null) {
+                    String hid = loginResponse.getHotel_id();
+                    if (String.valueOf(hotelid).equals(hid)) {
+                        Intent intent;
+                        switch (type) {
+                            case TYPE_RECOMMAND_FOODS:
+                                intent = new Intent(mContext, RecommendFoodActivity.class);
+                                intent.putExtra("type", RecommendFoodActivity.OperationType.TYPE_RECOMMEND_FOODS);
+                                mContext.startActivity(intent);
+                                break;
+                            case TYPE_WELCOME_WORD:
+                                intent = new Intent(mContext, WelComeSetTextActivity.class);
+                                mContext.startActivity(intent);
+                                break;
+                            case TYPE_ADVERT:
+                                intent = new Intent(mContext, RecommendFoodActivity.class);
+                                intent.putExtra("type", RecommendFoodActivity.OperationType.TYPE_ADVERT);
+                                mContext.startActivity(intent);
+                                break;
+                            case TYPE_VIDEO:
+                                intent = new Intent(mContext,SlideListActivity.class);
+                                intent.putExtra("type", SlideManager.SlideType.VIDEO);
+                                mContext.startActivity(intent);
+                                break;
+                            case TYPE_PIC:
+                                intent = new Intent(mContext,SlideListActivity.class);
+                                intent.putExtra("type", SlideManager.SlideType.IMAGE);
+                                mContext.startActivity(intent);
+                                break;
+                        }
+                    }else {
+                        if(listener!=null) {
+                            listener.onNoHotelClick();
+                        }
+                    }
+                }else {
                     if(listener!=null) {
                         listener.onNoHotelClick();
                     }
-                }else {
-                    Intent intent;
-                    switch (type) {
-                        case TYPE_RECOMMAND_FOODS:
-                            intent = new Intent(mContext, RecommendFoodActivity.class);
-                            intent.putExtra("type", RecommendFoodActivity.OperationType.TYPE_RECOMMEND_FOODS);
-                            mContext.startActivity(intent);
-                            break;
-                        case TYPE_WELCOME_WORD:
-                            intent = new Intent(mContext, WelComeSetTextActivity.class);
-                            mContext.startActivity(intent);
-                            break;
-                        case TYPE_ADVERT:
-                            intent = new Intent(mContext, RecommendFoodActivity.class);
-                            intent.putExtra("type", RecommendFoodActivity.OperationType.TYPE_ADVERT);
-                            mContext.startActivity(intent);
-                            break;
-                        case TYPE_VIDEO:
-                            intent = new Intent(mContext,SlideListActivity.class);
-                            intent.putExtra("type", SlideManager.SlideType.VIDEO);
-                            mContext.startActivity(intent);
-                            break;
-                        case TYPE_PIC:
-                            intent = new Intent(mContext,SlideListActivity.class);
-                            intent.putExtra("type", SlideManager.SlideType.IMAGE);
-                            mContext.startActivity(intent);
-                            break;
-                    }
                 }
+
             }
         });
     }
