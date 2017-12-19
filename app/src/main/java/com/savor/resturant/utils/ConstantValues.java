@@ -40,4 +40,14 @@ public class ConstantValues {
     public static final int CATEGORY_VIDEO = 1;
     /**分类-文件**/
     public static final int CATEGORY_FILE = 2;
+
+    /**
+     * 首页Tab下标
+     */
+    public class HomeTabIndex {
+        public static final int TAB_INDEX_BOOK = 0;
+        public static final int TAB_INDEX_CUSTOMER = 1;
+        public static final int TAB_INDEX_SERVICE = 2;
+        public static final int TAB_INDEX_MY = 3;
+    }
 }

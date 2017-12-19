@@ -2,17 +2,16 @@
 <resources>
     <!-- 首页导航显示文字 -->
     <string-array name="bottom_bar_labels">
-        <item>@string/home</item>
-        <item>@string/find</item>
-        <item></item>
-        <item>@string/projection</item>
+        <item>@string/book</item>
+        <item>@string/customer</item>
+        <item>@string/service</item>
         <item>@string/me</item>
     </string-array>
 
     <integer-array name="bottom_bar_attr">
         <item>0</item>
         <item>0</item>
-        <item>1</item>
+        <item>0</item>
         <item>0</item>
         <item>0</item>
     </integer-array>
@@ -61,5 +60,13 @@
         <item>TR</item>
         <item>TW</item>
         <item>US</item>
+    </string-array>
+
+    <!-- 首页导航显示图片 -->
+    <string-array name="bottom_bar_icon">
+        <item>@drawable/selector_foot_tab_book</item>
+        <item>@drawable/selector_foot_tab_customer</item>
+        <item>@drawable/selector_foot_tab_service</item>
+        <item>@drawable/selector_foot_tab_my</item>
     </string-array>
 </resources>

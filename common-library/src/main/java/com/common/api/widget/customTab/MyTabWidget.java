@@ -133,15 +133,15 @@ public class MyTabWidget extends LinearLayout {
 			final CheckedTextView itemName = (CheckedTextView) view
 					.findViewById(R.id.item_name);
 			ImageView imageView = (ImageView) view.findViewById(R.id.iv_bg);
-			if(i == 2) {
-				itemName.setVisibility(GONE);
-				imageView.setVisibility(VISIBLE);
-				imageView.setImageResource(mIconTa.getResourceId(i, 0));
-				this.addView(view,params);
-				// 将各个tab的View添加到list
-				mViewList.add(view);
-
-			}else {
+//			if(i == 2) {
+//				itemName.setVisibility(GONE);
+//				imageView.setVisibility(VISIBLE);
+//				imageView.setImageResource(mIconTa.getResourceId(i, 0));
+//				this.addView(view,params);
+//				// 将各个tab的View添加到list
+//				mViewList.add(view);
+//
+//			}else {
 				itemName.setCompoundDrawablesWithIntrinsicBounds(null, context
 						.getResources().getDrawable(mIconTa.getResourceId(i, 0)), null, null);
 				itemName.setText(mLabels[i]);
@@ -158,7 +158,7 @@ public class MyTabWidget extends LinearLayout {
 				mMessageIndicate.add(indicateImg);
 				// 将各个tab的View添加到list
 				mViewList.add(view);
-			}
+//			}
 
 			// CheckedTextView设置索引作为tag，以便后续更改颜色、图片等
 			itemName.setTag(index);
@@ -213,18 +213,18 @@ public class MyTabWidget extends LinearLayout {
 	public void setTabIconDisplay(Context context,int positon,int resid) {
 		if(positon<0)
 			return;
-		if(positon==2) {
-			View childView = getChildAt(positon);
-			ImageView itemName = (ImageView) childView.findViewById(R.id.iv_bg);
-			itemName.setImageResource(resid);
-			itemName.invalidate();
-		}else {
+//		if(positon==2) {
+//			View childView = getChildAt(positon);
+//			ImageView itemName = (ImageView) childView.findViewById(R.id.iv_bg);
+//			itemName.setImageResource(resid);
+//			itemName.invalidate();
+//		}else {
 			View childView = getChildAt(positon);
 			CheckedTextView itemName = (CheckedTextView) childView.findViewById(R.id.item_name);
 			itemName.setCompoundDrawablesWithIntrinsicBounds(null, context
 					.getResources().getDrawable(resid), null, null);
 			itemName.invalidate();
-		}
+//		}
 	}
 
 	/**
