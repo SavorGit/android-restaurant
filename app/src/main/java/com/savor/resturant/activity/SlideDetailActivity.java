@@ -1194,8 +1194,10 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                         if(mProgressBarDialog!=null) {
                             mProgressBarDialog.updatePercent("",100,slideType);
                         }
+                        setLog(slideSettingsMediaBeanResultList.size()+"","1",settingDialog.getLoopTime()*60+"","1");
                         break;
                     case IMAGE:
+                        setLog(slideSettingsMediaBeanResultList.size()+"","1",settingDialog.getLoopTime()*60+"","2");
                         mProgressBarDialog.dismiss();
                         break;
                 }
@@ -1310,6 +1312,29 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                 break;
             case POST_IMAGE_PROJECTION_JSON:
 //                mRequestScreenDialog.dismiss();
+                setLog(slideSettingsMediaBeanResultList.size()+"","0",settingDialog.getLoopTime()*60+"","2");
+                if (obj instanceof ResponseErrorMessage) {
+                    ResponseErrorMessage message = (ResponseErrorMessage) obj;
+                    int code = message.getCode();
+                    String error_msg = message.getMessage();
+                    Message msg = Message.obtain();
+                    if (code == 4) {
+                        msg.what = FORCE_MSG;
+                        msg.obj = error_msg;
+                        mHandler.sendMessage(msg);
+                    } else {
+                        msg.what = TOAST_ERROR_MSG;
+                        msg.obj = error_msg;
+                        mHandler.sendMessage(msg);
+                    }
+                } else if (obj == AppApi.ERROR_TIMEOUT) {
+                    mHandler.sendEmptyMessage(UPLOAD_TIMEOUT);
+                } else if (obj == AppApi.ERROR_NETWORK_FAILED) {
+                    mHandler.sendEmptyMessage(UPLOAD_TIMEOUT);
+                }
+                break;
+            case POST_VIDEO_PROJECTION_JSON:
+                setLog(slideSettingsMediaBeanResultList.size()+"","0",settingDialog.getLoopTime()*60+"","1");
                 if (obj instanceof ResponseErrorMessage) {
                     ResponseErrorMessage message = (ResponseErrorMessage) obj;
                     int code = message.getCode();
@@ -1505,21 +1530,34 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     }
 
 
-    private void setLog(){
+    private void setLog(String count,String result,String length,String type){
         HotelBean hotel = mSession.getHotelBean();
         AppApi.reportLog(mContext,
                 hotel.getHotel_id()+"",
                 "",hotel.getInvitation(),
                 hotel.getTel(),
                 currentRoom.getRoom_id(),
-                "1",//文件个数
-                "0",//投屏结果 1 成功；0失败
-                "120",//总时长
-                "5",//1视频 2照片 3特色菜 4宣传片 5欢迎词
+                count,//文件个数
+                result,//投屏结果 1 成功；0失败
+                length,//总时长
+                type,//1视频 2照片 3特色菜 4宣传片 5欢迎词
                 "",
                 "",
                 this
         );
+//        AppApi.reportLog(mContext,
+//                hotel.getHotel_id()+"",
+//                "",hotel.getInvitation(),
+//                hotel.getTel(),
+//                currentRoom.getRoom_id(),
+//                "1",//文件个数
+//                "0",//投屏结果 1 成功；0失败
+//                "120",//总时长
+//                "5",//1视频 2照片 3特色菜 4宣传片 5欢迎词
+//                "",
+//                "",
+//                this
+//        );
     }
 
 }
