@@ -117,6 +117,7 @@
                 android:id="@+id/bg_l5"
                 android:layout_width="345dp"
                 android:layout_height="194dp"
+                android:visibility="gone"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
                 >
