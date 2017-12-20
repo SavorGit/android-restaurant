@@ -250,6 +250,9 @@ public class ApiResponseFactory {
                 result = gson.fromJson(info, new TypeToken<List<RoomListBean>>() {
                 }.getType());;
                 break;
+            case POST_ADD_ROOM_JSON:
+                result = "success";
+                break;
 
             default:
                 break;
