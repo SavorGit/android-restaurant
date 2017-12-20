@@ -242,6 +242,9 @@ public class ApiResponseFactory {
             case GET_WORD_PRO_JSON:
                 result = "success";
                 break;
+            case POST_ADD_ORDER_JSON:
+                result = "success";
+                break;
             default:
                 break;
         }
