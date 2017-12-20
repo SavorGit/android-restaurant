@@ -436,5 +436,6 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
                 this
         );
     }
+
 }
 
