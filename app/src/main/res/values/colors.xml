@@ -105,4 +105,7 @@
     <color name="color_b7b6b2">#b7b6b2</color>
     <color name="color_333333">#333333</color>
     <color name="color_fefefe">#fefefe</color>
+
+    <color name="app_red_color">#922c3e</color>
+    <color name="app_divider_gray">#CCC5BD</color>
 </resources>

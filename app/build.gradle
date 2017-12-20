@@ -8,8 +8,8 @@ android {
         applicationId "com.savor.resturant"
         minSdkVersion MIN_SDK_VERSION as int
         targetSdkVersion TARGET_SDK_VERSION as int
-        versionCode 2017062001
-        versionName "1.0"
+        versionCode 2017121901
+        versionName "1.2"
 
         flavorDimensions "versionCode"
         multiDexEnabled true
@@ -126,6 +126,11 @@ dependencies {
     compile 'cn.jzvd:jiaozivideoplayer:6.2.1'
     implementation project(':FFmpeg4Android')
 }
+
+
+
+
+
 
 
 

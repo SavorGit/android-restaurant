@@ -193,14 +193,14 @@
         <activity
             android:name=".activity.WelComeSetBgActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.LinkTvActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysVisible" />
-        <activity android:name=".activity.RecommendFoodActivity"
-            android:screenOrientation="portrait"
-            />
+        <activity
+            android:name=".activity.RecommendFoodActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.SavorMainActivity"></activity>
     </application>
 
 </manifest>

@@ -254,7 +254,7 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
 
 
                         // 启动跳转到首页
-                        Intent homeIntent = new Intent(LoginForCodeActivity.this, MainActivity.class);
+                        Intent homeIntent = new Intent(LoginForCodeActivity.this, SavorMainActivity.class);
                         Intent intent = getIntent();
                         if(intent!=null&&("application/pdf").equals(intent.getType())) {
                             Uri data = getIntent().getData();

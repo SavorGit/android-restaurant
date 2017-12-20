@@ -87,7 +87,7 @@ public abstract class BaseActivity extends Activity implements ApiRequestListene
         mSession = Session.get(getApplicationContext());
         mContext = this;
         ActivitiesManager.getInstance().pushActivity(this);
-        StatusBarUtil.setStatusBarLightMode(getWindow());
+//        StatusBarUtil.setStatusBarLightMode(getWindow());
     }
 
     @Override

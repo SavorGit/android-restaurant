@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.savor.resturant.activity.SavorMainActivity">
+
+    <FrameLayout
+        android:id="@+id/center_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1.0" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <View
+            android:layout_marginBottom="5dp"
+            android:background="@color/app_divider_gray"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+        <com.common.api.widget.customTab.MyTabWidget
+            android:id="@+id/tabwidget"
+            android:layout_width="fill_parent"
+            android:layout_height="49dp"
+            android:layout_alignParentBottom="true"
+            app:bottom_icon="@array/bottom_bar_icon"
+            app:bottom_items_attr="@array/bottom_bar_attr"
+            app:bottom_labels="@array/bottom_bar_labels"
+            app:bottom_text_color="@drawable/selector_bottom_tab_text_color" />
+
+    </LinearLayout>
+</LinearLayout>
