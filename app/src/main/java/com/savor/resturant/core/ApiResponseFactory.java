@@ -28,6 +28,7 @@ import com.savor.resturant.bean.BaseProResponse;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.RecommendFoodAdvert;
 import com.savor.resturant.bean.RoomInfo;
+import com.savor.resturant.bean.RoomListBean;
 import com.savor.resturant.bean.SlideSettingsMediaBean;
 import com.savor.resturant.bean.SmallPlatformByGetIp;
 import com.savor.resturant.bean.TvBoxInfo;
@@ -245,6 +246,11 @@ public class ApiResponseFactory {
             case POST_ADD_ORDER_JSON:
                 result = "success";
                 break;
+            case POST_ROOM_LIST_JSON:
+                result = gson.fromJson(info, new TypeToken<List<RoomListBean>>() {
+                }.getType());;
+                break;
+
             default:
                 break;
         }

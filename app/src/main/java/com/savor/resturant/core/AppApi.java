@@ -91,7 +91,8 @@ public class AppApi {
         GET_WORD_PRO_JSON,
         /**新增预订*/
         POST_ADD_ORDER_JSON,
-
+        /**获取酒楼包间列表*/
+        POST_ROOM_LIST_JSON,
     }
 
     /**
@@ -125,6 +126,8 @@ public class AppApi {
             put(Action.GET_RECOMMEND_PRO_JSON,smallPlatformUrl);
             put(Action.GET_WORD_PRO_JSON,smallPlatformUrl);
             put(Action.POST_ADD_ORDER_JSON, formatPhpUrl("Dinnerapp2/Order/addOrder"));
+            put(Action.POST_ROOM_LIST_JSON, formatPhpUrl("Dinnerapp2/Room/getList"));
+
 
         }
     };
@@ -568,6 +571,14 @@ public class AppApi {
         params.put("room_id", room_id);
         params.put("room_type", room_type);
         new AppServiceOk(context,Action.POST_ADD_ORDER_JSON,handler,params).post();
+    }
+
+    /**获取酒楼包间列表*/
+    public static void getList(Context context,String invite_id, String mobile, ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("invite_id", invite_id);
+        params.put("mobile", mobile);
+        new AppServiceOk(context,Action.POST_ROOM_LIST_JSON,handler,params).post();
     }
     // 超时（网络）异常
     public static final String ERROR_TIMEOUT = "3001";
