@@ -2,14 +2,14 @@
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/app_red_color</item>
+        <item name="colorPrimaryDark">@color/app_red_color</item>
+        <item name="colorAccent">@color/app_red_color</item>
     </style>
     <!-- Base application theme. -->
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimaryDark">#f6f6f6</item>
-        <item name="colorPrimary">#f6f6f6</item>
+        <item name="colorPrimaryDark">@color/app_red_color</item>
+        <item name="colorPrimary">@color/app_red_color</item>
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to

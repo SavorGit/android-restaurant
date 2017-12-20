@@ -437,6 +437,7 @@
     <string name="create_slide">创建幻灯片</string>
     <string name="create_video">创建视频列表</string>
     <string name="found_tv_hint">发现可连接电视，请连接</string>
+    <string name="import_cancel"><u>暂不使用</u></string>
 
 
 </resources>

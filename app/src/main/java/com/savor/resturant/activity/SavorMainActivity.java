@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
+import com.common.api.utils.ShowMessage;
 import com.common.api.widget.customTab.MyTabWidget;
 import com.savor.resturant.R;
 import com.savor.resturant.fragment.BookFragment;
@@ -12,6 +13,7 @@ import com.savor.resturant.fragment.CustomerFragment;
 import com.savor.resturant.fragment.MyFragment;
 import com.savor.resturant.fragment.ServiceFragment;
 import com.savor.resturant.utils.ConstantValues;
+import com.savor.resturant.widget.ImportDialog;
 
 public class SavorMainActivity extends BaseFragmentActivity implements MyTabWidget.OnTabSelectedListener {
 
@@ -28,10 +30,21 @@ public class SavorMainActivity extends BaseFragmentActivity implements MyTabWidg
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_savor_main);
 
+
         supportFragmentManager = getSupportFragmentManager();
         getViews();
         setViews();
         setListeners();
+        testDialog();
+    }
+
+    private void testDialog() {
+        new ImportDialog(this, new ImportDialog.OnImportBtnClickListener() {
+            @Override
+            public void onImportBtnClick() {
+                ShowMessage.showToast(SavorMainActivity.this,"开始导入");
+            }
+        }).show();
     }
 
     @Override

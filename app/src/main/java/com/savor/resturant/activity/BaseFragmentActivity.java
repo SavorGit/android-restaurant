@@ -43,7 +43,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements I
 		mSession = Session.get(getApplicationContext());
 		mContext = this;
 		ActivitiesManager.getInstance().pushActivity(this);
-		StatusBarUtil.setStatusBarLightMode(getWindow());
+//		StatusBarUtil.setStatusBarLightMode(getWindow());
 //		EtagoClientApplication.setApplicationContext(this);
 	}
 
