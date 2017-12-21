@@ -41,7 +41,7 @@ import java.util.regex.Pattern;
  * 客户列表，通讯录列表
  * @author hezd
  */
-public class ContactAndCustomerListActivity extends BaseActivity implements View.OnClickListener {
+public class ContactAndCustomerListActivity extends BaseActivity implements View.OnClickListener, MyContactAdapter.OnAddBtnClickListener, MyContactAdapter.OnCheckStateChangeListener {
     private List<ContactFormat> contactFormats;
     private ChineseComparator pinyinComparator;
     private MyContactAdapter adapter;
@@ -55,6 +55,8 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
     private TextView mRightTv;
     /**是否是多选状态*/
     private boolean isMultiSelectMode;
+
+    private List<ContactFormat> selectedLsit = new ArrayList<>();
 
     public enum OperationType implements Serializable{
         /**客户列表*/
@@ -101,6 +103,9 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
 
                         recyclerView.setAdapter(adapter);
                         recyclerView.addItemDecoration(new DividerDecoration(ContactAndCustomerListActivity.this));
+
+                        adapter.setOnCheckStateChangeListener(ContactAndCustomerListActivity.this);
+                        adapter.setOnAddBtnClickListener(ContactAndCustomerListActivity.this);
 
                         hideLoadingLayout();
                     }
@@ -199,6 +204,7 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
     }
 
     public void setListeners() {
+
         mRightTv.setOnClickListener(this);
 
         sideBar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
@@ -312,12 +318,28 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
     }
 
     @Override
+    public void onAddBtnClick(int position, ContactFormat contactFormat) {
+
+    }
+
+    @Override
+    public void onCheckStateChange(boolean isChecked, ContactFormat contactFormat) {
+        if(isChecked) {
+            selectedLsit.add(contactFormat);
+        }else {
+            selectedLsit.remove(contactFormat);
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_right:
                 if(isMultiSelectMode) {
-                    mRightTv.setText("全选");
+                    mRightTv.setText("多选");
+                    resetList();
                     adapter.setSelectMode(false);
+                    selectedLsit.clear();
                 }else {
                     mRightTv.setText("取消");
                     adapter.setSelectMode(true);
@@ -326,4 +348,11 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
                 break;
         }
     }
+
+    private void resetList() {
+        for(ContactFormat contactFormat: contactFormats) {
+            contactFormat.setSelected(false);
+        }
+    }
+
 }

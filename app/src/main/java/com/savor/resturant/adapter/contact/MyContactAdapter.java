@@ -70,7 +70,7 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
 
         String mobile = item.getMobile();
         textView.setText(getItem(position).getName());
-        
+
         holder.mAdd.setVisibility(isMultiSelectMode?View.GONE:View.VISIBLE);
 
         if(TextUtils.isEmpty(mobile)) {
@@ -100,14 +100,18 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 int pos = (int) buttonView.getTag();
                 ContactFormat changeItem = getItem(pos);
+                changeItem.setSelected(isChecked);
                 if(onCheckStateChangeListener!=null) {
-                    onCheckStateChangeListener.onCheckStateChange(pos,changeItem);
+                    onCheckStateChangeListener.onCheckStateChange(isChecked,changeItem);
                 }
             }
         });
 
         if(isMultiSelectMode) {
             holder.checkBox.setChecked(selected);
+        }else {
+            item.setSelected(false);
+            holder.checkBox.setChecked(false);
         }
 
     }
@@ -219,6 +223,6 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
     }
 
     public interface OnCheckStateChangeListener {
-        void onCheckStateChange(int position,ContactFormat contactFormat);
+        void onCheckStateChange(boolean isChecked,ContactFormat contactFormat);
     }
 }
