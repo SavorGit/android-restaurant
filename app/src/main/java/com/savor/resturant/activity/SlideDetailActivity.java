@@ -36,6 +36,9 @@ import com.savor.resturant.bean.MediaInfo;
 import com.savor.resturant.bean.RoomInfo;
 import com.savor.resturant.bean.SlideSetInfo;
 import com.savor.resturant.bean.SlideSettingsMediaBean;
+import com.savor.resturant.bean.SmallPlatInfoBySSDP;
+import com.savor.resturant.bean.SmallPlatformByGetIp;
+import com.savor.resturant.bean.TvBoxSSDPInfo;
 import com.savor.resturant.core.ApiRequestListener;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.ResponseErrorMessage;
@@ -188,6 +191,8 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     private String needLinkWifi;
     /**是否在前台*/
     private boolean isForground;
+    /**请求房间列表的失败次数*/
+    private int erroCount;
 
     private void handleImageUploadResponse(Object obj) {
         if (obj instanceof ImageProResonse) {
@@ -529,6 +534,8 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     }
 
     private void hideRoomList() {
+        if(mRoomListView.getVisibility() != View.VISIBLE)
+            return;
         // 清楚房间选择记录
         resetRoomList();
 
@@ -1223,6 +1230,22 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     public void onSuccess(AppApi.Action method, Object obj) {
         super.onSuccess(method, obj);
         switch (method) {
+            case GET_HOTEL_BOX_JSON:
+                if(obj instanceof List) {
+                    List<RoomInfo> roomInfos = (List<RoomInfo>) obj;
+                    mSession.setRoomList(roomInfos);
+                    for(RoomInfo info : roomInfos) {
+                        String room_id = info.getRoom_id();
+                        String box_ip = info.getBox_ip();
+                        if(!TextUtils.isEmpty(room_id)&&currentRoom!=null&&room_id.equals(currentRoom.getRoom_id())) {
+                            currentRoom = info;
+                            reConnect(info);
+                            break;
+                        }
+                    }
+
+                }
+                break;
             case POST_VIDEO_SLIDESETTINGS_JSON:
                 if (obj instanceof List<?>) {
                     slideSettingsMediaBeanResultList = (List<SlideSettingsMediaBean>) obj;
@@ -1270,6 +1293,12 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     public void onError(AppApi.Action method, Object obj) {
 
         switch (method) {
+            case GET_HOTEL_BOX_JSON:
+                erroCount++;
+                if(erroCount ==3) {
+                    showToast("包间电视连接失败，请检查是否开机");
+                }
+                break;
             case POST_VIDEO_SLIDESETTINGS_JSON:
                 if (obj instanceof ResponseErrorMessage) {
                     ResponseErrorMessage message = (ResponseErrorMessage) obj;
@@ -1302,9 +1331,9 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
 //                        mHandler.sendMessage(msg);
 //                    } else {
 //                        error_msg = "用户正在投屏，请稍后再试";
-                        msg.what = TOAST_ERROR_MSG;
-                        msg.obj = error_msg;
-                        mHandler.sendMessage(msg);
+                    msg.what = TOAST_ERROR_MSG;
+                    msg.obj = error_msg;
+                    mHandler.sendMessage(msg);
 //                    }
                 } else if (obj == AppApi.ERROR_TIMEOUT) {
                     mHandler.sendEmptyMessage(UPLOAD_TIMEOUT);
@@ -1422,6 +1451,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                 info.setSelected(false);
             }
         }
+        roomListAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -1499,7 +1529,67 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     @Override
     public void onRoomItemClick(RoomInfo roomInfo) {
         currentRoom = roomInfo;
-        hideRoomList();
+
+        erroCount = 0;
+
+        // 判断是否连接同一个wifi并且同一网段
+        String wifiName = WifiUtil.getWifiName(this);
+        String box_name = roomInfo.getBox_name();
+        String box_ip = "";
+//        String box_ip = roomInfo.getBox_ip();
+        String localIp = WifiUtil.getLocalIp(this);
+        if(!TextUtils.isEmpty(wifiName)&&wifiName.equals(box_name)&&!TextUtils.isEmpty(localIp)&&WifiUtil.isInSameNetwork(localIp,box_ip)) {
+            hideRoomList();
+            showSlideSettings();
+        }else {
+            if(TextUtils.isEmpty(box_ip)) {
+//                showToast("与盒子失去联系");
+                SmallPlatInfoBySSDP smallPlatInfoBySSDP = mSession.getSmallPlatInfoBySSDP();
+                SmallPlatformByGetIp smallPlatformByGetIp = mSession.getmSmallPlatInfoByIp();
+                TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
+                int hotelid = mSession.getHotelid();
+                String smallIp = "";
+                // 1.通过getip请求包间列表
+                if(smallPlatformByGetIp!=null&&!TextUtils.isEmpty(smallPlatformByGetIp.getLocalIp())) {
+                    smallIp = smallPlatformByGetIp.getLocalIp();
+                    String url = "http://"+smallIp+":8080";
+                    AppApi.getHotelRoomList(SlideDetailActivity.this,url,String.valueOf(hotelid),SlideDetailActivity.this);
+                }else {
+                    erroCount++;
+                }
+
+                // 通过小平台ssdp获取小平台地址请求房间列表
+                if(smallPlatInfoBySSDP!=null&&!TextUtils.isEmpty(smallPlatInfoBySSDP.getServerIp())) {
+                    smallIp = smallPlatInfoBySSDP.getServerIp();
+                    String url = "http://"+smallIp+":8080";
+                    AppApi.getHotelRoomList(SlideDetailActivity.this,url,String.valueOf(hotelid),SlideDetailActivity.this);
+                }else {
+                    erroCount++;
+                }
+
+                if(tvBoxSSDPInfo!=null&&!TextUtils.isEmpty(tvBoxSSDPInfo.getServerIp())) {
+                    smallIp = tvBoxSSDPInfo.getServerIp();
+                    String url = "http://"+smallIp+":8080";
+                    AppApi.getHotelRoomList(SlideDetailActivity.this,url,String.valueOf(hotelid),SlideDetailActivity.this);
+                }else {
+                    erroCount++;
+                    if(erroCount == 3) {
+                        showToast("包间电视连接失败，请检查是否开机");
+                    }
+                }
+
+            }else {
+                needLinkWifi = box_name;
+                hideRoomList();
+                showChangeWifiDialog(box_name);
+            }
+        }
+    }
+
+    public void reConnect(RoomInfo roomInfo) {
+        currentRoom = roomInfo;
+
+        erroCount = 0;
 
         // 判断是否连接同一个wifi并且同一网段
         String wifiName = WifiUtil.getWifiName(this);
@@ -1507,12 +1597,15 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         String box_ip = roomInfo.getBox_ip();
         String localIp = WifiUtil.getLocalIp(this);
         if(!TextUtils.isEmpty(wifiName)&&wifiName.equals(box_name)&&!TextUtils.isEmpty(localIp)&&WifiUtil.isInSameNetwork(localIp,box_ip)) {
+            hideRoomList();
             showSlideSettings();
         }else {
-            if(TextUtils.isEmpty(box_ip)) {
-                showToast("与盒子失去联系");
+            if(!TextUtils.isEmpty(wifiName)&&wifiName.equals(box_name)&&TextUtils.isEmpty(box_ip)) {
+//                showToast("与盒子失去联系");
+                showToast("包间电视连接失败，请检查是否开机");
             }else {
                 needLinkWifi = box_name;
+                hideRoomList();
                 showChangeWifiDialog(box_name);
             }
         }
@@ -1523,6 +1616,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         if (!TextUtils.isEmpty(needLinkWifi) && needLinkWifi.equals(WifiUtil.getWifiName(this))&&isForground) {
             cancelWifiCheck();
             needLinkWifi = null;
+            hideRoomList();
             showSlideSettings();
         }else {
             startCheckWifiLinkedTimer();
@@ -1530,21 +1624,27 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
     }
 
 
-    private void setLog(String count,String result,String length,String type){
-        HotelBean hotel = mSession.getHotelBean();
-        AppApi.reportLog(mContext,
-                hotel.getHotel_id()+"",
-                "",hotel.getInvitation(),
-                hotel.getTel(),
-                currentRoom.getRoom_id(),
-                count,//文件个数
-                result,//投屏结果 1 成功；0失败
-                length,//总时长
-                type,//1视频 2照片 3特色菜 4宣传片 5欢迎词
-                "",
-                "",
-                this
-        );
+    private void setLog(final String count, final String result, final String length, final String type){
+        final HotelBean hotel = mSession.getHotelBean();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AppApi.reportLog(mContext,
+                        hotel.getHotel_id()+"",
+                        "",hotel.getInvitation(),
+                        hotel.getTel(),
+                        currentRoom.getRoom_id(),
+                        count,//文件个数
+                        result,//投屏结果 1 成功；0失败
+                        length,//总时长
+                        type,//1视频 2照片 3特色菜 4宣传片 5欢迎词
+                        "",
+                        "",
+                        SlideDetailActivity.this
+                );
+            }
+        });
+
 //        AppApi.reportLog(mContext,
 //                hotel.getHotel_id()+"",
 //                "",hotel.getInvitation(),
