@@ -2,7 +2,7 @@ package com.savor.resturant.utils;
 
 
 
-import com.savor.resturant.bean.MyContact;
+import com.savor.resturant.bean.Contact;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 
@@ -15,11 +15,11 @@ import java.util.regex.Pattern;
  * @author xiaanming
  *
  */
-public class ChineseComparator implements Comparator<MyContact> {
+public class ChineseComparator implements Comparator<Contact> {
 
-	public int compare(MyContact o1, MyContact o2) {
-		String displayName = String.valueOf(o1.getDisplayName().charAt(0));
-		String displayName1 = String.valueOf(o2.getDisplayName().charAt(0));
+	public int compare(Contact o1, Contact o2) {
+		String displayName = String.valueOf(o1.getName().charAt(0));
+		String displayName1 = String.valueOf(o2.getName().charAt(0));
 		if(isNumeric(displayName)) {
 			return 1;
 		}
@@ -27,8 +27,17 @@ public class ChineseComparator implements Comparator<MyContact> {
 		if(isNumeric(displayName1)) {
 			return -1;
 		}
-		String str1 = String.valueOf(PinyinHelper.toHanyuPinyinStringArray(o1.getDisplayName().charAt(0))[0].toLowerCase().charAt(0));
-		String str2 = String.valueOf(PinyinHelper.toHanyuPinyinStringArray(o2.getDisplayName().charAt(0))[0].toLowerCase().charAt(0));
+
+		if(isLetter(displayName)) {
+			return 1;
+		}
+
+		if(isLetter(displayName1)) {
+			return -1;
+		}
+
+		String str1 = String.valueOf(PinyinHelper.toHanyuPinyinStringArray(o1.getName().charAt(0))[0].toLowerCase().charAt(0));
+		String str2 = String.valueOf(PinyinHelper.toHanyuPinyinStringArray(o2.getName().charAt(0))[0].toLowerCase().charAt(0));
 
 		if (str1.equals("@")
 				|| str2.equals("#")) {

@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 
-import com.savor.resturant.bean.MyContact;
+import com.savor.resturant.bean.Contact;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 
@@ -35,12 +35,12 @@ public class ContactUtil {
         return instance;
     }
 
-    public List<MyContact> getAllContact(Context context) {
+    public List<Contact> getAllContact(Context context) {
         ContentResolver contentResolver = context.getContentResolver();
         Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-        List<MyContact> contactList = new ArrayList<>();
+        List<Contact> contactList = new ArrayList<>();
         while(cursor.moveToNext()) {
-            MyContact contact = new MyContact();
+            Contact contact = new Contact();
 
             int nameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
             int contactIndex = cursor.getColumnIndex(ContactsContract.Contacts._ID);
@@ -50,7 +50,7 @@ public class ContactUtil {
             if(!TextUtils.isEmpty(name)) {
                 name = name.trim().replaceAll(" ","");
             }
-            contact.setDisplayName(name);
+            contact.setName(name);
 
             String workAddress = "" ;
 
@@ -64,9 +64,7 @@ public class ContactUtil {
                 workAddress = address.getString(address.getColumnIndex(
                         ContactsContract.CommonDataKinds.StructuredPostal.DATA));
                 if(!TextUtils.isEmpty(workAddress)) {
-                    List<String> addressList = new ArrayList<>();
-                    addressList.add(workAddress);
-                    contact.setAddresses(addressList);
+                    contact.setBirthplace(workAddress);
                 }
             }
             address.close();
@@ -77,22 +75,26 @@ public class ContactUtil {
                     ContactsContract.CommonDataKinds.Phone.CONTACT_ID
                             + "=" + contactId, null, null);
 
-            List<String> numberList = new ArrayList<>();
+            int count = 0;
             while (phoneCursor.moveToNext()) {
-                String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER));
-                if(numberList.size()<2) {
-                    numberList.add(phoneNumber);
+                String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                if(count==0) {
+                    contact.setMobile(phoneNumber);
+                }else if(count==1) {
+                    contact.setMobile1(phoneNumber);
+                }else {
+                    break;
                 }
+                count++;
             }
 
             phoneCursor.close();
-            contact.setPhoneNumbers(numberList);
 
             StringBuilder sb = new StringBuilder();
 
             if(!TextUtils.isEmpty(name)) {
                 name = name.trim().replaceAll(" ","");
-                if(!isNumeric(name)) {
+                if(!isNumeric(name)&&!isLetter(name)) {
                     for(int i = 0;i<name.length();i++) {
                         String str= removeDigital(String.valueOf(PinyinHelper.toHanyuPinyinStringArray(name.charAt(i))[0]));
                         sb.append(str);
@@ -101,8 +103,23 @@ public class ContactUtil {
                     sb.append(name);
                 }
             }
-            contact.setKey(name+"#"+sb.toString().toLowerCase()+"#"+workAddress+(numberList.size()==0?"":numberList.get(0)));
+            String mobile = contact.getMobile();
+            contact.setKey(name+"#"+sb.toString().toLowerCase()+"#"+workAddress+(TextUtils.isEmpty(mobile)?"":mobile));
 
+            Cursor birthCursor = context.getContentResolver().query(ContactsContract.Data.CONTENT_URI,
+                    null, ContactsContract.Data.CONTACT_ID +"="+contactId, null, ContactsContract.Data.RAW_CONTACT_ID);
+            if (birthCursor.moveToNext()) {
+                String mimetype = birthCursor.getString(birthCursor.getColumnIndex(ContactsContract.Data.MIMETYPE));
+                if (ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE.equals(mimetype)) { // 取出时间类型
+                    int eventType = birthCursor.getInt(birthCursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.TYPE)); // 生日
+                    if (eventType == ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY) {
+                        String birthday = birthCursor.getString(cursor
+                                .getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE));
+                        contact.setBirthday(birthday);
+                    }
+                }
+            }
+            birthCursor.close();
 
             contactList.add(contact);
         }
@@ -111,110 +128,9 @@ public class ContactUtil {
         return contactList;
     }
 
-//    /**
-//     *
-//     * @param context
-//     * @return
-//     */
-//    public List<MyContact> getContactLike(Context context,String like) {
-//
-//        // 如果是纯数字搜索就是搜索手机号，否则搜索姓名
-//        boolean numeric = isNumeric(like);
-//        ContentResolver contentResolver = context.getContentResolver();
-//        Cursor cursor = null;
-//        List<MyContact> contactList = new ArrayList<>();
-//        if(numeric) {
-//            cursor = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-//                    null, ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER +" LIKE '%"+like+"%'",
-//                    null, null);
-//            while(cursor.moveToNext()) {
-//                MyContact contact = new MyContact();
-//
-//                int nameIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-//                int contactIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone._ID);
-//                String contactId = cursor.getString(contactIndex);
-//
-//                String name = cursor.getString(nameIndex);
-//                contact.setDisplayName(name);
-//
-//                String workAddress ;
-//
-//
-//                Cursor address = contentResolver.query(ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI,
-//                        null,
-//                        ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID + " = " + contactId,
-//                        null, null);
-//                if(address.moveToNext()) {
-//                    workAddress = address.getString(address.getColumnIndex(
-//                            ContactsContract.CommonDataKinds.StructuredPostal.DATA));
-//                    if(!TextUtils.isEmpty(workAddress)) {
-//                        List<String> addressList = new ArrayList<>();
-//                        addressList.add(workAddress);
-//                        contact.setAddresses(addressList);
-//                    }
-//                }
-//                address.close();
-//
-//                Cursor phoneCursor = contentResolver.query(
-//                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-//                        null,
-//                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID
-//                                + "=" + contactId, null, null);
-//                List<String> numberList = new ArrayList<>();
-//                while (phoneCursor.moveToNext()) {
-//                    String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER));
-//                    if(numberList.size()<2) {
-//                        numberList.add(phoneNumber);
-//                    }
-//                }
-//                contact.setPhoneNumbers(numberList);
-//                phoneCursor.close();
-//
-//                contactList.add(contact);
-//            }
-//        }else {
-//
-//            cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI,
-//                    null, null,
-//                    null, null);
-//            while(cursor.moveToNext()) {
-//
-//                int nameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
-//                int contactId = cursor.getColumnIndex(ContactsContract.Contacts._ID);
-//
-//                String name = cursor.getString(nameIndex);
-//
-//                // 如果仅包含字母比较麻烦 多重判断
-//                // 否则直接contains匹配 比较简单
-//                if(!isLetter(like)) {
-//                    if(name.contains(like)) {
-//                        addContact(contentResolver, contactList, contactId, name);
-//                    }
-//                }else {
-//                    StringBuilder sb = new StringBuilder();
-//                    for(int i = 0;i<name.length();i++) {
-//                        String  str= removeDigital(String.valueOf(PinyinHelper.toHanyuPinyinStringArray(name.charAt(i))[0]));
-//                        sb.append(str);
-//                    }
-//
-//                    if(sb.toString().contains(like)) {
-//                        addContact(contentResolver, contactList, contactId, name);
-//                    }
-//                }
-//
-//
-//            }
-//        }
-//
-//
-//        cursor.close();
-//
-//        return contactList;
-//    }
-
-    private void addContact(ContentResolver contentResolver, List<MyContact> contactList, int contactId, String name) {
-        MyContact contact = new MyContact();
-        contact.setDisplayName(name);
+    private void addContact(ContentResolver contentResolver, List<Contact> contactList, int contactId, String name) {
+        Contact contact = new Contact();
+        contact.setName(name);
 
         String workAddress ;
 
@@ -227,9 +143,7 @@ public class ContactUtil {
             workAddress = address.getString(address.getColumnIndex(
                     ContactsContract.CommonDataKinds.StructuredPostal.DATA));
             if(!TextUtils.isEmpty(workAddress)) {
-                List<String> addressList = new ArrayList<>();
-                addressList.add(workAddress);
-                contact.setAddresses(addressList);
+                contact.setBirthplace(workAddress);
             }
         }
         address.close();
@@ -239,14 +153,18 @@ public class ContactUtil {
                 null,
                 ContactsContract.CommonDataKinds.Phone.CONTACT_ID
                         + "=" + contactId, null, null);
-        List<String> numberList = new ArrayList<>();
+        int count = 0;
         while (phoneCursor.moveToNext()) {
             String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            if(numberList.size()<2) {
-                numberList.add(phoneNumber);
+            if(count==0) {
+                contact.setMobile(phoneNumber);
+            }else if(count==1) {
+                contact.setMobile1(phoneNumber);
+            }else {
+                break;
             }
+            count++;
         }
-        contact.setPhoneNumbers(numberList);
         phoneCursor.close();
 
         contactList.add(contact);

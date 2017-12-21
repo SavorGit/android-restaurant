@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.contact.MyContactAdapter;
-import com.savor.resturant.bean.MyContact;
+import com.savor.resturant.bean.Contact;
 import com.savor.resturant.utils.ChineseComparator;
 import com.savor.resturant.utils.ContactUtil;
 import com.savor.resturant.widget.contact.DividerDecoration;
@@ -31,7 +31,7 @@ import java.util.List;
  * @author hezd
  */
 public class ContactAndCustomerListActivity extends BaseActivity {
-    private List<MyContact> contacts;
+    private List<Contact> contacts;
     private ChineseComparator pinyinComparator;
     private MyContactAdapter adapter;
     private TextView contactDialog;
@@ -54,24 +54,46 @@ public class ContactAndCustomerListActivity extends BaseActivity {
     public void initData() {
 //        List<Contact> contacts = Contacts.getQuery().find();
         showLoadingLayout();
-        recyclerView.postDelayed(new Runnable() {
+        new Thread(){
             @Override
             public void run() {
-
-
                 contacts = ContactUtil.getInstance().getAllContact(ContactAndCustomerListActivity.this);
                 Collections.sort(contacts, pinyinComparator);
-                adapter = new MyContactAdapter(ContactAndCustomerListActivity.this, contacts);
-                int orientation = LinearLayoutManager.VERTICAL;
-                final LinearLayoutManager layoutManager = new LinearLayoutManager(ContactAndCustomerListActivity.this, orientation, false);
-                recyclerView.setLayoutManager(layoutManager);
 
-                recyclerView.setAdapter(adapter);
-                recyclerView.addItemDecoration(new DividerDecoration(ContactAndCustomerListActivity.this));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter = new MyContactAdapter(ContactAndCustomerListActivity.this, contacts);
+                        int orientation = LinearLayoutManager.VERTICAL;
+                        final LinearLayoutManager layoutManager = new LinearLayoutManager(ContactAndCustomerListActivity.this, orientation, false);
+                        recyclerView.setLayoutManager(layoutManager);
 
-                hideLoadingLayout();
+                        recyclerView.setAdapter(adapter);
+                        recyclerView.addItemDecoration(new DividerDecoration(ContactAndCustomerListActivity.this));
+
+                        hideLoadingLayout();
+                    }
+                });
             }
-        },100);
+        }.start();
+//        recyclerView.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//
+//                contacts = ContactUtil.getInstance().getAllContact(ContactAndCustomerListActivity.this);
+//                Collections.sort(contacts, pinyinComparator);
+//                adapter = new MyContactAdapter(ContactAndCustomerListActivity.this, contacts);
+//                int orientation = LinearLayoutManager.VERTICAL;
+//                final LinearLayoutManager layoutManager = new LinearLayoutManager(ContactAndCustomerListActivity.this, orientation, false);
+//                recyclerView.setLayoutManager(layoutManager);
+//
+//                recyclerView.setAdapter(adapter);
+//                recyclerView.addItemDecoration(new DividerDecoration(ContactAndCustomerListActivity.this));
+//
+//                hideLoadingLayout();
+//            }
+//        },100);
 
     }
 
@@ -118,7 +140,7 @@ public class ContactAndCustomerListActivity extends BaseActivity {
                 String content = mSearchEt.getText().toString();
                 if(!TextUtils.isEmpty(content)) {
                     if(contacts!=null&&contacts.size()>0) {
-                        List<MyContact> contactLike = getLikeList(contacts,content);
+                        List<Contact> contactLike = getLikeList(contacts,content);
                         adapter.setData(contactLike);
                     }
                 }else {
@@ -131,9 +153,9 @@ public class ContactAndCustomerListActivity extends BaseActivity {
         });
     }
 
-    private List<MyContact> getLikeList(List<MyContact> contacts, String content) {
-        List<MyContact> tempList = new ArrayList<>();
-        for(MyContact contact : contacts) {
+    private List<Contact> getLikeList(List<Contact> contacts, String content) {
+        List<Contact> tempList = new ArrayList<>();
+        for(Contact contact : contacts) {
             if(contact.getKey().trim().contains(content)) {
                 tempList.add(contact);
             }
