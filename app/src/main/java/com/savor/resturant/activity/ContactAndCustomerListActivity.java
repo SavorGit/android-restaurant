@@ -100,6 +100,8 @@ public class ContactAndCustomerListActivity extends BaseActivity {
             List<Address> addresses = contact.getAddresses();
             Event birthday = contact.getBirthday();
             List<PhoneNumber> phoneNumbers = contact.getPhoneNumbers();
+            Long id = contact.getId();
+            format.setContactId(String.valueOf(id));
 
             if(birthday!=null&&!TextUtils.isEmpty(birthday.getStartDate())) {
                 format.setBirthday(birthday.getStartDate());

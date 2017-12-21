@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.savor.resturant.R;
@@ -57,11 +58,13 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
         TextView textView = holder.mName;
         ContactFormat item = getItem(position);
         String mobile = item.getMobile();
-        String phone = "";
-        if(!TextUtils.isEmpty(mobile))
-            phone = mobile;
-        textView.setText(getItem(position).getName()+"  "+phone);
-
+        textView.setText(getItem(position).getName());
+        if(TextUtils.isEmpty(mobile)) {
+            holder.mNum.setVisibility(View.GONE);
+        }else {
+            holder.mNum.setVisibility(View.VISIBLE);
+            holder.mNum.setText(mobile);
+        }
     }
 
     @Override
@@ -92,7 +95,6 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
 //        } else {
             textView.setText(showValue);
 //        }
-
     }
 
 
@@ -119,16 +121,18 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
     public class ContactViewHolder extends RecyclerView.ViewHolder {
 
         public TextView mName;
+        public TextView mNum;
         public SwipeItemLayout mRoot;
         public TextView mDelete;
+        public CheckBox checkBox;
 
         public ContactViewHolder(View itemView) {
             super(itemView);
             mName = (TextView) itemView.findViewById(R.id.item_contact_title);
             mRoot = (SwipeItemLayout) itemView.findViewById(R.id.item_contact_swipe_root);
             mDelete = (TextView) itemView.findViewById(R.id.item_contact_delete);
-
-
+            mNum = (TextView) itemView.findViewById(R.id.tv_num);
+            checkBox = (CheckBox) itemView.findViewById(R.id.cb_select);
         }
 
 

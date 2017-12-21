@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item_contact_swipe_root"
     android:layout_width="match_parent"
-    android:layout_height="48dp"
+    android:layout_height="wrap_content"
     app:bga_sil_bottomMode="pullOut"
     app:bga_sil_springDistance="20dp"
     app:bga_sil_swipeDirection="left">
@@ -27,20 +27,74 @@
             android:textSize="20sp" />
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <CheckBox
+            android:layout_marginLeft="15dp"
+            android:layout_centerVertical="true"
+            android:id="@+id/cb_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/cb_select"
+            android:id="@+id/tv_label"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:background="@drawable/oval_label"
+            android:text="何"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/tv_add"
+            android:gravity="center_vertical"
+            android:layout_toRightOf="@id/tv_label"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+            <TextView
+                android:id="@+id/item_contact_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:gravity="left|center_vertical"
+                android:text="何竹冬"
+                android:textColor="@android:color/black"
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/tv_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:gravity="left|center_vertical"
+                android:text="标题"
+                android:textColor="@android:color/black"
+                android:textSize="14sp" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/item_contact_title"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
+            android:id="@+id/tv_add"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:layout_alignParentRight="true"
+            android:textSize="18sp"
             android:gravity="center"
-            android:text="标题"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" />
-    </LinearLayout>
+            android:layout_gravity="right|center_vertical"
+            android:padding="5dp"
+            android:text="添加"
+            android:background="@drawable/edit_text_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 
 </com.savor.resturant.widget.contact.SwipeItemLayout>
 
