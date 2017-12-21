@@ -30,6 +30,7 @@ import com.savor.resturant.widget.contact.SideBar;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,7 +41,7 @@ import java.util.regex.Pattern;
  * 客户列表，通讯录列表
  * @author hezd
  */
-public class ContactAndCustomerListActivity extends BaseActivity {
+public class ContactAndCustomerListActivity extends BaseActivity implements View.OnClickListener {
     private List<ContactFormat> contactFormats;
     private ChineseComparator pinyinComparator;
     private MyContactAdapter adapter;
@@ -49,16 +50,33 @@ public class ContactAndCustomerListActivity extends BaseActivity {
     private RecyclerView recyclerView;
     private EditText mSearchEt;
     private ProgressBar mLoadingPb;
+    private OperationType operationType;
+    private TextView mTitleTv;
+    private TextView mRightTv;
+    /**是否是多选状态*/
+    private boolean isMultiSelectMode;
+
+    public enum OperationType implements Serializable{
+        /**客户列表*/
+        CUSTOMER_LIST,
+        /**通讯录列表*/
+        CONSTACT_LIST,
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_and_customer_list);
 
+        handleIntent();
         getViews();
         setViews();
         setListeners();
         initData();
+    }
+
+    private void handleIntent() {
+        operationType = (OperationType) getIntent().getSerializableExtra("type");
     }
 
     public void initData() {
@@ -151,21 +169,38 @@ public class ContactAndCustomerListActivity extends BaseActivity {
     }
 
     public void getViews() {
+        mTitleTv = (TextView) findViewById(R.id.tv_center);
         mLoadingPb = (ProgressBar) findViewById(R.id.pb_loading);
         contactDialog = (TextView) findViewById(R.id.contact_dialog);
         sideBar = (SideBar) findViewById(R.id.contact_sidebar);
         recyclerView = (RecyclerView) findViewById(R.id.contact_member);
         mSearchEt = (EditText) findViewById(R.id.et_search);
+
+        mRightTv = (TextView) findViewById(R.id.tv_right);
+
     }
 
     public void setViews() {
-
+        mTitleTv.setTextColor(getResources().getColor(R.color.white));
         sideBar.setTextView(contactDialog);
-
         pinyinComparator = new ChineseComparator();
+
+        switch (operationType) {
+            case CONSTACT_LIST:
+                mRightTv.setVisibility(View.VISIBLE);
+                mRightTv.setText("多选");
+                mTitleTv.setText("通讯录");
+                break;
+            case CUSTOMER_LIST:
+                mRightTv.setVisibility(View.GONE);
+                mTitleTv.setText("客户列表");
+                break;
+        }
     }
 
     public void setListeners() {
+        mRightTv.setOnClickListener(this);
+
         sideBar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
             @Override
             public void onTouchingLetterChanged(String s) {
@@ -274,5 +309,21 @@ public class ContactAndCustomerListActivity extends BaseActivity {
     public static boolean isLetter(String str) {
         String regex = "^[a-zA-Z]+$";
         return str.matches(regex);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_right:
+                if(isMultiSelectMode) {
+                    mRightTv.setText("全选");
+                    adapter.setSelectMode(false);
+                }else {
+                    mRightTv.setText("取消");
+                    adapter.setSelectMode(true);
+                }
+                isMultiSelectMode = !isMultiSelectMode;
+                break;
+        }
     }
 }

@@ -24,6 +24,22 @@ public  class ContactFormat implements Serializable {
     private int sex;
     private String birthday;
     private String birthplace;
+    private boolean isSelected;
+
+    @Override
+    public String toString() {
+        return "ContactFormat{" +
+                "contactId='" + contactId + '\'' +
+                ", name='" + name + '\'' +
+                ", key='" + key + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", mobile1='" + mobile1 + '\'' +
+                ", sex=" + sex +
+                ", birthday='" + birthday + '\'' +
+                ", birthplace='" + birthplace + '\'' +
+                ", isSelected=" + isSelected +
+                '}';
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -110,5 +126,13 @@ public  class ContactFormat implements Serializable {
 
     public void setBirthplace(String birthplace) {
         this.birthplace = birthplace;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

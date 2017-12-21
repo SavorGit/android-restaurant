@@ -44,6 +44,7 @@ public class SavorMainActivity extends BaseFragmentActivity implements MyTabWidg
             @Override
             public void onImportBtnClick() {
                 Intent intent = new Intent(SavorMainActivity.this,ContactAndCustomerListActivity.class);
+                intent.putExtra("type", ContactAndCustomerListActivity.OperationType.CONSTACT_LIST);
                 startActivity(intent);
             }
         }).show();

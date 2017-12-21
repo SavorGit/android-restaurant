@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.savor.resturant.R;
@@ -31,6 +32,8 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
 
     private Context mContext;
     private boolean isMultiSelectMode;
+    private OnAddBtnClickListener onAddBtnClickListener;
+    private OnCheckStateChangeListener onCheckStateChangeListener;
 
 
     public MyContactAdapter(Context ct, List<ContactFormat> mListsD) {
@@ -58,13 +61,18 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
     }
 
     @Override
-    public void onBindViewHolder(MyContactAdapter.ContactViewHolder holder, final int position) {
+    public void onBindViewHolder(final MyContactAdapter.ContactViewHolder holder, final int position) {
         SwipeItemLayout swipeRoot = holder.mRoot;
         swipeRoot.setSwipeAble(false);
         TextView textView = holder.mName;
         ContactFormat item = getItem(position);
+        boolean selected = item.isSelected();
+
         String mobile = item.getMobile();
         textView.setText(getItem(position).getName());
+        
+        holder.mAdd.setVisibility(isMultiSelectMode?View.GONE:View.VISIBLE);
+
         if(TextUtils.isEmpty(mobile)) {
             holder.mNum.setVisibility(View.GONE);
         }else {
@@ -73,6 +81,35 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
         }
 
         holder.checkBox.setVisibility(isMultiSelectMode?View.VISIBLE:View.GONE);
+
+        holder.mAdd.setTag(position);
+        holder.mAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int pos = (int) v.getTag();
+                ContactFormat addItem = getItem(pos);
+                if(onAddBtnClickListener!=null) {
+                    onAddBtnClickListener.onAddBtnClick(pos,addItem);
+                }
+            }
+        });
+
+        holder.checkBox.setTag(position);
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                int pos = (int) buttonView.getTag();
+                ContactFormat changeItem = getItem(pos);
+                if(onCheckStateChangeListener!=null) {
+                    onCheckStateChangeListener.onCheckStateChange(pos,changeItem);
+                }
+            }
+        });
+
+        if(isMultiSelectMode) {
+            holder.checkBox.setChecked(selected);
+        }
+
     }
 
     @Override
@@ -129,6 +166,7 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
     public class ContactViewHolder extends RecyclerView.ViewHolder {
 
         public TextView mName;
+        public TextView mAdd;
         public TextView mNum;
         public SwipeItemLayout mRoot;
         public TextView mDelete;
@@ -140,6 +178,7 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
             mRoot = (SwipeItemLayout) itemView.findViewById(R.id.item_contact_swipe_root);
             mDelete = (TextView) itemView.findViewById(R.id.item_contact_delete);
             mNum = (TextView) itemView.findViewById(R.id.tv_num);
+            mAdd = (TextView) itemView.findViewById(R.id.tv_add);
             checkBox = (CheckBox) itemView.findViewById(R.id.cb_select);
         }
 
@@ -165,5 +204,21 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
     public static boolean isLetter(String str) {
         String regex = "^[a-zA-Z]+$";
         return str.matches(regex);
+    }
+
+    public void setOnAddBtnClickListener(OnAddBtnClickListener onAddBtnClickListener) {
+        this.onAddBtnClickListener = onAddBtnClickListener;
+    }
+
+    public void setOnCheckStateChangeListener(OnCheckStateChangeListener onCheckStateChangeListener) {
+        this.onCheckStateChangeListener = onCheckStateChangeListener;
+    }
+
+    public interface OnAddBtnClickListener {
+        void onAddBtnClick(int position,ContactFormat contactFormat);
+    }
+
+    public interface OnCheckStateChangeListener {
+        void onCheckStateChange(int position,ContactFormat contactFormat);
     }
 }
