@@ -1535,8 +1535,8 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         // 判断是否连接同一个wifi并且同一网段
         String wifiName = WifiUtil.getWifiName(this);
         String box_name = roomInfo.getBox_name();
-        String box_ip = "";
-//        String box_ip = roomInfo.getBox_ip();
+//        String box_ip = "";
+        String box_ip = roomInfo.getBox_ip();
         String localIp = WifiUtil.getLocalIp(this);
         if(!TextUtils.isEmpty(wifiName)&&wifiName.equals(box_name)&&!TextUtils.isEmpty(localIp)&&WifiUtil.isInSameNetwork(localIp,box_ip)) {
             hideRoomList();
