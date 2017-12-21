@@ -97,7 +97,12 @@ public class AppApi {
         POST_ADD_ROOM_JSON,
         /**预订列表*/
         POST_ORDER_LIST_JSON,
-
+        /**修改预订信息*/
+        POST_UPDATE_ORDER_JSON,
+        /**删除预订信息*/
+        POST_DELETE_ORDER_JSON,
+        /**更新预订信息服务*/
+        POST_UPDATE_ORDER_SERVICE_JSON,
 
     }
 
@@ -135,6 +140,9 @@ public class AppApi {
             put(Action.POST_ROOM_LIST_JSON, formatPhpUrl("Dinnerapp2/Room/getList"));
             put(Action.POST_ADD_ROOM_JSON, formatPhpUrl("Dinnerapp2/Room/addRoom"));
             put(Action.POST_ORDER_LIST_JSON, formatPhpUrl("Dinnerapp2/Order/getOrderList"));
+            put(Action.POST_UPDATE_ORDER_JSON, formatPhpUrl("Dinnerapp2/Order/updateOrder"));
+            put(Action.POST_DELETE_ORDER_JSON, formatPhpUrl("Dinnerapp2/Order/deleteOrder"));
+            put(Action.POST_UPDATE_ORDER_SERVICE_JSON, formatPhpUrl("Dinnerapp2/Order/upateOrderService"));
 
         }
     };
@@ -606,6 +614,57 @@ public class AppApi {
         new AppServiceOk(context,Action.POST_ORDER_LIST_JSON,handler,params).post();
     }
 
+    /**修改预订信息*/
+    public static void updateOrder(Context context,
+                                String invite_id,
+                                String mobile,
+                                String order_mobile,
+                                String order_id,
+                                String order_name,
+                                String order_time,
+                                String person_nums,
+                                String room_id,
+                                String room_type,
+                                ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("invite_id", invite_id);
+        params.put("mobile", mobile);
+        params.put("order_mobile", order_mobile);
+        params.put("order_name", order_name);
+        params.put("order_time", order_time);
+        params.put("person_nums", person_nums);
+        params.put("room_id", room_id);
+        params.put("room_type", room_type);
+        params.put("order_id", order_id);
+
+        new AppServiceOk(context,Action.POST_UPDATE_ORDER_JSON,handler,params).post();
+    }
+
+    /**删除预订信息*/
+    public static void deleteOrder(Context context,String invite_id, String mobile, String order_id, ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("invite_id", invite_id);
+        params.put("mobile", mobile);
+        params.put("order_id", order_id);
+        new AppServiceOk(context,Action.POST_DELETE_ORDER_JSON,handler,params).post();
+    }
+
+    /**更新预订信息服务*/
+    public static void upateOrderService(Context context,
+                                         String invite_id,
+                                         String mobile,
+                                         String order_id,
+                                         String ticket_url,
+                                         String type,
+                                         ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("invite_id", invite_id);
+        params.put("mobile", mobile);
+        params.put("order_id", order_id);
+        params.put("ticket_url", ticket_url);
+        params.put("type", type);
+        new AppServiceOk(context,Action.POST_UPDATE_ORDER_SERVICE_JSON,handler,params).post();
+    }
     // 超时（网络）异常
     public static final String ERROR_TIMEOUT = "3001";
     // 业务异常
