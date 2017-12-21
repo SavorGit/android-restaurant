@@ -5,6 +5,7 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import com.common.api.utils.AppUtils;
+import com.github.tamir7.contacts.Contacts;
 import com.savor.resturant.core.Session;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
@@ -56,6 +57,7 @@ public class SavorApplication extends MultiDexApplication {
         initCacheFile(this);
         UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, "");
 //        initUmengPush();
+        Contacts.initialize(this);
 
     }
 

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.savor.resturant.R;
-import com.savor.resturant.bean.Contact;
+import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.widget.contact.SwipeItemLayout;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
@@ -22,23 +22,23 @@ import java.util.regex.Pattern;
  * Created by jiang on 12/3/15.
  * 根据当前权限进行判断相关的滑动逻辑
  */
-public class MyContactAdapter extends ContactBaseAdapter<Contact, MyContactAdapter.ContactViewHolder>
+public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContactAdapter.ContactViewHolder>
         implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
 
 //    private final CharacterParser characterParser;
-    private List<Contact> mLists;
+    private List<ContactFormat> mLists;
 
     private Context mContext;
 
 
-    public MyContactAdapter(Context ct, List<Contact> mListsD) {
+    public MyContactAdapter(Context ct, List<ContactFormat> mListsD) {
         this.mLists = mListsD;
         mContext = ct;
         this.addAll(mLists);
 //        characterParser = CharacterParser.getInstance();
     }
 
-    public void setData(List<Contact> mListsD) {
+    public void setData(List<ContactFormat> mListsD) {
         this.mLists = mListsD;
         this.addAll(mLists);
     }
@@ -55,7 +55,7 @@ public class MyContactAdapter extends ContactBaseAdapter<Contact, MyContactAdapt
         SwipeItemLayout swipeRoot = holder.mRoot;
         swipeRoot.setSwipeAble(false);
         TextView textView = holder.mName;
-        Contact item = getItem(position);
+        ContactFormat item = getItem(position);
         String mobile = item.getMobile();
         String phone = "";
         if(!TextUtils.isEmpty(mobile))
