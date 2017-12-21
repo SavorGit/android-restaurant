@@ -1235,9 +1235,9 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                     List<RoomInfo> roomInfos = (List<RoomInfo>) obj;
                     mSession.setRoomList(roomInfos);
                     for(RoomInfo info : roomInfos) {
-                        String room_id = info.getRoom_id();
+                        String box_name = info.getBox_name();
                         String box_ip = info.getBox_ip();
-                        if(!TextUtils.isEmpty(room_id)&&currentRoom!=null&&room_id.equals(currentRoom.getRoom_id())) {
+                        if(!TextUtils.isEmpty(box_name)&&currentRoom!=null&&box_name.equals(currentRoom.getBox_name())) {
                             currentRoom = info;
                             reConnect(info);
                             break;
