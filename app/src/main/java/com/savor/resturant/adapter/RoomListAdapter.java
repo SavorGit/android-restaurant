@@ -35,6 +35,7 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.RoomHo
 
     public void setData(List<RoomInfo> data) {
         this.mData = data;
+        notifyDataSetChanged();
     }
 
     @Override

@@ -1451,7 +1451,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                 info.setSelected(false);
             }
         }
-        roomListAdapter.notifyDataSetChanged();
+        roomListAdapter.setData(roomList);
     }
 
     @Override
