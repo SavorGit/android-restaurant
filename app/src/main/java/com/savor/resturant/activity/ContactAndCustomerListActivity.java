@@ -89,24 +89,6 @@ public class ContactAndCustomerListActivity extends BaseActivity {
                 });
             }
         }.start();
-//        recyclerView.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//
-//                contactFormats = ContactUtil.getInstance().getAllContact(ContactAndCustomerListActivity.this);
-//                Collections.sort(contactFormats, pinyinComparator);
-//                adapter = new MyContactAdapter(ContactAndCustomerListActivity.this, contactFormats);
-//                int orientation = LinearLayoutManager.VERTICAL;
-//                final LinearLayoutManager layoutManager = new LinearLayoutManager(ContactAndCustomerListActivity.this, orientation, false);
-//                recyclerView.setLayoutManager(layoutManager);
-//
-//                recyclerView.setAdapter(adapter);
-//                recyclerView.addItemDecoration(new DividerDecoration(ContactAndCustomerListActivity.this));
-//
-//                hideLoadingLayout();
-//            }
-//        },100);
 
     }
 

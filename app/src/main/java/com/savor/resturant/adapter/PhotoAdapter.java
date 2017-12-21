@@ -70,7 +70,7 @@ public class PhotoAdapter extends BaseAdapter {
         if(file!=null&&file.exists()) {
             Glide.with(mContext).load(topImagePath).diskCacheStrategy(DiskCacheStrategy.NONE).centerCrop().into(holder.photoCover);
         }else {
-            Glide.with(mContext).load(file.toURI()).diskCacheStrategy(DiskCacheStrategy.NONE).centerCrop().into(holder.photoCover);
+            Glide.with(mContext).load(R.drawable.empty_slide).diskCacheStrategy(DiskCacheStrategy.NONE).centerCrop().into(holder.photoCover);
         }
         holder.photoTitle.setText(photoInfo.getFolderName());
         holder.photoCount.setText(Integer.toString(photoInfo.getImageCounts()));
