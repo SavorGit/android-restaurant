@@ -10,10 +10,14 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.common.api.utils.ShowMessage;
 import com.github.tamir7.contacts.Address;
 import com.github.tamir7.contacts.Contact;
 import com.github.tamir7.contacts.Contacts;
@@ -57,6 +61,9 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
     private boolean isMultiSelectMode;
 
     private List<ContactFormat> selectedLsit = new ArrayList<>();
+    private CheckBox mSelectAllCb;
+    private TextView mImportTv;
+    private LinearLayout mImportLayout;
 
     public enum OperationType implements Serializable{
         /**客户列表*/
@@ -174,6 +181,10 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
     }
 
     public void getViews() {
+        mImportLayout = (LinearLayout) findViewById(R.id.ll_import_layout);
+        mSelectAllCb = (CheckBox) findViewById(R.id.cb_select_all);
+        mImportTv = (TextView) findViewById(R.id.tv_import);
+
         mTitleTv = (TextView) findViewById(R.id.tv_center);
         mLoadingPb = (ProgressBar) findViewById(R.id.pb_loading);
         contactDialog = (TextView) findViewById(R.id.contact_dialog);
@@ -204,6 +215,22 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
     }
 
     public void setListeners() {
+        mImportTv.setOnClickListener(this);
+
+        mSelectAllCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    for(ContactFormat contactFormat:contactFormats) {
+                        contactFormat.setSelected(true);
+                    }
+                }else {
+                    resetList();
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+
 
         mRightTv.setOnClickListener(this);
 
@@ -334,13 +361,24 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tv_import:
+                if(selectedLsit.size()==0) {
+                    ShowMessage.showToast(this,"请选择要导入联系人");
+                    return;
+                }
+
+
+                break;
             case R.id.tv_right:
                 if(isMultiSelectMode) {
+                    mImportLayout.setVisibility(View.GONE);
+                    mSelectAllCb.setChecked(false);
                     mRightTv.setText("多选");
                     resetList();
                     adapter.setSelectMode(false);
                     selectedLsit.clear();
                 }else {
+                    mImportLayout.setVisibility(View.VISIBLE);
                     mRightTv.setText("取消");
                     adapter.setSelectMode(true);
                 }
