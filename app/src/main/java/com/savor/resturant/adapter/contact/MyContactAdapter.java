@@ -30,6 +30,7 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
     private List<ContactFormat> mLists;
 
     private Context mContext;
+    private boolean isMultiSelectMode;
 
 
     public MyContactAdapter(Context ct, List<ContactFormat> mListsD) {
@@ -42,6 +43,11 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
     public void setData(List<ContactFormat> mListsD) {
         this.mLists = mListsD;
         this.addAll(mLists);
+    }
+
+    public void setSelectMode(boolean isMultiSelectMode) {
+        this.isMultiSelectMode = isMultiSelectMode;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -65,6 +71,8 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
             holder.mNum.setVisibility(View.VISIBLE);
             holder.mNum.setText(mobile);
         }
+
+        holder.checkBox.setVisibility(isMultiSelectMode?View.VISIBLE:View.GONE);
     }
 
     @Override

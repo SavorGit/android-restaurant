@@ -142,7 +142,7 @@ public class ContactAndCustomerListActivity extends BaseActivity {
                 }
             }
             String mobile = format.getMobile();
-            format.setKey(displayName+"#"+sb.toString().toLowerCase()+"#"+format.getBirthplace()+"#"+(TextUtils.isEmpty(mobile)?"":mobile));
+            format.setKey(displayName+"#"+sb.toString().toLowerCase()+"#"+(TextUtils.isEmpty(format.getBirthplace())?"":format.getBirthplace())+"#"+(TextUtils.isEmpty(mobile)?"":mobile));
 
             tempList.add(format);
         }

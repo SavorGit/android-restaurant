@@ -28,6 +28,7 @@
     </LinearLayout>
 
     <RelativeLayout
+        android:paddingLeft="15dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:gravity="center_vertical"
@@ -35,7 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <CheckBox
-            android:layout_marginLeft="15dp"
+            android:layout_marginRight="10dp"
             android:layout_centerVertical="true"
             android:id="@+id/cb_select"
             android:layout_width="wrap_content"
@@ -44,7 +45,6 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/cb_select"
             android:id="@+id/tv_label"
-            android:layout_marginLeft="10dp"
             android:textColor="@color/white"
             android:textStyle="bold"
             android:textSize="20sp"
