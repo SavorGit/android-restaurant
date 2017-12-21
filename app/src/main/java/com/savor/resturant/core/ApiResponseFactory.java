@@ -258,6 +258,9 @@ public class ApiResponseFactory {
                 result = gson.fromJson(info, new TypeToken<List<OrderListBean>>() {
                 }.getType());;
                 break;
+            case POST_UPDATE_ORDER_JSON:
+                result = "success";
+                break;
 
             default:
                 break;
