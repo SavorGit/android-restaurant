@@ -1,5 +1,6 @@
 package com.savor.resturant.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -42,7 +43,8 @@ public class SavorMainActivity extends BaseFragmentActivity implements MyTabWidg
         new ImportDialog(this, new ImportDialog.OnImportBtnClickListener() {
             @Override
             public void onImportBtnClick() {
-                ShowMessage.showToast(SavorMainActivity.this,"开始导入");
+                Intent intent = new Intent(SavorMainActivity.this,ContactAndCustomerListActivity.class);
+                startActivity(intent);
             }
         }).show();
     }
