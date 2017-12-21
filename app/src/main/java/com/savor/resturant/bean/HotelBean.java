@@ -1,6 +1,10 @@
 package com.savor.resturant.bean;
 
+import com.savor.resturant.core.CustomerBean;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by bushlee on 2017/12/1.
@@ -12,6 +16,7 @@ public class HotelBean implements Serializable {
     private String hotel_name;
     private String invitation;
     private String tel;
+    private List<CustomerBean> customer_list = new ArrayList<CustomerBean>();
 
     public String getHotel_id() {
         return hotel_id;
@@ -46,6 +51,15 @@ public class HotelBean implements Serializable {
         this.tel = tel;
     }
 
+    public List<CustomerBean> getCustomer_list() {
+        return customer_list;
+    }
+
+    public void setCustomer_list(List<CustomerBean> customer_list) {
+        this.customer_list = customer_list;
+    }
+
+
     @Override
     public String toString() {
         return "HotelBean{" +
@@ -53,6 +67,7 @@ public class HotelBean implements Serializable {
                 ", hotel_name='" + hotel_name + '\'' +
                 ", invitation='" + invitation + '\'' +
                 ", tel='" + tel + '\'' +
+                ", customer_list=" + customer_list +
                 '}';
     }
 }
