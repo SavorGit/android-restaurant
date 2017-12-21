@@ -6,7 +6,7 @@ import java.io.Serializable;
 /**
  * 联系人
  */
-public  class Contact implements Serializable {
+public  class ContactFormat implements Serializable {
     /**
      * name : 小三
      * mobile : 130110858187
@@ -27,7 +27,7 @@ public  class Contact implements Serializable {
 
     @Override
     public String toString() {
-        return "Contact{" +
+        return "ContactFormat{" +
                 "name='" + name + '\'' +
                 ", key='" + key + '\'' +
                 ", mobile='" + mobile + '\'' +
@@ -43,11 +43,11 @@ public  class Contact implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Contact contact = (Contact) o;
+        ContactFormat contactFormat = (ContactFormat) o;
 
-        if (name != null ? !name.equals(contact.name) : contact.name != null) return false;
-        if (mobile != null ? !mobile.equals(contact.mobile) : contact.mobile != null) return false;
-        return mobile1 != null ? mobile1.equals(contact.mobile1) : contact.mobile1 == null;
+        if (name != null ? !name.equals(contactFormat.name) : contactFormat.name != null) return false;
+        if (mobile != null ? !mobile.equals(contactFormat.mobile) : contactFormat.mobile != null) return false;
+        return mobile1 != null ? mobile1.equals(contactFormat.mobile1) : contactFormat.mobile1 == null;
     }
 
     @Override

@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 
-import com.savor.resturant.bean.Contact;
+import com.savor.resturant.bean.ContactFormat;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 
@@ -35,12 +35,12 @@ public class ContactUtil {
         return instance;
     }
 
-    public List<Contact> getAllContact(Context context) {
+    public List<ContactFormat> getAllContact(Context context) {
         ContentResolver contentResolver = context.getContentResolver();
         Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-        List<Contact> contactList = new ArrayList<>();
+        List<ContactFormat> contactFormatList = new ArrayList<>();
         while(cursor.moveToNext()) {
-            Contact contact = new Contact();
+            ContactFormat contactFormat = new ContactFormat();
 
             int nameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
             int contactIndex = cursor.getColumnIndex(ContactsContract.Contacts._ID);
@@ -50,7 +50,7 @@ public class ContactUtil {
             if(!TextUtils.isEmpty(name)) {
                 name = name.trim().replaceAll(" ","");
             }
-            contact.setName(name);
+            contactFormat.setName(name);
 
             String workAddress = "" ;
 
@@ -64,7 +64,7 @@ public class ContactUtil {
                 workAddress = address.getString(address.getColumnIndex(
                         ContactsContract.CommonDataKinds.StructuredPostal.DATA));
                 if(!TextUtils.isEmpty(workAddress)) {
-                    contact.setBirthplace(workAddress);
+                    contactFormat.setBirthplace(workAddress);
                 }
             }
             address.close();
@@ -79,9 +79,9 @@ public class ContactUtil {
             while (phoneCursor.moveToNext()) {
                 String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                 if(count==0) {
-                    contact.setMobile(phoneNumber);
+                    contactFormat.setMobile(phoneNumber);
                 }else if(count==1) {
-                    contact.setMobile1(phoneNumber);
+                    contactFormat.setMobile1(phoneNumber);
                 }else {
                     break;
                 }
@@ -103,34 +103,34 @@ public class ContactUtil {
                     sb.append(name);
                 }
             }
-            String mobile = contact.getMobile();
-            contact.setKey(name+"#"+sb.toString().toLowerCase()+"#"+workAddress+(TextUtils.isEmpty(mobile)?"":mobile));
+            String mobile = contactFormat.getMobile();
+            contactFormat.setKey(name+"#"+sb.toString().toLowerCase()+"#"+workAddress+(TextUtils.isEmpty(mobile)?"":mobile));
 
-            Cursor birthCursor = context.getContentResolver().query(ContactsContract.Data.CONTENT_URI,
-                    null, ContactsContract.Data.CONTACT_ID +"="+contactId, null, ContactsContract.Data.RAW_CONTACT_ID);
-            if (birthCursor.moveToNext()) {
-                String mimetype = birthCursor.getString(birthCursor.getColumnIndex(ContactsContract.Data.MIMETYPE));
-                if (ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE.equals(mimetype)) { // 取出时间类型
-                    int eventType = birthCursor.getInt(birthCursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.TYPE)); // 生日
-                    if (eventType == ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY) {
-                        String birthday = birthCursor.getString(cursor
-                                .getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE));
-                        contact.setBirthday(birthday);
-                    }
-                }
-            }
-            birthCursor.close();
+//            Cursor birthCursor = context.getContentResolver().query(ContactsContract.Data.CONTENT_URI,
+//                    null, ContactsContract.Data.CONTACT_ID +"="+contactId, null, ContactsContract.Data.RAW_CONTACT_ID);
+//            if (birthCursor.moveToNext()) {
+//                String mimetype = birthCursor.getString(birthCursor.getColumnIndex(ContactsContract.Data.MIMETYPE));
+//                if (ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE.equals(mimetype)) { // 取出时间类型
+//                    int eventType = birthCursor.getInt(birthCursor.getColumnIndex(ContactsContract.CommonDataKinds.Event.TYPE)); // 生日
+//                    if (eventType == ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY) {
+//                        String birthday = birthCursor.getString(cursor
+//                                .getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE));
+//                        contactFormat.setBirthday(birthday);
+//                    }
+//                }
+//            }
+//            birthCursor.close();
 
-            contactList.add(contact);
+            contactFormatList.add(contactFormat);
         }
         cursor.close();
 
-        return contactList;
+        return contactFormatList;
     }
 
-    private void addContact(ContentResolver contentResolver, List<Contact> contactList, int contactId, String name) {
-        Contact contact = new Contact();
-        contact.setName(name);
+    private void addContact(ContentResolver contentResolver, List<ContactFormat> contactFormatList, int contactId, String name) {
+        ContactFormat contactFormat = new ContactFormat();
+        contactFormat.setName(name);
 
         String workAddress ;
 
@@ -143,7 +143,7 @@ public class ContactUtil {
             workAddress = address.getString(address.getColumnIndex(
                     ContactsContract.CommonDataKinds.StructuredPostal.DATA));
             if(!TextUtils.isEmpty(workAddress)) {
-                contact.setBirthplace(workAddress);
+                contactFormat.setBirthplace(workAddress);
             }
         }
         address.close();
@@ -157,9 +157,9 @@ public class ContactUtil {
         while (phoneCursor.moveToNext()) {
             String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
             if(count==0) {
-                contact.setMobile(phoneNumber);
+                contactFormat.setMobile(phoneNumber);
             }else if(count==1) {
-                contact.setMobile1(phoneNumber);
+                contactFormat.setMobile1(phoneNumber);
             }else {
                 break;
             }
@@ -167,7 +167,7 @@ public class ContactUtil {
         }
         phoneCursor.close();
 
-        contactList.add(contact);
+        contactFormatList.add(contactFormat);
     }
 
     public boolean isNumeric(String str){

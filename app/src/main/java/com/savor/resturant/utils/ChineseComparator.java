@@ -2,7 +2,7 @@ package com.savor.resturant.utils;
 
 
 
-import com.savor.resturant.bean.Contact;
+import com.savor.resturant.bean.ContactFormat;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 
@@ -15,9 +15,9 @@ import java.util.regex.Pattern;
  * @author xiaanming
  *
  */
-public class ChineseComparator implements Comparator<Contact> {
+public class ChineseComparator implements Comparator<ContactFormat> {
 
-	public int compare(Contact o1, Contact o2) {
+	public int compare(ContactFormat o1, ContactFormat o2) {
 		String displayName = String.valueOf(o1.getName().charAt(0));
 		String displayName1 = String.valueOf(o2.getName().charAt(0));
 		if(isNumeric(displayName)) {

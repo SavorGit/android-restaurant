@@ -14,24 +14,34 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.github.tamir7.contacts.Address;
+import com.github.tamir7.contacts.Contact;
+import com.github.tamir7.contacts.Contacts;
+import com.github.tamir7.contacts.Event;
+import com.github.tamir7.contacts.PhoneNumber;
+import com.github.tamir7.contacts.Query;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.contact.MyContactAdapter;
-import com.savor.resturant.bean.Contact;
+import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.utils.ChineseComparator;
 import com.savor.resturant.utils.ContactUtil;
 import com.savor.resturant.widget.contact.DividerDecoration;
 import com.savor.resturant.widget.contact.SideBar;
 
+import net.sourceforge.pinyin4j.PinyinHelper;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 客户列表，通讯录列表
  * @author hezd
  */
 public class ContactAndCustomerListActivity extends BaseActivity {
-    private List<Contact> contacts;
+    private List<ContactFormat> contactFormats;
     private ChineseComparator pinyinComparator;
     private MyContactAdapter adapter;
     private TextView contactDialog;
@@ -52,18 +62,21 @@ public class ContactAndCustomerListActivity extends BaseActivity {
     }
 
     public void initData() {
-//        List<Contact> contacts = Contacts.getQuery().find();
+//        List<ContactFormat> contactFormats = Contacts.getQuery().find();
         showLoadingLayout();
         new Thread(){
             @Override
             public void run() {
-                contacts = ContactUtil.getInstance().getAllContact(ContactAndCustomerListActivity.this);
-                Collections.sort(contacts, pinyinComparator);
+//                contactFormats = ContactUtil.getInstance().getAllContact(ContactAndCustomerListActivity.this);
+                Query query = Contacts.getQuery();
+                List<Contact> contacts = query.find();
+                contactFormats = getFormatContactList(contacts);
+                Collections.sort(contactFormats, pinyinComparator);
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        adapter = new MyContactAdapter(ContactAndCustomerListActivity.this, contacts);
+                        adapter = new MyContactAdapter(ContactAndCustomerListActivity.this, contactFormats);
                         int orientation = LinearLayoutManager.VERTICAL;
                         final LinearLayoutManager layoutManager = new LinearLayoutManager(ContactAndCustomerListActivity.this, orientation, false);
                         recyclerView.setLayoutManager(layoutManager);
@@ -81,9 +94,9 @@ public class ContactAndCustomerListActivity extends BaseActivity {
 //            public void run() {
 //
 //
-//                contacts = ContactUtil.getInstance().getAllContact(ContactAndCustomerListActivity.this);
-//                Collections.sort(contacts, pinyinComparator);
-//                adapter = new MyContactAdapter(ContactAndCustomerListActivity.this, contacts);
+//                contactFormats = ContactUtil.getInstance().getAllContact(ContactAndCustomerListActivity.this);
+//                Collections.sort(contactFormats, pinyinComparator);
+//                adapter = new MyContactAdapter(ContactAndCustomerListActivity.this, contactFormats);
 //                int orientation = LinearLayoutManager.VERTICAL;
 //                final LinearLayoutManager layoutManager = new LinearLayoutManager(ContactAndCustomerListActivity.this, orientation, false);
 //                recyclerView.setLayoutManager(layoutManager);
@@ -95,6 +108,62 @@ public class ContactAndCustomerListActivity extends BaseActivity {
 //            }
 //        },100);
 
+    }
+
+    private List<ContactFormat> getFormatContactList(List<Contact> contacts) {
+        List<ContactFormat> tempList = new ArrayList<>();
+        for(Contact contact : contacts) {
+            ContactFormat format = new ContactFormat();
+            String displayName = contact.getDisplayName();
+            List<Address> addresses = contact.getAddresses();
+            Event birthday = contact.getBirthday();
+            List<PhoneNumber> phoneNumbers = contact.getPhoneNumbers();
+
+            if(birthday!=null&&!TextUtils.isEmpty(birthday.getStartDate())) {
+                format.setBirthday(birthday.getStartDate());
+            }
+
+            if(addresses!=null&&addresses.size()>0) {
+                Address address = addresses.get(0);
+                if(address!=null&&!TextUtils.isEmpty(address.getFormattedAddress())) {
+                    format.setBirthplace(address.getFormattedAddress());
+                }
+            }
+
+            format.setName(displayName);
+
+            if(phoneNumbers!=null&&phoneNumbers.size()>0) {
+                PhoneNumber phoneNumber = phoneNumbers.get(0);
+                if(phoneNumber!=null&&!TextUtils.isEmpty(phoneNumber.getNormalizedNumber())) {
+                    format.setMobile(phoneNumber.getNormalizedNumber());
+                }
+                if(phoneNumbers.size()>=2) {
+                    PhoneNumber phoneNumber1 = phoneNumbers.get(1);
+                    if(phoneNumber1!=null&&!TextUtils.isEmpty(phoneNumber1.getNormalizedNumber())) {
+                        format.setMobile1(phoneNumber1.getNormalizedNumber());
+                    }
+                }
+            }
+
+            StringBuilder sb = new StringBuilder();
+            if(!TextUtils.isEmpty(displayName)) {
+                displayName = displayName.trim().replaceAll(" ","");
+                if(!isNumeric(displayName)&&!isLetter(displayName)) {
+                    for(int i = 0;i<displayName.length();i++) {
+                        String str= removeDigital(String.valueOf(PinyinHelper.toHanyuPinyinStringArray(displayName.charAt(i))[0]));
+                        sb.append(str);
+                    }
+                }else {
+                    sb.append(displayName);
+                }
+            }
+            String mobile = format.getMobile();
+            format.setKey(displayName+"#"+sb.toString().toLowerCase()+"#"+format.getBirthplace()+"#"+(TextUtils.isEmpty(mobile)?"":mobile));
+
+            tempList.add(format);
+        }
+
+        return tempList;
     }
 
     public void getViews() {
@@ -139,25 +208,25 @@ public class ContactAndCustomerListActivity extends BaseActivity {
             public void afterTextChanged(Editable s) {
                 String content = mSearchEt.getText().toString();
                 if(!TextUtils.isEmpty(content)) {
-                    if(contacts!=null&&contacts.size()>0) {
-                        List<Contact> contactLike = getLikeList(contacts,content);
-                        adapter.setData(contactLike);
+                    if(contactFormats !=null&& contactFormats.size()>0) {
+                        List<ContactFormat> contactFormatLike = getLikeList(contactFormats,content);
+                        adapter.setData(contactFormatLike);
                     }
                 }else {
-                    if(contacts == null) {
-                        contacts = ContactUtil.getInstance().getAllContact(ContactAndCustomerListActivity.this);
+                    if(contactFormats == null) {
+                        contactFormats = ContactUtil.getInstance().getAllContact(ContactAndCustomerListActivity.this);
                     }
-                    adapter.setData(contacts);
+                    adapter.setData(contactFormats);
                 }
             }
         });
     }
 
-    private List<Contact> getLikeList(List<Contact> contacts, String content) {
-        List<Contact> tempList = new ArrayList<>();
-        for(Contact contact : contacts) {
-            if(contact.getKey().trim().contains(content)) {
-                tempList.add(contact);
+    private List<ContactFormat> getLikeList(List<ContactFormat> contactFormats, String content) {
+        List<ContactFormat> tempList = new ArrayList<>();
+        for(ContactFormat contactFormat : contactFormats) {
+            if(contactFormat.getKey().trim().contains(content)) {
+                tempList.add(contactFormat);
             }
         }
         return tempList;
@@ -186,6 +255,40 @@ public class ContactAndCustomerListActivity extends BaseActivity {
 
     @Override
     public void hideLoadingLayout() {
+
         mLoadingPb.setVisibility(View.GONE);
+    }
+
+    public boolean isNumeric(String str){
+        Pattern pattern = Pattern.compile("[0-9]*");
+        Matcher isNum = pattern.matcher(str);
+        if( !isNum.matches() ){
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 剔除数字
+     * @param value
+     */
+    public String removeDigital(String value){
+
+        Pattern p = Pattern.compile("[\\d]");
+        Matcher matcher = p.matcher(value);
+        String result = matcher.replaceAll("");
+        return result;
+    }
+
+    /*判断字符串中是否仅包含字母数字和汉字
+      *各种字符的unicode编码的范围：
+     * 汉字：[0x4e00,0x9fa5]（或十进制[19968,40869]）
+     * 数字：[0x30,0x39]（或十进制[48, 57]）
+     *小写字母：[0x61,0x7a]（或十进制[97, 122]）
+     * 大写字母：[0x41,0x5a]（或十进制[65, 90]）
+*/
+    public static boolean isLetter(String str) {
+        String regex = "^[a-zA-Z]+$";
+        return str.matches(regex);
     }
 }

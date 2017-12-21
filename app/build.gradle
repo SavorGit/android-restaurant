@@ -124,6 +124,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
     compile 'com.android.support:multidex:1.0.0'
     compile 'cn.jzvd:jiaozivideoplayer:6.2.1'
+    compile 'com.github.tamir7.contacts:contacts:1.1.7'
     implementation project(':FFmpeg4Android')
 }
 
