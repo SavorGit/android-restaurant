@@ -89,4 +89,19 @@ public class OrderListBean implements Serializable {
     public void setIs_expense(int is_expense) {
         this.is_expense = is_expense;
     }
+
+    @Override
+    public String toString() {
+        return "OrderListBean{" +
+                "order_id='" + order_id + '\'' +
+                ", person_nums='" + person_nums + '\'' +
+                ", order_name='" + order_name + '\'' +
+                ", order_mobile='" + order_mobile + '\'' +
+                ", is_welcome='" + is_welcome + '\'' +
+                ", is_recfood='" + is_recfood + '\'' +
+                ", room_name='" + room_name + '\'' +
+                ", time_str='" + time_str + '\'' +
+                ", is_expense=" + is_expense +
+                '}';
+    }
 }
