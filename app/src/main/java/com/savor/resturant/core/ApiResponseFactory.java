@@ -264,6 +264,9 @@ public class ApiResponseFactory {
             case POST_DELETE_ORDER_JSON:
                 result = "success";
                 break;
+            case POST_UPDATE_ORDER_SERVICE_JSON:
+                result = "success";
+                break;
 
 
             default:
