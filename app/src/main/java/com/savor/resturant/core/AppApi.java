@@ -99,6 +99,8 @@ public class AppApi {
         POST_ORDER_LIST_JSON,
         /**修改预订信息*/
         POST_UPDATE_ORDER_JSON,
+        /**删除预订信息*/
+        POST_DELETE_ORDER_JSON,
 
     }
 
@@ -137,6 +139,7 @@ public class AppApi {
             put(Action.POST_ADD_ROOM_JSON, formatPhpUrl("Dinnerapp2/Room/addRoom"));
             put(Action.POST_ORDER_LIST_JSON, formatPhpUrl("Dinnerapp2/Order/getOrderList"));
             put(Action.POST_UPDATE_ORDER_JSON, formatPhpUrl("Dinnerapp2/Order/updateOrder"));
+            put(Action.POST_DELETE_ORDER_JSON, formatPhpUrl("Dinnerapp2/Order/deleteOrder"));
 
         }
     };
@@ -634,6 +637,14 @@ public class AppApi {
         new AppServiceOk(context,Action.POST_UPDATE_ORDER_JSON,handler,params).post();
     }
 
+    /**删除预订信息*/
+    public static void deleteOrder(Context context,String invite_id, String mobile, String order_id, ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("invite_id", invite_id);
+        params.put("mobile", mobile);
+        params.put("order_id", order_id);
+        new AppServiceOk(context,Action.POST_DELETE_ORDER_JSON,handler,params).post();
+    }
     // 超时（网络）异常
     public static final String ERROR_TIMEOUT = "3001";
     // 业务异常
