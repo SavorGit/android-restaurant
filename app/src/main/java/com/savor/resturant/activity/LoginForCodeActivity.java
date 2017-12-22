@@ -319,7 +319,6 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
                 login_btn.setBackgroundResource(R.drawable.corner_remote_view_btn);
                 login_btn.setTextColor(context.getResources().getColor(R.color.color_fefefe));
                 break;
-
         }
 
     }
