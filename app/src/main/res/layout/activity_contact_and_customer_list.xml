@@ -73,7 +73,7 @@
         android:background="@color/gray_bg"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingLeft="15dp"
+        android:paddingLeft="10dp"
         android:paddingRight="15dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"

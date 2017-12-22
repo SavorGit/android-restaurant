@@ -48,6 +48,10 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
         this.addAll(mLists);
     }
 
+    public List<ContactFormat> getData() {
+        return mLists;
+    }
+
     public void setSelectMode(boolean isMultiSelectMode) {
         this.isMultiSelectMode = isMultiSelectMode;
         notifyDataSetChanged();

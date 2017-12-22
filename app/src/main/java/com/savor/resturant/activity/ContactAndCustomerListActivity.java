@@ -225,10 +225,11 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
     public void setListeners() {
         mImportTv.setOnClickListener(this);
 
-        mSelectAllCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mSelectAllCb.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
+            public void onClick(View v) {
+                boolean checked = mSelectAllCb.isChecked();
+                if(checked) {
                     for(ContactFormat contactFormat:contactFormats) {
                         contactFormat.setSelected(true);
                     }
@@ -238,6 +239,20 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
                 adapter.notifyDataSetChanged();
             }
         });
+
+//        mSelectAllCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if(isChecked) {
+//                    for(ContactFormat contactFormat:contactFormats) {
+//                        contactFormat.setSelected(true);
+//                    }
+//                }else {
+//                    resetList();
+//                }
+//                adapter.notifyDataSetChanged();
+//            }
+//        });
 
 
         mRightTv.setOnClickListener(this);
@@ -366,9 +381,10 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
     @Override
     public void onCheckStateChange(boolean isChecked, ContactFormat contactFormat) {
         if(isChecked) {
-            selectedLsit.add(contactFormat);
+//            selectedLsit.add(contactFormat);
         }else {
-            selectedLsit.remove(contactFormat);
+//            selectedLsit.remove(contactFormat);
+            mSelectAllCb.setChecked(false);
         }
     }
 
@@ -376,10 +392,26 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_import:
-                if(selectedLsit.size()==0) {
+                selectedLsit.clear();
+                List<ContactFormat> data = adapter.getData();
+                if(data.size()==0) {
                     ShowMessage.showToast(this,"请选择要导入联系人");
                     return;
                 }
+                boolean checked = mSelectAllCb.isChecked();
+                if(checked) {
+                    selectedLsit.addAll(data);
+                }else {
+                    for(ContactFormat contactFormat:data) {
+                        if(contactFormat.isSelected()) {
+                            selectedLsit.add(contactFormat);
+                        }
+                    }
+                }
+                String importInfo = new Gson().toJson(selectedLsit);
+                String invitation = mSession.getHotelBean().getInvitation();
+                String tel = mSession.getHotelBean().getTel();
+                AppApi.importInfo(this,importInfo,invitation,tel,this);
                 break;
             case R.id.tv_right:
                 if(isMultiSelectMode) {
