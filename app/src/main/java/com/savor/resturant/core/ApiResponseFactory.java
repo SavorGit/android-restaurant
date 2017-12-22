@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.savor.resturant.bean.BaseProResponse;
+import com.savor.resturant.bean.CustomerHistory;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.OrderListBean;
 import com.savor.resturant.bean.RecommendFoodAdvert;
@@ -270,6 +271,13 @@ public class ApiResponseFactory {
                 break;
             case POST_IMPORT_INFO_JSON:
                 result = info;
+                break;
+            case POST_CUS_HISTORY_JSON:
+                result = gson.fromJson(info, new TypeToken<CustomerHistory>() {
+                }.getType());
+                break;
+            case POST_LIGHT_LABEL_JSON:
+                result = "success";
                 break;
 
             default:
