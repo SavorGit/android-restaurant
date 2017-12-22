@@ -24,9 +24,11 @@ import com.github.tamir7.contacts.Contacts;
 import com.github.tamir7.contacts.Event;
 import com.github.tamir7.contacts.PhoneNumber;
 import com.github.tamir7.contacts.Query;
+import com.google.gson.Gson;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.contact.MyContactAdapter;
 import com.savor.resturant.bean.ContactFormat;
+import com.savor.resturant.core.AppApi;
 import com.savor.resturant.utils.ChineseComparator;
 import com.savor.resturant.utils.ContactUtil;
 import com.savor.resturant.widget.contact.DividerDecoration;
@@ -64,6 +66,7 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
     private CheckBox mSelectAllCb;
     private TextView mImportTv;
     private LinearLayout mImportLayout;
+    private int currentAddPosition;
 
     public enum OperationType implements Serializable{
         /**客户列表*/
@@ -351,7 +354,13 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
 
     @Override
     public void onAddBtnClick(int position, ContactFormat contactFormat) {
-
+        currentAddPosition = position;
+        List<ContactFormat> contactFormats = new ArrayList<>();
+        contactFormats.add(contactFormat);
+        String importInfo = new Gson().toJson(contactFormats);
+        String invitation = mSession.getHotelBean().getInvitation();
+        String tel = mSession.getHotelBean().getTel();
+        AppApi.importInfo(this,importInfo,invitation,tel,this);
     }
 
     @Override
@@ -371,8 +380,6 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
                     ShowMessage.showToast(this,"请选择要导入联系人");
                     return;
                 }
-
-
                 break;
             case R.id.tv_right:
                 if(isMultiSelectMode) {
@@ -398,4 +405,15 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
         }
     }
 
+    @Override
+    public void onSuccess(AppApi.Action method, Object obj) {
+        super.onSuccess(method, obj);
+        switch (method) {
+            case POST_IMPORT_INFO_JSON:
+                ShowMessage.showToast(this,"导入成功");
+                contactFormats.get(currentAddPosition).setAdded(true);
+                adapter.notifyDataSetChanged();
+                break;
+        }
+    }
 }

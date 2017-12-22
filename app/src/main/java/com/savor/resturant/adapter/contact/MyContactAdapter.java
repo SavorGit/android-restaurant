@@ -114,6 +114,17 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
             holder.checkBox.setChecked(false);
         }
 
+        boolean added = item.isAdded();
+        if(added) {
+            holder.mAdd.setBackground(null);
+            holder.mAdd.setTextColor(mContext.getResources().getColor(R.color.divider_list));
+            holder.checkBox.setEnabled(false);
+        }else {
+            holder.mAdd.setBackgroundResource(R.drawable.edit_text_bg);
+            holder.mAdd.setText("添加");
+            holder.checkBox.setEnabled(true);
+        }
+
     }
 
     @Override

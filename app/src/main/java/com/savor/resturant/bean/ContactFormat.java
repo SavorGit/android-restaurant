@@ -24,7 +24,10 @@ public  class ContactFormat implements Serializable {
     private int sex;
     private String birthday;
     private String birthplace;
+    /**是否被选中*/
     private boolean isSelected;
+    /**是否已添加*/
+    private boolean isAdded;
 
     @Override
     public String toString() {
@@ -38,6 +41,7 @@ public  class ContactFormat implements Serializable {
                 ", birthday='" + birthday + '\'' +
                 ", birthplace='" + birthplace + '\'' +
                 ", isSelected=" + isSelected +
+                ", isAdded=" + isAdded +
                 '}';
     }
 
@@ -46,13 +50,13 @@ public  class ContactFormat implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ContactFormat format = (ContactFormat) o;
+        ContactFormat that = (ContactFormat) o;
 
-        if (contactId != null ? !contactId.equals(format.contactId) : format.contactId != null)
+        if (contactId != null ? !contactId.equals(that.contactId) : that.contactId != null)
             return false;
-        if (name != null ? !name.equals(format.name) : format.name != null) return false;
-        if (mobile != null ? !mobile.equals(format.mobile) : format.mobile != null) return false;
-        return mobile1 != null ? mobile1.equals(format.mobile1) : format.mobile1 == null;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (mobile != null ? !mobile.equals(that.mobile) : that.mobile != null) return false;
+        return mobile1 != null ? mobile1.equals(that.mobile1) : that.mobile1 == null;
     }
 
     @Override
@@ -134,5 +138,13 @@ public  class ContactFormat implements Serializable {
 
     public void setSelected(boolean selected) {
         isSelected = selected;
+    }
+
+    public boolean isAdded() {
+        return isAdded;
+    }
+
+    public void setAdded(boolean added) {
+        isAdded = added;
     }
 }

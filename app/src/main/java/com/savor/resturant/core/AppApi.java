@@ -103,7 +103,8 @@ public class AppApi {
         POST_DELETE_ORDER_JSON,
         /**更新预订信息服务*/
         POST_UPDATE_ORDER_SERVICE_JSON,
-
+        /**导入通讯录*/
+        POST_IMPORT_INFO_JSON,
     }
 
     /**
@@ -143,6 +144,7 @@ public class AppApi {
             put(Action.POST_UPDATE_ORDER_JSON, formatPhpUrl("Dinnerapp2/Order/updateOrder"));
             put(Action.POST_DELETE_ORDER_JSON, formatPhpUrl("Dinnerapp2/Order/deleteOrder"));
             put(Action.POST_UPDATE_ORDER_SERVICE_JSON, formatPhpUrl("Dinnerapp2/Order/upateOrderService"));
+            put(Action.POST_IMPORT_INFO_JSON, formatPhpUrl("Dinnerapp2/Customer/importInfo"));
 
         }
     };
@@ -665,6 +667,20 @@ public class AppApi {
         params.put("type", type);
         new AppServiceOk(context,Action.POST_UPDATE_ORDER_SERVICE_JSON,handler,params).post();
     }
+
+    /**导入通讯录*/
+    public static void importInfo(Context context,
+                                         String book_info,
+                                         String invite_id,
+                                         String mobile,
+                                         ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<>();
+        params.put("invite_id", invite_id);
+        params.put("mobile", mobile);
+        params.put("book_info", book_info);
+        new AppServiceOk(context,Action.POST_IMPORT_INFO_JSON,handler,params).post();
+    }
+
     // 超时（网络）异常
     public static final String ERROR_TIMEOUT = "3001";
     // 业务异常
