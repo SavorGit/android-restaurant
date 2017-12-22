@@ -6,6 +6,8 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.savor.resturant.R;
@@ -29,6 +31,9 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
     private List<ContactFormat> mLists;
 
     private Context mContext;
+    private boolean isMultiSelectMode;
+    private OnAddBtnClickListener onAddBtnClickListener;
+    private OnCheckStateChangeListener onCheckStateChangeListener;
 
 
     public MyContactAdapter(Context ct, List<ContactFormat> mListsD) {
@@ -43,6 +48,11 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
         this.addAll(mLists);
     }
 
+    public void setSelectMode(boolean isMultiSelectMode) {
+        this.isMultiSelectMode = isMultiSelectMode;
+        notifyDataSetChanged();
+    }
+
     @Override
     public MyContactAdapter.ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -51,16 +61,58 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
     }
 
     @Override
-    public void onBindViewHolder(MyContactAdapter.ContactViewHolder holder, final int position) {
+    public void onBindViewHolder(final MyContactAdapter.ContactViewHolder holder, final int position) {
         SwipeItemLayout swipeRoot = holder.mRoot;
         swipeRoot.setSwipeAble(false);
         TextView textView = holder.mName;
         ContactFormat item = getItem(position);
+        boolean selected = item.isSelected();
+
         String mobile = item.getMobile();
-        String phone = "";
-        if(!TextUtils.isEmpty(mobile))
-            phone = mobile;
-        textView.setText(getItem(position).getName()+"  "+phone);
+        textView.setText(getItem(position).getName());
+
+        holder.mAdd.setVisibility(isMultiSelectMode?View.GONE:View.VISIBLE);
+
+        if(TextUtils.isEmpty(mobile)) {
+            holder.mNum.setVisibility(View.GONE);
+        }else {
+            holder.mNum.setVisibility(View.VISIBLE);
+            holder.mNum.setText(mobile);
+        }
+
+        holder.checkBox.setVisibility(isMultiSelectMode?View.VISIBLE:View.GONE);
+
+        holder.mAdd.setTag(position);
+        holder.mAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int pos = (int) v.getTag();
+                ContactFormat addItem = getItem(pos);
+                if(onAddBtnClickListener!=null) {
+                    onAddBtnClickListener.onAddBtnClick(pos,addItem);
+                }
+            }
+        });
+
+        holder.checkBox.setTag(position);
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                int pos = (int) buttonView.getTag();
+                ContactFormat changeItem = getItem(pos);
+                changeItem.setSelected(isChecked);
+                if(onCheckStateChangeListener!=null) {
+                    onCheckStateChangeListener.onCheckStateChange(isChecked,changeItem);
+                }
+            }
+        });
+
+        if(isMultiSelectMode) {
+            holder.checkBox.setChecked(selected);
+        }else {
+            item.setSelected(false);
+            holder.checkBox.setChecked(false);
+        }
 
     }
 
@@ -92,7 +144,6 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
 //        } else {
             textView.setText(showValue);
 //        }
-
     }
 
 
@@ -100,6 +151,10 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
         for (int i = 0; i < getItemCount(); i++) {
 
             String sortStr;
+            String firstKeyWord = String.valueOf(mLists.get(i).getKey().charAt(0));
+            if(firstKeyWord.equals("#")&&firstKeyWord.equals(String.valueOf(section))) {
+                return i;
+            }
             String firstWord = String.valueOf(mLists.get(i).getName().charAt(0));
             if(isNumeric(firstWord)||isLetter(firstWord)) {
                 sortStr = firstWord;
@@ -119,16 +174,20 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
     public class ContactViewHolder extends RecyclerView.ViewHolder {
 
         public TextView mName;
+        public TextView mAdd;
+        public TextView mNum;
         public SwipeItemLayout mRoot;
         public TextView mDelete;
+        public CheckBox checkBox;
 
         public ContactViewHolder(View itemView) {
             super(itemView);
             mName = (TextView) itemView.findViewById(R.id.item_contact_title);
             mRoot = (SwipeItemLayout) itemView.findViewById(R.id.item_contact_swipe_root);
             mDelete = (TextView) itemView.findViewById(R.id.item_contact_delete);
-
-
+            mNum = (TextView) itemView.findViewById(R.id.tv_num);
+            mAdd = (TextView) itemView.findViewById(R.id.tv_add);
+            checkBox = (CheckBox) itemView.findViewById(R.id.cb_select);
         }
 
 
@@ -153,5 +212,21 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
     public static boolean isLetter(String str) {
         String regex = "^[a-zA-Z]+$";
         return str.matches(regex);
+    }
+
+    public void setOnAddBtnClickListener(OnAddBtnClickListener onAddBtnClickListener) {
+        this.onAddBtnClickListener = onAddBtnClickListener;
+    }
+
+    public void setOnCheckStateChangeListener(OnCheckStateChangeListener onCheckStateChangeListener) {
+        this.onCheckStateChangeListener = onCheckStateChangeListener;
+    }
+
+    public interface OnAddBtnClickListener {
+        void onAddBtnClick(int position,ContactFormat contactFormat);
+    }
+
+    public interface OnCheckStateChangeListener {
+        void onCheckStateChange(boolean isChecked,ContactFormat contactFormat);
     }
 }

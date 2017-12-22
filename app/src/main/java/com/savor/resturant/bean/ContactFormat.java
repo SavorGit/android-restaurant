@@ -15,7 +15,7 @@ public  class ContactFormat implements Serializable {
      * birthday : 2010-09-10
      * birthplace : 北京市丰台区
      */
-
+    private String contactId;
     private String name;
 
     private String key;
@@ -24,17 +24,20 @@ public  class ContactFormat implements Serializable {
     private int sex;
     private String birthday;
     private String birthplace;
+    private boolean isSelected;
 
     @Override
     public String toString() {
         return "ContactFormat{" +
-                "name='" + name + '\'' +
+                "contactId='" + contactId + '\'' +
+                ", name='" + name + '\'' +
                 ", key='" + key + '\'' +
                 ", mobile='" + mobile + '\'' +
                 ", mobile1='" + mobile1 + '\'' +
                 ", sex=" + sex +
                 ", birthday='" + birthday + '\'' +
                 ", birthplace='" + birthplace + '\'' +
+                ", isSelected=" + isSelected +
                 '}';
     }
 
@@ -43,19 +46,30 @@ public  class ContactFormat implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ContactFormat contactFormat = (ContactFormat) o;
+        ContactFormat format = (ContactFormat) o;
 
-        if (name != null ? !name.equals(contactFormat.name) : contactFormat.name != null) return false;
-        if (mobile != null ? !mobile.equals(contactFormat.mobile) : contactFormat.mobile != null) return false;
-        return mobile1 != null ? mobile1.equals(contactFormat.mobile1) : contactFormat.mobile1 == null;
+        if (contactId != null ? !contactId.equals(format.contactId) : format.contactId != null)
+            return false;
+        if (name != null ? !name.equals(format.name) : format.name != null) return false;
+        if (mobile != null ? !mobile.equals(format.mobile) : format.mobile != null) return false;
+        return mobile1 != null ? mobile1.equals(format.mobile1) : format.mobile1 == null;
     }
 
     @Override
     public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
+        int result = contactId != null ? contactId.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (mobile != null ? mobile.hashCode() : 0);
         result = 31 * result + (mobile1 != null ? mobile1.hashCode() : 0);
         return result;
+    }
+
+    public String getContactId() {
+        return contactId;
+    }
+
+    public void setContactId(String contactId) {
+        this.contactId = contactId;
     }
 
     public String getName() {
@@ -64,6 +78,14 @@ public  class ContactFormat implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getMobile() {
@@ -106,11 +128,11 @@ public  class ContactFormat implements Serializable {
         this.birthplace = birthplace;
     }
 
-    public String getKey() {
-        return key;
+    public boolean isSelected() {
+        return isSelected;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

@@ -10,10 +10,14 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.common.api.utils.ShowMessage;
 import com.github.tamir7.contacts.Address;
 import com.github.tamir7.contacts.Contact;
 import com.github.tamir7.contacts.Contacts;
@@ -30,6 +34,7 @@ import com.savor.resturant.widget.contact.SideBar;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,7 +45,7 @@ import java.util.regex.Pattern;
  * 客户列表，通讯录列表
  * @author hezd
  */
-public class ContactAndCustomerListActivity extends BaseActivity {
+public class ContactAndCustomerListActivity extends BaseActivity implements View.OnClickListener, MyContactAdapter.OnAddBtnClickListener, MyContactAdapter.OnCheckStateChangeListener {
     private List<ContactFormat> contactFormats;
     private ChineseComparator pinyinComparator;
     private MyContactAdapter adapter;
@@ -49,16 +54,38 @@ public class ContactAndCustomerListActivity extends BaseActivity {
     private RecyclerView recyclerView;
     private EditText mSearchEt;
     private ProgressBar mLoadingPb;
+    private OperationType operationType;
+    private TextView mTitleTv;
+    private TextView mRightTv;
+    /**是否是多选状态*/
+    private boolean isMultiSelectMode;
+
+    private List<ContactFormat> selectedLsit = new ArrayList<>();
+    private CheckBox mSelectAllCb;
+    private TextView mImportTv;
+    private LinearLayout mImportLayout;
+
+    public enum OperationType implements Serializable{
+        /**客户列表*/
+        CUSTOMER_LIST,
+        /**通讯录列表*/
+        CONSTACT_LIST,
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_and_customer_list);
 
+        handleIntent();
         getViews();
         setViews();
         setListeners();
         initData();
+    }
+
+    private void handleIntent() {
+        operationType = (OperationType) getIntent().getSerializableExtra("type");
     }
 
     public void initData() {
@@ -84,29 +111,14 @@ public class ContactAndCustomerListActivity extends BaseActivity {
                         recyclerView.setAdapter(adapter);
                         recyclerView.addItemDecoration(new DividerDecoration(ContactAndCustomerListActivity.this));
 
+                        adapter.setOnCheckStateChangeListener(ContactAndCustomerListActivity.this);
+                        adapter.setOnAddBtnClickListener(ContactAndCustomerListActivity.this);
+
                         hideLoadingLayout();
                     }
                 });
             }
         }.start();
-//        recyclerView.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//
-//                contactFormats = ContactUtil.getInstance().getAllContact(ContactAndCustomerListActivity.this);
-//                Collections.sort(contactFormats, pinyinComparator);
-//                adapter = new MyContactAdapter(ContactAndCustomerListActivity.this, contactFormats);
-//                int orientation = LinearLayoutManager.VERTICAL;
-//                final LinearLayoutManager layoutManager = new LinearLayoutManager(ContactAndCustomerListActivity.this, orientation, false);
-//                recyclerView.setLayoutManager(layoutManager);
-//
-//                recyclerView.setAdapter(adapter);
-//                recyclerView.addItemDecoration(new DividerDecoration(ContactAndCustomerListActivity.this));
-//
-//                hideLoadingLayout();
-//            }
-//        },100);
 
     }
 
@@ -118,6 +130,8 @@ public class ContactAndCustomerListActivity extends BaseActivity {
             List<Address> addresses = contact.getAddresses();
             Event birthday = contact.getBirthday();
             List<PhoneNumber> phoneNumbers = contact.getPhoneNumbers();
+            Long id = contact.getId();
+            format.setContactId(String.valueOf(id));
 
             if(birthday!=null&&!TextUtils.isEmpty(birthday.getStartDate())) {
                 format.setBirthday(birthday.getStartDate());
@@ -158,7 +172,12 @@ public class ContactAndCustomerListActivity extends BaseActivity {
                 }
             }
             String mobile = format.getMobile();
-            format.setKey(displayName+"#"+sb.toString().toLowerCase()+"#"+format.getBirthplace()+"#"+(TextUtils.isEmpty(mobile)?"":mobile));
+            String stuf = "";
+            if(isLetter(displayName)||isNumeric(displayName)) {
+                stuf = "#";
+            }
+
+            format.setKey(stuf+displayName+"#"+sb.toString().toLowerCase()+"#"+(TextUtils.isEmpty(format.getBirthplace())?"":format.getBirthplace())+"#"+(TextUtils.isEmpty(mobile)?"":mobile));
 
             tempList.add(format);
         }
@@ -167,21 +186,59 @@ public class ContactAndCustomerListActivity extends BaseActivity {
     }
 
     public void getViews() {
+        mImportLayout = (LinearLayout) findViewById(R.id.ll_import_layout);
+        mSelectAllCb = (CheckBox) findViewById(R.id.cb_select_all);
+        mImportTv = (TextView) findViewById(R.id.tv_import);
+
+        mTitleTv = (TextView) findViewById(R.id.tv_center);
         mLoadingPb = (ProgressBar) findViewById(R.id.pb_loading);
         contactDialog = (TextView) findViewById(R.id.contact_dialog);
         sideBar = (SideBar) findViewById(R.id.contact_sidebar);
         recyclerView = (RecyclerView) findViewById(R.id.contact_member);
         mSearchEt = (EditText) findViewById(R.id.et_search);
+
+        mRightTv = (TextView) findViewById(R.id.tv_right);
+
     }
 
     public void setViews() {
-
+        mTitleTv.setTextColor(getResources().getColor(R.color.white));
         sideBar.setTextView(contactDialog);
-
         pinyinComparator = new ChineseComparator();
+
+        switch (operationType) {
+            case CONSTACT_LIST:
+                mRightTv.setVisibility(View.VISIBLE);
+                mRightTv.setText("多选");
+                mTitleTv.setText("通讯录");
+                break;
+            case CUSTOMER_LIST:
+                mRightTv.setVisibility(View.GONE);
+                mTitleTv.setText("客户列表");
+                break;
+        }
     }
 
     public void setListeners() {
+        mImportTv.setOnClickListener(this);
+
+        mSelectAllCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    for(ContactFormat contactFormat:contactFormats) {
+                        contactFormat.setSelected(true);
+                    }
+                }else {
+                    resetList();
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+
+        mRightTv.setOnClickListener(this);
+
         sideBar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
             @Override
             public void onTouchingLetterChanged(String s) {
@@ -291,4 +348,54 @@ public class ContactAndCustomerListActivity extends BaseActivity {
         String regex = "^[a-zA-Z]+$";
         return str.matches(regex);
     }
+
+    @Override
+    public void onAddBtnClick(int position, ContactFormat contactFormat) {
+
+    }
+
+    @Override
+    public void onCheckStateChange(boolean isChecked, ContactFormat contactFormat) {
+        if(isChecked) {
+            selectedLsit.add(contactFormat);
+        }else {
+            selectedLsit.remove(contactFormat);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_import:
+                if(selectedLsit.size()==0) {
+                    ShowMessage.showToast(this,"请选择要导入联系人");
+                    return;
+                }
+
+
+                break;
+            case R.id.tv_right:
+                if(isMultiSelectMode) {
+                    mImportLayout.setVisibility(View.GONE);
+                    mSelectAllCb.setChecked(false);
+                    mRightTv.setText("多选");
+                    resetList();
+                    adapter.setSelectMode(false);
+                    selectedLsit.clear();
+                }else {
+                    mImportLayout.setVisibility(View.VISIBLE);
+                    mRightTv.setText("取消");
+                    adapter.setSelectMode(true);
+                }
+                isMultiSelectMode = !isMultiSelectMode;
+                break;
+        }
+    }
+
+    private void resetList() {
+        for(ContactFormat contactFormat: contactFormats) {
+            contactFormat.setSelected(false);
+        }
+    }
+
 }
