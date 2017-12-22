@@ -105,6 +105,8 @@ public class AppApi {
         POST_UPDATE_ORDER_SERVICE_JSON,
         /**点亮熄灭标签*/
         POST_LIGHT_LABEL_JSON,
+        /**获取客户最近历史*/
+        POST_CUS_HISTORY_JSON,
 
     }
 
@@ -146,6 +148,8 @@ public class AppApi {
             put(Action.POST_DELETE_ORDER_JSON, formatPhpUrl("Dinnerapp2/Order/deleteOrder"));
             put(Action.POST_UPDATE_ORDER_SERVICE_JSON, formatPhpUrl("Dinnerapp2/Order/upateOrderService"));
             put(Action.POST_LIGHT_LABEL_JSON, formatPhpUrl("Dinnerapp2/Label/lightLabel"));
+            put(Action.POST_CUS_HISTORY_JSON, formatPhpUrl("Dinnerapp2/Customer/getCustomerHistory"));
+
 
         }
     };
@@ -679,6 +683,16 @@ public class AppApi {
         params.put("type", type);
         new AppServiceOk(context,Action.POST_LIGHT_LABEL_JSON,handler,params).post();
     }
+
+    /**获取客户最近历史*/
+    public static void getCustomerHistory(Context context,String customer_id, String invite_id, String mobile, ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("invite_id", invite_id);
+        params.put("mobile", mobile);
+        params.put("customer_id", customer_id);
+        new AppServiceOk(context,Action.POST_CUS_HISTORY_JSON,handler,params).post();
+    }
+
     // 超时（网络）异常
     public static final String ERROR_TIMEOUT = "3001";
     // 业务异常
