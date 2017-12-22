@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -67,6 +68,7 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
     private TextView mImportTv;
     private LinearLayout mImportLayout;
     private int currentAddPosition;
+    private ImageView mBackBtn;
 
     public enum OperationType implements Serializable{
         /**客户列表*/
@@ -189,6 +191,7 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
     }
 
     public void getViews() {
+        mBackBtn = (ImageView) findViewById(R.id.iv_left);
         mImportLayout = (LinearLayout) findViewById(R.id.ll_import_layout);
         mSelectAllCb = (CheckBox) findViewById(R.id.cb_select_all);
         mImportTv = (TextView) findViewById(R.id.tv_import);
@@ -223,6 +226,8 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
     }
 
     public void setListeners() {
+        mBackBtn.setOnClickListener(this);
+
         mImportTv.setOnClickListener(this);
 
         mSelectAllCb.setOnClickListener(new View.OnClickListener() {
@@ -391,6 +396,9 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.iv_left:
+                finish();
+                break;
             case R.id.tv_import:
                 selectedLsit.clear();
                 List<ContactFormat> data = adapter.getData();
