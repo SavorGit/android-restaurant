@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.savor.resturant.R;
 
@@ -15,6 +17,9 @@ import com.savor.resturant.R;
  */
 public class CustomerFragment extends Fragment {
 
+
+    private TextView mTitleTv;
+    private ImageView mRightIv;
 
     public CustomerFragment() {
         // Required empty public constructor
@@ -39,8 +44,23 @@ public class CustomerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_customer, container, false);
+        View parentLayout = inflater.inflate(R.layout.fragment_customer, container, false);
+        initViews(parentLayout);
+        setViews();
+        return parentLayout;
+    }
+
+    private void setViews() {
+        mTitleTv.setText("客户管理");
+        mTitleTv.setTextColor(getResources().getColor(R.color.white));
+        mRightIv.setVisibility(View.VISIBLE);
+        mRightIv.setImageResource(R.drawable.ico_slide_video);
+    }
+
+    private void initViews(View parentLayout) {
+        parentLayout.findViewById(R.id.iv_left).setVisibility(View.GONE);
+        mTitleTv = (TextView) parentLayout.findViewById(R.id.tv_center);
+        mRightIv = (ImageView) parentLayout.findViewById(R.id.iv_right);
     }
 
 }
