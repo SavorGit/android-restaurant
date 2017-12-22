@@ -103,6 +103,8 @@ public class AppApi {
         POST_DELETE_ORDER_JSON,
         /**更新预订信息服务*/
         POST_UPDATE_ORDER_SERVICE_JSON,
+        /**点亮熄灭标签*/
+        POST_LIGHT_LABEL_JSON,
 
     }
 
@@ -143,6 +145,7 @@ public class AppApi {
             put(Action.POST_UPDATE_ORDER_JSON, formatPhpUrl("Dinnerapp2/Order/updateOrder"));
             put(Action.POST_DELETE_ORDER_JSON, formatPhpUrl("Dinnerapp2/Order/deleteOrder"));
             put(Action.POST_UPDATE_ORDER_SERVICE_JSON, formatPhpUrl("Dinnerapp2/Order/upateOrderService"));
+            put(Action.POST_LIGHT_LABEL_JSON, formatPhpUrl("Dinnerapp2/Label/lightLabel"));
 
         }
     };
@@ -664,6 +667,17 @@ public class AppApi {
         params.put("ticket_url", ticket_url);
         params.put("type", type);
         new AppServiceOk(context,Action.POST_UPDATE_ORDER_SERVICE_JSON,handler,params).post();
+    }
+
+    /**点亮熄灭标签*/
+    public static void lightLabel(Context context,String customer_id, String invite_id, String label_id,String mobile,String type, ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("customer_id", customer_id);
+        params.put("invite_id", invite_id);
+        params.put("label_id", label_id);
+        params.put("mobile", mobile);
+        params.put("type", type);
+        new AppServiceOk(context,Action.POST_LIGHT_LABEL_JSON,handler,params).post();
     }
     // 超时（网络）异常
     public static final String ERROR_TIMEOUT = "3001";
