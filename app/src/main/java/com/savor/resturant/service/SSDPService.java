@@ -76,7 +76,7 @@ public class SSDPService extends IntentService {
             operation_type = null;
         }
         ProjectionManager.getInstance().setLookingSSDP(true);
-        stopFirstUserServiceDelayed();
+//        stopFirstUserServiceDelayed();
         startReceive();
     }
     private void stopFirstUserServiceDelayed() {
@@ -167,7 +167,10 @@ public class SSDPService extends IntentService {
             closeSocketReceive();
         }
 
-        multicastLock.release();
+        try {
+            multicastLock.release();
+        }catch (Exception e){}
+
     }
 
     private void sendSpFoundReceiver() {
@@ -220,10 +223,12 @@ public class SSDPService extends IntentService {
     }
 
     @Override
-    public void onDestroy() {
-        LogUtils.d("savor:ssdp onDestroy关闭ssdp服务");
+    public void onDestroy() { LogUtils.d("savor:ssdp onDestroy关闭ssdp服务");
         super.onDestroy();
         isLooping = false;
         ProjectionManager.getInstance().setLookingSSDP(false);
+        try {
+            multicastLock.release();
+        }catch (Exception e){}
     }
 }
