@@ -151,6 +151,10 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
         for (int i = 0; i < getItemCount(); i++) {
 
             String sortStr;
+            String firstKeyWord = String.valueOf(mLists.get(i).getKey().charAt(0));
+            if(firstKeyWord.equals("#")&&firstKeyWord.equals(String.valueOf(section))) {
+                return i;
+            }
             String firstWord = String.valueOf(mLists.get(i).getName().charAt(0));
             if(isNumeric(firstWord)||isLetter(firstWord)) {
                 sortStr = firstWord;

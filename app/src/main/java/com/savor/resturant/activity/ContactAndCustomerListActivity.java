@@ -172,7 +172,12 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
                 }
             }
             String mobile = format.getMobile();
-            format.setKey(displayName+"#"+sb.toString().toLowerCase()+"#"+(TextUtils.isEmpty(format.getBirthplace())?"":format.getBirthplace())+"#"+(TextUtils.isEmpty(mobile)?"":mobile));
+            String stuf = "";
+            if(isLetter(displayName)||isNumeric(displayName)) {
+                stuf = "#";
+            }
+
+            format.setKey(stuf+displayName+"#"+sb.toString().toLowerCase()+"#"+(TextUtils.isEmpty(format.getBirthplace())?"":format.getBirthplace())+"#"+(TextUtils.isEmpty(mobile)?"":mobile));
 
             tempList.add(format);
         }
