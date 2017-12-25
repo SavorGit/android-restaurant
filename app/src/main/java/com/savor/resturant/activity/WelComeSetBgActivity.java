@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,10 +18,8 @@ import com.common.api.okhttp.OkHttpUtils;
 import com.common.api.utils.DensityUtil;
 import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
-import com.savor.resturant.adapter.RecommendFoodAdapter;
 import com.savor.resturant.adapter.RoomListAdapter;
 import com.savor.resturant.bean.HotelBean;
-import com.savor.resturant.bean.RecommendFoodAdvert;
 import com.savor.resturant.bean.RoomInfo;
 import com.savor.resturant.bean.SmallPlatInfoBySSDP;
 import com.savor.resturant.bean.SmallPlatformByGetIp;
@@ -337,7 +334,7 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
                 ShowMessage.showToast(this,"投屏成功！");
                 AppApi.reportLog(context,
                         hotel.getHotel_id()+"",
-                        "",hotel.getInvitation(),
+                        "",hotel.getInvite_id(),
                         hotel.getTel(),
                         currentRoom.getRoom_id(),
                         "1",
@@ -424,7 +421,7 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
         HotelBean hotel = mSession.getHotelBean();
         AppApi.reportLog(context,
                 hotel.getHotel_id()+"",
-                "",hotel.getInvitation(),
+                "",hotel.getInvite_id(),
                 hotel.getTel(),
                 currentRoom.getRoom_id(),
                 "1",

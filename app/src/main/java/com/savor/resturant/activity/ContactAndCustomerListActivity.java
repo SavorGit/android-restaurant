@@ -6,14 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -32,7 +28,6 @@ import com.savor.resturant.adapter.contact.MyContactAdapter;
 import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.utils.ChineseComparator;
-import com.savor.resturant.utils.ContactUtil;
 import com.savor.resturant.widget.contact.DividerDecoration;
 import com.savor.resturant.widget.contact.SideBar;
 
@@ -334,7 +329,7 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
         List<ContactFormat> contactFormats = new ArrayList<>();
         contactFormats.add(contactFormat);
         String importInfo = new Gson().toJson(contactFormats);
-        String invitation = mSession.getHotelBean().getInvitation();
+        String invitation = mSession.getHotelBean().getInvite_id();
         String tel = mSession.getHotelBean().getTel();
         AppApi.importInfo(this,importInfo,invitation,tel,this);
     }
@@ -378,7 +373,7 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
                     }
                 }
                 String importInfo = new Gson().toJson(selectedLsit);
-                String invitation = mSession.getHotelBean().getInvitation();
+                String invitation = mSession.getHotelBean().getInvite_id();
                 String tel = mSession.getHotelBean().getTel();
                 AppApi.importInfo(this,importInfo,invitation,tel,this);
                 break;

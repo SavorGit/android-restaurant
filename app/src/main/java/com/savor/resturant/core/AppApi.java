@@ -134,7 +134,7 @@ public class AppApi {
             put(Action.POST_BOX_INFO_JSON,tvBoxUrl);
             put(Action.GET_VERIFY_CODE_BY_BOXIP_JSON,tvBoxUrl);
             put(Action.POST_REPORT_LOG_JSON, formatPhpUrl("Dinnerapp/Touping/reportLog"));
-            put(Action.POST_LOGIN_JSON, formatPhpUrl("Dinnerapp/login/doLogin"));
+            put(Action.POST_LOGIN_JSON, formatPhpUrl("Dinnerapp2/Login/dologin"));
             put(Action.POST_VERIFY_CODE_JSON, formatPhpUrl("Dinnerapp/sms/getverifyCode"));
             put(Action.GET_HOTEL_BOX_JSON,smallPlatformUrl);
             put(Action.GET_RECOMMEND_FOODS_JSON, formatPhpUrl("Dinnerapp/Recfood/getHotelRecFoods"));

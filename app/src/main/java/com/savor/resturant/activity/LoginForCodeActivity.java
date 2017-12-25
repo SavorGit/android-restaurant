@@ -13,24 +13,17 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
 import com.savor.resturant.bean.HotelBean;
-import com.savor.resturant.bean.SlideSettingsMediaBean;
 import com.savor.resturant.core.ApiRequestListener;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.ResponseErrorMessage;
-import com.savor.resturant.service.ClearImageCacheService;
-import com.savor.resturant.service.LocalJettyService;
-import com.savor.resturant.service.SSDPService;
 import com.savor.resturant.utils.ActivitiesManager;
-import com.savor.resturant.utils.GlideImageLoader;
 import com.savor.resturant.widget.LoginDialog;
 
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -292,7 +285,7 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
             case POST_LOGIN_JSON:
 //                if (hotelBean != null) {
 //                    tel = hotelBean.getTel();
-//                    invitation = hotelBean.getInvitation();
+//                    invitation = hotelBean.getInvite_id();
 //                    if (!TextUtils.isEmpty(tel)) {
 //                        ev_num.setText(tel);
 //                        ev_num.setClickable(false);

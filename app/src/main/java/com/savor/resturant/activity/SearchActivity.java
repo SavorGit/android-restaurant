@@ -120,7 +120,7 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
         List<ContactFormat> contactFormats = new ArrayList<>();
         contactFormats.add(contactFormat);
         String importInfo = new Gson().toJson(contactFormats);
-        String invitation = mSession.getHotelBean().getInvitation();
+        String invitation = mSession.getHotelBean().getInvite_id();
         String tel = mSession.getHotelBean().getTel();
         AppApi.importInfo(this,importInfo,invitation,tel,this);
     }
@@ -144,6 +144,7 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_cancel_btn:
+                AppUtils.hideSoftKeybord(this);
                 finish();
                 break;
         }
