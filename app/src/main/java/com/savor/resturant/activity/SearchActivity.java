@@ -84,6 +84,7 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
     public void setListeners() {
         if(operationType == ContactCustomerListActivity.OperationType.CONSTACT_LIST) {
             mAdapter.setOnAddBtnClickListener(this);
+            mAdapter.setOnItemClickListener(null);
         }else {
             mAdapter.setOnItemClickListener(this);
         }
@@ -108,11 +109,8 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
                         mAdapter.setData(contactFormatLike);
                     }
                 }else {
-                    if(contactList == null) {
-                        contactList = mSession.getContactList();
-                        Collections.sort(contactList, pinyinComparator);
-                    }
-                    mAdapter.setData(contactList);
+                    List<ContactFormat> emptyList = new ArrayList<>();
+                    mAdapter.setData(emptyList);
                 }
             }
         });
@@ -134,7 +132,8 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
 
     @Override
     public void onItemClick(int position, ContactFormat contactFormat) {
-
+        ShowMessage.showToast(this,"打开客户信息列表");
+        finish();
     }
 
     private List<ContactFormat> getLikeList(List<ContactFormat> contactFormats, String content) {
