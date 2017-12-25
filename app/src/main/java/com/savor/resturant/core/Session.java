@@ -37,6 +37,7 @@ import com.common.api.utils.LogUtils;
 import com.common.api.utils.Pair;
 import com.common.api.utils.SaveFileData;
 import com.savor.resturant.bean.AdvertProHistory;
+import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.HotelMapCache;
 import com.savor.resturant.bean.HotelMapListData;
@@ -236,6 +237,7 @@ public class Session {
     private RoomInfo info;
     private AdvertProHistory advertProHistory;
     private RecommendProHistory recommendListHistory;
+    private List<ContactFormat> contactList;
 
     private Session(Context context) {
 
@@ -1037,5 +1039,13 @@ public class Session {
 
     public RecommendProHistory getRecommendListHistory() {
         return this.recommendListHistory;
+    }
+
+    public void setContactList(List<ContactFormat> contactList) {
+        this.contactList = contactList;
+    }
+
+    public List<ContactFormat> getContactList() {
+        return contactList;
     }
 }

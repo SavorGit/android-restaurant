@@ -2,6 +2,7 @@ package com.savor.resturant.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -55,7 +56,7 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
     private TextView contactDialog;
     private SideBar sideBar;
     private RecyclerView recyclerView;
-    private EditText mSearchEt;
+//    private EditText mSearchEt;
     private ProgressBar mLoadingPb;
     private OperationType operationType;
     private TextView mTitleTv;
@@ -69,6 +70,7 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
     private LinearLayout mImportLayout;
     private int currentAddPosition;
     private ImageView mBackBtn;
+    private TextView mSearchTv;
 
     public enum OperationType implements Serializable{
         /**客户列表*/
@@ -105,10 +107,13 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
                 contactFormats = getFormatContactList(contacts);
                 Collections.sort(contactFormats, pinyinComparator);
 
+                // 通讯录保存全局
+                mSession.setContactList(contactFormats);
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        adapter = new MyContactAdapter(ContactAndCustomerListActivity.this, contactFormats);
+                        adapter = new MyContactAdapter(ContactAndCustomerListActivity.this, contactFormats,operationType);
                         int orientation = LinearLayoutManager.VERTICAL;
                         final LinearLayoutManager layoutManager = new LinearLayoutManager(ContactAndCustomerListActivity.this, orientation, false);
                         recyclerView.setLayoutManager(layoutManager);
@@ -201,7 +206,7 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
         contactDialog = (TextView) findViewById(R.id.contact_dialog);
         sideBar = (SideBar) findViewById(R.id.contact_sidebar);
         recyclerView = (RecyclerView) findViewById(R.id.contact_member);
-        mSearchEt = (EditText) findViewById(R.id.et_search);
+        mSearchTv = (TextView) findViewById(R.id.tv_search);
 
         mRightTv = (TextView) findViewById(R.id.tv_right);
 
@@ -226,6 +231,8 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
     }
 
     public void setListeners() {
+        mSearchTv.setOnClickListener(this);
+
         mBackBtn.setOnClickListener(this);
 
         mImportTv.setOnClickListener(this);
@@ -245,20 +252,6 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
             }
         });
 
-//        mSelectAllCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                if(isChecked) {
-//                    for(ContactFormat contactFormat:contactFormats) {
-//                        contactFormat.setSelected(true);
-//                    }
-//                }else {
-//                    resetList();
-//                }
-//                adapter.notifyDataSetChanged();
-//            }
-//        });
-
 
         mRightTv.setOnClickListener(this);
 
@@ -273,43 +266,6 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
             }
         });
 
-        mSearchEt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String content = mSearchEt.getText().toString();
-                if(!TextUtils.isEmpty(content)) {
-                    if(contactFormats !=null&& contactFormats.size()>0) {
-                        List<ContactFormat> contactFormatLike = getLikeList(contactFormats,content);
-                        adapter.setData(contactFormatLike);
-                    }
-                }else {
-                    if(contactFormats == null) {
-                        contactFormats = ContactUtil.getInstance().getAllContact(ContactAndCustomerListActivity.this);
-                    }
-                    adapter.setData(contactFormats);
-                }
-            }
-        });
-    }
-
-    private List<ContactFormat> getLikeList(List<ContactFormat> contactFormats, String content) {
-        List<ContactFormat> tempList = new ArrayList<>();
-        for(ContactFormat contactFormat : contactFormats) {
-            if(contactFormat.getKey().trim().contains(content)) {
-                tempList.add(contactFormat);
-            }
-        }
-        return tempList;
     }
 
     public void hideSoftKeybord(Activity activity) {
@@ -396,6 +352,11 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tv_search:
+                Intent intent = new Intent(this,SearchActivity.class);
+                intent.putExtra("type",operationType);
+                startActivity(intent);
+                break;
             case R.id.iv_left:
                 finish();
                 break;

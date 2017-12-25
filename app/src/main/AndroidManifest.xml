@@ -201,6 +201,7 @@
             android:name=".activity.ContactAndCustomerListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity android:name=".activity.SearchActivity"></activity>
     </application>
 
 </manifest>
