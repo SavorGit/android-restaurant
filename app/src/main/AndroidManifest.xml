@@ -207,9 +207,11 @@
             android:name=".service.ReRequestService"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.savor.resturant.service.action.request"/>
+                <action android:name="com.savor.resturant.service.action.request" />
             </intent-filter>
         </service>
+
+        <activity android:name=".activity.AddCustomerActivity"></activity>
     </application>
 
 </manifest>
