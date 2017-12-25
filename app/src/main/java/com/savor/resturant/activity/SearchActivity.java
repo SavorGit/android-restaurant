@@ -132,6 +132,7 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
 
     @Override
     public void onItemClick(int position, ContactFormat contactFormat) {
+        AppUtils.hideSoftKeybord(this);
         ShowMessage.showToast(this,"打开客户信息列表");
         finish();
     }

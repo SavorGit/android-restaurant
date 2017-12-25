@@ -68,6 +68,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
     private int currentAddPosition;
     private ImageView mBackBtn;
     private TextView mSearchTv;
+    private ImageView mRightBtn;
 
     public enum OperationType implements Serializable{
         /**客户列表*/
@@ -99,9 +100,17 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
             @Override
             public void run() {
 //                contactFormats = ContactUtil.getInstance().getAllContact(ContactCustomerListActivity.this);
-                Query query = Contacts.getQuery();
-                List<Contact> contacts = query.find();
-                contactFormats = getFormatContactList(contacts);
+                switch (operationType) {
+                    case CUSTOMER_LIST:
+                        contactFormats = mSession.getCustomerList();
+                        break;
+                    case CONSTACT_LIST:
+                        Query query = Contacts.getQuery();
+                        List<Contact> contacts = query.find();
+                        contactFormats = getFormatContactList(contacts);
+                        break;
+                }
+
                 Collections.sort(contactFormats, pinyinComparator);
 
                 // 通讯录保存全局
@@ -206,6 +215,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         mSearchTv = (TextView) findViewById(R.id.tv_search);
 
         mRightTv = (TextView) findViewById(R.id.tv_right);
+        mRightBtn = (ImageView) findViewById(R.id.iv_right);
 
     }
 
@@ -216,18 +226,23 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
 
         switch (operationType) {
             case CONSTACT_LIST:
+                mRightBtn.setVisibility(View.GONE);
                 mRightTv.setVisibility(View.VISIBLE);
                 mRightTv.setText("多选");
                 mTitleTv.setText("通讯录");
                 break;
             case CUSTOMER_LIST:
+                mRightBtn.setVisibility(View.VISIBLE);
+                mRightBtn.setImageResource(R.drawable.ico_slide_video);
                 mRightTv.setVisibility(View.GONE);
                 mTitleTv.setText("客户列表");
+
                 break;
         }
     }
 
     public void setListeners() {
+        mRightBtn.setOnClickListener(this);
         mSearchTv.setOnClickListener(this);
 
         mBackBtn.setOnClickListener(this);
@@ -348,9 +363,13 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
+            case R.id.iv_right:
+                ShowMessage.showToast(this,"新增客户");
+                break;
             case R.id.tv_search:
-                Intent intent = new Intent(this,SearchActivity.class);
+                intent = new Intent(this,SearchActivity.class);
                 intent.putExtra("type",operationType);
                 startActivity(intent);
                 break;

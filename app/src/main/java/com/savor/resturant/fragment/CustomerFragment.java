@@ -57,6 +57,7 @@ public class CustomerFragment extends Fragment implements View.OnClickListener {
 
     private void setListeners() {
         mSearchTv.setOnClickListener(this);
+        mRightIv.setOnClickListener(this);
     }
 
     private void setViews() {
@@ -75,9 +76,15 @@ public class CustomerFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
             case R.id.tv_search:
-                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                intent = new Intent(getActivity(), SearchActivity.class);
+                intent.putExtra("type", ContactCustomerListActivity.OperationType.CUSTOMER_LIST);
+                startActivity(intent);
+                break;
+            case R.id.iv_right:
+                intent = new Intent(getActivity(),ContactCustomerListActivity.class);
                 intent.putExtra("type", ContactCustomerListActivity.OperationType.CUSTOMER_LIST);
                 startActivity(intent);
                 break;
