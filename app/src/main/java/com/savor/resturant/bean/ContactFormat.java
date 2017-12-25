@@ -16,11 +16,12 @@ public  class ContactFormat implements Serializable {
      * birthplace : 北京市丰台区
      */
     private String contactId;
-    private String name;
+    private String name = "";
+    private String face_url = "";
 
     private String key;
-    private String mobile;
-    private String mobile1;
+    private String mobile = "";
+    private String mobile1 = "";
     private int sex;
     private String birthday;
     private String birthplace;
@@ -34,6 +35,7 @@ public  class ContactFormat implements Serializable {
         return "ContactFormat{" +
                 "contactId='" + contactId + '\'' +
                 ", name='" + name + '\'' +
+                ", face_url='" + face_url + '\'' +
                 ", key='" + key + '\'' +
                 ", mobile='" + mobile + '\'' +
                 ", mobile1='" + mobile1 + '\'' +
@@ -52,19 +54,17 @@ public  class ContactFormat implements Serializable {
 
         ContactFormat that = (ContactFormat) o;
 
-        if (contactId != null ? !contactId.equals(that.contactId) : that.contactId != null)
-            return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (mobile != null ? !mobile.equals(that.mobile) : that.mobile != null) return false;
-        return mobile1 != null ? mobile1.equals(that.mobile1) : that.mobile1 == null;
+        if (face_url != null ? !face_url.equals(that.face_url) : that.face_url != null)
+            return false;
+        return mobile != null ? mobile.equals(that.mobile) : that.mobile == null;
     }
 
     @Override
     public int hashCode() {
-        int result = contactId != null ? contactId.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (face_url != null ? face_url.hashCode() : 0);
         result = 31 * result + (mobile != null ? mobile.hashCode() : 0);
-        result = 31 * result + (mobile1 != null ? mobile1.hashCode() : 0);
         return result;
     }
 
@@ -82,6 +82,14 @@ public  class ContactFormat implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getFace_url() {
+        return face_url;
+    }
+
+    public void setFace_url(String face_url) {
+        this.face_url = face_url;
     }
 
     public String getKey() {

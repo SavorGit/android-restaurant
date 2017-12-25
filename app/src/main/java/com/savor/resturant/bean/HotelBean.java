@@ -11,12 +11,11 @@ import java.util.List;
  */
 
 public class HotelBean implements Serializable {
-    private static final long serialVersionUID = -1;
     private String hotel_id;
     private String hotel_name;
     private String invite_id;
     private String tel;
-    private List<CustomerBean> customer_list = new ArrayList<CustomerBean>();
+    private List<ContactFormat> customer_list = new ArrayList<>();
     private String invitation;
 
     @Override
@@ -45,7 +44,9 @@ public class HotelBean implements Serializable {
         if (invite_id != null ? !invite_id.equals(hotelBean.invite_id) : hotelBean.invite_id != null)
             return false;
         if (tel != null ? !tel.equals(hotelBean.tel) : hotelBean.tel != null) return false;
-        return customer_list != null ? customer_list.equals(hotelBean.customer_list) : hotelBean.customer_list == null;
+        if (customer_list != null ? !customer_list.equals(hotelBean.customer_list) : hotelBean.customer_list != null)
+            return false;
+        return invitation != null ? invitation.equals(hotelBean.invitation) : hotelBean.invitation == null;
     }
 
     @Override
@@ -55,6 +56,7 @@ public class HotelBean implements Serializable {
         result = 31 * result + (invite_id != null ? invite_id.hashCode() : 0);
         result = 31 * result + (tel != null ? tel.hashCode() : 0);
         result = 31 * result + (customer_list != null ? customer_list.hashCode() : 0);
+        result = 31 * result + (invitation != null ? invitation.hashCode() : 0);
         return result;
     }
 
@@ -90,11 +92,11 @@ public class HotelBean implements Serializable {
         this.tel = tel;
     }
 
-    public List<CustomerBean> getCustomer_list() {
+    public List<ContactFormat> getCustomer_list() {
         return customer_list;
     }
 
-    public void setCustomer_list(List<CustomerBean> customer_list) {
+    public void setCustomer_list(List<ContactFormat> customer_list) {
         this.customer_list = customer_list;
     }
 

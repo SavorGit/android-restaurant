@@ -11,8 +11,11 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.savor.resturant.R;
-import com.savor.resturant.activity.ContactAndCustomerListActivity;
+import com.savor.resturant.activity.ContactCustomerListActivity;
 import com.savor.resturant.bean.ContactFormat;
+import com.savor.resturant.bean.HotelBean;
+import com.savor.resturant.core.CustomerBean;
+import com.savor.resturant.core.Session;
 import com.savor.resturant.widget.contact.SwipeItemLayout;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
@@ -28,7 +31,7 @@ import java.util.regex.Pattern;
 public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContactAdapter.ContactViewHolder>
         implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
 
-    private final ContactAndCustomerListActivity.OperationType operationType;
+    private final ContactCustomerListActivity.OperationType operationType;
     //    private final CharacterParser characterParser;
     private List<ContactFormat> mLists;
 
@@ -39,7 +42,7 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
     private OnItemClickListener onItemClickListener;
 
 
-    public MyContactAdapter(Context ct, List<ContactFormat> mListsD, ContactAndCustomerListActivity.OperationType operationType) {
+    public MyContactAdapter(Context ct, List<ContactFormat> mListsD, ContactCustomerListActivity.OperationType operationType) {
         this.mLists = mListsD;
         mContext = ct;
         this.addAll(mLists);
@@ -90,19 +93,10 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
 
         holder.checkBox.setVisibility(isMultiSelectMode?View.VISIBLE:View.GONE);
 
-        holder.mAdd.setVisibility(ContactAndCustomerListActivity.OperationType.CONSTACT_LIST==operationType?View.VISIBLE:View.GONE);
+        holder.mAdd.setVisibility(ContactCustomerListActivity.OperationType.CONSTACT_LIST==operationType?View.VISIBLE:View.GONE);
 
         holder.mAdd.setTag(position);
-        holder.mAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int pos = (int) v.getTag();
-                ContactFormat addItem = getItem(pos);
-                if(onAddBtnClickListener!=null) {
-                    onAddBtnClickListener.onAddBtnClick(pos,addItem);
-                }
-            }
-        });
+
 
         holder.checkBox.setTag(position);
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -124,15 +118,39 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
             holder.checkBox.setChecked(false);
         }
 
+        // 判断是否已添加
+        HotelBean hotelBean = Session.get(mContext).getHotelBean();
+        if(hotelBean!=null) {
+            List<ContactFormat> customer_list = hotelBean.getCustomer_list();
+            if(customer_list!=null&&customer_list.size()>0) {
+                if(customer_list.contains(item)) {
+                    item.setAdded(true);
+                }
+            }
+        }
+
         boolean added = item.isAdded();
         if(added) {
             holder.mAdd.setBackground(null);
             holder.mAdd.setTextColor(mContext.getResources().getColor(R.color.divider_list));
             holder.checkBox.setEnabled(false);
+            holder.mAdd.setText("已添加");
+            holder.mAdd.setOnClickListener(null);
         }else {
             holder.mAdd.setBackgroundResource(R.drawable.edit_text_bg);
             holder.mAdd.setText("添加");
+            holder.mAdd.setTextColor(mContext.getResources().getColor(R.color.black));
             holder.checkBox.setEnabled(true);
+            holder.mAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = (int) v.getTag();
+                    ContactFormat addItem = getItem(pos);
+                    if(onAddBtnClickListener!=null) {
+                        onAddBtnClickListener.onAddBtnClick(pos,addItem);
+                    }
+                }
+            });
         }
 
         swipeRoot.setTag(position);

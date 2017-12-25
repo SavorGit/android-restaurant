@@ -44,7 +44,7 @@ import java.util.regex.Pattern;
  * 客户列表，通讯录列表
  * @author hezd
  */
-public class ContactAndCustomerListActivity extends BaseActivity implements View.OnClickListener, MyContactAdapter.OnAddBtnClickListener, MyContactAdapter.OnCheckStateChangeListener {
+public class ContactCustomerListActivity extends BaseActivity implements View.OnClickListener, MyContactAdapter.OnAddBtnClickListener, MyContactAdapter.OnCheckStateChangeListener {
     private List<ContactFormat> contactFormats;
     private ChineseComparator pinyinComparator;
     private MyContactAdapter adapter;
@@ -96,7 +96,7 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
         new Thread(){
             @Override
             public void run() {
-//                contactFormats = ContactUtil.getInstance().getAllContact(ContactAndCustomerListActivity.this);
+//                contactFormats = ContactUtil.getInstance().getAllContact(ContactCustomerListActivity.this);
                 Query query = Contacts.getQuery();
                 List<Contact> contacts = query.find();
                 contactFormats = getFormatContactList(contacts);
@@ -108,16 +108,16 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        adapter = new MyContactAdapter(ContactAndCustomerListActivity.this, contactFormats,operationType);
+                        adapter = new MyContactAdapter(ContactCustomerListActivity.this, contactFormats,operationType);
                         int orientation = LinearLayoutManager.VERTICAL;
-                        final LinearLayoutManager layoutManager = new LinearLayoutManager(ContactAndCustomerListActivity.this, orientation, false);
+                        final LinearLayoutManager layoutManager = new LinearLayoutManager(ContactCustomerListActivity.this, orientation, false);
                         recyclerView.setLayoutManager(layoutManager);
 
                         recyclerView.setAdapter(adapter);
-                        recyclerView.addItemDecoration(new DividerDecoration(ContactAndCustomerListActivity.this));
+                        recyclerView.addItemDecoration(new DividerDecoration(ContactCustomerListActivity.this));
 
-                        adapter.setOnCheckStateChangeListener(ContactAndCustomerListActivity.this);
-                        adapter.setOnAddBtnClickListener(ContactAndCustomerListActivity.this);
+                        adapter.setOnCheckStateChangeListener(ContactCustomerListActivity.this);
+                        adapter.setOnAddBtnClickListener(ContactCustomerListActivity.this);
 
                         hideLoadingLayout();
                     }
@@ -253,7 +253,7 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
         sideBar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
             @Override
             public void onTouchingLetterChanged(String s) {
-                hideSoftKeybord(ContactAndCustomerListActivity.this);
+                hideSoftKeybord(ContactCustomerListActivity.this);
                 int position = adapter.getPositionForSection(s.charAt(0));
                 if (position != -1) {
                     recyclerView.getLayoutManager().scrollToPosition(position);

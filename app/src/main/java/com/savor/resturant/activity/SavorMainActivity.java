@@ -2,11 +2,9 @@ package com.savor.resturant.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
-import com.common.api.utils.ShowMessage;
 import com.common.api.widget.customTab.MyTabWidget;
 import com.savor.resturant.R;
 import com.savor.resturant.fragment.BookFragment;
@@ -43,8 +41,8 @@ public class SavorMainActivity extends BaseFragmentActivity implements MyTabWidg
         new ImportDialog(this, new ImportDialog.OnImportBtnClickListener() {
             @Override
             public void onImportBtnClick() {
-                Intent intent = new Intent(SavorMainActivity.this,ContactAndCustomerListActivity.class);
-                intent.putExtra("type", ContactAndCustomerListActivity.OperationType.CONSTACT_LIST);
+                Intent intent = new Intent(SavorMainActivity.this,ContactCustomerListActivity.class);
+                intent.putExtra("type", ContactCustomerListActivity.OperationType.CONSTACT_LIST);
                 startActivity(intent);
             }
         }).show();

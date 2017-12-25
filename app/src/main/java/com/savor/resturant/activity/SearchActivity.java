@@ -29,7 +29,7 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
     private EditText mSearchEt;
     private TextView mCancelBtn;
     private RecyclerView mContactListView;
-    private ContactAndCustomerListActivity.OperationType operationType;
+    private ContactCustomerListActivity.OperationType operationType;
     private MyContactAdapter mAdapter;
     private List<ContactFormat> contactList = new ArrayList<>();
     private ChineseComparator pinyinComparator;
@@ -47,7 +47,7 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
     }
 
     private void handleIntent() {
-        operationType = (ContactAndCustomerListActivity.OperationType) getIntent().getSerializableExtra("type");
+        operationType = (ContactCustomerListActivity.OperationType) getIntent().getSerializableExtra("type");
     }
 
     @Override
@@ -75,7 +75,7 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
 
     @Override
     public void setListeners() {
-        if(operationType == ContactAndCustomerListActivity.OperationType.CONSTACT_LIST) {
+        if(operationType == ContactCustomerListActivity.OperationType.CONSTACT_LIST) {
             mAdapter.setOnAddBtnClickListener(this);
         }else {
             mAdapter.setOnItemClickListener(this);
