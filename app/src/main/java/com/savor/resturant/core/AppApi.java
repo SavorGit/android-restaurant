@@ -682,6 +682,7 @@ public class AppApi {
         params.put("mobile", mobile);
         params.put("type", type);
         new AppServiceOk(context,Action.POST_LIGHT_LABEL_JSON,handler,params).post();
+
     }
 
     /**获取客户最近历史*/
