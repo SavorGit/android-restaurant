@@ -99,24 +99,7 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
 
 
         holder.checkBox.setTag(position);
-        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                int pos = (int) buttonView.getTag();
-                ContactFormat changeItem = getItem(pos);
-                changeItem.setSelected(isChecked);
-                if(onCheckStateChangeListener!=null) {
-                    onCheckStateChangeListener.onCheckStateChange(isChecked,changeItem);
-                }
-            }
-        });
 
-        if(isMultiSelectMode) {
-            holder.checkBox.setChecked(selected);
-        }else {
-            item.setSelected(false);
-            holder.checkBox.setChecked(false);
-        }
 
         // 判断是否已添加
         HotelBean hotelBean = Session.get(mContext).getHotelBean();
@@ -130,6 +113,12 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
         }
 
         boolean added = item.isAdded();
+        if(isMultiSelectMode) {
+            holder.checkBox.setChecked(selected);
+        }else {
+            item.setSelected(false);
+            holder.checkBox.setChecked(false);
+        }
         if(added) {
             holder.mAdd.setBackground(null);
             holder.mAdd.setTextColor(mContext.getResources().getColor(R.color.divider_list));
@@ -152,6 +141,18 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
                 }
             });
         }
+
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                int pos = (int) buttonView.getTag();
+                ContactFormat changeItem = getItem(pos);
+                changeItem.setSelected(isChecked);
+                if(onCheckStateChangeListener!=null) {
+                    onCheckStateChangeListener.onCheckStateChange(isChecked,changeItem);
+                }
+            }
+        });
 
         swipeRoot.setTag(position);
         swipeRoot.setOnClickListener(new View.OnClickListener() {

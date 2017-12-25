@@ -201,7 +201,15 @@
             android:name=".activity.ContactCustomerListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".activity.SearchActivity"></activity>
+        <activity android:name=".activity.SearchActivity" />
+
+        <service
+            android:name=".service.ReRequestService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.savor.resturant.service.action.request"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

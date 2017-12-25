@@ -31,6 +31,7 @@ import com.common.api.utils.LogUtils;
 import com.savor.resturant.R;
 import com.savor.resturant.SavorApplication;
 import com.savor.resturant.bean.AliLogBean;
+import com.savor.resturant.bean.OperationFailedItem;
 import com.savor.resturant.bean.RoomInfo;
 import com.savor.resturant.bean.SmallPlatInfoBySSDP;
 import com.savor.resturant.bean.SmallPlatformByGetIp;
@@ -40,6 +41,7 @@ import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.Session;
 import com.savor.resturant.presenter.SensePresenter;
 import com.savor.resturant.service.LocalJettyService;
+import com.savor.resturant.service.ReRequestService;
 import com.savor.resturant.service.SSDPService;
 import com.savor.resturant.service.UpLoadLogService;
 import com.savor.resturant.utils.ActivitiesManager;
@@ -166,6 +168,20 @@ public class SplashActivity extends BaseActivity {
         registerNetWorkReceiver(mHandler);
         startJettyServer();
         regitsterSmallPlatformReciever();
+        startReRequestService();
+    }
+
+    /**
+     * 操作失败的请求列表重新发起请求
+     */
+    private void startReRequestService() {
+        List<OperationFailedItem> opFailedList = mSession.getOpFailedList();
+        if(opFailedList!=null&&opFailedList.size()>0) {
+            LogUtils.d("savor:opr 有操作失败记录开始重新发起请求\n "+opFailedList);
+            ReRequestService.startActionRequest(this);
+        }else {
+            LogUtils.d("savor:opr 没有操作失败记录");
+        }
     }
 
     /**

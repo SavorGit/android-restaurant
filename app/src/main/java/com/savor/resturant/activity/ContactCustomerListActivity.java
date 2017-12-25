@@ -26,7 +26,9 @@ import com.google.gson.Gson;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.contact.MyContactAdapter;
 import com.savor.resturant.bean.ContactFormat;
+import com.savor.resturant.bean.OperationFailedItem;
 import com.savor.resturant.core.AppApi;
+import com.savor.resturant.core.ResponseErrorMessage;
 import com.savor.resturant.utils.ChineseComparator;
 import com.savor.resturant.widget.contact.DividerDecoration;
 import com.savor.resturant.widget.contact.SideBar;
@@ -364,7 +366,9 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                 }
                 boolean checked = mSelectAllCb.isChecked();
                 if(checked) {
-                    selectedLsit.addAll(data);
+                    // 获取为添加的集合
+                    List<ContactFormat> enableList = getEnableList(data);
+                    selectedLsit.addAll(enableList);
                 }else {
                     for(ContactFormat contactFormat:data) {
                         if(contactFormat.isSelected()) {
@@ -395,6 +399,16 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         }
     }
 
+    private List<ContactFormat> getEnableList(List<ContactFormat> data) {
+        List<ContactFormat> enableList = new ArrayList<>();
+        for(ContactFormat contactFormat :data ) {
+            if(!contactFormat.isAdded()) {
+                enableList.add(contactFormat);
+            }
+        }
+        return enableList;
+    }
+
     private void resetList() {
         for(ContactFormat contactFormat: contactFormats) {
             contactFormat.setSelected(false);
@@ -409,6 +423,37 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                 ShowMessage.showToast(this,"导入成功");
                 contactFormats.get(currentAddPosition).setAdded(true);
                 adapter.notifyDataSetChanged();
+                break;
+        }
+    }
+
+    @Override
+    public void onError(AppApi.Action method, Object obj) {
+//        super.onError(method, obj);
+        switch (method) {
+            case POST_IMPORT_INFO_JSON:
+                if(obj instanceof ResponseErrorMessage) {
+                    ResponseErrorMessage message = (ResponseErrorMessage) obj;
+                    String msg = message.getMessage();
+                    showToast(msg);
+                }else  {
+                    List<OperationFailedItem> failedItemList = mSession.getOpFailedList();
+                    OperationFailedItem item = new OperationFailedItem();
+                    if(isMultiSelectMode) {
+                        if(failedItemList==null) {
+                            failedItemList = new ArrayList<>();
+                        }
+                        item.setContactFormat(selectedLsit);
+                        item.setType(OperationFailedItem.OpType.TYPE_IMPORT);
+                    }else {
+                        List<ContactFormat> list = new ArrayList<>();
+                        list.add(contactFormats.get(currentAddPosition));
+                        item.setContactFormat(list);
+                        item.setType(OperationFailedItem.OpType.TYPE_IMPORT);
+                    }
+                    failedItemList.add(item);
+                    mSession.setOpFailedList(failedItemList);
+                }
                 break;
         }
     }
