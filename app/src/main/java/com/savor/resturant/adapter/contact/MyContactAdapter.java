@@ -11,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.savor.resturant.R;
+import com.savor.resturant.activity.ContactAndCustomerListActivity;
 import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.widget.contact.SwipeItemLayout;
 
@@ -27,25 +28,32 @@ import java.util.regex.Pattern;
 public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContactAdapter.ContactViewHolder>
         implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
 
-//    private final CharacterParser characterParser;
+    private final ContactAndCustomerListActivity.OperationType operationType;
+    //    private final CharacterParser characterParser;
     private List<ContactFormat> mLists;
 
     private Context mContext;
     private boolean isMultiSelectMode;
     private OnAddBtnClickListener onAddBtnClickListener;
     private OnCheckStateChangeListener onCheckStateChangeListener;
+    private OnItemClickListener onItemClickListener;
 
 
-    public MyContactAdapter(Context ct, List<ContactFormat> mListsD) {
+    public MyContactAdapter(Context ct, List<ContactFormat> mListsD, ContactAndCustomerListActivity.OperationType operationType) {
         this.mLists = mListsD;
         mContext = ct;
         this.addAll(mLists);
+        this.operationType = operationType;
 //        characterParser = CharacterParser.getInstance();
     }
 
     public void setData(List<ContactFormat> mListsD) {
         this.mLists = mListsD;
         this.addAll(mLists);
+    }
+
+    public List<ContactFormat> getData() {
+        return mLists;
     }
 
     public void setSelectMode(boolean isMultiSelectMode) {
@@ -62,7 +70,7 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
 
     @Override
     public void onBindViewHolder(final MyContactAdapter.ContactViewHolder holder, final int position) {
-        SwipeItemLayout swipeRoot = holder.mRoot;
+        final SwipeItemLayout swipeRoot = holder.mRoot;
         swipeRoot.setSwipeAble(false);
         TextView textView = holder.mName;
         ContactFormat item = getItem(position);
@@ -81,6 +89,8 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
         }
 
         holder.checkBox.setVisibility(isMultiSelectMode?View.VISIBLE:View.GONE);
+
+        holder.mAdd.setVisibility(ContactAndCustomerListActivity.OperationType.CONSTACT_LIST==operationType?View.VISIBLE:View.GONE);
 
         holder.mAdd.setTag(position);
         holder.mAdd.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +124,27 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
             holder.checkBox.setChecked(false);
         }
 
+        boolean added = item.isAdded();
+        if(added) {
+            holder.mAdd.setBackground(null);
+            holder.mAdd.setTextColor(mContext.getResources().getColor(R.color.divider_list));
+            holder.checkBox.setEnabled(false);
+        }else {
+            holder.mAdd.setBackgroundResource(R.drawable.edit_text_bg);
+            holder.mAdd.setText("添加");
+            holder.checkBox.setEnabled(true);
+        }
+
+        swipeRoot.setTag(position);
+        swipeRoot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onItemClickListener!=null) {
+                    int pos = (int) swipeRoot.getTag();
+                    onItemClickListener.onItemClick(pos,getItem(pos));
+                }
+            }
+        });
     }
 
     @Override
@@ -222,11 +253,19 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
         this.onCheckStateChangeListener = onCheckStateChangeListener;
     }
 
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
     public interface OnAddBtnClickListener {
         void onAddBtnClick(int position,ContactFormat contactFormat);
     }
 
     public interface OnCheckStateChangeListener {
         void onCheckStateChange(boolean isChecked,ContactFormat contactFormat);
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position,ContactFormat contactFormat);
     }
 }

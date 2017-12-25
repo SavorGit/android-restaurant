@@ -108,6 +108,8 @@ public class AppApi {
         /**获取客户最近历史*/
         POST_CUS_HISTORY_JSON,
 
+        /**导入通讯录*/
+        POST_IMPORT_INFO_JSON,
     }
 
     /**
@@ -147,6 +149,7 @@ public class AppApi {
             put(Action.POST_UPDATE_ORDER_JSON, formatPhpUrl("Dinnerapp2/Order/updateOrder"));
             put(Action.POST_DELETE_ORDER_JSON, formatPhpUrl("Dinnerapp2/Order/deleteOrder"));
             put(Action.POST_UPDATE_ORDER_SERVICE_JSON, formatPhpUrl("Dinnerapp2/Order/upateOrderService"));
+            put(Action.POST_IMPORT_INFO_JSON, formatPhpUrl("Dinnerapp2/Customer/importInfo"));
             put(Action.POST_LIGHT_LABEL_JSON, formatPhpUrl("Dinnerapp2/Label/lightLabel"));
             put(Action.POST_CUS_HISTORY_JSON, formatPhpUrl("Dinnerapp2/Customer/getCustomerHistory"));
 
@@ -672,6 +675,20 @@ public class AppApi {
         params.put("type", type);
         new AppServiceOk(context,Action.POST_UPDATE_ORDER_SERVICE_JSON,handler,params).post();
     }
+
+    /**导入通讯录*/
+    public static void importInfo(Context context,
+                                         String book_info,
+                                         String invite_id,
+                                         String mobile,
+                                         ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<>();
+        params.put("invite_id", invite_id);
+        params.put("mobile", mobile);
+        params.put("book_info", book_info);
+        new AppServiceOk(context,Action.POST_IMPORT_INFO_JSON,handler,params).post();
+    }
+
 
     /**点亮熄灭标签*/
     public static void lightLabel(Context context,String customer_id, String invite_id, String label_id,String mobile,String type, ApiRequestListener handler) {

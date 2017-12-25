@@ -167,7 +167,10 @@ public class SSDPService extends IntentService {
             closeSocketReceive();
         }
 
-        multicastLock.release();
+        try {
+            multicastLock.release();
+        }catch (Exception e){
+        }
     }
 
     private void sendSpFoundReceiver() {
@@ -225,5 +228,8 @@ public class SSDPService extends IntentService {
         super.onDestroy();
         isLooping = false;
         ProjectionManager.getInstance().setLookingSSDP(false);
+        try {
+            multicastLock.release();
+        }catch (Exception e){}
     }
 }

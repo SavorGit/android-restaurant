@@ -115,6 +115,7 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.GET_RECOMMEND_PRO_JSON
                     || action == AppApi.Action.GET_WORD_PRO_JSON
                     || action == AppApi.Action.POST_REPORT_LOG_JSON
+                    || action == AppApi.Action.POST_IMPORT_INFO_JSON
                     ){
                 int code = rSet.getInt("code");
                 if(rSet.has("result")) {
@@ -268,6 +269,9 @@ public class ApiResponseFactory {
             case POST_UPDATE_ORDER_SERVICE_JSON:
                 result = "success";
                 break;
+            case POST_IMPORT_INFO_JSON:
+                result = info;
+                break;
             case POST_CUS_HISTORY_JSON:
                 result = gson.fromJson(info, new TypeToken<CustomerHistory>() {
                 }.getType());
@@ -275,7 +279,6 @@ public class ApiResponseFactory {
             case POST_LIGHT_LABEL_JSON:
                 result = "success";
                 break;
-
 
             default:
                 break;

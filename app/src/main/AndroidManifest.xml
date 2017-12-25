@@ -84,7 +84,7 @@
             android:value="${UMENG_CHANNEL_VALUE}" />
 
         <activity
-            android:name=".activity.SavorMainActivity"
+            android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -194,13 +194,14 @@
         <activity
             android:name=".activity.RecommendFoodActivity"
             android:screenOrientation="portrait" />
-        <!--<activity-->
-            <!--android:name=".activity.SavorMainActivity"-->
-            <!--android:screenOrientation="portrait" />-->
+        <activity
+            android:name=".activity.SavorMainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ContactAndCustomerListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity android:name=".activity.SearchActivity"></activity>
     </application>
 
 </manifest>
