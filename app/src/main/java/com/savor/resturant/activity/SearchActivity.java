@@ -60,7 +60,14 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
     @Override
     public void setViews() {
         pinyinComparator = new ChineseComparator();
-        contactList = mSession.getContactList();
+        switch (operationType) {
+            case CONSTACT_LIST:
+                contactList = mSession.getContactList();
+                break;
+            case CUSTOMER_LIST:
+                contactList = mSession.getCustomerList();
+                break;
+        }
 
         mAdapter = new MyContactAdapter(this,null,operationType);
         int orientation = LinearLayoutManager.VERTICAL;

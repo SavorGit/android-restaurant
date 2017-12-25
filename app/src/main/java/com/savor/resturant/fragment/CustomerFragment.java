@@ -1,6 +1,7 @@
 package com.savor.resturant.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,16 +11,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.savor.resturant.R;
+import com.savor.resturant.activity.ContactCustomerListActivity;
+import com.savor.resturant.activity.SearchActivity;
 
 /**
  * 客户管理
  * @author hezd 2019/09/19
  */
-public class CustomerFragment extends Fragment {
+public class CustomerFragment extends Fragment implements View.OnClickListener {
 
 
     private TextView mTitleTv;
     private ImageView mRightIv;
+    private TextView mSearchTv;
 
     public CustomerFragment() {
         // Required empty public constructor
@@ -47,7 +51,12 @@ public class CustomerFragment extends Fragment {
         View parentLayout = inflater.inflate(R.layout.fragment_customer, container, false);
         initViews(parentLayout);
         setViews();
+        setListeners();
         return parentLayout;
+    }
+
+    private void setListeners() {
+        mSearchTv.setOnClickListener(this);
     }
 
     private void setViews() {
@@ -61,6 +70,17 @@ public class CustomerFragment extends Fragment {
         parentLayout.findViewById(R.id.iv_left).setVisibility(View.GONE);
         mTitleTv = (TextView) parentLayout.findViewById(R.id.tv_center);
         mRightIv = (ImageView) parentLayout.findViewById(R.id.iv_right);
+        mSearchTv = (TextView) parentLayout.findViewById(R.id.tv_search);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_search:
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                intent.putExtra("type", ContactCustomerListActivity.OperationType.CUSTOMER_LIST);
+                startActivity(intent);
+                break;
+        }
+    }
 }
