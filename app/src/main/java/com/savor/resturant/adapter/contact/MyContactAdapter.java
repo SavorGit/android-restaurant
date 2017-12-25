@@ -32,6 +32,7 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
         implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
 
     private final ContactCustomerListActivity.OperationType operationType;
+    private final Session session;
     //    private final CharacterParser characterParser;
     private List<ContactFormat> mLists;
 
@@ -47,6 +48,7 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
         mContext = ct;
         this.addAll(mLists);
         this.operationType = operationType;
+        this.session = Session.get(mContext);
 //        characterParser = CharacterParser.getInstance();
     }
 
@@ -102,13 +104,10 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
 
 
         // 判断是否已添加
-        HotelBean hotelBean = Session.get(mContext).getHotelBean();
-        if(hotelBean!=null) {
-            List<ContactFormat> customer_list = hotelBean.getCustomer_list();
-            if(customer_list!=null&&customer_list.size()>0) {
-                if(customer_list.contains(item)) {
-                    item.setAdded(true);
-                }
+        List<ContactFormat> customer_list =session.getCustomerList();
+        if(customer_list!=null&&customer_list.size()>0) {
+            if(customer_list.contains(item)) {
+                item.setAdded(true);
             }
         }
 

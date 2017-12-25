@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
+import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.core.ApiRequestListener;
 import com.savor.resturant.core.AppApi;
@@ -24,6 +25,7 @@ import com.savor.resturant.core.ResponseErrorMessage;
 import com.savor.resturant.utils.ActivitiesManager;
 import com.savor.resturant.widget.LoginDialog;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -244,7 +246,11 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
                         hotelBean.setTel(tel);
                         mSession.setHotelBean(hotelBean);
 
-
+                        List<ContactFormat> customer_list = hotelBean.getCustomer_list();
+                        List<ContactFormat> cacheList = mSession.getCustomerList();
+                        if(customer_list!=null&&cacheList == null) {
+                            mSession.setCustomerList(customer_list);
+                        }
 
                         // 启动跳转到首页
                         Intent homeIntent = new Intent(LoginForCodeActivity.this, SavorMainActivity.class);
