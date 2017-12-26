@@ -19,7 +19,7 @@ import java.io.File;
 public class SavorApplication extends MultiDexApplication {
 
     private static SavorApplication mInstance;
-
+    public String imagePath;
     private String mSplashCachePath;
     private String mSplashTempPath;
     public String VodTypePath;
@@ -185,6 +185,8 @@ public class SavorApplication extends MultiDexApplication {
         GalleyPath = ImageCachePath + "/galley";
         PdfJsPath = externalCacheDir + File.separator;
         OfficePath = fileDir + File.separator + "documents/";
+
+        imagePath = cachePath+File.separator+"operations"+File.separator+"cache";
     }
 
     public String getLottoryCountDir() {
