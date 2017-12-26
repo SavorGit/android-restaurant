@@ -295,6 +295,11 @@ public class ApiResponseFactory {
                 result = gson.fromJson(info, new TypeToken<ConAbilityList>() {
                 }.getType());
                 break;
+            case POST_CUSTOMER_INFO_JSON:
+                result = gson.fromJson(info, new TypeToken<CustomerBean>() {
+                }.getType());
+                break;
+
             default:
                 break;
         }
