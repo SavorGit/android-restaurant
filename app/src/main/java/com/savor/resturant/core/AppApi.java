@@ -117,6 +117,8 @@ public class AppApi {
         POST_CON_ABILITY_JSON,
         /**导入通讯录非首次*/
         POST_IMPORT_INFO_NEW_JSON,
+        /**获取客户基本信息*/
+        POST_CUSTOMER_INFO_JSON,
     }
 
     /**
@@ -163,6 +165,7 @@ public class AppApi {
             put(Action.POST_EDIT_CUS_JSON, formatPhpUrl("Dinnerapp2/Customer/editCustomer"));
             put(Action.POST_CON_ABILITY_JSON, formatPhpUrl("Dinnerapp2/Customer/getConAbility"));
             put(Action.POST_IMPORT_INFO_NEW_JSON, formatPhpUrl("Dinnerapp2/Customer/importNewInfo"));
+            put(Action.POST_CUSTOMER_INFO_JSON, formatPhpUrl("Dinnerapp2/Customer/getCustomerBaseInfo"));
         }
     };
 
@@ -792,6 +795,14 @@ public class AppApi {
         new AppServiceOk(context,Action.POST_EDIT_CUS_JSON,handler,params).post();
     }
 
+    /**获取客户基本信息*/
+    public static void getCustomerBaseInfo(Context context,String customer_id, String invite_id, String mobile, ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("invite_id", invite_id);
+        params.put("mobile", mobile);
+        params.put("customer_id", customer_id);
+        new AppServiceOk(context,Action.POST_CUSTOMER_INFO_JSON,handler,params).post();
+    }
     /**获取消费能力列表*/
     public static void getConAbilityList(Context context,
                                     ApiRequestListener handler) {
