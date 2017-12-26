@@ -8,26 +8,45 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.sdk.android.oss.ClientException;
+import com.alibaba.sdk.android.oss.OSSClient;
+import com.alibaba.sdk.android.oss.ServiceException;
+import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
+import com.alibaba.sdk.android.oss.model.PutObjectRequest;
+import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.bigkoo.pickerview.TimePickerView;
 import com.bumptech.glide.Glide;
 import com.common.api.utils.FileUtils;
+import com.common.api.utils.LogUtils;
+import com.common.api.utils.ShowMessage;
+import com.google.gson.Gson;
 import com.savor.resturant.R;
 import com.savor.resturant.SavorApplication;
 import com.savor.resturant.bean.ConAbilityList;
+import com.savor.resturant.bean.ContactFormat;
+import com.savor.resturant.bean.OperationFailedItem;
 import com.savor.resturant.core.AppApi;
+import com.savor.resturant.core.ResponseErrorMessage;
+import com.savor.resturant.utils.ChineseComparator;
+import com.savor.resturant.utils.ConstantValues;
 import com.savor.resturant.utils.GlideCircleTransform;
+import com.savor.resturant.utils.OSSClientUtil;
 import com.savor.resturant.widget.ChoosePicDialog;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -39,7 +58,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     public static final int REQUEST_CODE_IMAGE = 0x2;
     private ImageView mBackBtn;
     private EditText mNameEt;
-    private EditText mPhontEt;
+    private EditText mMobileEt;
     private EditText mSecondMobileEt;
     private LinearLayout mUploadHeaderLayout;
     private ImageView mAddBtn;
@@ -59,6 +78,12 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     /**当前选择要上传的头像*/
     private String currentImagePath;
     private ImageView mHeaderIv;
+    private String faceUrl = "";
+    private RadioGroup mSexRG;
+    private EditText mBirthPlaceEt;
+    private EditText mTicketInfoEt;
+    private ContactFormat currentAddCustomer;
+    private ChineseComparator pinyinComparator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +105,9 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void getViews() {
+        mTicketInfoEt = (EditText) findViewById(R.id.et_ticket_info);
+        mBirthPlaceEt = (EditText) findViewById(R.id.et_birth_place);
+        mSexRG = (RadioGroup) findViewById(R.id.rg_sex);
         mTitleTv = (TextView) findViewById(R.id.tv_center);
         mRightTv = (TextView) findViewById(R.id.tv_right);
         mAbilityTv = (TextView) findViewById(R.id.tv_con_ability);
@@ -87,7 +115,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         mBirthDayLayout = (RelativeLayout) findViewById(R.id.rl_birthday);
         mBackBtn = (ImageView) findViewById(R.id.iv_left);
         mNameEt = (EditText) findViewById(R.id.et_name);
-        mPhontEt = (EditText) findViewById(R.id.et_phone);
+        mMobileEt = (EditText) findViewById(R.id.et_phone);
         mSecondMobileEt = (EditText) findViewById(R.id.et_second_mobile);
         mAddBtn = (ImageView) findViewById(R.id.iv_add);
         mUploadHeaderLayout = (LinearLayout) findViewById(R.id.ll_upload_header);
@@ -99,6 +127,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void setViews() {
+        pinyinComparator = new ChineseComparator();
         mTitleTv.setText("新增客户");
         mTitleTv.setTextColor(getResources().getColor(R.color.white));
         mRightTv.setVisibility(View.VISIBLE);
@@ -125,33 +154,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_upload_header:
-                final String tel = mSession.getHotelBean().getTel();
-                new ChoosePicDialog(this, new ChoosePicDialog.OnTakePhotoBtnClickListener() {
-                    @Override
-                    public void onTakePhotoClick() {
-
-                        String cacheDir = ((SavorApplication) getApplication()).imagePath;
-                        File cachePath = new File(cacheDir);
-                        if(!cachePath.exists()) {
-                            cachePath.mkdirs();
-                        }
-                        currentImagePath = cacheDir+ File.separator+tel+"_"+System.currentTimeMillis()+".jpg";
-                        File file = new File(currentImagePath);
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        Uri imageUri = Uri.fromFile(file);
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
-                        AddCustomerActivity.this.startActivityForResult(intent, TAKE_PHOTO_REQUEST);
-                    }
-                },
-                        new ChoosePicDialog.OnAlbumBtnClickListener() {
-                            @Override
-                            public void onAlbumBtnClick() {
-                                Intent intent = new Intent(Intent.ACTION_PICK,
-                                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                AddCustomerActivity.this.startActivityForResult(intent, REQUEST_CODE_IMAGE);
-                            }
-                        }
-                ).show();
+                showPhotoDialog();
                 break;
             case R.id.tv_right:
                 Intent intent = new Intent(this,ContactCustomerListActivity.class);
@@ -159,36 +162,15 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                 startActivity(intent);
                 break;
             case R.id.rl_birthday:
-                TimePickerView timePickerView = new TimePickerView.Builder(this, new TimePickerView.OnTimeSelectListener() {
-                    @Override
-                    public void onTimeSelect(Date date, View v) {
-                        String birthDay = getTime(date);
-                        mBirthDayTv.setText(birthDay);
-                    }
-                }).setType(new boolean[]{true, true, true, false, false, false}).isCenterLabel(false).build();
-                timePickerView.show();
+                showDateDialog();
                 break;
             case R.id.rl_con_ability:
                 // 消费能力
-                ConAbilityList conAbilityList = mSession.getConAbilityList();
-                final List<ConAbilityList.ConAbility> list = conAbilityList.getList();
-                conAbilityIds = getConAbilityIds(list);
-                conAbilityIdsNames = getConAbilityNames(list);
-                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mContext);
-                alertBuilder.setTitle("--请选择消费能力--");
-                alertBuilder.setItems(conAbilityIdsNames, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int index) {
-                        currentConAbility = list.get(index);
-                        mAbilityTv.setText(currentConAbility.getName());
-                    }
-                });
-                AlertDialog finalAlertDialog = alertBuilder.create();
-                finalAlertDialog.show();
+                showConAbilityDialog();
                 break;
             case R.id.btn_save:
                 // 新增客户提交
-
+                startSubmit();
                 break;
             case R.id.iv_add:
                 mAddBtn.setVisibility(View.GONE);
@@ -198,6 +180,175 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                 finish();
                 break;
         }
+    }
+
+    private void startSubmit() {
+        String name = mNameEt.getText().toString();
+        String mobile = mMobileEt.getText().toString();
+        String secondMobile = mSecondMobileEt.getText().toString();
+
+        if(TextUtils.isEmpty(name)) {
+            ShowMessage.showToast(this,"请输入客户名称");
+            return;
+        }
+
+        if(TextUtils.isEmpty(mobile)&&TextUtils.isEmpty(secondMobile)) {
+            ShowMessage.showToast(this,"请输入手机号");
+            return;
+        }
+
+        if(!TextUtils.isEmpty(currentImagePath)) {
+            faceUrl = "";
+            String hotel_id = mSession.getHotelBean().getHotel_id();
+            File file = new File(currentImagePath);
+            final String objectKey = "log/resource/restaurant/mobile/userlogo/"+hotel_id+"/"+file.getName();
+            final OSSClient ossClient = OSSClientUtil.getOSSClient(this);
+            // 构造上传请求
+            PutObjectRequest put = new PutObjectRequest(ConstantValues.BUCKET_NAME,objectKey , currentImagePath);
+            ossClient.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+
+                @Override
+                public void onSuccess(PutObjectRequest putObjectRequest, PutObjectResult putObjectResult) {
+                    faceUrl = ossClient.presignPublicObjectURL(ConstantValues.BUCKET_NAME, objectKey);
+                    submit();
+                }
+
+                @Override
+                public void onFailure(PutObjectRequest putObjectRequest, ClientException e, ServiceException e1) {
+                    submit();
+                }
+            });
+        }else {
+            submit();
+        }
+    }
+
+    private void submit() {
+        String name = mNameEt.getText().toString();
+        String mobile = mMobileEt.getText().toString();
+        String secondMobile = mSecondMobileEt.getText().toString();
+        String birthPlace = mBirthPlaceEt.getText().toString();
+        String birthdDay = mBirthDayTv.getText().toString();
+        String ticketInfo = mTicketInfoEt.getText().toString();
+
+        String bill_info = getFormatStr(ticketInfo);
+        birthdDay = getFormatStr(birthdDay);
+        birthPlace = TextUtils.isEmpty(birthPlace)?"":birthPlace;
+        String consume_ability = currentConAbility == null?"":currentConAbility.getId()+"";
+
+        String invite_id = mSession.getHotelBean().getInvite_id();
+        String tel = mSession.getHotelBean().getTel();
+        String remark = "";
+        String sex = "";
+
+        List<String> mobiles = new ArrayList<>();
+        if(!TextUtils.isEmpty(mobile)) {
+            mobiles.add(mobile);
+        }
+        if(!TextUtils.isEmpty(secondMobile)) {
+            mobiles.add(secondMobile);
+        }
+
+        String usermobile = new Gson().toJson(mobiles);
+
+        int checkedRadioButtonId = mSexRG.getCheckedRadioButtonId();
+        switch (checkedRadioButtonId) {
+            case R.id.rb_man:
+                sex = "1";
+                break;
+            case R.id.rb_woman:
+                sex = "2";
+                break;
+        }
+
+        currentAddCustomer = new ContactFormat();
+        currentAddCustomer.setUsermobile(usermobile);
+        currentAddCustomer.setName(name);
+        currentAddCustomer.setMobile(mobile);
+        currentAddCustomer.setMobile1(secondMobile);
+        currentAddCustomer.setBirthplace(birthPlace);
+        currentAddCustomer.setBirthday(birthdDay);
+        currentAddCustomer.setBill_info(bill_info);
+        currentAddCustomer.setConsume_ability(consume_ability);
+        currentAddCustomer.setFace_url(faceUrl);
+        currentAddCustomer.setSex(TextUtils.isEmpty(sex)?0:Integer.valueOf(sex));
+
+
+        List<ContactFormat> customerList = mSession.getCustomerList();
+        if(customerList.contains(currentAddCustomer)) {
+            ShowMessage.showToast(this,"该客户已存在");
+        }else {
+            AppApi.addCustomer(this,bill_info,birthdDay,birthPlace,consume_ability,
+                    faceUrl,invite_id,tel,name,remark,sex,usermobile,this);
+            customerList.add(currentAddCustomer);
+            Collections.sort(customerList,pinyinComparator);
+            mSession.setCustomerList(customerList);
+            ShowMessage.showToast(this,"添加成功");
+            finish();
+        }
+    }
+
+    public String getFormatStr(String str) {
+        return TextUtils.isEmpty(str)?"":str;
+    }
+
+    private void showConAbilityDialog() {
+        ConAbilityList conAbilityList = mSession.getConAbilityList();
+        final List<ConAbilityList.ConAbility> list = conAbilityList.getList();
+        conAbilityIds = getConAbilityIds(list);
+        conAbilityIdsNames = getConAbilityNames(list);
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mContext);
+        alertBuilder.setTitle("--请选择消费能力--");
+        alertBuilder.setItems(conAbilityIdsNames, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int index) {
+                currentConAbility = list.get(index);
+                mAbilityTv.setText(currentConAbility.getName());
+            }
+        });
+        AlertDialog finalAlertDialog = alertBuilder.create();
+        finalAlertDialog.show();
+    }
+
+    private void showDateDialog() {
+        TimePickerView timePickerView = new TimePickerView.Builder(this, new TimePickerView.OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {
+                String birthDay = getTime(date);
+                mBirthDayTv.setText(birthDay);
+            }
+        }).setType(new boolean[]{true, true, true, false, false, false}).isCenterLabel(false).build();
+        timePickerView.show();
+    }
+
+    private void showPhotoDialog() {
+        final String tel = mSession.getHotelBean().getTel();
+        new ChoosePicDialog(this, new ChoosePicDialog.OnTakePhotoBtnClickListener() {
+            @Override
+            public void onTakePhotoClick() {
+
+                String cacheDir = ((SavorApplication) getApplication()).imagePath;
+                File cachePath = new File(cacheDir);
+                if(!cachePath.exists()) {
+                    cachePath.mkdirs();
+                }
+                currentImagePath = cacheDir+ File.separator+tel+"_"+System.currentTimeMillis()+".jpg";
+                File file = new File(currentImagePath);
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Uri imageUri = Uri.fromFile(file);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
+                AddCustomerActivity.this.startActivityForResult(intent, TAKE_PHOTO_REQUEST);
+            }
+        },
+                new ChoosePicDialog.OnAlbumBtnClickListener() {
+                    @Override
+                    public void onAlbumBtnClick() {
+                        Intent intent = new Intent(Intent.ACTION_PICK,
+                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        AddCustomerActivity.this.startActivityForResult(intent, REQUEST_CODE_IMAGE);
+                    }
+                }
+        ).show();
     }
 
     @Override
@@ -257,6 +408,9 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     public void onSuccess(AppApi.Action method, Object obj) {
         super.onSuccess(method, obj);
         switch (method) {
+            case POST_ADD_CUS_JSON:
+                LogUtils.d("savor:add customer success");
+                break;
             case POST_CON_ABILITY_JSON:
                 if(obj instanceof ConAbilityList) {
                     ConAbilityList conAbilityList = (ConAbilityList) obj;
@@ -267,5 +421,40 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onError(AppApi.Action method, Object obj) {
+        switch (method) {
+            case POST_ADD_CUS_JSON:
+                LogUtils.d("savor:add customer failed");
+                if(obj instanceof ResponseErrorMessage) {
+                    ResponseErrorMessage message = (ResponseErrorMessage) obj;
+                    int code = message.getCode();
+                    String msg = message.getMessage();
+                    if(code == 60105||code == 60106) {
+//                        showToast(msg);
+                    }else {
+                        addOpFailedList();
+                    }
+                }else {
+                    addOpFailedList();
+                }
+                break;
+        }
+    }
+
+    private void addOpFailedList() {
+        List<ContactFormat> contactFormats = new ArrayList<>();
+        contactFormats.add(currentAddCustomer);
+        List<OperationFailedItem> opFailedList = mSession.getOpFailedList();
+        if(opFailedList == null) {
+            opFailedList = new ArrayList<>();
+        }
+        OperationFailedItem item = new OperationFailedItem();
+        item.setType(OperationFailedItem.OpType.TYPE_ADD_CUSTOMER);
+        item.setContactFormat(contactFormats);
+        opFailedList.add(item);
+        mSession.setOpFailedList(opFailedList);
     }
 }

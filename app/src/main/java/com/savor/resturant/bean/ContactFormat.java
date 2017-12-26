@@ -25,6 +25,9 @@ public  class ContactFormat implements Serializable {
     private int sex;
     private String birthday;
     private String birthplace;
+    private String usermobile;
+    private String consume_ability;
+    private String bill_info;
     /**是否被选中*/
     private boolean isSelected;
     /**是否已添加*/
@@ -42,6 +45,9 @@ public  class ContactFormat implements Serializable {
                 ", sex=" + sex +
                 ", birthday='" + birthday + '\'' +
                 ", birthplace='" + birthplace + '\'' +
+                ", usermobile='" + usermobile + '\'' +
+                ", consume_ability='" + consume_ability + '\'' +
+                ", bill_info='" + bill_info + '\'' +
                 ", isSelected=" + isSelected +
                 ", isAdded=" + isAdded +
                 '}';
@@ -55,16 +61,15 @@ public  class ContactFormat implements Serializable {
         ContactFormat that = (ContactFormat) o;
 
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (face_url != null ? !face_url.equals(that.face_url) : that.face_url != null)
-            return false;
-        return mobile != null ? mobile.equals(that.mobile) : that.mobile == null;
+        if (mobile != null ? !mobile.equals(that.mobile) : that.mobile != null) return false;
+        return mobile1 != null ? mobile1.equals(that.mobile1) : that.mobile1 == null;
     }
 
     @Override
     public int hashCode() {
         int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (face_url != null ? face_url.hashCode() : 0);
         result = 31 * result + (mobile != null ? mobile.hashCode() : 0);
+        result = 31 * result + (mobile1 != null ? mobile1.hashCode() : 0);
         return result;
     }
 
@@ -138,6 +143,30 @@ public  class ContactFormat implements Serializable {
 
     public void setBirthplace(String birthplace) {
         this.birthplace = birthplace;
+    }
+
+    public String getUsermobile() {
+        return usermobile;
+    }
+
+    public void setUsermobile(String usermobile) {
+        this.usermobile = usermobile;
+    }
+
+    public String getConsume_ability() {
+        return consume_ability;
+    }
+
+    public void setConsume_ability(String consume_ability) {
+        this.consume_ability = consume_ability;
+    }
+
+    public String getBill_info() {
+        return bill_info;
+    }
+
+    public void setBill_info(String bill_info) {
+        this.bill_info = bill_info;
     }
 
     public boolean isSelected() {

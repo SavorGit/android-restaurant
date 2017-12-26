@@ -119,6 +119,7 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.POST_IMPORT_INFO_JSON
                     || action == AppApi.Action.POST_IMPORT_INFO_NEW_JSON
                     || action == AppApi.Action.POST_CON_ABILITY_JSON
+                    || action == AppApi.Action.POST_ADD_CUS_JSON
                     ){
                 int code = rSet.getInt("code");
                 if(rSet.has("result")) {
