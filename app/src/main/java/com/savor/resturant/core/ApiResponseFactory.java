@@ -299,6 +299,9 @@ public class ApiResponseFactory {
                 result = gson.fromJson(info, new TypeToken<CustomerBean>() {
                 }.getType());
                 break;
+            case POST_ADD_CONSUME_RECORD_JSON:
+                result = "success";
+                break;
 
             default:
                 break;
