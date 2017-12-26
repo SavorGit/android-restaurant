@@ -111,6 +111,8 @@ public class AppApi {
         POST_ADD_CUS_JSON,
         /**导入通讯录*/
         POST_IMPORT_INFO_JSON,
+        /**修改客户*/
+        POST_EDIT_CUS_JSON,
     }
 
     /**
@@ -154,6 +156,7 @@ public class AppApi {
             put(Action.POST_LIGHT_LABEL_JSON, formatPhpUrl("Dinnerapp2/Label/lightLabel"));
             put(Action.POST_CUS_HISTORY_JSON, formatPhpUrl("Dinnerapp2/Customer/getCustomerHistory"));
             put(Action.POST_ADD_CUS_JSON, formatPhpUrl("Dinnerapp2/Customer/addCustomer"));
+            put(Action.POST_EDIT_CUS_JSON, formatPhpUrl("Dinnerapp2/Customer/editCustomer"));
 
 
         }
@@ -713,7 +716,7 @@ public class AppApi {
         new AppServiceOk(context,Action.POST_CUS_HISTORY_JSON,handler,params).post();
     }
 
-    /**更新预订信息服务*/
+    /**添加客户*/
     public static void addCustomer(Context context,
                                          String bill_info,
                                          String birthday,
@@ -741,6 +744,37 @@ public class AppApi {
         params.put("usermobile", usermobile);
         new AppServiceOk(context,Action.POST_ADD_CUS_JSON,handler,params).post();
     }
+
+
+    /**修改客户*/
+    public static void editCustomer(Context context,
+                                   String bill_info,
+                                   String birthday,
+                                   String birthplace,
+                                   String consume_ability,
+                                   String face_url,
+                                   String invite_id,
+                                   String mobile,
+                                   String name,
+                                   String remark,
+                                   String sex,
+                                   String usermobile,
+                                   ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("bill_info", bill_info);
+        params.put("birthday", birthday);
+        params.put("birthplace", birthplace);
+        params.put("consume_ability", consume_ability);
+        params.put("face_url", face_url);
+        params.put("invite_id", invite_id);
+        params.put("mobile", mobile);
+        params.put("remark", remark);
+        params.put("name", name);
+        params.put("sex", sex);
+        params.put("usermobile", usermobile);
+        new AppServiceOk(context,Action.POST_EDIT_CUS_JSON,handler,params).post();
+    }
+
     // 超时（网络）异常
     public static final String ERROR_TIMEOUT = "3001";
     // 业务异常
