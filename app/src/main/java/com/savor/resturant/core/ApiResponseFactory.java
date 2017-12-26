@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.savor.resturant.bean.BaseProResponse;
+import com.savor.resturant.bean.ConAbilityList;
 import com.savor.resturant.bean.CustomerHistory;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.OrderListBean;
@@ -116,6 +117,8 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.GET_WORD_PRO_JSON
                     || action == AppApi.Action.POST_REPORT_LOG_JSON
                     || action == AppApi.Action.POST_IMPORT_INFO_JSON
+                    || action == AppApi.Action.POST_IMPORT_INFO_NEW_JSON
+                    || action == AppApi.Action.POST_CON_ABILITY_JSON
                     ){
                 int code = rSet.getInt("code");
                 if(rSet.has("result")) {
@@ -272,6 +275,9 @@ public class ApiResponseFactory {
             case POST_IMPORT_INFO_JSON:
                 result = info;
                 break;
+            case POST_IMPORT_INFO_NEW_JSON:
+                result = info;
+                break;
             case POST_CUS_HISTORY_JSON:
                 result = gson.fromJson(info, new TypeToken<CustomerHistory>() {
                 }.getType());
@@ -285,7 +291,10 @@ public class ApiResponseFactory {
             case POST_EDIT_CUS_JSON:
                 result = "success";
                 break;
-
+            case POST_CON_ABILITY_JSON:
+                result = gson.fromJson(info, new TypeToken<ConAbilityList>() {
+                }.getType());
+                break;
             default:
                 break;
         }

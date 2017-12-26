@@ -21,7 +21,6 @@ import com.savor.resturant.utils.ChineseComparator;
 import com.savor.resturant.widget.contact.DividerDecoration;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class SearchActivity extends BaseActivity implements MyContactAdapter.OnAddBtnClickListener, MyContactAdapter.OnItemClickListener, View.OnClickListener {
@@ -61,7 +60,7 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
     public void setViews() {
         pinyinComparator = new ChineseComparator();
         switch (operationType) {
-            case CONSTACT_LIST:
+            case CONSTACT_LIST_FIRST:
                 contactList = mSession.getContactList();
                 break;
             case CUSTOMER_LIST:
@@ -82,7 +81,8 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
 
     @Override
     public void setListeners() {
-        if(operationType == ContactCustomerListActivity.OperationType.CONSTACT_LIST) {
+
+        if(operationType == ContactCustomerListActivity.OperationType.CONSTACT_LIST_FIRST) {
             mAdapter.setOnAddBtnClickListener(this);
             mAdapter.setOnItemClickListener(null);
         }else {
@@ -127,7 +127,7 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
         String importInfo = new Gson().toJson(contactFormats);
         String invitation = mSession.getHotelBean().getInvite_id();
         String tel = mSession.getHotelBean().getTel();
-        AppApi.importInfo(this,importInfo,invitation,tel,this);
+        AppApi.importInfoFirst(this,importInfo,invitation,tel,this);
     }
 
     @Override

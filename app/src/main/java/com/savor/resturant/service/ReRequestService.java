@@ -54,12 +54,12 @@ public class ReRequestService extends IntentService {
         for(final OperationFailedItem item : opFailedList) {
             OperationFailedItem.OpType type = item.getType();
             switch (type) {
-                case TYPE_IMPORT:
+                case TYPE_IMPORT_FIRST:
                     // 导入通讯录
                     String importInfo = new Gson().toJson(item.getContactFormat());
                     String invitation = session.getHotelBean().getInvite_id();
                     String tel = session.getHotelBean().getTel();
-                    AppApi.importInfo(this, importInfo, invitation, tel, new ApiRequestListener() {
+                    AppApi.importInfoFirst(this, importInfo, invitation, tel, new ApiRequestListener() {
                         @Override
                         public void onSuccess(AppApi.Action method, Object obj) {
                             LogUtils.d("savor:opr 通讯录重传成功\n "+item.getContactFormat());

@@ -13,8 +13,6 @@ import android.widget.TextView;
 import com.savor.resturant.R;
 import com.savor.resturant.activity.ContactCustomerListActivity;
 import com.savor.resturant.bean.ContactFormat;
-import com.savor.resturant.bean.HotelBean;
-import com.savor.resturant.core.CustomerBean;
 import com.savor.resturant.core.Session;
 import com.savor.resturant.widget.contact.SwipeItemLayout;
 
@@ -95,7 +93,7 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
 
         holder.checkBox.setVisibility(isMultiSelectMode?View.VISIBLE:View.GONE);
 
-        holder.mAdd.setVisibility(ContactCustomerListActivity.OperationType.CONSTACT_LIST==operationType?View.VISIBLE:View.GONE);
+        holder.mAdd.setVisibility(ContactCustomerListActivity.OperationType.CONSTACT_LIST_FIRST ==operationType?View.VISIBLE:View.GONE);
 
         holder.mAdd.setTag(position);
 

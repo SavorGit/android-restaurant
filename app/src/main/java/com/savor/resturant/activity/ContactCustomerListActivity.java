@@ -74,7 +74,9 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         /**客户列表*/
         CUSTOMER_LIST,
         /**通讯录列表*/
-        CONSTACT_LIST,
+        CONSTACT_LIST_FIRST,
+        /**通讯录列表非首次导入*/
+        CONSTACT_LIST_NOTFIST,
     }
 
     @Override
@@ -104,7 +106,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                     case CUSTOMER_LIST:
                         contactFormats = mSession.getCustomerList();
                         break;
-                    case CONSTACT_LIST:
+                    case CONSTACT_LIST_FIRST:
                         Query query = Contacts.getQuery();
                         List<Contact> contacts = query.find();
                         contactFormats = getFormatContactList(contacts);
@@ -225,7 +227,8 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         pinyinComparator = new ChineseComparator();
 
         switch (operationType) {
-            case CONSTACT_LIST:
+            case CONSTACT_LIST_NOTFIST:
+            case CONSTACT_LIST_FIRST:
                 mRightBtn.setVisibility(View.GONE);
                 mRightTv.setVisibility(View.VISIBLE);
                 mRightTv.setText("多选");
@@ -348,7 +351,15 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         String importInfo = new Gson().toJson(contactFormats);
         String invitation = mSession.getHotelBean().getInvite_id();
         String tel = mSession.getHotelBean().getTel();
-        AppApi.importInfo(this,importInfo,invitation,tel,this);
+        switch (operationType) {
+            case CONSTACT_LIST_NOTFIST:
+                AppApi.importInfoNew(this,importInfo,invitation,tel,this);
+                break;
+            case CONSTACT_LIST_FIRST:
+                AppApi.importInfoFirst(this,importInfo,invitation,tel,this);
+                break;
+        }
+
     }
 
     @Override
@@ -366,7 +377,8 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         Intent intent;
         switch (v.getId()) {
             case R.id.iv_right:
-                ShowMessage.showToast(this,"新增客户");
+                intent = new Intent(this,AddCustomerActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_search:
                 intent = new Intent(this,SearchActivity.class);
@@ -398,7 +410,11 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                 String importInfo = new Gson().toJson(selectedLsit);
                 String invitation = mSession.getHotelBean().getInvite_id();
                 String tel = mSession.getHotelBean().getTel();
-                AppApi.importInfo(this,importInfo,invitation,tel,this);
+                if(operationType == OperationType.CONSTACT_LIST_FIRST) {
+                    AppApi.importInfoFirst(this,importInfo,invitation,tel,this);
+                }else if(operationType == OperationType.CONSTACT_LIST_NOTFIST) {
+                    AppApi.importInfoNew(this,importInfo,invitation,tel,this);
+                }
                 break;
             case R.id.tv_right:
                 if(isMultiSelectMode) {
@@ -438,10 +454,14 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
     public void onSuccess(AppApi.Action method, Object obj) {
         super.onSuccess(method, obj);
         switch (method) {
-            case POST_IMPORT_INFO_JSON:
+            case POST_IMPORT_INFO_NEW_JSON:
                 ShowMessage.showToast(this,"导入成功");
                 contactFormats.get(currentAddPosition).setAdded(true);
                 adapter.notifyDataSetChanged();
+                break;
+            case POST_IMPORT_INFO_JSON:
+                ShowMessage.showToast(this,"导入成功");
+                finish();
                 break;
         }
     }
@@ -450,6 +470,30 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
     public void onError(AppApi.Action method, Object obj) {
 //        super.onError(method, obj);
         switch (method) {
+            case POST_IMPORT_INFO_NEW_JSON:
+                if(obj instanceof ResponseErrorMessage) {
+                    ResponseErrorMessage message = (ResponseErrorMessage) obj;
+                    String msg = message.getMessage();
+                    showToast(msg);
+                }else  {
+                    List<OperationFailedItem> failedItemList = mSession.getOpFailedList();
+                    OperationFailedItem item = new OperationFailedItem();
+                    if(isMultiSelectMode) {
+                        if(failedItemList==null) {
+                            failedItemList = new ArrayList<>();
+                        }
+                        item.setContactFormat(selectedLsit);
+                        item.setType(OperationFailedItem.OpType.TYPE_IMPORT_NEW);
+                    }else {
+                        List<ContactFormat> list = new ArrayList<>();
+                        list.add(contactFormats.get(currentAddPosition));
+                        item.setContactFormat(list);
+                        item.setType(OperationFailedItem.OpType.TYPE_IMPORT_NEW);
+                    }
+                    failedItemList.add(item);
+                    mSession.setOpFailedList(failedItemList);
+                }
+                break;
             case POST_IMPORT_INFO_JSON:
                 if(obj instanceof ResponseErrorMessage) {
                     ResponseErrorMessage message = (ResponseErrorMessage) obj;
@@ -463,12 +507,12 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                             failedItemList = new ArrayList<>();
                         }
                         item.setContactFormat(selectedLsit);
-                        item.setType(OperationFailedItem.OpType.TYPE_IMPORT);
+                        item.setType(OperationFailedItem.OpType.TYPE_IMPORT_FIRST);
                     }else {
                         List<ContactFormat> list = new ArrayList<>();
                         list.add(contactFormats.get(currentAddPosition));
                         item.setContactFormat(list);
-                        item.setType(OperationFailedItem.OpType.TYPE_IMPORT);
+                        item.setType(OperationFailedItem.OpType.TYPE_IMPORT_FIRST);
                     }
                     failedItemList.add(item);
                     mSession.setOpFailedList(failedItemList);
