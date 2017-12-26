@@ -123,6 +123,8 @@ public class AppApi {
         POST_ADD_CONSUME_RECORD_JSON,
         /**添加无预定信息消费记录*/
         POST_ADD_SIGNLE_CONSUME_RECORD_JSON,
+        /**上下拉消费记录*/
+        POST_TOP_LIST_JSON,
     }
 
     /**
@@ -172,6 +174,8 @@ public class AppApi {
             put(Action.POST_CUSTOMER_INFO_JSON, formatPhpUrl("Dinnerapp2/Customer/getCustomerBaseInfo"));
             put(Action.POST_ADD_CONSUME_RECORD_JSON, formatPhpUrl("Dinnerapp2/Customer/addConsumeRecord"));
             put(Action.POST_ADD_SIGNLE_CONSUME_RECORD_JSON, formatPhpUrl("Dinnerapp2/Customer/addSignleConsumeRecord"));
+            put(Action.POST_TOP_LIST_JSON, formatPhpUrl("Dinnerapp2/Customer/getConRecTopList"));
+
 
         }
     };
@@ -853,6 +857,32 @@ public class AppApi {
         new AppServiceOk(context,Action.POST_ADD_SIGNLE_CONSUME_RECORD_JSON,handler,params).post();
 
     }
+
+
+    /**上下拉消费记录*/
+    public static void reportLog(Context context,
+                                 String customer_id,
+                                 String invite_id,
+                                 String max_id,
+                                 String min_id,
+                                 String mobile,
+                                 String order_id,
+                                 String recipt,
+                                 String type,
+                                 ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("hotel_id", customer_id);
+        params.put("invite_id", invite_id);
+        params.put("max_id", max_id);
+        params.put("min_id", min_id);
+        params.put("mobile", mobile);
+        params.put("order_id", order_id);
+        params.put("recipt", recipt);
+        params.put("type", type);
+
+        new AppServiceOk(context,Action.POST_TOP_LIST_JSON,handler,params).post();
+    }
+
     // 超时（网络）异常
     public static final String ERROR_TIMEOUT = "3001";
     // 业务异常

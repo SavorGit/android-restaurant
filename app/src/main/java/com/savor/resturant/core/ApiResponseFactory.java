@@ -29,6 +29,7 @@ import com.savor.resturant.bean.ConAbilityList;
 import com.savor.resturant.bean.CustomerHistory;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.OrderListBean;
+import com.savor.resturant.bean.RecTopList;
 import com.savor.resturant.bean.RecommendFoodAdvert;
 import com.savor.resturant.bean.RoomInfo;
 import com.savor.resturant.bean.RoomListBean;
@@ -305,7 +306,10 @@ public class ApiResponseFactory {
             case POST_ADD_SIGNLE_CONSUME_RECORD_JSON:
                 result = "success";
                 break;
-
+            case POST_TOP_LIST_JSON:
+                result = gson.fromJson(info, new TypeToken<RecTopList>() {
+                }.getType());
+                break;
 
             default:
                 break;
