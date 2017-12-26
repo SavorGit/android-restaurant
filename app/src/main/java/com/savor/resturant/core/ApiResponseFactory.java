@@ -302,6 +302,10 @@ public class ApiResponseFactory {
             case POST_ADD_CONSUME_RECORD_JSON:
                 result = "success";
                 break;
+            case POST_ADD_SIGNLE_CONSUME_RECORD_JSON:
+                result = "success";
+                break;
+
 
             default:
                 break;

@@ -121,6 +121,8 @@ public class AppApi {
         POST_CUSTOMER_INFO_JSON,
         /**添加带预订信息截图消费记录*/
         POST_ADD_CONSUME_RECORD_JSON,
+        /**添加无预定信息消费记录*/
+        POST_ADD_SIGNLE_CONSUME_RECORD_JSON,
     }
 
     /**
@@ -169,6 +171,7 @@ public class AppApi {
             put(Action.POST_IMPORT_INFO_NEW_JSON, formatPhpUrl("Dinnerapp2/Customer/importNewInfo"));
             put(Action.POST_CUSTOMER_INFO_JSON, formatPhpUrl("Dinnerapp2/Customer/getCustomerBaseInfo"));
             put(Action.POST_ADD_CONSUME_RECORD_JSON, formatPhpUrl("Dinnerapp2/Customer/addConsumeRecord"));
+            put(Action.POST_ADD_SIGNLE_CONSUME_RECORD_JSON, formatPhpUrl("Dinnerapp2/Customer/addSignleConsumeRecord"));
 
         }
     };
@@ -829,6 +832,25 @@ public class AppApi {
         params.put("mobile", mobile);
         params.put("recipt", recipt);
         new AppServiceOk(context,Action.POST_ADD_CONSUME_RECORD_JSON,handler,params).post();
+
+    }
+    /**添加无预定信息消费记录*/
+    public static void addSignleConsumeRecord(Context context,
+                                        String customer_id,
+                                        String invite_id,
+                                        String name,
+                                        String mobile,
+                                        String recipt,
+                                        String usermobile,
+                                        ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("customer_id", customer_id);
+        params.put("invite_id", invite_id);
+        params.put("name", name);
+        params.put("mobile", mobile);
+        params.put("recipt", recipt);
+        params.put("usermobile", usermobile);
+        new AppServiceOk(context,Action.POST_ADD_SIGNLE_CONSUME_RECORD_JSON,handler,params).post();
 
     }
     // 超时（网络）异常
