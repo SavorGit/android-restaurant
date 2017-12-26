@@ -366,7 +366,8 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         Intent intent;
         switch (v.getId()) {
             case R.id.iv_right:
-                ShowMessage.showToast(this,"新增客户");
+                intent = new Intent(this,AddCustomerActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_search:
                 intent = new Intent(this,SearchActivity.class);

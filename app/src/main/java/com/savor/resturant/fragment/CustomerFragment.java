@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.savor.resturant.R;
+import com.savor.resturant.activity.AddCustomerActivity;
 import com.savor.resturant.activity.ContactCustomerListActivity;
 import com.savor.resturant.activity.SearchActivity;
 
@@ -24,6 +25,8 @@ public class CustomerFragment extends Fragment implements View.OnClickListener {
     private TextView mTitleTv;
     private ImageView mRightIv;
     private TextView mSearchTv;
+    private TextView mAddCustomerTv;
+    private TextView mAddHistoryTv;
 
     public CustomerFragment() {
         // Required empty public constructor
@@ -56,6 +59,8 @@ public class CustomerFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setListeners() {
+        mAddCustomerTv.setOnClickListener(this);
+        mAddHistoryTv.setOnClickListener(this);
         mSearchTv.setOnClickListener(this);
         mRightIv.setOnClickListener(this);
     }
@@ -72,12 +77,21 @@ public class CustomerFragment extends Fragment implements View.OnClickListener {
         mTitleTv = (TextView) parentLayout.findViewById(R.id.tv_center);
         mRightIv = (ImageView) parentLayout.findViewById(R.id.iv_right);
         mSearchTv = (TextView) parentLayout.findViewById(R.id.tv_search);
+        mAddCustomerTv = (TextView) parentLayout.findViewById(R.id.tv_add_customer);
+        mAddHistoryTv = (TextView) parentLayout.findViewById(R.id.tv_add_history);
     }
 
     @Override
     public void onClick(View v) {
         Intent intent;
         switch (v.getId()) {
+            case R.id.tv_add_customer:
+                intent = new Intent(getActivity(), AddCustomerActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.tv_add_history:
+
+                break;
             case R.id.tv_search:
                 intent = new Intent(getActivity(), SearchActivity.class);
                 intent.putExtra("type", ContactCustomerListActivity.OperationType.CUSTOMER_LIST);

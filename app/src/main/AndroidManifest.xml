@@ -203,6 +203,11 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity android:name=".activity.SearchActivity" />
 
+        <activity android:name=".activity.AddCustomerActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            />
+
         <service
             android:name=".service.ReRequestService"
             android:exported="false">
@@ -211,7 +216,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".activity.AddCustomerActivity"></activity>
+
     </application>
 
 </manifest>

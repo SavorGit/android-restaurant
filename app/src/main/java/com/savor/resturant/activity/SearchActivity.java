@@ -1,5 +1,6 @@
 package com.savor.resturant.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,7 +22,6 @@ import com.savor.resturant.utils.ChineseComparator;
 import com.savor.resturant.widget.contact.DividerDecoration;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class SearchActivity extends BaseActivity implements MyContactAdapter.OnAddBtnClickListener, MyContactAdapter.OnItemClickListener, View.OnClickListener {
@@ -82,6 +82,7 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
 
     @Override
     public void setListeners() {
+
         if(operationType == ContactCustomerListActivity.OperationType.CONSTACT_LIST) {
             mAdapter.setOnAddBtnClickListener(this);
             mAdapter.setOnItemClickListener(null);
