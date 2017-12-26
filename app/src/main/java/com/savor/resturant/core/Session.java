@@ -37,6 +37,7 @@ import com.common.api.utils.LogUtils;
 import com.common.api.utils.Pair;
 import com.common.api.utils.SaveFileData;
 import com.savor.resturant.bean.AdvertProHistory;
+import com.savor.resturant.bean.ConAbilityList;
 import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.HotelMapCache;
@@ -127,7 +128,10 @@ public class Session {
      * 当前操作失败类型集合，导入通讯录，新增客户，修改客户
      */
     private static final String P_OPERATION_FAILED_LIST = "p_operation_failed_list";
+    /**客户列表*/
     private static final String P_CUSTOMER_LIST = "p_customer_list";
+    /**消费能力列表*/
+    private static final String P_CON_ABILITY_LIST = "p_con_ability_list";
 
 
 
@@ -245,6 +249,7 @@ public class Session {
     private List<ContactFormat> contactList;
     private List<OperationFailedItem> opFailedList;
     private List<ContactFormat> customerList;
+    private ConAbilityList conAbilityList;
 
     private Session(Context context) {
 
@@ -483,6 +488,7 @@ public class Session {
     private void readSettings() {
 //        mHotelMapCache = (HotelMapCache) getObj(P_APP_HOTEL_MAP);
 //        roomList = (List<RoomInfo>) getObj(P_ROMM_LIST);
+        conAbilityList = (ConAbilityList) getObj(P_CON_ABILITY_LIST);
         customerList = (List<ContactFormat>) getObj(P_CUSTOMER_LIST);
         opFailedList = (List<OperationFailedItem>) getObj(P_OPERATION_FAILED_LIST);
         recommendListHistory = (RecommendProHistory) getObj(P_RECOMEND_HISTORY_LIST);
@@ -1074,5 +1080,14 @@ public class Session {
     public void setCustomerList(List<ContactFormat> customerList) {
         this.customerList = customerList;
         setObj(P_CUSTOMER_LIST,customerList);
+    }
+
+    public void setConAbilityList(ConAbilityList conAbilityList) {
+        this.conAbilityList = conAbilityList;
+        setObj(P_CON_ABILITY_LIST,conAbilityList);
+    }
+
+    public ConAbilityList getConAbilityList() {
+        return this.conAbilityList;
     }
 }

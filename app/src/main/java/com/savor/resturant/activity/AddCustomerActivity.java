@@ -2,12 +2,16 @@ package com.savor.resturant.activity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.savor.resturant.R;
+import com.savor.resturant.bean.ConAbilityList;
 import com.savor.resturant.core.AppApi;
+
+import java.util.List;
 
 /**
  * 新增客户
@@ -20,6 +24,8 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     private EditText mSecondMobileEt;
     private LinearLayout mUploadHeaderLayout;
     private ImageView mAddBtn;
+    private Button mSaveBtn;
+    private LinearLayout mSeconMobileLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +42,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
      * 获取消费能力列表
      */
     private void getConAbility() {
-//        AppApi.getCo
+        AppApi.getConAbilityList(this,this);
     }
 
     @Override
@@ -47,6 +53,8 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         mSecondMobileEt = (EditText) findViewById(R.id.et_second_mobile);
         mAddBtn = (ImageView) findViewById(R.id.iv_add);
         mUploadHeaderLayout = (LinearLayout) findViewById(R.id.ll_upload_header);
+        mSaveBtn = (Button) findViewById(R.id.btn_save);
+        mSeconMobileLayout = (LinearLayout) findViewById(R.id.ll_second_mobile);
     }
 
     @Override
@@ -58,17 +66,38 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     public void setListeners() {
         mBackBtn.setOnClickListener(this);
         mAddBtn.setOnClickListener(this);
+        mSaveBtn.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.btn_save:
+                // 新增客户
+
+                break;
             case R.id.iv_add:
                 mAddBtn.setVisibility(View.GONE);
-                mSecondMobileEt.setVisibility(View.VISIBLE);
+                mSeconMobileLayout.setVisibility(View.VISIBLE);
                 break;
             case R.id.iv_left:
                 finish();
+                break;
+        }
+    }
+
+    @Override
+    public void onSuccess(AppApi.Action method, Object obj) {
+        super.onSuccess(method, obj);
+        switch (method) {
+            case POST_CON_ABILITY_JSON:
+                if(obj instanceof ConAbilityList) {
+                    ConAbilityList conAbilityList = (ConAbilityList) obj;
+                    List<ConAbilityList.ConAbility> list = conAbilityList.getList();
+                    if(list!=null&&list.size()>0) {
+                        mSession.setConAbilityList(conAbilityList);
+                    }
+                }
                 break;
         }
     }

@@ -175,6 +175,7 @@
                     android:layout_marginBottom="10dp"
                     android:background="@color/divider_list" />
                 <RelativeLayout
+                    android:paddingRight="10dp"
                     android:paddingTop="15dp"
                     android:paddingBottom="15dp"
                     android:layout_width="match_parent"
@@ -201,6 +202,7 @@
                     android:layout_marginBottom="5dp"
                     android:background="@color/divider_list" />
                 <RelativeLayout
+                    android:paddingRight="10dp"
                     android:paddingTop="15dp"
                     android:paddingBottom="15dp"
                     android:layout_width="match_parent"
@@ -278,6 +280,8 @@
         </LinearLayout>
     </ScrollView>
     <Button
+        android:layout_marginBottom="20dp"
+        android:id="@+id/btn_save"
         android:layout_gravity="center_horizontal"
         android:text="保存"
         android:layout_width="wrap_content"

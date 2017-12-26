@@ -778,20 +778,8 @@ public class AppApi {
 
     /**获取消费能力列表*/
     public static void getConAbilityList(Context context,
-                                    String bill_info,
-                                    String birthday,
-                                    String birthplace,
-                                    String consume_ability,
-                                    String face_url,
-                                    String invite_id,
-                                    String mobile,
-                                    String name,
-                                    String remark,
-                                    String sex,
-                                    String usermobile,
                                     ApiRequestListener handler) {
         final HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("bill_info", bill_info);
         new AppServiceOk(context,Action.POST_CON_ABILITY_JSON,handler,params).post();
     }
 
