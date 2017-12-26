@@ -6,14 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -30,9 +26,10 @@ import com.google.gson.Gson;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.contact.MyContactAdapter;
 import com.savor.resturant.bean.ContactFormat;
+import com.savor.resturant.bean.OperationFailedItem;
 import com.savor.resturant.core.AppApi;
+import com.savor.resturant.core.ResponseErrorMessage;
 import com.savor.resturant.utils.ChineseComparator;
-import com.savor.resturant.utils.ContactUtil;
 import com.savor.resturant.widget.contact.DividerDecoration;
 import com.savor.resturant.widget.contact.SideBar;
 
@@ -49,7 +46,7 @@ import java.util.regex.Pattern;
  * 客户列表，通讯录列表
  * @author hezd
  */
-public class ContactAndCustomerListActivity extends BaseActivity implements View.OnClickListener, MyContactAdapter.OnAddBtnClickListener, MyContactAdapter.OnCheckStateChangeListener {
+public class ContactCustomerListActivity extends BaseActivity implements View.OnClickListener, MyContactAdapter.OnAddBtnClickListener, MyContactAdapter.OnCheckStateChangeListener {
     private List<ContactFormat> contactFormats;
     private ChineseComparator pinyinComparator;
     private MyContactAdapter adapter;
@@ -71,6 +68,7 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
     private int currentAddPosition;
     private ImageView mBackBtn;
     private TextView mSearchTv;
+    private ImageView mRightBtn;
 
     public enum OperationType implements Serializable{
         /**客户列表*/
@@ -101,10 +99,18 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
         new Thread(){
             @Override
             public void run() {
-//                contactFormats = ContactUtil.getInstance().getAllContact(ContactAndCustomerListActivity.this);
-                Query query = Contacts.getQuery();
-                List<Contact> contacts = query.find();
-                contactFormats = getFormatContactList(contacts);
+//                contactFormats = ContactUtil.getInstance().getAllContact(ContactCustomerListActivity.this);
+                switch (operationType) {
+                    case CUSTOMER_LIST:
+                        contactFormats = mSession.getCustomerList();
+                        break;
+                    case CONSTACT_LIST:
+                        Query query = Contacts.getQuery();
+                        List<Contact> contacts = query.find();
+                        contactFormats = getFormatContactList(contacts);
+                        break;
+                }
+
                 Collections.sort(contactFormats, pinyinComparator);
 
                 // 通讯录保存全局
@@ -113,16 +119,16 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        adapter = new MyContactAdapter(ContactAndCustomerListActivity.this, contactFormats,operationType);
+                        adapter = new MyContactAdapter(ContactCustomerListActivity.this, contactFormats,operationType);
                         int orientation = LinearLayoutManager.VERTICAL;
-                        final LinearLayoutManager layoutManager = new LinearLayoutManager(ContactAndCustomerListActivity.this, orientation, false);
+                        final LinearLayoutManager layoutManager = new LinearLayoutManager(ContactCustomerListActivity.this, orientation, false);
                         recyclerView.setLayoutManager(layoutManager);
 
                         recyclerView.setAdapter(adapter);
-                        recyclerView.addItemDecoration(new DividerDecoration(ContactAndCustomerListActivity.this));
+                        recyclerView.addItemDecoration(new DividerDecoration(ContactCustomerListActivity.this));
 
-                        adapter.setOnCheckStateChangeListener(ContactAndCustomerListActivity.this);
-                        adapter.setOnAddBtnClickListener(ContactAndCustomerListActivity.this);
+                        adapter.setOnCheckStateChangeListener(ContactCustomerListActivity.this);
+                        adapter.setOnAddBtnClickListener(ContactCustomerListActivity.this);
 
                         hideLoadingLayout();
                     }
@@ -209,6 +215,7 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
         mSearchTv = (TextView) findViewById(R.id.tv_search);
 
         mRightTv = (TextView) findViewById(R.id.tv_right);
+        mRightBtn = (ImageView) findViewById(R.id.iv_right);
 
     }
 
@@ -219,18 +226,23 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
 
         switch (operationType) {
             case CONSTACT_LIST:
+                mRightBtn.setVisibility(View.GONE);
                 mRightTv.setVisibility(View.VISIBLE);
                 mRightTv.setText("多选");
                 mTitleTv.setText("通讯录");
                 break;
             case CUSTOMER_LIST:
+                mRightBtn.setVisibility(View.VISIBLE);
+                mRightBtn.setImageResource(R.drawable.ico_slide_video);
                 mRightTv.setVisibility(View.GONE);
                 mTitleTv.setText("客户列表");
+
                 break;
         }
     }
 
     public void setListeners() {
+        mRightBtn.setOnClickListener(this);
         mSearchTv.setOnClickListener(this);
 
         mBackBtn.setOnClickListener(this);
@@ -258,7 +270,7 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
         sideBar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
             @Override
             public void onTouchingLetterChanged(String s) {
-                hideSoftKeybord(ContactAndCustomerListActivity.this);
+                hideSoftKeybord(ContactCustomerListActivity.this);
                 int position = adapter.getPositionForSection(s.charAt(0));
                 if (position != -1) {
                     recyclerView.getLayoutManager().scrollToPosition(position);
@@ -334,7 +346,7 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
         List<ContactFormat> contactFormats = new ArrayList<>();
         contactFormats.add(contactFormat);
         String importInfo = new Gson().toJson(contactFormats);
-        String invitation = mSession.getHotelBean().getInvitation();
+        String invitation = mSession.getHotelBean().getInvite_id();
         String tel = mSession.getHotelBean().getTel();
         AppApi.importInfo(this,importInfo,invitation,tel,this);
     }
@@ -351,9 +363,13 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
+            case R.id.iv_right:
+                ShowMessage.showToast(this,"新增客户");
+                break;
             case R.id.tv_search:
-                Intent intent = new Intent(this,SearchActivity.class);
+                intent = new Intent(this,SearchActivity.class);
                 intent.putExtra("type",operationType);
                 startActivity(intent);
                 break;
@@ -369,7 +385,9 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
                 }
                 boolean checked = mSelectAllCb.isChecked();
                 if(checked) {
-                    selectedLsit.addAll(data);
+                    // 获取为添加的集合
+                    List<ContactFormat> enableList = getEnableList(data);
+                    selectedLsit.addAll(enableList);
                 }else {
                     for(ContactFormat contactFormat:data) {
                         if(contactFormat.isSelected()) {
@@ -378,7 +396,7 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
                     }
                 }
                 String importInfo = new Gson().toJson(selectedLsit);
-                String invitation = mSession.getHotelBean().getInvitation();
+                String invitation = mSession.getHotelBean().getInvite_id();
                 String tel = mSession.getHotelBean().getTel();
                 AppApi.importInfo(this,importInfo,invitation,tel,this);
                 break;
@@ -400,6 +418,16 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
         }
     }
 
+    private List<ContactFormat> getEnableList(List<ContactFormat> data) {
+        List<ContactFormat> enableList = new ArrayList<>();
+        for(ContactFormat contactFormat :data ) {
+            if(!contactFormat.isAdded()) {
+                enableList.add(contactFormat);
+            }
+        }
+        return enableList;
+    }
+
     private void resetList() {
         for(ContactFormat contactFormat: contactFormats) {
             contactFormat.setSelected(false);
@@ -414,6 +442,37 @@ public class ContactAndCustomerListActivity extends BaseActivity implements View
                 ShowMessage.showToast(this,"导入成功");
                 contactFormats.get(currentAddPosition).setAdded(true);
                 adapter.notifyDataSetChanged();
+                break;
+        }
+    }
+
+    @Override
+    public void onError(AppApi.Action method, Object obj) {
+//        super.onError(method, obj);
+        switch (method) {
+            case POST_IMPORT_INFO_JSON:
+                if(obj instanceof ResponseErrorMessage) {
+                    ResponseErrorMessage message = (ResponseErrorMessage) obj;
+                    String msg = message.getMessage();
+                    showToast(msg);
+                }else  {
+                    List<OperationFailedItem> failedItemList = mSession.getOpFailedList();
+                    OperationFailedItem item = new OperationFailedItem();
+                    if(isMultiSelectMode) {
+                        if(failedItemList==null) {
+                            failedItemList = new ArrayList<>();
+                        }
+                        item.setContactFormat(selectedLsit);
+                        item.setType(OperationFailedItem.OpType.TYPE_IMPORT);
+                    }else {
+                        List<ContactFormat> list = new ArrayList<>();
+                        list.add(contactFormats.get(currentAddPosition));
+                        item.setContactFormat(list);
+                        item.setType(OperationFailedItem.OpType.TYPE_IMPORT);
+                    }
+                    failedItemList.add(item);
+                    mSession.setOpFailedList(failedItemList);
+                }
                 break;
         }
     }

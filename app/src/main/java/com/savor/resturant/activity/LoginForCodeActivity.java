@@ -13,27 +13,25 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
+import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.HotelBean;
-import com.savor.resturant.bean.SlideSettingsMediaBean;
 import com.savor.resturant.core.ApiRequestListener;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.ResponseErrorMessage;
-import com.savor.resturant.service.ClearImageCacheService;
-import com.savor.resturant.service.LocalJettyService;
-import com.savor.resturant.service.SSDPService;
 import com.savor.resturant.utils.ActivitiesManager;
-import com.savor.resturant.utils.GlideImageLoader;
 import com.savor.resturant.widget.LoginDialog;
+
+import net.sourceforge.pinyin4j.PinyinHelper;
 
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -251,7 +249,7 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
                         hotelBean.setTel(tel);
                         mSession.setHotelBean(hotelBean);
 
-
+                        formatAndSaveCustomers(hotelBean);
 
                         // 启动跳转到首页
                         Intent homeIntent = new Intent(LoginForCodeActivity.this, SavorMainActivity.class);
@@ -280,6 +278,44 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
+    private void formatAndSaveCustomers(final HotelBean hotelBean) {
+        new Thread(){
+            @Override
+            public void run() {
+                List<ContactFormat> customer_list = hotelBean.getCustomer_list();
+                List<ContactFormat> cacheList = mSession.getCustomerList();
+                if(customer_list!=null&&cacheList == null) {
+
+                    for(ContactFormat contactFormat : customer_list) {
+                        String name = contactFormat.getName();
+                        StringBuilder sb = new StringBuilder();
+                        if(!TextUtils.isEmpty(name)) {
+                            name = name.trim().replaceAll(" ","");
+                            if(!isNumeric(name)&&!isLetter(name)) {
+                                for(int i = 0;i<name.length();i++) {
+                                    String str= removeDigital(String.valueOf(PinyinHelper.toHanyuPinyinStringArray(name.charAt(i))[0]));
+                                    sb.append(str);
+                                }
+                            }else {
+                                sb.append(name);
+                            }
+                        }
+                        String mobile = contactFormat.getMobile();
+                        String stuf = "";
+                        if(isLetter(name)||isNumeric(name)) {
+                            stuf = "#";
+                        }
+
+                        contactFormat.setKey(stuf+name+"#"+sb.toString().toLowerCase()+"#"+(TextUtils.isEmpty(contactFormat.getBirthplace())?"":contactFormat.getBirthplace())+"#"+(TextUtils.isEmpty(mobile)?"":mobile));
+
+                    }
+                    mSession.setCustomerList(customer_list);
+                }
+            }
+        }.start();
+
+    }
+
     @Override
     public void onError(AppApi.Action method, Object obj) {
 
@@ -292,7 +328,7 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
             case POST_LOGIN_JSON:
 //                if (hotelBean != null) {
 //                    tel = hotelBean.getTel();
-//                    invitation = hotelBean.getInvitation();
+//                    invitation = hotelBean.getInvite_id();
 //                    if (!TextUtils.isEmpty(tel)) {
 //                        ev_num.setText(tel);
 //                        ev_num.setClickable(false);
@@ -408,6 +444,39 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
     public void onBackPressed() {
         ActivitiesManager.getInstance().popAllActivities();
         exitApp();
+    }
+
+    public boolean isNumeric(String str){
+        Pattern pattern = Pattern.compile("[0-9]*");
+        Matcher isNum = pattern.matcher(str);
+        if( !isNum.matches() ){
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 剔除数字
+     * @param value
+     */
+    public String removeDigital(String value){
+
+        Pattern p = Pattern.compile("[\\d]");
+        Matcher matcher = p.matcher(value);
+        String result = matcher.replaceAll("");
+        return result;
+    }
+
+    /*判断字符串中是否仅包含字母数字和汉字
+      *各种字符的unicode编码的范围：
+     * 汉字：[0x4e00,0x9fa5]（或十进制[19968,40869]）
+     * 数字：[0x30,0x39]（或十进制[48, 57]）
+     *小写字母：[0x61,0x7a]（或十进制[97, 122]）
+     * 大写字母：[0x41,0x5a]（或十进制[65, 90]）
+*/
+    public static boolean isLetter(String str) {
+        String regex = "^[a-zA-Z]+$";
+        return str.matches(regex);
     }
 }
 

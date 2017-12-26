@@ -29,7 +29,7 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
     private EditText mSearchEt;
     private TextView mCancelBtn;
     private RecyclerView mContactListView;
-    private ContactAndCustomerListActivity.OperationType operationType;
+    private ContactCustomerListActivity.OperationType operationType;
     private MyContactAdapter mAdapter;
     private List<ContactFormat> contactList = new ArrayList<>();
     private ChineseComparator pinyinComparator;
@@ -47,7 +47,7 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
     }
 
     private void handleIntent() {
-        operationType = (ContactAndCustomerListActivity.OperationType) getIntent().getSerializableExtra("type");
+        operationType = (ContactCustomerListActivity.OperationType) getIntent().getSerializableExtra("type");
     }
 
     @Override
@@ -60,7 +60,14 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
     @Override
     public void setViews() {
         pinyinComparator = new ChineseComparator();
-        contactList = mSession.getContactList();
+        switch (operationType) {
+            case CONSTACT_LIST:
+                contactList = mSession.getContactList();
+                break;
+            case CUSTOMER_LIST:
+                contactList = mSession.getCustomerList();
+                break;
+        }
 
         mAdapter = new MyContactAdapter(this,null,operationType);
         int orientation = LinearLayoutManager.VERTICAL;
@@ -75,8 +82,9 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
 
     @Override
     public void setListeners() {
-        if(operationType == ContactAndCustomerListActivity.OperationType.CONSTACT_LIST) {
+        if(operationType == ContactCustomerListActivity.OperationType.CONSTACT_LIST) {
             mAdapter.setOnAddBtnClickListener(this);
+            mAdapter.setOnItemClickListener(null);
         }else {
             mAdapter.setOnItemClickListener(this);
         }
@@ -101,11 +109,8 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
                         mAdapter.setData(contactFormatLike);
                     }
                 }else {
-                    if(contactList == null) {
-                        contactList = mSession.getContactList();
-                        Collections.sort(contactList, pinyinComparator);
-                    }
-                    mAdapter.setData(contactList);
+                    List<ContactFormat> emptyList = new ArrayList<>();
+                    mAdapter.setData(emptyList);
                 }
             }
         });
@@ -120,14 +125,16 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
         List<ContactFormat> contactFormats = new ArrayList<>();
         contactFormats.add(contactFormat);
         String importInfo = new Gson().toJson(contactFormats);
-        String invitation = mSession.getHotelBean().getInvitation();
+        String invitation = mSession.getHotelBean().getInvite_id();
         String tel = mSession.getHotelBean().getTel();
         AppApi.importInfo(this,importInfo,invitation,tel,this);
     }
 
     @Override
     public void onItemClick(int position, ContactFormat contactFormat) {
-
+        AppUtils.hideSoftKeybord(this);
+        ShowMessage.showToast(this,"打开客户信息列表");
+        finish();
     }
 
     private List<ContactFormat> getLikeList(List<ContactFormat> contactFormats, String content) {
@@ -144,6 +151,7 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_cancel_btn:
+                AppUtils.hideSoftKeybord(this);
                 finish();
                 break;
         }

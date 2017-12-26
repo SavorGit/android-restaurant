@@ -1631,7 +1631,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
             public void run() {
                 AppApi.reportLog(mContext,
                         hotel.getHotel_id()+"",
-                        "",hotel.getInvitation(),
+                        "",hotel.getInvite_id(),
                         hotel.getTel(),
                         currentRoom.getRoom_id(),
                         count,//文件个数
@@ -1647,7 +1647,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
 
 //        AppApi.reportLog(mContext,
 //                hotel.getHotel_id()+"",
-//                "",hotel.getInvitation(),
+//                "",hotel.getInvite_id(),
 //                hotel.getTel(),
 //                currentRoom.getRoom_id(),
 //                "1",//文件个数

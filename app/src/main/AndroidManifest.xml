@@ -198,10 +198,20 @@
             android:name=".activity.SavorMainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.ContactAndCustomerListActivity"
+            android:name=".activity.ContactCustomerListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".activity.SearchActivity"></activity>
+        <activity android:name=".activity.SearchActivity" />
+
+        <service
+            android:name=".service.ReRequestService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.savor.resturant.service.action.request" />
+            </intent-filter>
+        </service>
+
+        <activity android:name=".activity.AddCustomerActivity"></activity>
     </application>
 
 </manifest>

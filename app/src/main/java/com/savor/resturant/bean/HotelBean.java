@@ -11,12 +11,54 @@ import java.util.List;
  */
 
 public class HotelBean implements Serializable {
-    private static final long serialVersionUID = -1;
     private String hotel_id;
     private String hotel_name;
-    private String invitation;
+    private String invite_id;
     private String tel;
-    private List<CustomerBean> customer_list = new ArrayList<CustomerBean>();
+    private List<ContactFormat> customer_list = new ArrayList<>();
+    private String invitation;
+
+    @Override
+    public String toString() {
+        return "HotelBean{" +
+                "hotel_id='" + hotel_id + '\'' +
+                ", hotel_name='" + hotel_name + '\'' +
+                ", invite_id='" + invite_id + '\'' +
+                ", tel='" + tel + '\'' +
+                ", customer_list=" + customer_list +
+                ", invitation='" + invitation + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        HotelBean hotelBean = (HotelBean) o;
+
+        if (hotel_id != null ? !hotel_id.equals(hotelBean.hotel_id) : hotelBean.hotel_id != null)
+            return false;
+        if (hotel_name != null ? !hotel_name.equals(hotelBean.hotel_name) : hotelBean.hotel_name != null)
+            return false;
+        if (invite_id != null ? !invite_id.equals(hotelBean.invite_id) : hotelBean.invite_id != null)
+            return false;
+        if (tel != null ? !tel.equals(hotelBean.tel) : hotelBean.tel != null) return false;
+        if (customer_list != null ? !customer_list.equals(hotelBean.customer_list) : hotelBean.customer_list != null)
+            return false;
+        return invitation != null ? invitation.equals(hotelBean.invitation) : hotelBean.invitation == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = hotel_id != null ? hotel_id.hashCode() : 0;
+        result = 31 * result + (hotel_name != null ? hotel_name.hashCode() : 0);
+        result = 31 * result + (invite_id != null ? invite_id.hashCode() : 0);
+        result = 31 * result + (tel != null ? tel.hashCode() : 0);
+        result = 31 * result + (customer_list != null ? customer_list.hashCode() : 0);
+        result = 31 * result + (invitation != null ? invitation.hashCode() : 0);
+        return result;
+    }
 
     public String getHotel_id() {
         return hotel_id;
@@ -34,13 +76,12 @@ public class HotelBean implements Serializable {
         this.hotel_name = hotel_name;
     }
 
-
-    public String getInvitation() {
-        return invitation;
+    public String getInvite_id() {
+        return invite_id;
     }
 
-    public void setInvitation(String invitation) {
-        this.invitation = invitation;
+    public void setInvite_id(String invite_id) {
+        this.invite_id = invite_id;
     }
 
     public String getTel() {
@@ -51,23 +92,19 @@ public class HotelBean implements Serializable {
         this.tel = tel;
     }
 
-    public List<CustomerBean> getCustomer_list() {
+    public List<ContactFormat> getCustomer_list() {
         return customer_list;
     }
 
-    public void setCustomer_list(List<CustomerBean> customer_list) {
+    public void setCustomer_list(List<ContactFormat> customer_list) {
         this.customer_list = customer_list;
     }
 
+    public String getInvitation() {
+        return invitation;
+    }
 
-    @Override
-    public String toString() {
-        return "HotelBean{" +
-                "hotel_id='" + hotel_id + '\'' +
-                ", hotel_name='" + hotel_name + '\'' +
-                ", invitation='" + invitation + '\'' +
-                ", tel='" + tel + '\'' +
-                ", customer_list=" + customer_list +
-                '}';
+    public void setInvitation(String invitation) {
+        this.invitation = invitation;
     }
 }

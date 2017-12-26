@@ -41,6 +41,7 @@ import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.HotelMapCache;
 import com.savor.resturant.bean.HotelMapListData;
+import com.savor.resturant.bean.OperationFailedItem;
 import com.savor.resturant.bean.PdfInfo;
 import com.savor.resturant.bean.RecommendProHistory;
 import com.savor.resturant.bean.RoomInfo;
@@ -122,6 +123,11 @@ public class Session {
     private static final String P_ADVERT_HISTORY_LIST = "p_advert_history_list";
     /**推荐菜历史*/
     private static final String P_RECOMEND_HISTORY_LIST = "p_recomend_history_list";
+    /**
+     * 当前操作失败类型集合，导入通讯录，新增客户，修改客户
+     */
+    private static final String P_OPERATION_FAILED_LIST = "p_operation_failed_list";
+    private static final String P_CUSTOMER_LIST = "p_customer_list";
 
 
 
@@ -134,7 +140,6 @@ public class Session {
      * The Application Debug flag
      */
     private String debugType;
-
     /**
      * The Application Version Code
      */
@@ -238,6 +243,8 @@ public class Session {
     private AdvertProHistory advertProHistory;
     private RecommendProHistory recommendListHistory;
     private List<ContactFormat> contactList;
+    private List<OperationFailedItem> opFailedList;
+    private List<ContactFormat> customerList;
 
     private Session(Context context) {
 
@@ -476,6 +483,8 @@ public class Session {
     private void readSettings() {
 //        mHotelMapCache = (HotelMapCache) getObj(P_APP_HOTEL_MAP);
 //        roomList = (List<RoomInfo>) getObj(P_ROMM_LIST);
+        customerList = (List<ContactFormat>) getObj(P_CUSTOMER_LIST);
+        opFailedList = (List<OperationFailedItem>) getObj(P_OPERATION_FAILED_LIST);
         recommendListHistory = (RecommendProHistory) getObj(P_RECOMEND_HISTORY_LIST);
         advertProHistory = (AdvertProHistory) getObj(P_ADVERT_HISTORY_LIST);
         mUploadFirstUse = mPreference.loadBooleanKey(P_APP_FIRST_USE,false);
@@ -1047,5 +1056,23 @@ public class Session {
 
     public List<ContactFormat> getContactList() {
         return contactList;
+    }
+
+    public List<OperationFailedItem> getOpFailedList() {
+        return opFailedList;
+    }
+
+    public void setOpFailedList(List<OperationFailedItem> opFailedList) {
+        this.opFailedList = opFailedList;
+        setObj(P_OPERATION_FAILED_LIST,opFailedList);
+    }
+
+    public List<ContactFormat> getCustomerList() {
+        return customerList;
+    }
+
+    public void setCustomerList(List<ContactFormat> customerList) {
+        this.customerList = customerList;
+        setObj(P_CUSTOMER_LIST,customerList);
     }
 }
