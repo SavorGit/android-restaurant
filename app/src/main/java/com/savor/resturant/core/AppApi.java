@@ -107,7 +107,8 @@ public class AppApi {
         POST_LIGHT_LABEL_JSON,
         /**获取客户最近历史*/
         POST_CUS_HISTORY_JSON,
-
+        /**添加客户*/
+        POST_ADD_CUS_JSON,
         /**导入通讯录*/
         POST_IMPORT_INFO_JSON,
     }
@@ -152,6 +153,7 @@ public class AppApi {
             put(Action.POST_IMPORT_INFO_JSON, formatPhpUrl("Dinnerapp2/Customer/importInfo"));
             put(Action.POST_LIGHT_LABEL_JSON, formatPhpUrl("Dinnerapp2/Label/lightLabel"));
             put(Action.POST_CUS_HISTORY_JSON, formatPhpUrl("Dinnerapp2/Customer/getCustomerHistory"));
+            put(Action.POST_ADD_CUS_JSON, formatPhpUrl("Dinnerapp2/Customer/addCustomer"));
 
 
         }
