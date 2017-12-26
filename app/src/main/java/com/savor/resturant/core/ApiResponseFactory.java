@@ -279,6 +279,12 @@ public class ApiResponseFactory {
             case POST_LIGHT_LABEL_JSON:
                 result = "success";
                 break;
+            case POST_ADD_CUS_JSON:
+                result = "success";
+                break;
+            case POST_EDIT_CUS_JSON:
+                result = "success";
+                break;
 
             default:
                 break;
