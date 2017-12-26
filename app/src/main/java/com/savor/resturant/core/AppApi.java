@@ -113,6 +113,8 @@ public class AppApi {
         POST_IMPORT_INFO_JSON,
         /**修改客户*/
         POST_EDIT_CUS_JSON,
+        /**消费能力列表*/
+        POST_CON_ABILITY_JSON,
     }
 
     /**
@@ -157,8 +159,7 @@ public class AppApi {
             put(Action.POST_CUS_HISTORY_JSON, formatPhpUrl("Dinnerapp2/Customer/getCustomerHistory"));
             put(Action.POST_ADD_CUS_JSON, formatPhpUrl("Dinnerapp2/Customer/addCustomer"));
             put(Action.POST_EDIT_CUS_JSON, formatPhpUrl("Dinnerapp2/Customer/editCustomer"));
-
-
+            put(Action.POST_CON_ABILITY_JSON, formatPhpUrl("Dinnerapp2/Customer/getConAbility"));
         }
     };
 
@@ -773,6 +774,25 @@ public class AppApi {
         params.put("sex", sex);
         params.put("usermobile", usermobile);
         new AppServiceOk(context,Action.POST_EDIT_CUS_JSON,handler,params).post();
+    }
+
+    /**获取消费能力列表*/
+    public static void getConAbilityList(Context context,
+                                    String bill_info,
+                                    String birthday,
+                                    String birthplace,
+                                    String consume_ability,
+                                    String face_url,
+                                    String invite_id,
+                                    String mobile,
+                                    String name,
+                                    String remark,
+                                    String sex,
+                                    String usermobile,
+                                    ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("bill_info", bill_info);
+        new AppServiceOk(context,Action.POST_CON_ABILITY_JSON,handler,params).post();
     }
 
     // 超时（网络）异常
