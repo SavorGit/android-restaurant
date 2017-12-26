@@ -43,12 +43,16 @@ import com.savor.resturant.utils.GlideCircleTransform;
 import com.savor.resturant.utils.OSSClientUtil;
 import com.savor.resturant.widget.ChoosePicDialog;
 
+import net.sourceforge.pinyin4j.PinyinHelper;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 新增客户
@@ -285,6 +289,25 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         currentAddCustomer.setFace_url(faceUrl);
         currentAddCustomer.setSex(TextUtils.isEmpty(sex)?0:Integer.valueOf(sex));
 
+        StringBuilder sb = new StringBuilder();
+        if(!TextUtils.isEmpty(name)) {
+            name = name.trim().replaceAll(" ","");
+            if(!isNumeric(name)&&!isLetter(name)) {
+                for(int i = 0;i<name.length();i++) {
+                    String str= removeDigital(String.valueOf(PinyinHelper.toHanyuPinyinStringArray(name.charAt(i))[0]));
+                    sb.append(str);
+                }
+            }else {
+                sb.append(name);
+            }
+        }
+        String stuf = "";
+        if(isLetter(name)||isNumeric(name)) {
+            stuf = "#";
+        }
+
+        currentAddCustomer.setKey(stuf+name+"#"+sb.toString().toLowerCase()+"#"+(TextUtils.isEmpty(birthPlace)?"":birthPlace)+"#"+(TextUtils.isEmpty(mobile)?"":mobile));
+
 
         List<ContactFormat> customerList = mSession.getCustomerList();
         if(customerList.contains(currentAddCustomer)) {
@@ -468,5 +491,39 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         item.setContactFormat(contactFormats);
         opFailedList.add(item);
         mSession.setOpFailedList(opFailedList);
+    }
+
+
+    public boolean isNumeric(String str){
+        Pattern pattern = Pattern.compile("[0-9]*");
+        Matcher isNum = pattern.matcher(str);
+        if( !isNum.matches() ){
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 剔除数字
+     * @param value
+     */
+    public String removeDigital(String value){
+
+        Pattern p = Pattern.compile("[\\d]");
+        Matcher matcher = p.matcher(value);
+        String result = matcher.replaceAll("");
+        return result;
+    }
+
+    /*判断字符串中是否仅包含字母数字和汉字
+      *各种字符的unicode编码的范围：
+     * 汉字：[0x4e00,0x9fa5]（或十进制[19968,40869]）
+     * 数字：[0x30,0x39]（或十进制[48, 57]）
+     *小写字母：[0x61,0x7a]（或十进制[97, 122]）
+     * 大写字母：[0x41,0x5a]（或十进制[65, 90]）
+*/
+    public static boolean isLetter(String str) {
+        String regex = "^[a-zA-Z]+$";
+        return str.matches(regex);
     }
 }
