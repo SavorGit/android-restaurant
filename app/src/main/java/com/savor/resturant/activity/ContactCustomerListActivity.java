@@ -106,6 +106,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                     case CUSTOMER_LIST:
                         contactFormats = mSession.getCustomerList();
                         break;
+                    case CONSTACT_LIST_NOTFIST:
                     case CONSTACT_LIST_FIRST:
                         Query query = Contacts.getQuery();
                         List<Contact> contacts = query.find();
