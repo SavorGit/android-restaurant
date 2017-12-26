@@ -761,7 +761,7 @@ public class AppApi {
                                          String sex,
                                          String usermobile,
                                          ApiRequestListener handler) {
-        final HashMap<String, Object> params = new HashMap<String, Object>();
+        final HashMap<String, Object> params = new HashMap<>();
         params.put("bill_info", bill_info);
         params.put("birthday", birthday);
         params.put("birthplace", birthplace);

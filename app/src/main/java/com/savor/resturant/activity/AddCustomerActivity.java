@@ -210,12 +210,24 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                 @Override
                 public void onSuccess(PutObjectRequest putObjectRequest, PutObjectResult putObjectResult) {
                     faceUrl = ossClient.presignPublicObjectURL(ConstantValues.BUCKET_NAME, objectKey);
-                    submit();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            submit();
+                        }
+                    });
+
                 }
 
                 @Override
                 public void onFailure(PutObjectRequest putObjectRequest, ClientException e, ServiceException e1) {
-                    submit();
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            submit();
+                        }
+                    });
                 }
             });
         }else {
