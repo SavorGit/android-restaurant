@@ -117,6 +117,7 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.GET_WORD_PRO_JSON
                     || action == AppApi.Action.POST_REPORT_LOG_JSON
                     || action == AppApi.Action.POST_IMPORT_INFO_JSON
+                    || action == AppApi.Action.POST_IMPORT_INFO_NEW_JSON
                     || action == AppApi.Action.POST_CON_ABILITY_JSON
                     ){
                 int code = rSet.getInt("code");
@@ -272,6 +273,9 @@ public class ApiResponseFactory {
                 result = "success";
                 break;
             case POST_IMPORT_INFO_JSON:
+                result = info;
+                break;
+            case POST_IMPORT_INFO_NEW_JSON:
                 result = info;
                 break;
             case POST_CUS_HISTORY_JSON:

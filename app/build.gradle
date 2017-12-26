@@ -125,6 +125,7 @@ dependencies {
     compile 'com.android.support:multidex:1.0.0'
     compile 'cn.jzvd:jiaozivideoplayer:6.2.1'
     compile 'com.github.tamir7.contacts:contacts:1.1.7'
+    compile 'com.contrarywind:Android-PickerView:3.2.6'
     implementation project(':FFmpeg4Android')
 }
 

@@ -13,12 +13,14 @@ public class OperationFailedItem implements Serializable {
      * 当前操作类型，导入通讯录，新增客户，修改客户
      */
     public enum OpType implements Serializable{
-        /**导入通讯录*/
-        TYPE_IMPORT,
+        /**首次导入通讯录*/
+        TYPE_IMPORT_FIRST,
         /**新增客户*/
         TYPE_ADD_CUSTOMER,
         /**修改客户*/
         TYPE_EDIT_CUSTOMER,
+        /**新增导入通讯录*/
+        TYPE_IMPORT_NEW,
     }
     /**
      * 当前操作类型，导入通讯录，新增客户，修改客户
