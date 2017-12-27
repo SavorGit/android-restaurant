@@ -26,6 +26,7 @@ import com.google.gson.Gson;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.contact.MyContactAdapter;
 import com.savor.resturant.bean.ContactFormat;
+import com.savor.resturant.bean.ImportInfoResponse;
 import com.savor.resturant.bean.OperationFailedItem;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.ResponseErrorMessage;
@@ -358,9 +359,31 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
             customerList = new ArrayList<>();
         }
 
-        if(customerList.contains(contactFormat)) {
-            ShowMessage.showToast(this,"该客户已存在");
-        }else {
+        String mobile1 = contactFormat.getMobile1();
+        String mobile = contactFormat.getMobile();
+        if(TextUtils.isEmpty(mobile)&&TextUtils.isEmpty(mobile1)) {
+            ShowMessage.showToast(this,"不能添加手机号为空的客户");
+            return;
+        }
+
+        for(ContactFormat cacheContact : customerList){
+
+            String cacheMobile = cacheContact.getMobile();
+            String cacheMobile1 = cacheContact.getMobile1();
+            String name = cacheContact.getName();
+            if(TextUtils.isEmpty(mobile1)) {
+                if(mobile.equals(cacheMobile)||mobile.equals(cacheMobile1)) {
+                    ShowMessage.showToast(this,"与"+name+"的手机号码重复，添加失败");
+                    return;
+                }
+            }else {
+                if(mobile.equals(cacheMobile)||mobile.equals(cacheMobile1)||mobile1.equals(cacheMobile)||mobile1.equals(cacheMobile1)) {
+                    ShowMessage.showToast(this,"与"+name+"的手机号码重复，添加失败");
+                    return;
+                }
+            }
+        }
+
             contactFormat.setAdded(true);
             customerList.add(contactFormat);
             Collections.sort(customerList,pinyinComparator);
@@ -374,8 +397,6 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                     AppApi.importInfoFirst(this,importInfo,invitation,tel,this);
                     break;
             }
-        }
-
 
     }
 
@@ -478,13 +499,28 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         super.onSuccess(method, obj);
         switch (method) {
             case POST_IMPORT_INFO_NEW_JSON:
-                ShowMessage.showToast(this,"导入成功");
+//                ShowMessage.showToast(this,"导入成功");
                 contactFormats.get(currentAddPosition).setAdded(true);
                 adapter.notifyDataSetChanged();
-                break;
+//                break;
             case POST_IMPORT_INFO_JSON:
-                ShowMessage.showToast(this,"导入成功");
-                finish();
+                if(obj instanceof ImportInfoResponse) {
+                    ImportInfoResponse importInfoResponse = (ImportInfoResponse) obj;
+                    List<ContactFormat> customer_list = importInfoResponse.getCustomer_list();
+                    List<ContactFormat> cacheList = mSession.getCustomerList();
+                    if(customer_list!=null&&customer_list.size()>0) {
+                        if(customer_list!=null) {
+                            for(ContactFormat contactFormat:customer_list) {
+                                int i = cacheList.indexOf(contactFormat);
+                                if(i!=-1) {
+                                    ContactFormat cacheCustomer = cacheList.get(i);
+                                    cacheCustomer.setCustomer_id(contactFormat.getCustomer_id());
+                                }
+                            }
+                            mSession.setCustomerList(cacheList);
+                        }
+                    }
+                }
                 break;
         }
     }

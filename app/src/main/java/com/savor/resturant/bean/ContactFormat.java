@@ -16,6 +16,8 @@ public  class ContactFormat implements Serializable {
      * birthplace : 北京市丰台区
      */
     private String contactId;
+    private String invite_id;
+    private String customer_id;
     private String name = "";
     private String face_url = "";
 
@@ -37,6 +39,8 @@ public  class ContactFormat implements Serializable {
     public String toString() {
         return "ContactFormat{" +
                 "contactId='" + contactId + '\'' +
+                ", invite_id='" + invite_id + '\'' +
+                ", customer_id='" + customer_id + '\'' +
                 ", name='" + name + '\'' +
                 ", face_url='" + face_url + '\'' +
                 ", key='" + key + '\'' +
@@ -79,6 +83,22 @@ public  class ContactFormat implements Serializable {
 
     public void setContactId(String contactId) {
         this.contactId = contactId;
+    }
+
+    public String getInvite_id() {
+        return invite_id;
+    }
+
+    public void setInvite_id(String invite_id) {
+        this.invite_id = invite_id;
+    }
+
+    public String getCustomer_id() {
+        return customer_id;
+    }
+
+    public void setCustomer_id(String customer_id) {
+        this.customer_id = customer_id;
     }
 
     public String getName() {
