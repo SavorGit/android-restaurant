@@ -238,7 +238,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                 break;
             case CUSTOMER_LIST:
                 mRightBtn.setVisibility(View.VISIBLE);
-                mRightBtn.setImageResource(R.drawable.ico_slide_video);
+                mRightBtn.setImageResource(R.drawable.ico_customer_list_add);
                 mRightTv.setVisibility(View.GONE);
                 mTitleTv.setText("客户列表");
 
