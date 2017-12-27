@@ -4,16 +4,16 @@
     <string-array name="bottom_bar_labels">
         <item>@string/book</item>
         <item>@string/customer</item>
-        <item>@string/service</item>
-        <item>@string/me</item>
+        <item>@string/projection</item>
+        <!--<item>@string/me</item>-->
     </string-array>
 
     <integer-array name="bottom_bar_attr">
         <item>0</item>
         <item>0</item>
         <item>0</item>
-        <item>0</item>
-        <item>0</item>
+        <!--<item>0</item>-->
+        <!--<item>0</item>-->
     </integer-array>
 
     <string-array name="preferences_front_light_options">
@@ -67,6 +67,6 @@
         <item>@drawable/selector_foot_tab_book</item>
         <item>@drawable/selector_foot_tab_customer</item>
         <item>@drawable/selector_foot_tab_service</item>
-        <item>@drawable/selector_foot_tab_my</item>
+        <!--<item>@drawable/selector_foot_tab_my</item>-->
     </string-array>
 </resources>

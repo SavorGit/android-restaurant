@@ -2,7 +2,7 @@
     <string name="app_name">小热点-餐厅端</string>
     <string name="book">预定</string>
     <string name="customer">客户</string>
-    <string name="service">服务</string>
+    <string name="projection">投屏</string>
     <string name="me">我的</string>
 
     <string name="exit_app">再按一次退出热点儿</string>
