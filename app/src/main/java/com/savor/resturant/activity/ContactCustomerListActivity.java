@@ -424,24 +424,30 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                         }
                     }
                 }
-                String importInfo = new Gson().toJson(selectedLsit);
-                String invitation = mSession.getHotelBean().getInvite_id();
-                String tel = mSession.getHotelBean().getTel();
-                if(operationType == OperationType.CONSTACT_LIST_FIRST) {
-                    AppApi.importInfoFirst(this,importInfo,invitation,tel,this);
-                }else if(operationType == OperationType.CONSTACT_LIST_NOTFIST) {
-                    AppApi.importInfoNew(this,importInfo,invitation,tel,this);
+
+                if(selectedLsit.size()==0) {
+                    ShowMessage.showToast(this,"请选择未添加的客户");
+                }else {
+                    String importInfo = new Gson().toJson(selectedLsit);
+                    String invitation = mSession.getHotelBean().getInvite_id();
+                    String tel = mSession.getHotelBean().getTel();
+                    if (operationType == OperationType.CONSTACT_LIST_FIRST) {
+                        AppApi.importInfoFirst(this, importInfo, invitation, tel, this);
+                    } else if (operationType == OperationType.CONSTACT_LIST_NOTFIST) {
+                        AppApi.importInfoNew(this, importInfo, invitation, tel, this);
+                    }
                 }
+
                 break;
             case R.id.tv_right:
-                if(isMultiSelectMode) {
+                if (isMultiSelectMode) {
                     mImportLayout.setVisibility(View.GONE);
                     mSelectAllCb.setChecked(false);
                     mRightTv.setText("多选");
                     resetList();
                     adapter.setSelectMode(false);
                     selectedLsit.clear();
-                }else {
+                } else {
                     mImportLayout.setVisibility(View.VISIBLE);
                     mRightTv.setText("取消");
                     adapter.setSelectMode(true);
