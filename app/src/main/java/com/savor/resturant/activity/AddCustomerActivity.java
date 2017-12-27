@@ -66,7 +66,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     private EditText mSecondMobileEt;
     private LinearLayout mUploadHeaderLayout;
     private ImageView mAddBtn;
-    private Button mSaveBtn;
+    private TextView mSaveBtn;
     private LinearLayout mSeconMobileLayout;
     private RelativeLayout mAbilityLayout;
     /**消费能力Id列表*/
@@ -123,7 +123,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         mSecondMobileEt = (EditText) findViewById(R.id.et_second_mobile);
         mAddBtn = (ImageView) findViewById(R.id.iv_add);
         mUploadHeaderLayout = (LinearLayout) findViewById(R.id.ll_upload_header);
-        mSaveBtn = (Button) findViewById(R.id.btn_save);
+        mSaveBtn = (TextView) findViewById(R.id.tv_save);
         mSeconMobileLayout = (LinearLayout) findViewById(R.id.ll_second_mobile);
         mAbilityLayout = (RelativeLayout) findViewById(R.id.rl_con_ability);
         mHeaderIv = (ImageView) findViewById(R.id.iv_header);
@@ -172,7 +172,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                 // 消费能力
                 showConAbilityDialog();
                 break;
-            case R.id.btn_save:
+            case R.id.tv_save:
                 // 新增客户提交
                 startSubmit();
                 break;
@@ -199,6 +199,26 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         if(TextUtils.isEmpty(mobile)&&TextUtils.isEmpty(secondMobile)) {
             ShowMessage.showToast(this,"请输入手机号");
             return;
+        }
+
+        List<ContactFormat> customerList = mSession.getCustomerList();
+        if(customerList!=null&&customerList.size()>0) {
+            for(ContactFormat contactFormat : customerList) {
+                String cMobile = contactFormat.getMobile();
+                String cMobile1 = contactFormat.getMobile1();
+                if(!TextUtils.isEmpty(cMobile1)) {
+                    if(cMobile.equals(mobile)||cMobile.equals(secondMobile) || cMobile1.equals(mobile)||cMobile1.equals(secondMobile)) {
+                        ShowMessage.showToast(this,"已存在相同手机号的客户");
+                        return;
+                    }
+                }else {
+                    if(cMobile.equals(mobile)||cMobile.equals(secondMobile)) {
+                        ShowMessage.showToast(this,"已存在相同手机号的客户");
+                        return;
+                    }
+                }
+
+            }
         }
 
         if(!TextUtils.isEmpty(currentImagePath)) {
