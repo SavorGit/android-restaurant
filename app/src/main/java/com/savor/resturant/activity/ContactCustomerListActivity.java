@@ -352,14 +352,30 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         String importInfo = new Gson().toJson(contactFormats);
         String invitation = mSession.getHotelBean().getInvite_id();
         String tel = mSession.getHotelBean().getTel();
-        switch (operationType) {
-            case CONSTACT_LIST_NOTFIST:
-                AppApi.importInfoNew(this,importInfo,invitation,tel,this);
-                break;
-            case CONSTACT_LIST_FIRST:
-                AppApi.importInfoFirst(this,importInfo,invitation,tel,this);
-                break;
+
+        List<ContactFormat> customerList = mSession.getCustomerList();
+        if(customerList == null) {
+            customerList = new ArrayList<>();
         }
+
+        if(customerList.contains(contactFormat)) {
+            ShowMessage.showToast(this,"该客户已存在");
+        }else {
+            contactFormat.setAdded(true);
+            customerList.add(contactFormat);
+            Collections.sort(customerList,pinyinComparator);
+            mSession.setCustomerList(customerList);
+
+            switch (operationType) {
+                case CONSTACT_LIST_NOTFIST:
+                    AppApi.importInfoNew(this,importInfo,invitation,tel,this);
+                    break;
+                case CONSTACT_LIST_FIRST:
+                    AppApi.importInfoFirst(this,importInfo,invitation,tel,this);
+                    break;
+            }
+        }
+
 
     }
 
@@ -475,24 +491,14 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                 if(obj instanceof ResponseErrorMessage) {
                     ResponseErrorMessage message = (ResponseErrorMessage) obj;
                     String msg = message.getMessage();
-                    showToast(msg);
-                }else  {
-                    List<OperationFailedItem> failedItemList = mSession.getOpFailedList();
-                    OperationFailedItem item = new OperationFailedItem();
-                    if(isMultiSelectMode) {
-                        if(failedItemList==null) {
-                            failedItemList = new ArrayList<>();
-                        }
-                        item.setContactFormat(selectedLsit);
-                        item.setType(OperationFailedItem.OpType.TYPE_IMPORT_NEW);
+                    int code = message.getCode();
+                    if(code == 60105||code == 60106) {
+
                     }else {
-                        List<ContactFormat> list = new ArrayList<>();
-                        list.add(contactFormats.get(currentAddPosition));
-                        item.setContactFormat(list);
-                        item.setType(OperationFailedItem.OpType.TYPE_IMPORT_NEW);
+                        addOpFailedList(selectedLsit, OperationFailedItem.OpType.TYPE_IMPORT_NEW);
                     }
-                    failedItemList.add(item);
-                    mSession.setOpFailedList(failedItemList);
+                }else  {
+                    addOpFailedList(selectedLsit, OperationFailedItem.OpType.TYPE_IMPORT_NEW);
                 }
                 break;
             case POST_IMPORT_INFO_JSON:
@@ -501,24 +507,28 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                     String msg = message.getMessage();
                     showToast(msg);
                 }else  {
-                    List<OperationFailedItem> failedItemList = mSession.getOpFailedList();
-                    OperationFailedItem item = new OperationFailedItem();
-                    if(isMultiSelectMode) {
-                        if(failedItemList==null) {
-                            failedItemList = new ArrayList<>();
-                        }
-                        item.setContactFormat(selectedLsit);
-                        item.setType(OperationFailedItem.OpType.TYPE_IMPORT_FIRST);
-                    }else {
-                        List<ContactFormat> list = new ArrayList<>();
-                        list.add(contactFormats.get(currentAddPosition));
-                        item.setContactFormat(list);
-                        item.setType(OperationFailedItem.OpType.TYPE_IMPORT_FIRST);
-                    }
-                    failedItemList.add(item);
-                    mSession.setOpFailedList(failedItemList);
+                    addOpFailedList(selectedLsit, OperationFailedItem.OpType.TYPE_IMPORT_FIRST);
                 }
                 break;
         }
+    }
+
+    private void addOpFailedList(List<ContactFormat> selectedLsit, OperationFailedItem.OpType typeImportNew) {
+        List<OperationFailedItem> failedItemList = mSession.getOpFailedList();
+        OperationFailedItem item = new OperationFailedItem();
+        if (isMultiSelectMode) {
+            if (failedItemList == null) {
+                failedItemList = new ArrayList<>();
+            }
+            item.setContactFormat(selectedLsit);
+            item.setType(typeImportNew);
+        } else {
+            List<ContactFormat> list = new ArrayList<>();
+            list.add(contactFormats.get(currentAddPosition));
+            item.setContactFormat(list);
+            item.setType(typeImportNew);
+        }
+        failedItemList.add(item);
+        mSession.setOpFailedList(failedItemList);
     }
 }
