@@ -175,6 +175,14 @@
             android:enabled="true"
             android:exported="true" />
 
+        <service
+            android:name=".service.ReRequestService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.savor.resturant.service.action.request" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait" />
@@ -202,21 +210,15 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity android:name=".activity.SearchActivity" />
+        <activity
+            android:name=".activity.AddCustomerActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
 
-        <activity android:name=".activity.AddCustomerActivity"
+        <activity android:name=".activity.SpendHistoryAddActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan"
             />
-
-        <service
-            android:name=".service.ReRequestService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.savor.resturant.service.action.request" />
-            </intent-filter>
-        </service>
-
-
     </application>
 
 </manifest>

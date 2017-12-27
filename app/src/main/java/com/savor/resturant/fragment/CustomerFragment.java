@@ -14,6 +14,7 @@ import com.savor.resturant.R;
 import com.savor.resturant.activity.AddCustomerActivity;
 import com.savor.resturant.activity.ContactCustomerListActivity;
 import com.savor.resturant.activity.SearchActivity;
+import com.savor.resturant.activity.SpendHistoryAddActivity;
 
 /**
  * 客户管理
@@ -90,7 +91,8 @@ public class CustomerFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.tv_add_history:
-
+                intent = new Intent(getActivity(), SpendHistoryAddActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_search:
                 intent = new Intent(getActivity(), SearchActivity.class);
