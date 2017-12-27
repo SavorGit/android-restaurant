@@ -48,6 +48,8 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
         mTitleTv.setTextColor(getResources().getColor(R.color.white));
         mTitleTv.setText("添加消费记录");
 
+
+
     }
 
     @Override
@@ -74,7 +76,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
                     if(matches) {
                         // 1.从客户列表查找是否存在这个用户如果存在将客户名称自动填充
                         // 2.获取标签列表，判断customer_id是否为空如果为空，需要将全量信息传给接口，
-                        // 否则不需要生日籍贯等字段
+                        // 接口会创建新客户并否则不需要生日籍贯等字段
                     }else {
                         ShowMessage.showToast(SpendHistoryAddActivity.this,"请输入正确的手机号");
                     }

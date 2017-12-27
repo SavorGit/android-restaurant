@@ -70,7 +70,7 @@ public class CustomerFragment extends Fragment implements View.OnClickListener {
         mTitleTv.setText("客户管理");
         mTitleTv.setTextColor(getResources().getColor(R.color.white));
         mRightIv.setVisibility(View.VISIBLE);
-        mRightIv.setImageResource(R.drawable.ico_slide_video);
+        mRightIv.setImageResource(R.drawable.ico_cutomer_list);
     }
 
     private void initViews(View parentLayout) {

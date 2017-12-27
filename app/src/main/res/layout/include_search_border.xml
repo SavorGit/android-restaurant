@@ -18,6 +18,6 @@
         android:hint="输入姓名或手机号查找客户"
         android:padding="10dp"
         android:textColor="@color/white"
-        android:textColorHint="@color/text_content_black"
+        android:textColorHint="#9A9997"
         android:textSize="14sp" />
 </LinearLayout>

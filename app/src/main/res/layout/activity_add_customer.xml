@@ -39,7 +39,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/transparent"
-                        android:drawableLeft="@drawable/ico_slide_video"
+                        android:drawableLeft="@drawable/ico_person"
                         android:drawablePadding="10dp"
                         android:hint="请输入客户名称" />
 
@@ -62,13 +62,13 @@
                             android:drawablePadding="10dp"
                             android:background="@color/transparent"
                             android:hint="请输入手机号"
-                            android:drawableLeft="@drawable/ico_slide_video"
+                            android:drawableLeft="@drawable/ico_phone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                         <ImageView
                             android:id="@+id/iv_add"
                             android:layout_gravity="center_vertical"
-                            android:src="@drawable/add_item"
+                            android:src="@drawable/ico_add"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
@@ -90,9 +90,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/transparent"
-                            android:drawableLeft="@drawable/ico_slide_video"
+                            android:drawableLeft="@drawable/ico_phone"
                             android:drawablePadding="10dp"
-                            android:hint="请输入客户名称" />
+                            android:hint="请输入手机号" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -107,21 +107,21 @@
 
                     <ImageView
                         android:id="@+id/iv_header"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ico_slide_video" />
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ico_header" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:padding="10dp"
+                        android:padding="5dp"
                         android:text="上传头像" />
                 </LinearLayout>
             </LinearLayout>
 
             <View
-                android:background="@color/divider_list"
+                android:background="#EDE6DE"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"/>
 
@@ -140,7 +140,7 @@
                     android:layout_height="wrap_content">
                     <ImageView
                         android:layout_marginLeft="10dp"
-                        android:src="@drawable/ico_slide_video"
+                        android:src="@drawable/ico_sex"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <RadioGroup
@@ -151,6 +151,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <RadioButton
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
                             android:id="@+id/rb_man"
                             android:layout_marginRight="10dp"
                             android:textColor="@drawable/radio_sex_color_selector"
@@ -161,6 +165,10 @@
                             android:layout_height="wrap_content" />
 
                         <RadioButton
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
                             android:id="@+id/rb_woman"
                             android:layout_marginLeft="10dp"
                             android:textColor="@drawable/radio_sex_color_selector"
@@ -172,12 +180,14 @@
                     </RadioGroup>
                 </LinearLayout>
                 <View
+                    android:layout_marginLeft="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="5dp"
                     android:background="@color/divider_list" />
                 <RelativeLayout
+                    android:gravity="center_vertical"
                     android:id="@+id/rl_con_ability"
                     android:paddingRight="10dp"
                     android:paddingTop="15dp"
@@ -190,7 +200,7 @@
                         android:drawablePadding="10dp"
                         android:gravity="center_vertical"
                         android:hint="请选择消费能力"
-                        android:drawableLeft="@drawable/delete"
+                        android:drawableLeft="@drawable/ico_spend_ability"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                     <ImageView
@@ -201,6 +211,7 @@
                         android:layout_height="wrap_content" />
                 </RelativeLayout>
                 <View
+                    android:layout_marginLeft="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="5dp"
@@ -219,7 +230,7 @@
                         android:drawablePadding="10dp"
                         android:gravity="center_vertical"
                         android:hint="请选择生日"
-                        android:drawableLeft="@drawable/delete"
+                        android:drawableLeft="@drawable/ico_birth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                     <ImageView
@@ -230,6 +241,7 @@
                         android:layout_height="wrap_content" />
                 </RelativeLayout>
                 <View
+                    android:layout_marginLeft="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/divider_list" />
@@ -249,12 +261,13 @@
                         android:gravity="center_vertical"
                         android:hint="请输入籍贯"
                         android:textSize="14sp"
-                        android:drawableLeft="@drawable/delete"
+                        android:drawableLeft="@drawable/ico_birhtplace"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
                 </RelativeLayout>
                 <View
+                    android:layout_marginLeft="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/divider_list" />
@@ -273,12 +286,13 @@
                         android:drawablePadding="10dp"
                         android:gravity="center_vertical"
                         android:hint="请输入发票信息"
-                        android:drawableLeft="@drawable/delete"
+                        android:drawableLeft="@drawable/ico_ticket"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
                 </RelativeLayout>
                 <View
+                    android:layout_marginLeft="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/divider_list" />
