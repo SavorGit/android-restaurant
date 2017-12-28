@@ -151,6 +151,8 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
                         customer_id = "";
                         if(existContact!=null) {// 已存在
                             String customerId = existContact.getCustomer_id();
+                            String name = existContact.getName();
+                            mNameEt.setText(name);
                             if(!TextUtils.isEmpty(customerId)) {
                                 customer_id = customerId;
                             }
