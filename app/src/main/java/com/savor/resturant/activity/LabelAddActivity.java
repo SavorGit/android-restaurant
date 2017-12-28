@@ -111,13 +111,13 @@ public class LabelAddActivity extends BaseActivity implements View.OnClickListen
             case POST_ADD_LABEL_JSON:
                 if(obj instanceof LabelAddRessponse) {
                     LabelAddRessponse labelAddRessponse = (LabelAddRessponse) obj;
-                    List<CustomerLabel> labelList = labelAddRessponse.getList();
-                    if(labelList!=null&&labelList.size()>0) {
+                    CustomerLabel label = labelAddRessponse.getList();
+                    if(label!=null) {
 
                         if(this.list == null) {
                             this.list = new ArrayList<>();
                         }
-                        this.list.add(labelList.get(0));
+                        this.list.add(label);
                         mLabelAdapter.setData(this.list);
                     }
                 }

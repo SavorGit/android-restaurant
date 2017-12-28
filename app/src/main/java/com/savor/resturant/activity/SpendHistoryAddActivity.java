@@ -17,6 +17,8 @@ import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.FlowAdapter;
 import com.savor.resturant.bean.ContactFormat;
+import com.savor.resturant.bean.Customer;
+import com.savor.resturant.bean.CustomerBean;
 import com.savor.resturant.bean.CustomerLabel;
 import com.savor.resturant.bean.CustomerLabelList;
 import com.savor.resturant.core.AppApi;
@@ -153,7 +155,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
                                 customer_id = customerId;
                             }
                         }
-                        AppApi.getCustomerLabelList(SpendHistoryAddActivity.this, customer_id,invite_id,mSession.getHotelBean().getTel(),SpendHistoryAddActivity.this);
+                        AppApi.getCustomerBaseInfo(SpendHistoryAddActivity.this, customer_id,invite_id,mSession.getHotelBean().getTel(),SpendHistoryAddActivity.this);
                     }else {
                         mMobileEt.setText("");
                         ShowMessage.showToast(SpendHistoryAddActivity.this,"请输入正确的手机号");
@@ -211,13 +213,20 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
         super.onSuccess(method, obj);
         AppUtils.hideSoftKeybord(this);
         switch (method) {
-            case POST_CUSTOMER_LABELS_JSON:
-                if(obj instanceof CustomerLabelList) {
-                    CustomerLabelList customerLabelList = (CustomerLabelList) obj;
-                    List<CustomerLabel> list = customerLabelList.getList();
-                    if(list!=null&&list.size()>0) {
-                        mLabelAdapter.setData(list);
-                        showLabel();
+            case POST_CUSTOMER_INFO_JSON:
+                if(obj instanceof CustomerBean) {
+                    CustomerBean customerBean = (CustomerBean) obj;
+
+                    if(customerBean!=null) {
+                        Customer list = customerBean.getList();
+                        if(list!=null) {
+                            List<CustomerLabel> label = list.getLabel();
+                            if(label!=null&&label.size()>0) {
+                                mLabelAdapter.setData(label);
+                                showLabel();
+                            }
+                        }
+
                     }
                 }
                 break;

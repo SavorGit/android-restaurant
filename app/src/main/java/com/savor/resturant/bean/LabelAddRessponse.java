@@ -1,7 +1,6 @@
 package com.savor.resturant.bean;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 添加标签
@@ -9,7 +8,7 @@ import java.util.List;
  */
 
 public class LabelAddRessponse implements Serializable {
-    private List<CustomerLabel> list;
+    private CustomerLabel list;
 
     @Override
     public String toString() {
@@ -33,11 +32,11 @@ public class LabelAddRessponse implements Serializable {
         return list != null ? list.hashCode() : 0;
     }
 
-    public List<CustomerLabel> getList() {
+    public CustomerLabel getList() {
         return list;
     }
 
-    public void setList(List<CustomerLabel> list) {
+    public void setList(CustomerLabel list) {
         this.list = list;
     }
 }

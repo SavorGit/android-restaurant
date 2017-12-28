@@ -180,7 +180,7 @@ public class AppApi {
             put(Action.POST_ADD_SIGNLE_CONSUME_RECORD_JSON, formatPhpUrl("Dinnerapp2/Customer/addSignleConsumeRecord"));
             put(Action.POST_TOP_LIST_JSON, formatPhpUrl("Dinnerapp2/Customer/getConRecTopList"));
             put(Action.POST_CUSTOMER_LABELS_JSON, formatPhpUrl("Dinnerapp2/Label/getCustomerLable"));
-            put(Action.POST_ADD_LABEL_JSON, formatPhpUrl("Dinnerapp2/Label/getCustomerLable"));
+            put(Action.POST_ADD_LABEL_JSON, formatPhpUrl("Dinnerapp2/Label/addLabel"));
         }
     };
 
