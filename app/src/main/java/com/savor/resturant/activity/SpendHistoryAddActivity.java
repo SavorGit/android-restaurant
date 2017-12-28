@@ -9,6 +9,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.common.api.utils.AppUtils;
@@ -29,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.savor.resturant.activity.ContactCustomerListActivity.REQUEST_CODE_SELECT;
+
 public class SpendHistoryAddActivity extends BaseActivity implements View.OnClickListener {
 
     private RecyclerView mLabelsRlv;
@@ -40,6 +43,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
     private FlowAdapter mLabelAdapter;
     private TextView mEditLabelTv;
     private String customer_id;
+    private LinearLayout mSelectCusLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void getViews() {
+        mSelectCusLayout = (LinearLayout) findViewById(R.id.ll_customer_select);
         mEditLabelTv = (TextView) findViewById(R.id.tv_edit_label);
         mNameEt = (EditText) findViewById(R.id.et_name);
         mMobileEt = (EditText) findViewById(R.id.et_phone);
@@ -124,6 +129,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void setListeners() {
+        mSelectCusLayout.setOnClickListener(this);
         mEditLabelTv.setOnClickListener(this);
         mBackBtn.setOnClickListener(this);
 
@@ -194,6 +200,11 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
     public void onClick(View v) {
         Intent intent;
         switch (v.getId()) {
+            case R.id.ll_customer_select:
+                intent = new Intent(this,ContactCustomerListActivity.class);
+                intent.putExtra("type", ContactCustomerListActivity.OperationType.CONSTACT_LIST_SELECT);
+                startActivityForResult(intent,REQUEST_CODE_SELECT);
+                break;
             case R.id.tv_edit_label:
                 String mobile = mMobileEt.getText().toString();
                 if(TextUtils.isEmpty(mobile)) {
@@ -232,6 +243,17 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
                     }
                 }
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE_SELECT) {
+            if(data!=null) {
+                ContactFormat contactFormat = (ContactFormat) data.getSerializableExtra("customer");
+                mMobileEt.setText(contactFormat.getMobile());
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.savor.resturant.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +23,8 @@ import com.savor.resturant.widget.contact.DividerDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.savor.resturant.activity.ContactCustomerListActivity.RESULT_CODE_SELECT;
 
 public class SearchActivity extends BaseActivity implements MyContactAdapter.OnAddBtnClickListener, MyContactAdapter.OnItemClickListener, View.OnClickListener {
 
@@ -83,10 +86,12 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
     @Override
     public void setListeners() {
 
-        if(operationType == ContactCustomerListActivity.OperationType.CONSTACT_LIST_FIRST) {
+        if(operationType == ContactCustomerListActivity.OperationType.CONSTACT_LIST_FIRST||operationType == ContactCustomerListActivity.OperationType.CONSTACT_LIST_NOTFIST) {
             mAdapter.setOnAddBtnClickListener(this);
             mAdapter.setOnItemClickListener(null);
-        }else {
+        }else if(operationType == ContactCustomerListActivity.OperationType.CUSTOMER_LIST){
+            mAdapter.setOnItemClickListener(this);
+        }else if(operationType == ContactCustomerListActivity.OperationType.CONSTACT_LIST_SELECT) {
             mAdapter.setOnItemClickListener(this);
         }
 
@@ -133,8 +138,14 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
 
     @Override
     public void onItemClick(int position, ContactFormat contactFormat) {
+        if(operationType == ContactCustomerListActivity.OperationType.CONSTACT_LIST_SELECT) {
+            Intent intent = new Intent();
+            intent.putExtra("customer",contactFormat);
+            setResult(RESULT_CODE_SELECT,intent);
+        }else {
+            ShowMessage.showToast(this,"打开客户信息列表");
+        }
         AppUtils.hideSoftKeybord(this);
-        ShowMessage.showToast(this,"打开客户信息列表");
         finish();
     }
 
