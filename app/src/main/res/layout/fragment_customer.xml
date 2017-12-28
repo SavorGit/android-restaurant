@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#F6F3EE"
     tools:context="com.savor.resturant.fragment.CustomerFragment">
     <include
         layout="@layout/layout_head_title"
         />
     <LinearLayout
-        android:background="#F6F3EE"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
         android:gravity="center_vertical"
@@ -20,12 +20,12 @@
             android:gravity="center"
             android:drawablePadding="10dp"
             android:text="新增客户"
-            android:drawableTop="@drawable/ico_slide_video"
+            android:drawableTop="@drawable/ico_add_customer"
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:layout_height="wrap_content" />
         <View
-            android:background="@color/divider_list"
+            android:background="#D9D8D6"
             android:layout_width="1dp"
             android:layout_height="match_parent"/>
         <TextView
@@ -33,7 +33,7 @@
             android:gravity="center"
             android:drawablePadding="10dp"
             android:text="添加消费记录"
-            android:drawableTop="@drawable/ico_slide_video"
+            android:drawableTop="@drawable/ico_add_spend_history"
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:layout_height="wrap_content" />
@@ -55,6 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <android.support.v7.widget.RecyclerView
+            android:background="#F6F3EE"
             android:id="@+id/rlv_op_list"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"

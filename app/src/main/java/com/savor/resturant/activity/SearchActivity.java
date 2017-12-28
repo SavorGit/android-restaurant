@@ -60,6 +60,7 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
     public void setViews() {
         pinyinComparator = new ChineseComparator();
         switch (operationType) {
+            case CONSTACT_LIST_NOTFIST:
             case CONSTACT_LIST_FIRST:
                 contactList = mSession.getContactList();
                 break;

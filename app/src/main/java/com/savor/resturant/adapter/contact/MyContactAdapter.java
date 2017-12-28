@@ -93,7 +93,7 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
 
         holder.checkBox.setVisibility(isMultiSelectMode?View.VISIBLE:View.GONE);
 
-        holder.mAdd.setVisibility(ContactCustomerListActivity.OperationType.CONSTACT_LIST_FIRST ==operationType?View.VISIBLE:View.GONE);
+        holder.mAdd.setVisibility((ContactCustomerListActivity.OperationType.CONSTACT_LIST_FIRST ==operationType||ContactCustomerListActivity.OperationType.CONSTACT_LIST_NOTFIST ==operationType)?View.VISIBLE:View.GONE);
 
         holder.mAdd.setTag(position);
 

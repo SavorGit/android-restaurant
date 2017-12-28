@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EDE6DE"
+    android:orientation="vertical"
+    tools:context="com.savor.resturant.activity.SpendHistoryAddActivity">
+
+    <include layout="@layout/layout_head_title" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <!--客户信息-->
+            <include
+                layout="@layout/include_customer_info"
+                />
+
+            <!--客户标签-->
+            <include
+                layout="@layout/include_customer_label"
+                />
+
+            <!--消费小票-->
+            <include
+                layout="@layout/include_customer_ticket"
+                />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

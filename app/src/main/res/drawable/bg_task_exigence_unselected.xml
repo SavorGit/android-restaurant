@@ -9,12 +9,6 @@
         android:color="@color/colorPrimary"
         android:width="0.5dp"
         />
-    <padding
-        android:top="10dp"
-        android:bottom="10dp"
-        android:left="15dp"
-        android:right="15dp"
-        />
     <solid
         android:color="@color/white"
         />

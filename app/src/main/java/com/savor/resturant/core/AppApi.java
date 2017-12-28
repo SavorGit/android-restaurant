@@ -125,6 +125,8 @@ public class AppApi {
         POST_ADD_SIGNLE_CONSUME_RECORD_JSON,
         /**上下拉消费记录*/
         POST_TOP_LIST_JSON,
+        /**获取标签列表*/
+        POST_CUSTOMER_LABELS_JSON,
     }
 
     /**
@@ -175,7 +177,7 @@ public class AppApi {
             put(Action.POST_ADD_CONSUME_RECORD_JSON, formatPhpUrl("Dinnerapp2/Customer/addConsumeRecord"));
             put(Action.POST_ADD_SIGNLE_CONSUME_RECORD_JSON, formatPhpUrl("Dinnerapp2/Customer/addSignleConsumeRecord"));
             put(Action.POST_TOP_LIST_JSON, formatPhpUrl("Dinnerapp2/Customer/getConRecTopList"));
-
+            put(Action.POST_CUSTOMER_LABELS_JSON, formatPhpUrl("Dinnerapp2/Label/getCustomerLable"));
 
         }
     };
@@ -761,7 +763,7 @@ public class AppApi {
                                          String sex,
                                          String usermobile,
                                          ApiRequestListener handler) {
-        final HashMap<String, Object> params = new HashMap<String, Object>();
+        final HashMap<String, Object> params = new HashMap<>();
         params.put("bill_info", bill_info);
         params.put("birthday", birthday);
         params.put("birthplace", birthplace);
@@ -881,6 +883,20 @@ public class AppApi {
         params.put("type", type);
 
         new AppServiceOk(context,Action.POST_TOP_LIST_JSON,handler,params).post();
+    }
+
+    /**获取标签列表*/
+    public static void getCustomerLabelList(Context context,
+                                            String customer_id,
+                                            String invite_id,
+                                            String mobile,
+                                            ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("customer_id", customer_id);
+        params.put("invite_id", invite_id);
+        params.put("mobile", mobile);
+
+        new AppServiceOk(context,Action.POST_CUSTOMER_LABELS_JSON,handler,params).post();
     }
 
     // 超时（网络）异常

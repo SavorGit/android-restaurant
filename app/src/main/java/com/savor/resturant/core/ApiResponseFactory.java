@@ -27,7 +27,9 @@ import com.google.gson.reflect.TypeToken;
 import com.savor.resturant.bean.BaseProResponse;
 import com.savor.resturant.bean.ConAbilityList;
 import com.savor.resturant.bean.CustomerHistory;
+import com.savor.resturant.bean.CustomerLabelList;
 import com.savor.resturant.bean.HotelBean;
+import com.savor.resturant.bean.ImportInfoResponse;
 import com.savor.resturant.bean.OrderListBean;
 import com.savor.resturant.bean.RecTopList;
 import com.savor.resturant.bean.RecommendFoodAdvert;
@@ -120,6 +122,9 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.POST_IMPORT_INFO_JSON
                     || action == AppApi.Action.POST_IMPORT_INFO_NEW_JSON
                     || action == AppApi.Action.POST_CON_ABILITY_JSON
+                    || action == AppApi.Action.POST_ADD_CUS_JSON
+                    || action == AppApi.Action.POST_CUSTOMER_LABELS_JSON
+                    || action == AppApi.Action.POST_CUSTOMER_INFO_JSON
                     ){
                 int code = rSet.getInt("code");
                 if(rSet.has("result")) {
@@ -274,10 +279,10 @@ public class ApiResponseFactory {
                 result = "success";
                 break;
             case POST_IMPORT_INFO_JSON:
-                result = info;
+                result = gson.fromJson(info,new TypeToken<ImportInfoResponse>(){}.getType());
                 break;
             case POST_IMPORT_INFO_NEW_JSON:
-                result = info;
+                result = gson.fromJson(info,new TypeToken<ImportInfoResponse>(){}.getType());
                 break;
             case POST_CUS_HISTORY_JSON:
                 result = gson.fromJson(info, new TypeToken<CustomerHistory>() {
@@ -310,7 +315,10 @@ public class ApiResponseFactory {
                 result = gson.fromJson(info, new TypeToken<RecTopList>() {
                 }.getType());
                 break;
-
+            case POST_CUSTOMER_LABELS_JSON:
+                result = gson.fromJson(info, new TypeToken<CustomerLabelList>() {
+                }.getType());
+                break;
             default:
                 break;
         }
