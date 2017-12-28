@@ -26,6 +26,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.savor.resturant.bean.BaseProResponse;
 import com.savor.resturant.bean.ConAbilityList;
+import com.savor.resturant.bean.CustomerBean;
 import com.savor.resturant.bean.CustomerHistory;
 import com.savor.resturant.bean.CustomerLabelList;
 import com.savor.resturant.bean.HotelBean;

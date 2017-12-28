@@ -1,7 +1,5 @@
 package com.savor.resturant.bean;
 
-import com.savor.resturant.core.CustomerBean;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
