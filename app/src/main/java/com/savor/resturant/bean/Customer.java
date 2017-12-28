@@ -19,7 +19,7 @@ public class Customer implements Serializable {
     private String face_url;
     private String consume_ability;
     private String remark;
-    private List<Label> label = new ArrayList<Label>();
+    private List<CustomerLabel> label = new ArrayList<CustomerLabel>();
 
     public String getUsername() {
         return username;
@@ -93,11 +93,11 @@ public class Customer implements Serializable {
         this.remark = remark;
     }
 
-    public List<Label> getLabel() {
+    public List<CustomerLabel> getLabel() {
         return label;
     }
 
-    public void setLabel(List<Label> label) {
+    public void setLabel(List<CustomerLabel> label) {
         this.label = label;
     }
 
