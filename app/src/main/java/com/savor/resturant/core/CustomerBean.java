@@ -11,7 +11,6 @@ public class CustomerBean implements Serializable {
     private String name;
     private String mobile;
     private String face_url;
-
     public String getName() {
         return name;
     }
