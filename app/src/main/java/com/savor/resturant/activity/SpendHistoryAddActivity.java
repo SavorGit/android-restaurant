@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.common.api.utils.AppUtils;
 import com.common.api.utils.DensityUtil;
 import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
@@ -68,7 +69,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
         mLabelsRlv.setLayoutManager(flowLayoutManager);
         mLabelsRlv.setAdapter(mLabelAdapter);
 
-        testLabel();
+//        testLabel();
 
     }
 
@@ -140,13 +141,16 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
                         // 1.从客户列表查找是否存在这个用户如果存在，判断customerid是否为空
                         ContactFormat existContact = getMobileInCustomerList(content);
                         String invite_id = mSession.getHotelBean().getInvite_id();
-//                        if(existContact!=null) {// 已存在
-//                            String customer_id = existContact.getCustomer_id();
-//                            AppApi.getCustomerLabelList(SpendHistoryAddActivity.this,customer_id,invite_id,SpendHistoryAddActivity.this);
-//                        }else {// 不存在
-//                            AppApi.getCustomerLabelList(SpendHistoryAddActivity.this,"",invite_id,SpendHistoryAddActivity.this);
-//                        }
+                        String customer_id = "";
+                        if(existContact!=null) {// 已存在
+                            String customerId = existContact.getCustomer_id();
+                            if(!TextUtils.isEmpty(customerId)) {
+                                customer_id = customerId;
+                            }
+                        }
+                        AppApi.getCustomerLabelList(SpendHistoryAddActivity.this,customer_id,invite_id,mSession.getHotelBean().getTel(),SpendHistoryAddActivity.this);
                     }else {
+                        mMobileEt.setText("");
                         ShowMessage.showToast(SpendHistoryAddActivity.this,"请输入正确的手机号");
                     }
                 }
@@ -189,6 +193,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
     @Override
     public void onSuccess(AppApi.Action method, Object obj) {
         super.onSuccess(method, obj);
+        AppUtils.hideSoftKeybord(this);
         switch (method) {
             case POST_CUSTOMER_LABELS_JSON:
                 if(obj instanceof CustomerLabelList) {

@@ -889,10 +889,12 @@ public class AppApi {
     public static void getCustomerLabelList(Context context,
                                             String customer_id,
                                             String invite_id,
+                                            String mobile,
                                             ApiRequestListener handler) {
         final HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("hotel_id", customer_id);
+        params.put("customer_id", customer_id);
         params.put("invite_id", invite_id);
+        params.put("mobile", mobile);
 
         new AppServiceOk(context,Action.POST_CUSTOMER_LABELS_JSON,handler,params).post();
     }

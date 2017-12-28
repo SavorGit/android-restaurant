@@ -174,7 +174,6 @@
             android:name=".service.UpLoadLogService"
             android:enabled="true"
             android:exported="true" />
-
         <service
             android:name=".service.ReRequestService"
             android:exported="false">
@@ -214,11 +213,11 @@
             android:name=".activity.AddCustomerActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <activity android:name=".activity.SpendHistoryAddActivity"
+        <activity
+            android:name=".activity.SpendHistoryAddActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            />
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity android:name=".activity.LabelAddActivity"></activity>
     </application>
 
 </manifest>

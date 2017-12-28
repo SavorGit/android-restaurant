@@ -124,6 +124,7 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.POST_CON_ABILITY_JSON
                     || action == AppApi.Action.POST_ADD_CUS_JSON
                     || action == AppApi.Action.POST_CUSTOMER_LABELS_JSON
+                    || action == AppApi.Action.POST_CUSTOMER_INFO_JSON
                     ){
                 int code = rSet.getInt("code");
                 if(rSet.has("result")) {
