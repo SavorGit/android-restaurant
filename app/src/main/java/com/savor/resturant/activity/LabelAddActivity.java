@@ -9,10 +9,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.common.api.utils.AppUtils;
 import com.common.api.utils.DensityUtil;
 import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.FlowAdapter;
+import com.savor.resturant.adapter.LabelAdapter;
 import com.savor.resturant.bean.CustomerLabel;
 import com.savor.resturant.bean.CustomerLabelList;
 import com.savor.resturant.bean.LabelAddRessponse;
@@ -33,7 +35,7 @@ public class LabelAddActivity extends BaseActivity implements View.OnClickListen
     private TextView mTitleTv;
     private TextView mAddTv;
     private RecyclerView mLabelListRlv;
-    private FlowAdapter mLabelAdapter;
+    private LabelAdapter mLabelAdapter;
     private EditText mLabelEt;
     private String customerId;
     private String invite_id;
@@ -74,7 +76,7 @@ public class LabelAddActivity extends BaseActivity implements View.OnClickListen
         mTitleTv.setText("选择标签");
 
 
-        mLabelAdapter = new FlowAdapter(this);
+        mLabelAdapter = new LabelAdapter(this);
         FlowLayoutManager flowLayoutManager = new FlowLayoutManager();
         mLabelListRlv.addItemDecoration(new SpaceItemDecoration(DensityUtil.dip2px(this,5),DensityUtil.dip2px(this,10)));
         mLabelListRlv.setLayoutManager(flowLayoutManager);
@@ -99,6 +101,7 @@ public class LabelAddActivity extends BaseActivity implements View.OnClickListen
                 }
                 break;
             case R.id.iv_left:
+                AppUtils.hideSoftKeybord(this);
                 finish();
                 break;
         }

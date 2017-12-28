@@ -610,6 +610,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                 Intent intent = new Intent();
                 intent.putExtra("customer",contactFormat);
                 setResult(RESULT_CODE_SELECT,intent);
+                finish();
             }
         }
     }
