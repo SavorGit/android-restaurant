@@ -31,6 +31,7 @@ import com.savor.resturant.bean.CustomerHistory;
 import com.savor.resturant.bean.CustomerLabelList;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.ImportInfoResponse;
+import com.savor.resturant.bean.LabelAddRessponse;
 import com.savor.resturant.bean.OrderListBean;
 import com.savor.resturant.bean.RecTopList;
 import com.savor.resturant.bean.RecommendFoodAdvert;
@@ -126,6 +127,7 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.POST_ADD_CUS_JSON
                     || action == AppApi.Action.POST_CUSTOMER_LABELS_JSON
                     || action == AppApi.Action.POST_CUSTOMER_INFO_JSON
+                    || action == AppApi.Action.POST_ADD_LABEL_JSON
                     ){
                 int code = rSet.getInt("code");
                 if(rSet.has("result")) {
@@ -318,6 +320,10 @@ public class ApiResponseFactory {
                 break;
             case POST_CUSTOMER_LABELS_JSON:
                 result = gson.fromJson(info, new TypeToken<CustomerLabelList>() {
+                }.getType());
+                break;
+            case POST_ADD_LABEL_JSON:
+                result = gson.fromJson(info, new TypeToken<LabelAddRessponse>() {
                 }.getType());
                 break;
             default:

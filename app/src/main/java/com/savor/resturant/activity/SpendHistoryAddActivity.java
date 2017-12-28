@@ -1,5 +1,6 @@
 package com.savor.resturant.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -35,6 +36,8 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
     private EditText mNameEt;
     private EditText mMobileEt;
     private FlowAdapter mLabelAdapter;
+    private TextView mEditLabelTv;
+    private String customer_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void getViews() {
+        mEditLabelTv = (TextView) findViewById(R.id.tv_edit_label);
         mNameEt = (EditText) findViewById(R.id.et_name);
         mMobileEt = (EditText) findViewById(R.id.et_phone);
         mBackBtn = (ImageView) findViewById(R.id.iv_left);
@@ -118,6 +122,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void setListeners() {
+        mEditLabelTv.setOnClickListener(this);
         mBackBtn.setOnClickListener(this);
 
         mMobileEt.addTextChangedListener(new TextWatcher() {
@@ -141,14 +146,14 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
                         // 1.从客户列表查找是否存在这个用户如果存在，判断customerid是否为空
                         ContactFormat existContact = getMobileInCustomerList(content);
                         String invite_id = mSession.getHotelBean().getInvite_id();
-                        String customer_id = "";
+                        customer_id = "";
                         if(existContact!=null) {// 已存在
                             String customerId = existContact.getCustomer_id();
                             if(!TextUtils.isEmpty(customerId)) {
                                 customer_id = customerId;
                             }
                         }
-                        AppApi.getCustomerLabelList(SpendHistoryAddActivity.this,customer_id,invite_id,mSession.getHotelBean().getTel(),SpendHistoryAddActivity.this);
+                        AppApi.getCustomerLabelList(SpendHistoryAddActivity.this, customer_id,invite_id,mSession.getHotelBean().getTel(),SpendHistoryAddActivity.this);
                     }else {
                         mMobileEt.setText("");
                         ShowMessage.showToast(SpendHistoryAddActivity.this,"请输入正确的手机号");
@@ -183,7 +188,18 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
+            case R.id.tv_edit_label:
+                String mobile = mMobileEt.getText().toString();
+                if(TextUtils.isEmpty(mobile)) {
+                    ShowMessage.showToast(this,"请输入客户手机号");
+                }else {
+                    intent = new Intent(this,LabelAddActivity.class);
+                    intent.putExtra("customer_id",customer_id);
+                    startActivity(intent);
+                }
+                break;
             case R.id.iv_left:
                 finish();
                 break;
