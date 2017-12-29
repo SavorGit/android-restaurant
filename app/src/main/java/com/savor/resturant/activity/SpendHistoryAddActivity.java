@@ -25,6 +25,9 @@ import com.savor.resturant.bean.CustomerLabelList;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.widget.flowlayout.FlowLayoutManager;
 import com.savor.resturant.widget.flowlayout.SpaceItemDecoration;
+import com.zhy.view.flowlayout.FlowLayout;
+import com.zhy.view.flowlayout.TagAdapter;
+import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +37,8 @@ import static com.savor.resturant.activity.ContactCustomerListActivity.REQUEST_C
 
 public class SpendHistoryAddActivity extends BaseActivity implements View.OnClickListener {
 
-    private RecyclerView mLabelsRlv;
+    private static final int REQUEST_CODE_LABEL = 100;
+    private TagFlowLayout mLabelsRlv;
     private TextView mLabelHint;
     private ImageView mBackBtn;
     private TextView mTitleTv;
@@ -44,6 +48,18 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
     private TextView mEditLabelTv;
     private String customer_id;
     private LinearLayout mSelectCusLayout;
+    private List<CustomerLabel> labelList = new ArrayList<>();;
+    private TagAdapter mTagAdapter = new  TagAdapter(labelList) {
+        @Override
+        public View getView(FlowLayout parent, int position, Object o) {
+            TextView tv = (TextView) getLayoutInflater().inflate(R.layout.flow_item,
+                    mLabelsRlv, false);
+            tv.setBackgroundResource(R.drawable.label_bg);
+            tv.setTextColor(mContext.getResources().getColor(R.color.color_label));
+            tv.setText(labelList.get(position).getLabel_name());
+            return tv;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +81,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
         mLabelHint = (TextView) findViewById(R.id.tv_label_hint);
         mTitleTv = (TextView) findViewById(R.id.tv_center);
 
-        mLabelsRlv = (RecyclerView) findViewById(R.id.rlv_labels);
+        mLabelsRlv = (TagFlowLayout) findViewById(R.id.rlv_labels);
         mLabelAdapter = new FlowAdapter(this);
 
     }
@@ -75,12 +91,12 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
         mTitleTv.setTextColor(getResources().getColor(R.color.white));
         mTitleTv.setText("添加消费记录");
 
-        FlowLayoutManager flowLayoutManager = new FlowLayoutManager();
-        mLabelsRlv.addItemDecoration(new SpaceItemDecoration(DensityUtil.dip2px(this,5),DensityUtil.dip2px(this,10)));
-        mLabelsRlv.setLayoutManager(flowLayoutManager);
-        mLabelsRlv.setAdapter(mLabelAdapter);
+//        FlowLayoutManager flowLayoutManager = new FlowLayoutManager();
+//        mLabelsRlv.addItemDecoration(new SpaceItemDecoration(DensityUtil.dip2px(this,5),DensityUtil.dip2px(this,10)));
+//        mLabelsRlv.setLayoutManager(flowLayoutManager);
+        mLabelsRlv.setAdapter(mTagAdapter);
 
-//        testLabel();
+        testLabel();
 
     }
 
@@ -88,19 +104,19 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
         showLabel();
         List<CustomerLabel> labelList = new ArrayList<>();
 
-        CustomerLabel label = new CustomerLabel();
+        final CustomerLabel label = new CustomerLabel();
         label.setLabel_id("1");
         label.setLabel_name("口味偏辣");
         label.setLight(0);
         labelList.add(label);
 
-        CustomerLabel label2 = new CustomerLabel();
+        final CustomerLabel label2 = new CustomerLabel();
         label2.setLabel_id("2");
         label2.setLabel_name("爱吃海鲜");
         label2.setLight(0);
         labelList.add(label2);
 
-        CustomerLabel label3 = new CustomerLabel();
+        final CustomerLabel label3 = new CustomerLabel();
         label3.setLabel_id("3");
         label3.setLabel_name("喜欢热闹");
         label3.setLight(0);
@@ -123,8 +139,20 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
         label6.setLabel_name("喜欢推荐菜");
         label6.setLight(0);
         labelList.add(label6);
+        this.labelList.addAll(labelList);
 
-        mLabelAdapter.setData(labelList);
+        mTagAdapter.notifyDataChanged();
+
+//        mLabelsRlv.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                List<CustomerLabel> labelList = new ArrayList<>();
+//                labelList.add(label);
+//                labelList.add(label2);
+//                labelList.add(label3);
+//                mLabelAdapter.setData(labelList);
+//            }
+//        },2000);
     }
 
     @Override
@@ -161,9 +189,10 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
                             mNameEt.setText(name);
                             if(!TextUtils.isEmpty(customerId)) {
                                 customer_id = customerId;
+//                                AppApi.getCustomerBaseInfo(SpendHistoryAddActivity.this, customer_id,invite_id,mSession.getHotelBean().getTel(),SpendHistoryAddActivity.this);
                             }
                         }
-                        AppApi.getCustomerBaseInfo(SpendHistoryAddActivity.this, customer_id,invite_id,mSession.getHotelBean().getTel(),SpendHistoryAddActivity.this);
+
                     }else {
                         mMobileEt.setText("");
                         ShowMessage.showToast(SpendHistoryAddActivity.this,"请输入正确的手机号");
@@ -212,7 +241,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
                 }else {
                     intent = new Intent(this,LabelAddActivity.class);
                     intent.putExtra("customer_id",customer_id);
-                    startActivity(intent);
+                    startActivityForResult(intent,REQUEST_CODE_LABEL);
                 }
                 break;
             case R.id.iv_left:
@@ -253,6 +282,16 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
             if(data!=null) {
                 ContactFormat contactFormat = (ContactFormat) data.getSerializableExtra("customer");
                 mMobileEt.setText(contactFormat.getMobile());
+            }
+        }else if(requestCode == REQUEST_CODE_LABEL) {
+            if(data!=null) {
+                ArrayList<CustomerLabel> labelList = (ArrayList<CustomerLabel>) data.getSerializableExtra("selecteLabels");
+                if(labelList!=null&&labelList.size()>0) {
+                    mLabelAdapter.setData(labelList);
+                    showLabel();
+                }else {
+                    hideLabel();
+                }
             }
         }
     }

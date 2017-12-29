@@ -127,6 +127,7 @@ dependencies {
     compile 'com.github.tamir7.contacts:contacts:1.1.7'
     compile 'com.contrarywind:Android-PickerView:3.2.6'
     implementation project(':FFmpeg4Android')
+    implementation project(':flowlayout-lib')
 }
 
 

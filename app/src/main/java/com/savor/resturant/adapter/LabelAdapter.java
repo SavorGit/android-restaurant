@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.common.api.utils.AppUtils;
 import com.savor.resturant.R;
 import com.savor.resturant.bean.CustomerLabel;
 
@@ -30,6 +31,9 @@ public class LabelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         notifyDataSetChanged();
     }
 
+    public List<CustomerLabel> getData() {
+        return list;
+    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

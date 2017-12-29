@@ -14,7 +14,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        >
 
         <TextView
             android:layout_width="wrap_content"
@@ -42,19 +46,21 @@
         android:paddingBottom="20dp"
         android:paddingTop="10dp">
 
-        <android.support.v7.widget.RecyclerView
+        <com.zhy.view.flowlayout.TagFlowLayout
             android:id="@+id/rlv_labels"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_label_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:paddingTop="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:paddingBottom="20dp"
             android:text="选择或输入客人信息后，可以进行标签管理" />
     </FrameLayout>

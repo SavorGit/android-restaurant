@@ -1,5 +1,6 @@
 package com.savor.resturant.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -31,6 +32,7 @@ import java.util.List;
  */
 public class LabelAddActivity extends BaseActivity implements View.OnClickListener {
 
+    public static final int RESULT_CODE_LABEL = 10002;
     private ImageView mBackBtn;
     private TextView mTitleTv;
     private TextView mAddTv;
@@ -101,10 +103,27 @@ public class LabelAddActivity extends BaseActivity implements View.OnClickListen
                 }
                 break;
             case R.id.iv_left:
+                onBackPressed();
                 AppUtils.hideSoftKeybord(this);
-                finish();
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        List<CustomerLabel> data = mLabelAdapter.getData();
+        ArrayList<CustomerLabel> selectedList = new ArrayList<>();
+        if(data!=null&&data.size()>0) {
+            for(CustomerLabel label: data) {
+                if(label.getLight() == 1) {
+                    selectedList.add(label);
+                }
+            }
+        }
+        Intent intent = new Intent();
+        intent.putExtra("selecteLabels",selectedList);
+        setResult(RESULT_CODE_LABEL,intent);
+        super.onBackPressed();
     }
 
     @Override
