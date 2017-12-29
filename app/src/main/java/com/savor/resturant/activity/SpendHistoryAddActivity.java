@@ -44,7 +44,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
     private TextView mTitleTv;
     private EditText mNameEt;
     private EditText mMobileEt;
-    private FlowAdapter mLabelAdapter;
+//    private FlowAdapter mLabelAdapter;
     private TextView mEditLabelTv;
     private String customer_id;
     private LinearLayout mSelectCusLayout;
@@ -82,7 +82,6 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
         mTitleTv = (TextView) findViewById(R.id.tv_center);
 
         mLabelsRlv = (TagFlowLayout) findViewById(R.id.rlv_labels);
-        mLabelAdapter = new FlowAdapter(this);
 
     }
 
@@ -96,7 +95,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
 //        mLabelsRlv.setLayoutManager(flowLayoutManager);
         mLabelsRlv.setAdapter(mTagAdapter);
 
-        testLabel();
+//        testLabel();
 
     }
 
@@ -189,7 +188,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
                             mNameEt.setText(name);
                             if(!TextUtils.isEmpty(customerId)) {
                                 customer_id = customerId;
-//                                AppApi.getCustomerBaseInfo(SpendHistoryAddActivity.this, customer_id,invite_id,mSession.getHotelBean().getTel(),SpendHistoryAddActivity.this);
+                                AppApi.getCustomerBaseInfo(SpendHistoryAddActivity.this, customer_id,invite_id,mSession.getHotelBean().getTel(),SpendHistoryAddActivity.this);
                             }
                         }
 
@@ -264,7 +263,9 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
                         if(list!=null) {
                             List<CustomerLabel> label = list.getLabel();
                             if(label!=null&&label.size()>0) {
-                                mLabelAdapter.setData(label);
+                                labelList.clear();
+                                labelList.addAll(label);
+                                mTagAdapter.notifyDataChanged();
                                 showLabel();
                             }
                         }
@@ -287,7 +288,9 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
             if(data!=null) {
                 ArrayList<CustomerLabel> labelList = (ArrayList<CustomerLabel>) data.getSerializableExtra("selecteLabels");
                 if(labelList!=null&&labelList.size()>0) {
-                    mLabelAdapter.setData(labelList);
+                    this.labelList.clear();
+                    this.labelList.addAll(labelList);
+                    mTagAdapter.notifyDataChanged();
                     showLabel();
                 }else {
                     hideLabel();
