@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -26,6 +28,7 @@ import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.bigkoo.pickerview.TimePickerView;
 import com.bumptech.glide.Glide;
+import com.common.api.utils.DensityUtil;
 import com.common.api.utils.FileUtils;
 import com.common.api.utils.LogUtils;
 import com.common.api.utils.ShowMessage;
@@ -353,7 +356,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         conAbilityIds = getConAbilityIds(list);
         conAbilityIdsNames = getConAbilityNames(list);
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mContext);
-        alertBuilder.setTitle("--请选择消费能力--");
+//        alertBuilder.setTitle("--请选择消费能力--");
         alertBuilder.setItems(conAbilityIdsNames, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface arg0, int index) {
@@ -362,6 +365,12 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
             }
         });
         AlertDialog finalAlertDialog = alertBuilder.create();
+        float widthInPx = DensityUtil.getWidthInPx(this);
+        float heightInPx = DensityUtil.getHeightInPx(this);
+        WindowManager.LayoutParams attributes = finalAlertDialog.getWindow().getAttributes();
+        attributes.width = (int) (widthInPx/2);
+        attributes.height = (int) (heightInPx/2);
+        finalAlertDialog.getWindow().setLayout((int) (widthInPx/2),(int) (heightInPx/2));
         finalAlertDialog.show();
     }
 
