@@ -85,6 +85,18 @@ public class BookAdapter extends BaseAdapter {
         }
 
 
+
+        if (position%0 == 0) {
+            holder.room_name.setBackgroundResource(R.drawable.corner_remote_b3);
+        }else if (position%1 == 0) {
+            holder.room_name.setBackgroundResource(R.drawable.corner_remote_b1);
+        }else if (position%2 == 0) {
+            holder.room_name.setBackgroundResource(R.drawable.corner_remote_b2);
+        }else if (position%3 == 0) {
+            holder.room_name.setBackgroundResource(R.drawable.corner_remote_b4);
+        }else {
+            holder.room_name.setBackgroundResource(R.drawable.corner_remote_b3);
+        }
         String room_name = item.getRoom_name();
         if (!TextUtils.isEmpty(room_name)) {
             holder.room_name.setVisibility(View.VISIBLE);
