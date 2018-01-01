@@ -12,11 +12,17 @@ public class OrderListBean implements Serializable {
     private String person_nums;
     private String order_name;
     private String order_mobile;
-    private String is_welcome;
-    private String is_recfood;
     private String room_name;
     private String time_str;
     private int is_expense;
+    private String is_welcome;
+    private String is_recfood;
+    private String customer_id;
+    private String room_id;
+    private String room_type;
+    private String face_url;
+    private String moment_str;
+
 
     public String getOrder_id() {
         return order_id;
@@ -90,6 +96,46 @@ public class OrderListBean implements Serializable {
         this.is_expense = is_expense;
     }
 
+    public String getCustomer_id() {
+        return customer_id;
+    }
+
+    public void setCustomer_id(String customer_id) {
+        this.customer_id = customer_id;
+    }
+
+    public String getRoom_id() {
+        return room_id;
+    }
+
+    public void setRoom_id(String room_id) {
+        this.room_id = room_id;
+    }
+
+    public String getRoom_type() {
+        return room_type;
+    }
+
+    public void setRoom_type(String room_type) {
+        this.room_type = room_type;
+    }
+
+    public String getFace_url() {
+        return face_url;
+    }
+
+    public void setFace_url(String face_url) {
+        this.face_url = face_url;
+    }
+
+    public String getMoment_str() {
+        return moment_str;
+    }
+
+    public void setMoment_str(String moment_str) {
+        this.moment_str = moment_str;
+    }
+
     @Override
     public String toString() {
         return "OrderListBean{" +
@@ -97,11 +143,16 @@ public class OrderListBean implements Serializable {
                 ", person_nums='" + person_nums + '\'' +
                 ", order_name='" + order_name + '\'' +
                 ", order_mobile='" + order_mobile + '\'' +
-                ", is_welcome='" + is_welcome + '\'' +
-                ", is_recfood='" + is_recfood + '\'' +
                 ", room_name='" + room_name + '\'' +
                 ", time_str='" + time_str + '\'' +
                 ", is_expense=" + is_expense +
+                ", is_welcome='" + is_welcome + '\'' +
+                ", is_recfood='" + is_recfood + '\'' +
+                ", customer_id='" + customer_id + '\'' +
+                ", room_id='" + room_id + '\'' +
+                ", room_type='" + room_type + '\'' +
+                ", face_url='" + face_url + '\'' +
+                ", moment_str='" + moment_str + '\'' +
                 '}';
     }
 }
