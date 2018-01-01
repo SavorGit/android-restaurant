@@ -12,7 +12,7 @@
         android:drawableLeft="@drawable/ico_search"
         android:textSize="14sp"
         android:textColorHint="@color/text_content_black"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:background="@drawable/bg_search_text"
         android:padding="10dp"
         android:hint="输入姓名或手机号查找客户"

@@ -32,6 +32,19 @@
             <include
                 layout="@layout/include_customer_ticket"
                 />
+
+            <TextView
+                android:layout_marginTop="20dp"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:background="@drawable/right_bg_button"
+                android:layout_marginBottom="20dp"
+                android:id="@+id/tv_save"
+                android:layout_gravity="center_horizontal"
+                android:text="保存"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 

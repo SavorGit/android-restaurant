@@ -127,6 +127,8 @@ public class AppApi {
         POST_TOP_LIST_JSON,
         /**获取标签列表*/
         POST_CUSTOMER_LABELS_JSON,
+        /**添加标签*/
+        POST_ADD_LABEL_JSON,
     }
 
     /**
@@ -178,7 +180,7 @@ public class AppApi {
             put(Action.POST_ADD_SIGNLE_CONSUME_RECORD_JSON, formatPhpUrl("Dinnerapp2/Customer/addSignleConsumeRecord"));
             put(Action.POST_TOP_LIST_JSON, formatPhpUrl("Dinnerapp2/Customer/getConRecTopList"));
             put(Action.POST_CUSTOMER_LABELS_JSON, formatPhpUrl("Dinnerapp2/Label/getCustomerLable"));
-
+            put(Action.POST_ADD_LABEL_JSON, formatPhpUrl("Dinnerapp2/Label/addLabel"));
         }
     };
 
@@ -897,6 +899,22 @@ public class AppApi {
         params.put("mobile", mobile);
 
         new AppServiceOk(context,Action.POST_CUSTOMER_LABELS_JSON,handler,params).post();
+    }
+
+    /**获取标签列表*/
+    public static void addLabel(Context context,
+                                            String customer_id,
+                                            String invite_id,
+                                            String label_name,
+                                            String mobile,
+                                            ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("customer_id", customer_id);
+        params.put("invite_id", invite_id);
+        params.put("label_name", label_name);
+        params.put("mobile", mobile);
+
+        new AppServiceOk(context,Action.POST_ADD_LABEL_JSON,handler,params).post();
     }
 
     // 超时（网络）异常

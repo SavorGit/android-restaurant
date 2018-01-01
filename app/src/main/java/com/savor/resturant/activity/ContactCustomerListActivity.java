@@ -47,7 +47,9 @@ import java.util.regex.Pattern;
  * 客户列表，通讯录列表
  * @author hezd
  */
-public class ContactCustomerListActivity extends BaseActivity implements View.OnClickListener, MyContactAdapter.OnAddBtnClickListener, MyContactAdapter.OnCheckStateChangeListener {
+public class ContactCustomerListActivity extends BaseActivity implements View.OnClickListener, MyContactAdapter.OnAddBtnClickListener, MyContactAdapter.OnCheckStateChangeListener, MyContactAdapter.OnItemClickListener {
+    public static final int RESULT_CODE_SELECT = 1000;
+    public static final int REQUEST_CODE_SELECT = 1001;
     private List<ContactFormat> contactFormats;
     private ChineseComparator pinyinComparator;
     private MyContactAdapter adapter;
@@ -78,6 +80,8 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         CONSTACT_LIST_FIRST,
         /**通讯录列表非首次导入*/
         CONSTACT_LIST_NOTFIST,
+        /**选择客户*/
+        CONSTACT_LIST_SELECT,
     }
 
     @Override
@@ -104,6 +108,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
             public void run() {
 //                contactFormats = ContactUtil.getInstance().getAllContact(ContactCustomerListActivity.this);
                 switch (operationType) {
+                    case CONSTACT_LIST_SELECT:
                     case CUSTOMER_LIST:
                         contactFormats = mSession.getCustomerList();
                         break;
@@ -133,7 +138,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
 
                         adapter.setOnCheckStateChangeListener(ContactCustomerListActivity.this);
                         adapter.setOnAddBtnClickListener(ContactCustomerListActivity.this);
-
+                        adapter.setOnItemClickListener(ContactCustomerListActivity.this);
                         hideLoadingLayout();
                     }
                 });
@@ -241,7 +246,9 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                 mRightBtn.setImageResource(R.drawable.ico_customer_list_add);
                 mRightTv.setVisibility(View.GONE);
                 mTitleTv.setText("客户列表");
-
+                break;
+            case CONSTACT_LIST_SELECT:
+                mRightBtn.setVisibility(View.GONE);
                 break;
         }
     }
@@ -282,6 +289,8 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                 }
             }
         });
+
+
 
     }
 
@@ -419,9 +428,15 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                 startActivity(intent);
                 break;
             case R.id.tv_search:
-                intent = new Intent(this,SearchActivity.class);
-                intent.putExtra("type",operationType);
-                startActivity(intent);
+                if(operationType == OperationType.CONSTACT_LIST_SELECT) {
+                    intent = new Intent(this,SearchActivity.class);
+                    intent.putExtra("type",operationType);
+                    startActivityForResult(intent,REQUEST_CODE_SELECT);
+                }else {
+                    intent = new Intent(this,SearchActivity.class);
+                    intent.putExtra("type",operationType);
+                    startActivity(intent);
+                }
                 break;
             case R.id.iv_left:
                 finish();
@@ -572,5 +587,31 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         }
         failedItemList.add(item);
         mSession.setOpFailedList(failedItemList);
+    }
+
+    @Override
+    public void onItemClick(int position, ContactFormat contactFormat) {
+        switch (operationType) {
+            case CONSTACT_LIST_SELECT:
+                Intent intent = new Intent();
+                intent.putExtra("customer",contactFormat);
+                setResult(RESULT_CODE_SELECT,intent);
+                finish();
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE_SELECT || resultCode == RESULT_CODE_SELECT) {
+            if(data!=null) {
+                ContactFormat contactFormat = (ContactFormat) data.getSerializableExtra("customer");
+                Intent intent = new Intent();
+                intent.putExtra("customer",contactFormat);
+                setResult(RESULT_CODE_SELECT,intent);
+                finish();
+            }
+        }
     }
 }

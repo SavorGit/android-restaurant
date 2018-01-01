@@ -1,2 +1,2 @@
-include ':app',  ':FFmpeg4Android'
+include ':app', ':FFmpeg4Android', ':flowlayout-lib'
 include ':common-library'
