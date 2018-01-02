@@ -158,12 +158,16 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
                 showDateDialog();
                 break;
             case R.id.yesterday_la:
+                InitBtnData(0);
                 break;
             case R.id.today_la:
+                InitBtnData(1);
                 break;
             case R.id.tomorrow_la:
+                InitBtnData(2);
                 break;
             case R.id.after_tomorrow_la:
+                InitBtnData(3);
                 break;
 
         }
@@ -291,5 +295,90 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
     private void getOrderList(){
         HotelBean hotelBean = mSession.getHotelBean();
         AppApi.getOrderList(mContext,hotelBean.getInvite_id(),hotelBean.getTel(),currentDate,page_num+"",this);
+    }
+
+    private void InitBtnData(int pos){
+        switch (pos){
+            case 0:
+                initYesterday(true);
+                initToday(false);
+                initTomorrow(false);
+                initAfterTomorrow(false);
+                currentDate = yesterdayStr;
+                break;
+            case 1:
+                initYesterday(false);
+                initToday(true);
+                initTomorrow(false);
+                initAfterTomorrow(false);
+                currentDate = todayStr;
+                break;
+            case 2:
+                initYesterday(false);
+                initToday(false);
+                initTomorrow(true);
+                initAfterTomorrow(false);
+                currentDate = tomorrowStr;
+                break;
+            case 3:
+                initYesterday(false);
+                initToday(false);
+                initTomorrow(false);
+                initAfterTomorrow(true);
+                currentDate = after_tomorrowStr;
+                break;
+
+        }
+
+        page_num = 1;
+        isUp = true;
+        getOrderList();
+    }
+    private void initYesterday(boolean flag){
+        if (flag) {
+            yesterday.setTextColor(mContext.getResources().getColor(R.color.app_red_color));
+            yesterday_month.setTextColor(mContext.getResources().getColor(R.color.app_red_color));
+            yesterday_ia.setVisibility(View.VISIBLE);
+        }else{
+            yesterday.setTextColor(mContext.getResources().getColor(R.color.color_text_black));
+            yesterday_month.setTextColor(mContext.getResources().getColor(R.color.color_label));
+            yesterday_ia.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void initToday(boolean flag){
+        if (flag) {
+            today.setTextColor(mContext.getResources().getColor(R.color.app_red_color));
+            today_month.setTextColor(mContext.getResources().getColor(R.color.app_red_color));
+            ia_2.setVisibility(View.VISIBLE);
+        }else{
+            today.setTextColor(mContext.getResources().getColor(R.color.color_text_black));
+            today_month.setTextColor(mContext.getResources().getColor(R.color.color_label));
+            ia_2.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void initTomorrow(boolean flag){
+        if (flag) {
+            tomorrow.setTextColor(mContext.getResources().getColor(R.color.app_red_color));
+            tomorrow_month.setTextColor(mContext.getResources().getColor(R.color.app_red_color));
+            tomorrow_ia.setVisibility(View.VISIBLE);
+        }else{
+            tomorrow.setTextColor(mContext.getResources().getColor(R.color.color_text_black));
+            tomorrow_month.setTextColor(mContext.getResources().getColor(R.color.color_label));
+            tomorrow_ia.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void initAfterTomorrow(boolean flag){
+        if (flag) {
+            after_tomorrow.setTextColor(mContext.getResources().getColor(R.color.app_red_color));
+            after_tomorrow_month.setTextColor(mContext.getResources().getColor(R.color.app_red_color));
+            ia_4.setVisibility(View.VISIBLE);
+        }else{
+            after_tomorrow.setTextColor(mContext.getResources().getColor(R.color.color_text_black));
+            after_tomorrow_month.setTextColor(mContext.getResources().getColor(R.color.color_label));
+            ia_4.setVisibility(View.INVISIBLE);
+        }
     }
 }
