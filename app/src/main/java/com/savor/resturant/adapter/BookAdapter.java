@@ -43,7 +43,8 @@ public class BookAdapter extends BaseAdapter {
     }
     @Override
     public int getCount() {
-        return list == null?0:list.size();
+        //return list == null?20:list.size();
+        return 20;
     }
 
     @Override
@@ -74,82 +75,82 @@ public class BookAdapter extends BaseAdapter {
         }else {
             holder = (BookAdapter.ViewHolder) convertView.getTag();
         }
-        OrderListBean item = (OrderListBean) getItem(position);
-
-        String moment_str = item.getMoment_str();
-        if (!TextUtils.isEmpty(moment_str)) {
-            holder.time.setVisibility(View.VISIBLE);
-            holder.time.setText(moment_str);
-        }else {
-            holder.time.setVisibility(View.INVISIBLE);
-        }
-
-
-
-        if (position%0 == 0) {
-            holder.room_name.setBackgroundResource(R.drawable.corner_remote_b3);
-        }else if (position%1 == 0) {
-            holder.room_name.setBackgroundResource(R.drawable.corner_remote_b1);
-        }else if (position%2 == 0) {
-            holder.room_name.setBackgroundResource(R.drawable.corner_remote_b2);
-        }else if (position%3 == 0) {
-            holder.room_name.setBackgroundResource(R.drawable.corner_remote_b4);
-        }else {
-            holder.room_name.setBackgroundResource(R.drawable.corner_remote_b3);
-        }
-        String room_name = item.getRoom_name();
-        if (!TextUtils.isEmpty(room_name)) {
-            holder.room_name.setVisibility(View.VISIBLE);
-            holder.room_name.setText(room_name);
-        }else {
-            holder.room_name.setVisibility(View.INVISIBLE);
-        }
-
-        String person_nums = item.getPerson_nums();
-        if (!TextUtils.isEmpty(person_nums)) {
-            holder.custom_num.setVisibility(View.VISIBLE);
-            holder.custom_num.setText(person_nums);
-        }else {
-            holder.custom_num.setVisibility(View.INVISIBLE);
-        }
-
-        String order_name = item.getOrder_name();
-        if (!TextUtils.isEmpty(order_name)) {
-            holder.custom_name.setVisibility(View.VISIBLE);
-            holder.custom_name.setText(order_name);
-        }else {
-            holder.custom_name.setVisibility(View.INVISIBLE);
-        }
-
-        int is_expense = item.getIs_expense();
-        if (is_expense == 1) {
-            holder.is_xfjl.setVisibility(View.VISIBLE);
-        }else {
-            holder.is_xfjl.setVisibility(View.INVISIBLE);
-        }
-
-        String is_welcome = item.getIs_welcome();
-        if (!TextUtils.isEmpty(is_welcome)) {
-            if ("1".equals(is_welcome)) {
-                holder.is_hyc.setVisibility(View.VISIBLE);
-            }else {
-                holder.is_hyc.setVisibility(View.INVISIBLE);
-            }
-        }else {
-            holder.is_hyc.setVisibility(View.INVISIBLE);
-        }
+//        OrderListBean item = (OrderListBean) getItem(position);
+//
+//        String moment_str = item.getMoment_str();
+//        if (!TextUtils.isEmpty(moment_str)) {
+//            holder.time.setVisibility(View.VISIBLE);
+//            holder.time.setText(moment_str);
+//        }else {
+//            holder.time.setVisibility(View.INVISIBLE);
+//        }
 
 
-        String is_recfood = item.getIs_recfood();
-        if (!TextUtils.isEmpty(is_recfood)) {
-            if ("1".equals(is_recfood)) {
-                holder.is_tjc.setVisibility(View.VISIBLE);
-            }else {
-                holder.is_tjc.setVisibility(View.INVISIBLE);
-            }
-        }else {
-            holder.is_tjc.setVisibility(View.INVISIBLE);
-        }
+
+//        if (position%0 == 0) {
+//            holder.room_name.setBackgroundResource(R.drawable.corner_remote_b3);
+//        }else if (position%1 == 0) {
+//            holder.room_name.setBackgroundResource(R.drawable.corner_remote_b1);
+//        }else if (position%2 == 0) {
+//            holder.room_name.setBackgroundResource(R.drawable.corner_remote_b2);
+//        }else if (position%3 == 0) {
+//            holder.room_name.setBackgroundResource(R.drawable.corner_remote_b4);
+//        }else {
+//            holder.room_name.setBackgroundResource(R.drawable.corner_remote_b3);
+//        }
+//        String room_name = item.getRoom_name();
+//        if (!TextUtils.isEmpty(room_name)) {
+//            holder.room_name.setVisibility(View.VISIBLE);
+//            holder.room_name.setText(room_name);
+//        }else {
+//            holder.room_name.setVisibility(View.INVISIBLE);
+//        }
+//
+//        String person_nums = item.getPerson_nums();
+//        if (!TextUtils.isEmpty(person_nums)) {
+//            holder.custom_num.setVisibility(View.VISIBLE);
+//            holder.custom_num.setText(person_nums);
+//        }else {
+//            holder.custom_num.setVisibility(View.INVISIBLE);
+//        }
+//
+//        String order_name = item.getOrder_name();
+//        if (!TextUtils.isEmpty(order_name)) {
+//            holder.custom_name.setVisibility(View.VISIBLE);
+//            holder.custom_name.setText(order_name);
+//        }else {
+//            holder.custom_name.setVisibility(View.INVISIBLE);
+//        }
+//
+//        int is_expense = item.getIs_expense();
+//        if (is_expense == 1) {
+//            holder.is_xfjl.setVisibility(View.VISIBLE);
+//        }else {
+//            holder.is_xfjl.setVisibility(View.INVISIBLE);
+//        }
+//
+//        String is_welcome = item.getIs_welcome();
+//        if (!TextUtils.isEmpty(is_welcome)) {
+//            if ("1".equals(is_welcome)) {
+//                holder.is_hyc.setVisibility(View.VISIBLE);
+//            }else {
+//                holder.is_hyc.setVisibility(View.INVISIBLE);
+//            }
+//        }else {
+//            holder.is_hyc.setVisibility(View.INVISIBLE);
+//        }
+//
+//
+//        String is_recfood = item.getIs_recfood();
+//        if (!TextUtils.isEmpty(is_recfood)) {
+//            if ("1".equals(is_recfood)) {
+//                holder.is_tjc.setVisibility(View.VISIBLE);
+//            }else {
+//                holder.is_tjc.setVisibility(View.INVISIBLE);
+//            }
+//        }else {
+//            holder.is_tjc.setVisibility(View.INVISIBLE);
+//        }
 
 
         return convertView;
