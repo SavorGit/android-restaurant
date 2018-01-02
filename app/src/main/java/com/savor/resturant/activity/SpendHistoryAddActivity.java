@@ -42,10 +42,14 @@ import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
+import net.sourceforge.pinyin4j.PinyinHelper;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.savor.resturant.activity.AddCustomerActivity.REQUEST_CODE_IMAGE;
 import static com.savor.resturant.activity.AddCustomerActivity.TAKE_PHOTO_REQUEST;
@@ -315,10 +319,10 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
     }
 
     private void submit() {
-        final String name = mNameEt.getText().toString();
+
         final String usermobile = mMobileEt.getText().toString();
 
-        if(TextUtils.isEmpty(name)) {
+        if(TextUtils.isEmpty(mNameEt.getText().toString())) {
             ShowMessage.showToast(this,"请输入客户姓名");
             return;
         }
@@ -342,6 +346,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        String name = mNameEt.getText().toString();
                         String invite_id = mSession.getHotelBean().getInvite_id();
                         String mobile = mSession.getHotelBean().getTel();
                         String recipt = "";
@@ -375,7 +380,26 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
                                 ContactFormat contactFormat = new ContactFormat();
                                 contactFormat.setMobile(usermobile);
                                 contactFormat.setName(name);
+
+
+                                StringBuilder sb = new StringBuilder();
+                                if(!TextUtils.isEmpty(name)) {
+                                    name = name.trim().replaceAll(" ","");
+                                    if(!isNumeric(name)&&!isLetter(name)) {
+                                        for(int i = 0;i<name.length();i++) {
+                                            String str= removeDigital(String.valueOf(PinyinHelper.toHanyuPinyinStringArray(name.charAt(i))[0]));
+                                            sb.append(str);
+                                        }
+                                    }else {
+                                        sb.append(name);
+                                    }
+                                }
+                                String stuf = "";
+                                if(isLetter(name)||isNumeric(name)) {
+                                    stuf = "#";
+                                }
                                 customerList.add(contactFormat);
+                                contactFormat.setKey(stuf+name+"#"+sb.toString().toLowerCase()+"#"+(TextUtils.isEmpty(birthplace)?"":birthplace)+"#"+(TextUtils.isEmpty(mobile)?"":mobile));
                                 Collections.sort(customerList,pinyinComparator);
                                 mSession.setCustomerList(customerList);
                             }
@@ -528,5 +552,38 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
 
             Glide.with(this).load(currentImagePath).placeholder(R.drawable.empty_slide).into(mSpendHistoryIv);
         }
+    }
+
+    public boolean isNumeric(String str){
+        Pattern pattern = Pattern.compile("[0-9]*");
+        Matcher isNum = pattern.matcher(str);
+        if( !isNum.matches() ){
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 剔除数字
+     * @param value
+     */
+    public String removeDigital(String value){
+
+        Pattern p = Pattern.compile("[\\d]");
+        Matcher matcher = p.matcher(value);
+        String result = matcher.replaceAll("");
+        return result;
+    }
+
+    /*判断字符串中是否仅包含字母数字和汉字
+      *各种字符的unicode编码的范围：
+     * 汉字：[0x4e00,0x9fa5]（或十进制[19968,40869]）
+     * 数字：[0x30,0x39]（或十进制[48, 57]）
+     *小写字母：[0x61,0x7a]（或十进制[97, 122]）
+     * 大写字母：[0x41,0x5a]（或十进制[65, 90]）
+*/
+    public static boolean isLetter(String str) {
+        String regex = "^[a-zA-Z]+$";
+        return str.matches(regex);
     }
 }
