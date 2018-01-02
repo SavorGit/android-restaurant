@@ -147,6 +147,8 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
         today_la.setOnClickListener(this);
         tomorrow_la.setOnClickListener(this);
         after_tomorrow_la.setOnClickListener(this);
+        listview.setOnRefreshListener(onRefreshListener);
+        listview.setOnLastItemVisibleListener(onLastItemVisibleListener);
     }
 
     @Override
@@ -236,7 +238,7 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
     public void onError(AppApi.Action method, Object obj) {
         switch (method) {
             case POST_ORDER_LIST_JSON:
-
+                listview.onRefreshComplete();
                 break;
         }
     }
