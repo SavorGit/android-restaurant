@@ -3,24 +3,31 @@ package com.savor.resturant.bean;
 import java.io.Serializable;
 
 /**
- * Created by bushlee on 2017/12/22.
+ * 用户操作历史
+ * Created by hezd on 2018/1/2.
  */
 
-public class CustomerHistoryBean implements Serializable {
+public class OperationHistory implements Serializable {
+
+    /**
+     * username : 小三vvvvv3434死神
+     * create_time : 47分钟
+     * type : 修改
+     * usermobile : 13712759212
+     */
+
     private String username;
     private String create_time;
     private String type;
     private String usermobile;
-    private String face_url;
 
     @Override
     public String toString() {
-        return "CustomerHistoryBean{" +
+        return "OperationHistory{" +
                 "username='" + username + '\'' +
                 ", create_time='" + create_time + '\'' +
                 ", type='" + type + '\'' +
                 ", usermobile='" + usermobile + '\'' +
-                ", face_url='" + face_url + '\'' +
                 '}';
     }
 
@@ -29,16 +36,14 @@ public class CustomerHistoryBean implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        CustomerHistoryBean that = (CustomerHistoryBean) o;
+        OperationHistory that = (OperationHistory) o;
 
         if (username != null ? !username.equals(that.username) : that.username != null)
             return false;
         if (create_time != null ? !create_time.equals(that.create_time) : that.create_time != null)
             return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (usermobile != null ? !usermobile.equals(that.usermobile) : that.usermobile != null)
-            return false;
-        return face_url != null ? face_url.equals(that.face_url) : that.face_url == null;
+        return usermobile != null ? usermobile.equals(that.usermobile) : that.usermobile == null;
     }
 
     @Override
@@ -47,7 +52,6 @@ public class CustomerHistoryBean implements Serializable {
         result = 31 * result + (create_time != null ? create_time.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (usermobile != null ? usermobile.hashCode() : 0);
-        result = 31 * result + (face_url != null ? face_url.hashCode() : 0);
         return result;
     }
 
@@ -81,13 +85,5 @@ public class CustomerHistoryBean implements Serializable {
 
     public void setUsermobile(String usermobile) {
         this.usermobile = usermobile;
-    }
-
-    public String getFace_url() {
-        return face_url;
-    }
-
-    public void setFace_url(String face_url) {
-        this.face_url = face_url;
     }
 }

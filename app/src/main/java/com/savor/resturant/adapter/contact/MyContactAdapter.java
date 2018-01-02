@@ -8,12 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.savor.resturant.R;
 import com.savor.resturant.activity.ContactCustomerListActivity;
 import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.core.Session;
+import com.savor.resturant.utils.GlideCircleTransform;
 import com.savor.resturant.widget.contact.SwipeItemLayout;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
@@ -80,6 +83,9 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
         boolean selected = item.isSelected();
 
         String mobile = item.getMobile();
+        String name = item.getName();
+        String face_url = item.getFace_url();
+
         textView.setText(getItem(position).getName());
 
         holder.mAdd.setVisibility(isMultiSelectMode?View.GONE:View.VISIBLE);
@@ -111,21 +117,21 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
 
         boolean added = item.isAdded();
         if(isMultiSelectMode) {
-            holder.checkBox.setChecked(selected);
+            holder.checkBox.setChecked(selected||added);
         }else {
             item.setSelected(false);
-            holder.checkBox.setChecked(false);
+            holder.checkBox.setChecked(added);
         }
         if(added) {
             holder.mAdd.setBackground(null);
-            holder.mAdd.setTextColor(mContext.getResources().getColor(R.color.divider_list));
+            holder.mAdd.setTextColor(mContext.getResources().getColor(R.color.app_gray));
             holder.checkBox.setEnabled(false);
             holder.mAdd.setText("已添加");
             holder.mAdd.setOnClickListener(null);
         }else {
             holder.mAdd.setBackgroundResource(R.drawable.edit_text_bg);
             holder.mAdd.setText("添加");
-            holder.mAdd.setTextColor(mContext.getResources().getColor(R.color.black));
+            holder.mAdd.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
             holder.checkBox.setEnabled(true);
             holder.mAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -161,6 +167,20 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
                 }
             }
         });
+
+        if(!TextUtils.isEmpty(face_url)) {
+            holder.iv_header.setVisibility(View.VISIBLE);
+            holder.tv_label.setVisibility(View.GONE);
+            Glide.with(mContext).load(face_url).transform(new GlideCircleTransform(mContext)).into(holder.iv_header);
+        }else {
+            holder.iv_header.setVisibility(View.GONE);
+            holder.tv_label.setVisibility(View.VISIBLE);
+
+            if(!TextUtils.isEmpty(name)&&name.length()>0) {
+                holder.tv_label.setText(String.valueOf(name.charAt(0)));
+            }
+        }
+
     }
 
     @Override
@@ -223,18 +243,22 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
         public TextView mName;
         public TextView mAdd;
         public TextView mNum;
+        public TextView tv_label;
         public SwipeItemLayout mRoot;
         public TextView mDelete;
         public CheckBox checkBox;
+        public ImageView iv_header;
 
         public ContactViewHolder(View itemView) {
             super(itemView);
             mName = (TextView) itemView.findViewById(R.id.item_contact_title);
+            tv_label = (TextView) itemView.findViewById(R.id.tv_label);
             mRoot = (SwipeItemLayout) itemView.findViewById(R.id.item_contact_swipe_root);
             mDelete = (TextView) itemView.findViewById(R.id.item_contact_delete);
             mNum = (TextView) itemView.findViewById(R.id.tv_num);
             mAdd = (TextView) itemView.findViewById(R.id.tv_add);
             checkBox = (CheckBox) itemView.findViewById(R.id.cb_select);
+            iv_header = (ImageView) itemView.findViewById(R.id.iv_header);
         }
 
 

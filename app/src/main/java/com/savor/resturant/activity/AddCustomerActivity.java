@@ -210,14 +210,24 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                 String cMobile = contactFormat.getMobile();
                 String cMobile1 = contactFormat.getMobile1();
                 if(!TextUtils.isEmpty(cMobile1)) {
-                    if(cMobile.equals(mobile)||cMobile.equals(secondMobile) || cMobile1.equals(mobile)||cMobile1.equals(secondMobile)) {
-                        ShowMessage.showToast(this,"已存在相同手机号的客户");
-                        return;
+                    if(!TextUtils.isEmpty(cMobile)) {
+                        if(cMobile.equals(mobile)||cMobile.equals(secondMobile) || cMobile1.equals(mobile)||cMobile1.equals(secondMobile)) {
+                            ShowMessage.showToast(this,"已存在相同手机号的客户");
+                            return;
+                        }
+                    }else {
+                        if(cMobile1.equals(mobile)||cMobile1.equals(secondMobile)) {
+                            ShowMessage.showToast(this,"已存在相同手机号的客户");
+                            return;
+                        }
                     }
+
                 }else {
-                    if(cMobile.equals(mobile)||cMobile.equals(secondMobile)) {
-                        ShowMessage.showToast(this,"已存在相同手机号的客户");
-                        return;
+                    if(!TextUtils.isEmpty(cMobile)) {
+                        if(cMobile.equals(mobile)||cMobile.equals(secondMobile)) {
+                            ShowMessage.showToast(this,"已存在相同手机号的客户");
+                            return;
+                        }
                     }
                 }
 

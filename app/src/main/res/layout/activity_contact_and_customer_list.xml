@@ -71,34 +71,43 @@
         </FrameLayout>
 
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#D3CFCA"
+        />
     <LinearLayout
         android:visibility="gone"
         android:id="@+id/ll_import_layout"
         android:background="@color/gray_bg"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingLeft="10dp"
+        android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <CheckBox
+            android:button="@drawable/cb_contact_selector"
             android:id="@+id/cb_select_all"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
-            android:layout_marginRight="10dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_marginRight="43dp"
             android:text="全选"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/tv_import"
             android:padding="10dp"
-            android:background="@color/gray"
+            android:background="@drawable/right_bg_button"
             android:gravity="center"
-            android:text="导入"
+            android:text="添加"
+            android:textColor="@color/white"
             android:textSize="18sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

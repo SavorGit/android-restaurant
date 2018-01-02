@@ -3,7 +3,10 @@ package com.savor.resturant.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +18,18 @@ import com.savor.resturant.activity.AddCustomerActivity;
 import com.savor.resturant.activity.ContactCustomerListActivity;
 import com.savor.resturant.activity.SearchActivity;
 import com.savor.resturant.activity.SpendHistoryAddActivity;
+import com.savor.resturant.adapter.CustomerOpHistoryAdapter;
+import com.savor.resturant.bean.CustomerHistory;
+import com.savor.resturant.bean.CustomerHistoryBean;
+import com.savor.resturant.core.AppApi;
+
+import java.util.List;
 
 /**
  * 客户管理
  * @author hezd 2019/09/19
  */
-public class CustomerFragment extends Fragment implements View.OnClickListener {
+public class CustomerFragment extends BaseFragment implements View.OnClickListener {
 
 
     private TextView mTitleTv;
@@ -28,6 +37,9 @@ public class CustomerFragment extends Fragment implements View.OnClickListener {
     private TextView mSearchTv;
     private TextView mAddCustomerTv;
     private TextView mAddHistoryTv;
+    private RecyclerView mHistoryRlv;
+    private CustomerOpHistoryAdapter mHistoryAdapter;
+    private TextView mHistoryHintTv;
 
     public CustomerFragment() {
         // Required empty public constructor
@@ -59,18 +71,42 @@ public class CustomerFragment extends Fragment implements View.OnClickListener {
         return parentLayout;
     }
 
-    private void setListeners() {
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getCustomerHistory();
+    }
+
+    @Override
+    public String getFragmentName() {
+        return this.getClass().getSimpleName();
+    }
+
+    private void getCustomerHistory() {
+        String invite_id = mSession.getHotelBean().getInvite_id();
+        String tel = mSession.getHotelBean().getTel();
+        AppApi.getCustomerHistory(getActivity(),"",invite_id,tel,this);
+    }
+
+    public void setListeners() {
         mAddCustomerTv.setOnClickListener(this);
         mAddHistoryTv.setOnClickListener(this);
         mSearchTv.setOnClickListener(this);
         mRightIv.setOnClickListener(this);
     }
 
-    private void setViews() {
+    public void setViews() {
         mTitleTv.setText("客户管理");
         mTitleTv.setTextColor(getResources().getColor(R.color.white));
         mRightIv.setVisibility(View.VISIBLE);
         mRightIv.setImageResource(R.drawable.ico_cutomer_list);
+
+        int orientation = LinearLayoutManager.VERTICAL;
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), orientation, false);
+        mHistoryRlv.setLayoutManager(layoutManager);
+
+        mHistoryAdapter = new CustomerOpHistoryAdapter(getContext());
+        mHistoryRlv.setAdapter(mHistoryAdapter);
     }
 
     private void initViews(View parentLayout) {
@@ -80,6 +116,19 @@ public class CustomerFragment extends Fragment implements View.OnClickListener {
         mSearchTv = (TextView) parentLayout.findViewById(R.id.tv_search);
         mAddCustomerTv = (TextView) parentLayout.findViewById(R.id.tv_add_customer);
         mAddHistoryTv = (TextView) parentLayout.findViewById(R.id.tv_add_history);
+
+        mHistoryRlv = (RecyclerView) parentLayout.findViewById(R.id.rlv_op_list);
+        mHistoryHintTv = (TextView) parentLayout.findViewById(R.id.tv_history_empty);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(hidden) {
+
+        }else {
+
+        }
     }
 
     @Override
@@ -105,5 +154,34 @@ public class CustomerFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
         }
+    }
+
+    @Override
+    public void onSuccess(AppApi.Action method, Object obj) {
+        super.onSuccess(method, obj);
+        switch (method) {
+            case POST_CUS_HISTORY_JSON:
+                if(obj instanceof CustomerHistory) {
+                    CustomerHistory customerHistory = (CustomerHistory) obj;
+                    List<CustomerHistoryBean> list = customerHistory.getList();
+                    if(list!=null&&list.size()>0) {
+                        mHistoryAdapter.setData(list);
+                        showHistoryLayout();
+                    }else {
+                        hideHistoryLayout();
+                    }
+                }
+                break;
+        }
+    }
+
+    private void showHistoryLayout() {
+        mHistoryRlv.setVisibility(View.VISIBLE);
+        mHistoryHintTv.setVisibility(View.GONE);
+    }
+
+    public void hideHistoryLayout() {
+        mHistoryRlv.setVisibility(View.GONE);
+        mHistoryHintTv.setVisibility(View.VISIBLE);
     }
 }

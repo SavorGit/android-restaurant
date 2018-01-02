@@ -54,12 +54,27 @@
             android:text="最近操作"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-        <android.support.v7.widget.RecyclerView
-            android:background="#F6F3EE"
-            android:id="@+id/rlv_op_list"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_gravity="center"
-            android:layout_marginRight="15dp" />
+        <RelativeLayout
+            android:background="#f6f2ed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:visibility="gone"
+                android:background="#F6F3EE"
+                android:id="@+id/rlv_op_list"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginRight="15dp" />
+            <TextView
+                android:id="@+id/tv_history_empty"
+                android:textColor="#434343"
+                android:textSize="15sp"
+                android:layout_centerInParent="true"
+                android:text="这里展示近期操作的客户列表\n方便您快速查找与维护客户信息"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
     </LinearLayout>
 </LinearLayout>
