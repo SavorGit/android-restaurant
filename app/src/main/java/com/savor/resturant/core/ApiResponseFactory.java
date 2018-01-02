@@ -126,10 +126,11 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.POST_IMPORT_INFO_NEW_JSON
                     || action == AppApi.Action.POST_CON_ABILITY_JSON
                     || action == AppApi.Action.POST_ADD_CUS_JSON
-                    || action == AppApi.Action.POST_CUSTOMER_LABELS_JSON
+                    || action == AppApi.Action.POST_LABEL_List_JSON
                     || action == AppApi.Action.POST_CUSTOMER_INFO_JSON
                     || action == AppApi.Action.POST_ADD_LABEL_JSON
                     || action == AppApi.Action.POST_ADD_SIGNLE_CONSUME_RECORD_JSON
+                    || action == AppApi.Action.POST_CUSTOMER_LABELS_JSON
                     ){
                 int code = rSet.getInt("code");
                 if(rSet.has("result")) {
@@ -321,12 +322,16 @@ public class ApiResponseFactory {
                 result = gson.fromJson(info, new TypeToken<RecTopList>() {
                 }.getType());
                 break;
-            case POST_CUSTOMER_LABELS_JSON:
+            case POST_LABEL_List_JSON:
                 result = gson.fromJson(info, new TypeToken<CustomerLabelList>() {
                 }.getType());
                 break;
             case POST_ADD_LABEL_JSON:
                 result = gson.fromJson(info, new TypeToken<LabelAddRessponse>() {
+                }.getType());
+                break;
+            case POST_CUSTOMER_LABELS_JSON:
+                result = gson.fromJson(info, new TypeToken<CustomerLabelList>() {
                 }.getType());
                 break;
             default:
