@@ -252,7 +252,14 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
                         formatAndSaveCustomers(hotelBean);
 
                         // 启动跳转到首页
-                        Intent homeIntent = new Intent(LoginForCodeActivity.this, SavorMainActivity.class);
+                        String is_open_customer = mSession.getHotelBean().getIs_open_customer();
+                        Intent homeIntent;
+                        if("1".equals(is_open_customer)) {
+                            homeIntent = new Intent(LoginForCodeActivity.this, SavorMainActivity.class);
+                        }else {
+                            homeIntent = new Intent(LoginForCodeActivity.this, MainActivity.class);
+                        }
+
                         Intent intent = getIntent();
                         if(intent!=null&&("application/pdf").equals(intent.getType())) {
                             Uri data = getIntent().getData();
