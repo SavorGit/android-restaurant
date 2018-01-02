@@ -2,16 +2,197 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F3EE"
+    android:background=" #ece6de"
+
     tools:context="com.savor.resturant.fragment.BookFragment">
     <include
         android:id="@+id/top"
         layout="@layout/layout_head_title"
         />
+    <RelativeLayout
+        android:id="@+id/time_la"
+        android:layout_width="match_parent"
+        android:layout_below="@id/top"
+        android:background="#F6F3EE"
+        android:layout_height="75dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <RelativeLayout
+                android:id="@+id/time1"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/yesterday"
+                    android:textSize="16sp"
+                    android:text="昨天(16)"
+                    android:gravity="center"
+                    android:textColor="@color/color_text_black"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/yesterday_month"
+                    android:textSize="14sp"
+                    android:text="12/19"
+                    android:gravity="center"
+                    android:textColor="@color/color_label"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/yesterday"
+                    android:layout_marginTop="6dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:id="@+id/yesterday_ia"
+                    android:visibility="invisible"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/app_red_color"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    android:layout_width="0.5dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@color/color_e1dbd4"/>
+
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/time2"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/day2"
+                    android:textSize="16sp"
+                    android:text="今天(16)"
+                    android:gravity="center"
+                    android:textColor="@color/app_red_color"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/month2"
+                    android:textSize="14sp"
+                    android:text="12/19"
+                    android:gravity="center"
+                    android:textColor="@color/app_red_color"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/day2"
+                    android:layout_marginTop="6dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:id="@+id/ia_2"
+                    android:visibility="visible"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/app_red_color"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    android:layout_width="0.5dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@color/color_e1dbd4"/>
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/tomorrow_la"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/tomorrow"
+                    android:textSize="16sp"
+                    android:text="明天(16)"
+                    android:gravity="center"
+                    android:textColor="@color/color_text_black"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tomorrow_month"
+                    android:textSize="14sp"
+                    android:text="12/19"
+                    android:gravity="center"
+                    android:textColor="@color/color_label"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/tomorrow"
+                    android:layout_marginTop="6dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:id="@+id/tomorrow_ia"
+                    android:visibility="invisible"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/app_red_color"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    android:layout_width="0.5dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@color/color_e1dbd4"/>
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/after_tomorrow_la"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/after_tomorrow"
+                    android:textSize="16sp"
+                    android:text="后天(16)"
+                    android:gravity="center"
+                    android:textColor="@color/color_text_black"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/after_tomorrow_month"
+                    android:textSize="14sp"
+                    android:text="12/19"
+                    android:gravity="center"
+                    android:textColor="@color/color_label"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/after_tomorrow"
+                    android:layout_marginTop="6dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:id="@+id/ia_4"
+                    android:visibility="invisible"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/app_red_color"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
     <com.common.api.widget.pulltorefresh.library.PullToRefreshListView
         xmlns:ptr="http://schemas.android.com/apk/res-auto"
         ptr:ptrOrientationMode = "vertical"
-        android:layout_below="@id/top"
+        android:layout_below="@id/time_la"
         android:id="@+id/listview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -19,6 +200,7 @@
         android:divider="#e0dad2"
         android:dividerHeight="1dp"
         android:fadingEdge="none"
+        android:layout_marginTop="2dp"
         android:fastScrollEnabled="false"
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
