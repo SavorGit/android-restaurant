@@ -21,15 +21,15 @@
             android:layout_marginBottom="14dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/corner_remote_view"
+            android:background="@drawable/corner_remote_b3"
             android:gravity="center"
             android:paddingBottom="4dp"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:paddingTop="4dp"
-            android:text="维"
+            android:text="包间名称"
             android:textColor="@color/white"
-            android:textSize="17dp" />
+            android:textSize="15dp" />
 
         <TextView
             android:id="@+id/time"
@@ -96,6 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
+                android:visibility="gone"
                 android:src="@drawable/dx_xzh"
 
                 />
@@ -133,7 +134,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:src="@drawable/dx_xzh"
-
+                android:visibility="gone"
                 />
 
         </RelativeLayout>
@@ -168,7 +169,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:src="@drawable/dx_xzh"
-
+                android:visibility="gone"
                 />
 
         </RelativeLayout>
