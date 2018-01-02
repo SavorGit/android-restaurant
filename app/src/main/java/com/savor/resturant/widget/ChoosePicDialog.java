@@ -30,7 +30,7 @@ public class ChoosePicDialog extends Dialog implements View.OnClickListener {
     }
 
     public ChoosePicDialog(Context context, OnTakePhotoBtnClickListener onTakePhotoBtnClickListener, OnAlbumBtnClickListener onAlbumBtnClickListener) {
-        super(context, R.style.loading_dialog);
+        super(context, R.style.choose_pic_dialog);
         this.onTakePhotoBtnClickListener = onTakePhotoBtnClickListener;
         this.onAlbumBtnClickListener = onAlbumBtnClickListener;
     }

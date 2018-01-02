@@ -34,7 +34,8 @@ public class ImportDialog extends Dialog implements View.OnClickListener {
     private OnImportBtnClickListener listener;
 
     public ImportDialog(@NonNull Context context,OnImportBtnClickListener listener) {
-        super(context);
+        super(context,R.style.loading_dialog);
+
         this.mContext = context;
         this.listener = listener;
     }
