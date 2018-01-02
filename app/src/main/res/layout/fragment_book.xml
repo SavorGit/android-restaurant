@@ -20,7 +20,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
             <RelativeLayout
-                android:id="@+id/time1"
+                android:id="@+id/yesterday_la"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
@@ -64,12 +64,12 @@
 
             </RelativeLayout>
             <RelativeLayout
-                android:id="@+id/time2"
+                android:id="@+id/today_la"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <TextView
-                    android:id="@+id/day2"
+                    android:id="@+id/today"
                     android:textSize="16sp"
                     android:text="今天(16)"
                     android:gravity="center"
@@ -80,13 +80,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
-                    android:id="@+id/month2"
+                    android:id="@+id/today_month"
                     android:textSize="14sp"
                     android:text="12/19"
                     android:gravity="center"
                     android:textColor="@color/app_red_color"
                     android:layout_centerHorizontal="true"
-                    android:layout_below="@id/day2"
+                    android:layout_below="@id/today"
                     android:layout_marginTop="6dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
