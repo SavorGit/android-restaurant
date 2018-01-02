@@ -124,10 +124,8 @@ public class CustomerFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if(hidden) {
-
-        }else {
-
+        if(!hidden) {
+            getCustomerHistory();
         }
     }
 

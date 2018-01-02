@@ -2,12 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="30dp"
-    android:layout_marginRight="30dp"
     android:orientation="vertical">
 
     <TextView
-        android:textColor="@color/color_text_black"
+        android:background="@color/white"
+        android:gravity="center"
+        android:textColor="@color/colorPrimaryDark"
         android:id="@+id/tv_take_photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,17 +19,33 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/grid_item_divider" />
+        android:background="#DDDDDD" />
 
     <TextView
+        android:background="@color/white"
+        android:gravity="center"
         android:id="@+id/tv_album"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:padding="10dp"
-        android:text="从相册选择"
-        android:textColor="@color/color_text_black"
-        android:textSize="17sp" />
-
-
+        android:text="从手机相册选择"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp" />
+    <View
+        android:id="@+id/divider_view"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:background="@color/transparent" />
+    <TextView
+        android:background="@color/white"
+        android:gravity="center"
+        android:id="@+id/tv_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:padding="10dp"
+        android:text="取消"
+        android:textColor="@color/color_222222"
+        android:textSize="16sp" />
 </LinearLayout>
