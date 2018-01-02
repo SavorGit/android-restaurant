@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -16,31 +15,36 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.sdk.android.oss.ClientException;
+import com.alibaba.sdk.android.oss.OSSClient;
+import com.alibaba.sdk.android.oss.ServiceException;
+import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
+import com.alibaba.sdk.android.oss.model.PutObjectRequest;
+import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.bumptech.glide.Glide;
 import com.common.api.utils.AppUtils;
-import com.common.api.utils.DensityUtil;
 import com.common.api.utils.FileUtils;
 import com.common.api.utils.ShowMessage;
+import com.google.gson.Gson;
 import com.savor.resturant.R;
 import com.savor.resturant.SavorApplication;
-import com.savor.resturant.adapter.FlowAdapter;
+import com.savor.resturant.bean.AddSpendTicketNoBookInfo;
 import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.Customer;
 import com.savor.resturant.bean.CustomerBean;
 import com.savor.resturant.bean.CustomerLabel;
-import com.savor.resturant.bean.CustomerLabelList;
 import com.savor.resturant.core.AppApi;
-import com.savor.resturant.utils.GlideCircleTransform;
+import com.savor.resturant.utils.ChineseComparator;
+import com.savor.resturant.utils.ConstantValues;
+import com.savor.resturant.utils.OSSClientUtil;
 import com.savor.resturant.widget.ChoosePicDialog;
-import com.savor.resturant.widget.flowlayout.FlowLayoutManager;
-import com.savor.resturant.widget.flowlayout.SpaceItemDecoration;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static com.savor.resturant.activity.AddCustomerActivity.REQUEST_CODE_IMAGE;
@@ -75,6 +79,10 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
     private String currentImagePath;
     private ImageView mSpendHistoryIv;
     private TextView mTicketTv;
+    private TextView mSaveTv;
+    private String ticketOssUrl;
+    private ContactFormat existContact;
+    private ChineseComparator pinyinComparator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +96,9 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void getViews() {
+        pinyinComparator = new ChineseComparator();
+
+        mSaveTv = (TextView) findViewById(R.id.tv_save);
         mTicketTv = (TextView) findViewById(R.id.tv_add_ticket);
         mSpendHistoryIv = (ImageView) findViewById(R.id.iv_spend_history);
         mSelectCusLayout = (LinearLayout) findViewById(R.id.ll_customer_select);
@@ -104,6 +115,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void setViews() {
+        mSaveTv.setOnClickListener(this);
         mTicketTv.setOnClickListener(this);
         mTitleTv.setTextColor(getResources().getColor(R.color.white));
         mTitleTv.setText("添加消费记录");
@@ -197,10 +209,10 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
                     boolean matches = content.matches(regex);
                     if(matches) {
                         // 1.从客户列表查找是否存在这个用户如果存在，判断customerid是否为空
-                        ContactFormat existContact = getMobileInCustomerList(content);
+                        existContact = getMobileInCustomerList(content);
                         String invite_id = mSession.getHotelBean().getInvite_id();
                         customer_id = "";
-                        if(existContact!=null) {// 已存在
+                        if(existContact !=null) {// 已存在
                             String customerId = existContact.getCustomer_id();
                             String name = existContact.getName();
                             mNameEt.setText(name);
@@ -275,6 +287,9 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
     public void onClick(View v) {
         Intent intent;
         switch (v.getId()) {
+            case R.id.tv_save:
+                submit();
+                break;
             case R.id.tv_add_ticket:
                 showPhotoDialog();
                 break;
@@ -299,11 +314,148 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
         }
     }
 
+    private void submit() {
+        final String name = mNameEt.getText().toString();
+        final String usermobile = mMobileEt.getText().toString();
+
+        if(TextUtils.isEmpty(name)) {
+            ShowMessage.showToast(this,"请输入客户姓名");
+            return;
+        }
+
+        if(TextUtils.isEmpty(usermobile)) {
+            ShowMessage.showToast(this,"请输入客户手机号");
+            return;
+        }
+
+        File file = new File(currentImagePath);
+        String hotel_id = mSession.getHotelBean().getHotel_id();
+        final String objectKey = "log/resource/restaurant/mobile/userlogo/"+hotel_id+"/"+file.getName();
+        final OSSClient ossClient = OSSClientUtil.getOSSClient(this);
+        // 构造上传请求
+        PutObjectRequest put = new PutObjectRequest(ConstantValues.BUCKET_NAME,objectKey , currentImagePath);
+        ossClient.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+
+            @Override
+            public void onSuccess(PutObjectRequest putObjectRequest, PutObjectResult putObjectResult) {
+                ticketOssUrl = ossClient.presignPublicObjectURL(ConstantValues.BUCKET_NAME, objectKey);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String invite_id = mSession.getHotelBean().getInvite_id();
+                        String mobile = mSession.getHotelBean().getTel();
+                        String recipt = "";
+                        List<String> urlList = new ArrayList<>();
+                        urlList.add(ticketOssUrl);
+
+                        recipt = new Gson().toJson(urlList);
+
+                        if(TextUtils.isEmpty(customer_id)) {
+                            // 如果客户id为空需要传客户信息bill_info，birthday，birthplace，consume_ability
+                            String bill_info = "";
+                            String birthday = "";
+                            String birthplace = "";
+                            String consume_ability = "";
+                            String face_url = "";
+                            String lable_id_str = "";
+                            String remark = "";
+                            String sex = "";
+                            if(existContact!=null) {
+                                bill_info = existContact.getBill_info();
+                                birthday = existContact.getBirthday();
+                                birthplace = existContact.getBirthplace();
+                                consume_ability = existContact.getConsume_ability();
+                                face_url = existContact.getFace_url();
+                                sex = String.valueOf(existContact.getSex());
+                            }else {
+                                List<ContactFormat> customerList = mSession.getCustomerList();
+                                if(customerList == null) {
+                                    customerList = new ArrayList<>();
+                                }
+                                ContactFormat contactFormat = new ContactFormat();
+                                contactFormat.setMobile(usermobile);
+                                contactFormat.setName(name);
+                                customerList.add(contactFormat);
+                                Collections.sort(customerList,pinyinComparator);
+                                mSession.setCustomerList(customerList);
+                            }
+
+                            List<String> labeIds = new ArrayList<>();
+                            if(labelList.size()>0) {
+                                for(int i = 0;i<labelList.size();i++) {
+                                    CustomerLabel label = labelList.get(i);
+                                    String label_id = label.getLabel_id();
+                                    labeIds.add(label_id);
+                                }
+                                lable_id_str = new Gson().toJson(labeIds);
+                            }
+
+
+                            AppApi.addSignleConsumeRecord(SpendHistoryAddActivity.this,
+                                    bill_info,birthday,birthplace,consume_ability,"",
+                                    face_url,invite_id,lable_id_str,mobile,name, recipt,usermobile,
+                                    "",sex,SpendHistoryAddActivity.this);
+                        }else {
+                            String lable_id_str = "";
+                            List<String> labeIds = new ArrayList<>();
+                            if(labelList.size()>0) {
+                                for(int i = 0;i<labelList.size();i++) {
+                                    CustomerLabel label = labelList.get(i);
+                                    String label_id = label.getLabel_id();
+                                    labeIds.add(label_id);
+                                }
+                                lable_id_str = new Gson().toJson(labeIds);
+                            }
+                            // 如果客户id不为空 不需要传客户信息
+                            AppApi.addSignleConsumeRecord(SpendHistoryAddActivity.this,
+                                    "","","","",customer_id,
+                                    "",invite_id,lable_id_str,mobile,name, recipt,usermobile,
+                                    "","",SpendHistoryAddActivity.this);
+                        }
+                    }
+                });
+
+            }
+
+            @Override
+            public void onFailure(PutObjectRequest putObjectRequest, ClientException e, ServiceException e1) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ShowMessage.showToast(SpendHistoryAddActivity.this,"小票上传失败");
+                    }
+                });
+            }
+        });
+
+
+    }
+
     @Override
     public void onSuccess(AppApi.Action method, Object obj) {
         super.onSuccess(method, obj);
         AppUtils.hideSoftKeybord(this);
         switch (method) {
+            case POST_ADD_SIGNLE_CONSUME_RECORD_JSON:
+                if(obj instanceof AddSpendTicketNoBookInfo) {
+                    AddSpendTicketNoBookInfo spendTicketNoBookInfo = (AddSpendTicketNoBookInfo) obj;
+                    AddSpendTicketNoBookInfo.ListBean list = spendTicketNoBookInfo.getList();
+                    if(list!=null) {
+                        String customer_id = list.getCustomer_id();
+                        String mobile = mMobileEt.getText().toString();
+                        ContactFormat mobileInCustomerList = getMobileInCustomerList(mobile);
+                        if(!TextUtils.isEmpty(customer_id)&&existContact == null) {
+                            mobileInCustomerList.setCustomer_id(customer_id);
+                            List<ContactFormat> customerList = mSession.getCustomerList();
+                            mSession.setCustomerList(customerList);
+                        }
+                    }
+
+                    ShowMessage.showToast(this,"添加成功");
+                    finish();
+                }
+                break;
             case POST_CUSTOMER_INFO_JSON:
                 if(obj instanceof CustomerBean) {
                     CustomerBean customerBean = (CustomerBean) obj;

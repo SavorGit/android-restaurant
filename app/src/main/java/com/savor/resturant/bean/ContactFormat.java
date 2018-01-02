@@ -25,11 +25,11 @@ public  class ContactFormat implements Serializable {
     private String mobile = "";
     private String mobile1 = "";
     private int sex;
-    private String birthday;
-    private String birthplace;
+    private String birthday = "";
+    private String birthplace = "";
     private String usermobile;
-    private String consume_ability;
-    private String bill_info;
+    private String consume_ability = "";
+    private String bill_info = "";
     /**是否被选中*/
     private boolean isSelected;
     /**是否已添加*/

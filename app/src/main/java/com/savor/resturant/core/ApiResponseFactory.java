@@ -24,6 +24,7 @@ import com.common.api.utils.LogUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.savor.resturant.bean.AddSpendTicketNoBookInfo;
 import com.savor.resturant.bean.BaseProResponse;
 import com.savor.resturant.bean.ConAbilityList;
 import com.savor.resturant.bean.CustomerBean;
@@ -128,6 +129,7 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.POST_CUSTOMER_LABELS_JSON
                     || action == AppApi.Action.POST_CUSTOMER_INFO_JSON
                     || action == AppApi.Action.POST_ADD_LABEL_JSON
+                    || action == AppApi.Action.POST_ADD_SIGNLE_CONSUME_RECORD_JSON
                     ){
                 int code = rSet.getInt("code");
                 if(rSet.has("result")) {
@@ -312,7 +314,8 @@ public class ApiResponseFactory {
                 result = "success";
                 break;
             case POST_ADD_SIGNLE_CONSUME_RECORD_JSON:
-                result = "success";
+                result = gson.fromJson(info, new TypeToken<AddSpendTicketNoBookInfo>() {
+                }.getType());
                 break;
             case POST_TOP_LIST_JSON:
                 result = gson.fromJson(info, new TypeToken<RecTopList>() {
