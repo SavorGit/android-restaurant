@@ -12,18 +12,28 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.TimePickerView;
+import com.common.api.utils.LogUtils;
+import com.common.api.widget.pulltorefresh.library.PullToRefreshBase;
 import com.common.api.widget.pulltorefresh.library.PullToRefreshListView;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.BookAdapter;
+import com.savor.resturant.bean.ConAbilityList;
+import com.savor.resturant.bean.HotelBean;
+import com.savor.resturant.bean.OrderListBean;
+import com.savor.resturant.core.ApiRequestListener;
+import com.savor.resturant.core.AppApi;
+import com.savor.resturant.core.ResponseErrorMessage;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  *@author hezd 2017
  */
-public class BookFragment extends BaseFragment implements View.OnClickListener{
+public class BookFragment extends BaseFragment implements View.OnClickListener,ApiRequestListener {
 
     private TextView tv_center;
     private ImageView iv_right;
@@ -51,7 +61,15 @@ public class BookFragment extends BaseFragment implements View.OnClickListener{
     private TextView after_tomorrow;
     private TextView after_tomorrow_month;
     private ImageView ia_4;
+    private int page_num = 1;
 
+    private String yesterdayStr = "";
+    private String todayStr = "";
+    private String tomorrowStr = "";
+    private String after_tomorrowStr = "";
+    private String currentDate = "";
+    private boolean isUp = false;
+    private List<OrderListBean> listItems = new ArrayList<>();
     public BookFragment() {
         // Required empty public constructor
     }
@@ -76,6 +94,7 @@ public class BookFragment extends BaseFragment implements View.OnClickListener{
         initViews(mParentLayout);
         setViews();
         setListeners();
+        getOrderList();
         return mParentLayout;
     }
 
@@ -165,6 +184,10 @@ public class BookFragment extends BaseFragment implements View.OnClickListener{
         return format.format(date);
     }
 
+    private String getDataTime(Date date) {//可根据需要自行截取数据显示
+        SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd");
+        return format.format(date);
+    }
     private void setTime(){
 
         Date curDate = new Date(System.currentTimeMillis());//获取当前时间
@@ -173,6 +196,12 @@ public class BookFragment extends BaseFragment implements View.OnClickListener{
         yesterday_month.setText(getTime(datePlus(curDate,-1)));
         tomorrow_month.setText(getTime(datePlus(curDate,1)));
         after_tomorrow_month.setText(getTime(datePlus(curDate,2)));
+
+        yesterdayStr = getDataTime(datePlus(curDate,-1));
+        todayStr = getDataTime(curDate);
+        tomorrowStr = getDataTime(datePlus(curDate,1));
+        after_tomorrowStr = getDataTime(datePlus(curDate,2));
+        currentDate = todayStr;
     }
 
     public static Date datePlus(Date base, int days) {
@@ -180,5 +209,85 @@ public class BookFragment extends BaseFragment implements View.OnClickListener{
         cal.setTime(base);
         cal.add(Calendar.DATE, days);
         return cal.getTime();
+    }
+
+    private void setListTime(Date date){
+        String day = getTime(date);
+
+    }
+    @Override
+    public void onSuccess(AppApi.Action method, Object obj) {
+        super.onSuccess(method, obj);
+        switch (method) {
+            case POST_ORDER_LIST_JSON:
+                listview.onRefreshComplete();
+                if (obj instanceof List<?>){
+                    List<OrderListBean> mlist = (List<OrderListBean>) obj;
+                    handleData(mlist);
+
+                }
+
+                break;
+
+        }
+    }
+
+    @Override
+    public void onError(AppApi.Action method, Object obj) {
+        switch (method) {
+            case POST_ORDER_LIST_JSON:
+
+                break;
+        }
+    }
+
+    private void handleData(List<OrderListBean> mList){
+
+        if (mList != null && mList.size() > 0) {
+            page_num++;
+            listview.setVisibility(View.VISIBLE);
+            if (isUp) {
+                listItems.clear();
+                bookAdapter.clear();
+                listview.onLoadComplete(true,false);
+
+            }else {
+                listview.onLoadComplete(true,false);
+            }
+
+            listItems.addAll(mList);
+            bookAdapter.setData(listItems);
+
+            if (mList!=null && mList.size()<15) {
+                listview.onLoadComplete(false,true);
+            }else {
+                listview.onLoadComplete(true,false);
+            }
+        }else {
+
+            listview.onLoadComplete(false,true);
+        }
+
+    }
+
+    PullToRefreshBase.OnRefreshListener onRefreshListener = new PullToRefreshBase.OnRefreshListener() {
+        @Override
+        public void onRefresh(PullToRefreshBase refreshView) {
+            page_num = 1;
+            isUp = true;
+            getOrderList();
+        }
+    };
+
+    PullToRefreshBase.OnLastItemVisibleListener onLastItemVisibleListener = new PullToRefreshBase.OnLastItemVisibleListener() {
+        @Override
+        public void onLastItemVisible() {
+            isUp = false;
+            getOrderList();
+        }
+    };
+    private void getOrderList(){
+        HotelBean hotelBean = mSession.getHotelBean();
+        AppApi.getOrderList(mContext,hotelBean.getInvite_id(),hotelBean.getTel(),currentDate,page_num+"",this);
     }
 }
