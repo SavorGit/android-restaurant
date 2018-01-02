@@ -844,20 +844,35 @@ public class AppApi {
     }
     /**添加无预定信息消费记录*/
     public static void addSignleConsumeRecord(Context context,
+                                        String bill_info,
+                                        String birthday,
+                                        String birthplace,
+                                        String consume_ability,
                                         String customer_id,
+                                        String face_url,
                                         String invite_id,
-                                        String name,
+                                        String lable_id_str,
                                         String mobile,
+                                        String name,
                                         String recipt,
                                         String usermobile,
+                                        String remark,
+                                        String sex,
                                         ApiRequestListener handler) {
         final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("bill_info", bill_info);
+        params.put("birthday", birthday);
+        params.put("consume_ability", consume_ability);
         params.put("customer_id", customer_id);
+        params.put("face_url", face_url);
         params.put("invite_id", invite_id);
-        params.put("name", name);
+        params.put("lable_id_str", lable_id_str);
         params.put("mobile", mobile);
+        params.put("name", name);
         params.put("recipt", recipt);
         params.put("usermobile", usermobile);
+        params.put("remark", remark);
+        params.put("sex", sex);
         new AppServiceOk(context,Action.POST_ADD_SIGNLE_CONSUME_RECORD_JSON,handler,params).post();
 
     }

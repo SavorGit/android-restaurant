@@ -293,7 +293,14 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
                             name = name.trim().replaceAll(" ","");
                             if(!isNumeric(name)&&!isLetter(name)) {
                                 for(int i = 0;i<name.length();i++) {
-                                    String str= removeDigital(String.valueOf(PinyinHelper.toHanyuPinyinStringArray(name.charAt(i))[0]));
+                                    String[] pinyin = PinyinHelper.toHanyuPinyinStringArray(name.charAt(i));
+                                    String str = "";
+                                    if(pinyin == null||pinyin.length == 0) {
+                                        str = String.valueOf(name.charAt(i));
+                                    }else {
+                                        str= removeDigital(String.valueOf(pinyin[0]));
+                                    }
+
                                     sb.append(str);
                                 }
                             }else {
