@@ -33,6 +33,7 @@ import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.Customer;
 import com.savor.resturant.bean.CustomerBean;
 import com.savor.resturant.bean.CustomerLabel;
+import com.savor.resturant.bean.CustomerLabelList;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.utils.ChineseComparator;
 import com.savor.resturant.utils.ConstantValues;
@@ -222,7 +223,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
                             mNameEt.setText(name);
                             if(!TextUtils.isEmpty(customerId)) {
                                 customer_id = customerId;
-                                AppApi.getCustomerBaseInfo(SpendHistoryAddActivity.this, customer_id,invite_id,mSession.getHotelBean().getTel(),SpendHistoryAddActivity.this);
+                                AppApi.getCustomerLabelList(SpendHistoryAddActivity.this, customer_id,invite_id,mSession.getHotelBean().getTel(),SpendHistoryAddActivity.this);
                             }
                         }
 
@@ -480,20 +481,17 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
                     finish();
                 }
                 break;
-            case POST_CUSTOMER_INFO_JSON:
-                if(obj instanceof CustomerBean) {
-                    CustomerBean customerBean = (CustomerBean) obj;
+            case POST_CUSTOMER_LABELS_JSON:
+                if(obj instanceof CustomerLabelList) {
+                    CustomerLabelList customerBean = (CustomerLabelList) obj;
 
                     if(customerBean!=null) {
-                        Customer list = customerBean.getList();
-                        if(list!=null) {
-                            List<CustomerLabel> label = list.getLabel();
-                            if(label!=null&&label.size()>0) {
+                        List<CustomerLabel> list = customerBean.getList();
+                            if(list!=null&&list.size()>0) {
                                 labelList.clear();
-                                labelList.addAll(label);
+                                labelList.addAll(list);
                                 mTagAdapter.notifyDataChanged();
                                 showLabel();
-                            }
                         }
 
                     }

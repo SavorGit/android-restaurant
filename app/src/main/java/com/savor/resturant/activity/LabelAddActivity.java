@@ -1,7 +1,6 @@
 package com.savor.resturant.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -14,7 +13,6 @@ import com.common.api.utils.AppUtils;
 import com.common.api.utils.DensityUtil;
 import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
-import com.savor.resturant.adapter.FlowAdapter;
 import com.savor.resturant.adapter.LabelAdapter;
 import com.savor.resturant.bean.CustomerLabel;
 import com.savor.resturant.bean.CustomerLabelList;
@@ -59,7 +57,7 @@ public class LabelAddActivity extends BaseActivity implements View.OnClickListen
         invite_id = mSession.getHotelBean().getInvite_id();
         tel = mSession.getHotelBean().getTel();
         customerId = getIntent().getStringExtra("customer_id");
-        AppApi.getCustomerLabelList(this, customerId, invite_id, tel,this);
+        AppApi.getLabelList(this, customerId, invite_id, tel,this);
     }
 
     @Override
@@ -145,7 +143,7 @@ public class LabelAddActivity extends BaseActivity implements View.OnClickListen
                 }
 
                 break;
-            case POST_CUSTOMER_LABELS_JSON:
+            case POST_LABEL_List_JSON:
                 if(obj instanceof CustomerLabelList) {
                     CustomerLabelList customerLabelList = (CustomerLabelList) obj;
                     list = customerLabelList.getList();
