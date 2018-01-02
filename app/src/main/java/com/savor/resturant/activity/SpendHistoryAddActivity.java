@@ -1,7 +1,11 @@
 package com.savor.resturant.activity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -12,10 +16,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.common.api.utils.AppUtils;
 import com.common.api.utils.DensityUtil;
+import com.common.api.utils.FileUtils;
 import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
+import com.savor.resturant.SavorApplication;
 import com.savor.resturant.adapter.FlowAdapter;
 import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.Customer;
@@ -23,16 +30,21 @@ import com.savor.resturant.bean.CustomerBean;
 import com.savor.resturant.bean.CustomerLabel;
 import com.savor.resturant.bean.CustomerLabelList;
 import com.savor.resturant.core.AppApi;
+import com.savor.resturant.utils.GlideCircleTransform;
+import com.savor.resturant.widget.ChoosePicDialog;
 import com.savor.resturant.widget.flowlayout.FlowLayoutManager;
 import com.savor.resturant.widget.flowlayout.SpaceItemDecoration;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.savor.resturant.activity.AddCustomerActivity.REQUEST_CODE_IMAGE;
+import static com.savor.resturant.activity.AddCustomerActivity.TAKE_PHOTO_REQUEST;
 import static com.savor.resturant.activity.ContactCustomerListActivity.REQUEST_CODE_SELECT;
 
 public class SpendHistoryAddActivity extends BaseActivity implements View.OnClickListener {
@@ -60,6 +72,9 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
             return tv;
         }
     };
+    private String currentImagePath;
+    private ImageView mSpendHistoryIv;
+    private TextView mTicketTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +88,8 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void getViews() {
+        mTicketTv = (TextView) findViewById(R.id.tv_add_ticket);
+        mSpendHistoryIv = (ImageView) findViewById(R.id.iv_spend_history);
         mSelectCusLayout = (LinearLayout) findViewById(R.id.ll_customer_select);
         mEditLabelTv = (TextView) findViewById(R.id.tv_edit_label);
         mNameEt = (EditText) findViewById(R.id.et_name);
@@ -87,6 +104,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void setViews() {
+        mTicketTv.setOnClickListener(this);
         mTitleTv.setTextColor(getResources().getColor(R.color.white));
         mTitleTv.setText("添加消费记录");
 
@@ -223,11 +241,43 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
         mLabelHint.setVisibility(View.VISIBLE);
     }
 
+    private void showPhotoDialog() {
+        final String tel = mSession.getHotelBean().getTel();
+        new ChoosePicDialog(this, new ChoosePicDialog.OnTakePhotoBtnClickListener() {
+            @Override
+            public void onTakePhotoClick() {
+
+                String cacheDir = ((SavorApplication) getApplication()).imagePath;
+                File cachePath = new File(cacheDir);
+                if(!cachePath.exists()) {
+                    cachePath.mkdirs();
+                }
+                currentImagePath = cacheDir+ File.separator+tel+"_"+System.currentTimeMillis()+".jpg";
+                File file = new File(currentImagePath);
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Uri imageUri = Uri.fromFile(file);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
+                SpendHistoryAddActivity.this.startActivityForResult(intent, TAKE_PHOTO_REQUEST);
+            }
+        },
+                new ChoosePicDialog.OnAlbumBtnClickListener() {
+                    @Override
+                    public void onAlbumBtnClick() {
+                        Intent intent = new Intent(Intent.ACTION_PICK,
+                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        SpendHistoryAddActivity.this.startActivityForResult(intent, REQUEST_CODE_IMAGE);
+                    }
+                }
+        ).show();
+    }
 
     @Override
     public void onClick(View v) {
         Intent intent;
         switch (v.getId()) {
+            case R.id.tv_add_ticket:
+                showPhotoDialog();
+                break;
             case R.id.ll_customer_select:
                 intent = new Intent(this,ContactCustomerListActivity.class);
                 intent.putExtra("type", ContactCustomerListActivity.OperationType.CONSTACT_LIST_SELECT);
@@ -296,6 +346,35 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
                     hideLabel();
                 }
             }
+        }else if (requestCode == TAKE_PHOTO_REQUEST && resultCode == Activity.RESULT_OK) {
+            // 拍照
+            Glide.with(this).load(currentImagePath).placeholder(R.drawable.empty_slide).into(mSpendHistoryIv);
+        }else   if (requestCode == REQUEST_CODE_IMAGE&&resultCode == Activity.RESULT_OK && data != null) {
+            // 从相册选择
+            Uri selectedImage = data.getData();
+            String[] filePathColumns = {MediaStore.Images.Media.DATA};
+            Cursor c = getContentResolver().query(selectedImage, filePathColumns, null, null, null);
+            c.moveToFirst();
+            int columnIndex = c.getColumnIndex(filePathColumns[0]);
+            String imagePath = c.getString(columnIndex);
+
+            String cachePath = ((SavorApplication)mContext.getApplication()).imagePath;
+            File dir = new File(cachePath);
+            if(!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            long timeMillis = System.currentTimeMillis();
+            String tel = mSession.getHotelBean().getTel();
+            String key = tel+"_"+timeMillis+".jpg";
+            String copyPath = dir.getAbsolutePath()+File.separator+key;
+
+            File sFile = new File(imagePath);
+            FileUtils.copyFile(sFile, copyPath);
+
+            currentImagePath = copyPath;
+
+            Glide.with(this).load(currentImagePath).placeholder(R.drawable.empty_slide).into(mSpendHistoryIv);
         }
     }
 }
