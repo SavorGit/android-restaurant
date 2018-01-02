@@ -1,6 +1,7 @@
 package com.savor.resturant.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import com.common.api.utils.LogUtils;
 import com.common.api.widget.pulltorefresh.library.PullToRefreshBase;
 import com.common.api.widget.pulltorefresh.library.PullToRefreshListView;
 import com.savor.resturant.R;
+import com.savor.resturant.activity.BookListByDateActivity;
 import com.savor.resturant.adapter.BookAdapter;
 import com.savor.resturant.bean.ConAbilityList;
 import com.savor.resturant.bean.HotelBean;
@@ -177,7 +179,11 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
         TimePickerView timePickerView = new TimePickerView.Builder(mContext, new TimePickerView.OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
-
+            String time = getDataTime(date);
+            Intent intent = new Intent();
+            intent.putExtra("Date",time);
+            intent.setClass(mContext,BookListByDateActivity.class);
+            startActivity(intent);
                 //setTime(date);
 
             }

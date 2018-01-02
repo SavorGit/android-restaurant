@@ -218,6 +218,10 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity android:name=".activity.LabelAddActivity"></activity>
+        <activity
+            android:name=".activity.BookListByDateActivity"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>
