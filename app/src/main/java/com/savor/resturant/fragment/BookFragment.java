@@ -69,6 +69,9 @@ public class BookFragment extends BaseFragment implements View.OnClickListener{
     public void setViews() {
         bookAdapter = new BookAdapter(mContext);
         listview.setAdapter(bookAdapter);
+        iv_left.setVisibility(View.GONE);
+        iv_right.setVisibility(View.VISIBLE);
+        iv_right.setBackgroundResource(R.drawable.rili);
     }
 
     @Override
