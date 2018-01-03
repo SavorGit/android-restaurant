@@ -18,7 +18,7 @@
         android:layout_gravity="center_horizontal"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:text="建议同步您的通讯录，\n 生成您的客户管理私有控件"
+        android:text="建议同步您的通讯录，\n 生成您的客户管理私有云空间"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
