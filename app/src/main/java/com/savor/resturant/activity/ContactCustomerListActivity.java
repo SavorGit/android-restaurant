@@ -72,6 +72,8 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
     private ImageView mBackBtn;
     private TextView mSearchTv;
     private ImageView mRightBtn;
+    private LinearLayout mCustomerEmptyHintLayout;
+    private TextView mAddCustomerTv;
 
     public enum OperationType implements Serializable{
         /**客户列表*/
@@ -100,26 +102,40 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         operationType = (OperationType) getIntent().getSerializableExtra("type");
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        switch (operationType) {
+            case CONSTACT_LIST_SELECT:
+            case CUSTOMER_LIST:
+                if(contactFormats != null) {
+                    hideEmptyCustomerHintLayout();
+                }
+                break;
+        }
+    }
+
     public void initData() {
-//        List<ContactFormat> contactFormats = Contacts.getQuery().find();
         showLoadingLayout();
+        switch (operationType) {
+            case CONSTACT_LIST_SELECT:
+            case CUSTOMER_LIST:
+                contactFormats = mSession.getCustomerList();
+                if(contactFormats == null) {
+                    showEmptyCustomerHintLayout();
+                    return;
+                }
+                break;
+            case CONSTACT_LIST_NOTFIST:
+            case CONSTACT_LIST_FIRST:
+                Query query = Contacts.getQuery();
+                List<Contact> contacts = query.find();
+                contactFormats = getFormatContactList(contacts);
+                break;
+        }
         new Thread(){
             @Override
             public void run() {
-//                contactFormats = ContactUtil.getInstance().getAllContact(ContactCustomerListActivity.this);
-                switch (operationType) {
-                    case CONSTACT_LIST_SELECT:
-                    case CUSTOMER_LIST:
-                        contactFormats = mSession.getCustomerList();
-                        break;
-                    case CONSTACT_LIST_NOTFIST:
-                    case CONSTACT_LIST_FIRST:
-                        Query query = Contacts.getQuery();
-                        List<Contact> contacts = query.find();
-                        contactFormats = getFormatContactList(contacts);
-                        break;
-                }
-
                 Collections.sort(contactFormats, pinyinComparator);
 
                 // 通讯录保存全局
@@ -226,6 +242,8 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         mRightTv = (TextView) findViewById(R.id.tv_right);
         mRightBtn = (ImageView) findViewById(R.id.iv_right);
 
+        mCustomerEmptyHintLayout = (LinearLayout) findViewById(R.id.ll_empty_hint);
+        mAddCustomerTv = (TextView) findViewById(R.id.tv_add_customer);
     }
 
     public void setViews() {
@@ -254,6 +272,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
     }
 
     public void setListeners() {
+        mAddCustomerTv.setOnClickListener(this);
         mRightBtn.setOnClickListener(this);
         mSearchTv.setOnClickListener(this);
 
@@ -429,10 +448,22 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         }
     }
 
+    public void showEmptyCustomerHintLayout() {
+        mCustomerEmptyHintLayout.setVisibility(View.VISIBLE);
+    }
+
+    public void hideEmptyCustomerHintLayout() {
+        mCustomerEmptyHintLayout.setVisibility(View.GONE);
+    }
+
     @Override
     public void onClick(View v) {
         Intent intent;
         switch (v.getId()) {
+            case R.id.tv_add_customer:
+                intent = new Intent(this, AddCustomerActivity.class);
+                startActivity(intent);
+                break;
             case R.id.iv_right:
                 intent = new Intent(this,AddCustomerActivity.class);
                 startActivity(intent);
