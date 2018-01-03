@@ -108,7 +108,8 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         switch (operationType) {
             case CONSTACT_LIST_SELECT:
             case CUSTOMER_LIST:
-                if(contactFormats != null) {
+                if(contactFormats != null&&contactFormats.size()>0) {
+                    hideLoadingLayout();
                     hideEmptyCustomerHintLayout();
                 }
                 break;
@@ -121,7 +122,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
             case CONSTACT_LIST_SELECT:
             case CUSTOMER_LIST:
                 contactFormats = mSession.getCustomerList();
-                if(contactFormats == null) {
+                if(contactFormats == null||contactFormats.size()==0) {
                     showEmptyCustomerHintLayout();
                     return;
                 }
