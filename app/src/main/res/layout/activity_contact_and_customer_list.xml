@@ -68,6 +68,38 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:indeterminateOnly="true" />
+            <LinearLayout
+                android:id="@+id/ll_empty_hint"
+                android:visibility="gone"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="#EDE6DE"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/tv_empyt_hint"
+                    android:text="请添加客户信息，开始大数据管理"
+                    android:textSize="15sp"
+                    android:textColor="@color/color_text_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tv_add_customer"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:layout_below="@id/tv_empyt_hint"
+                    android:text="添加"
+                    android:textSize="16sp"
+                    android:background="@drawable/btn_add_bg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
         </FrameLayout>
 
     </LinearLayout>
