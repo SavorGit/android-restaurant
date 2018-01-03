@@ -137,9 +137,10 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     public void setViews() {
         pinyinComparator = new ChineseComparator();
         mTitleTv.setText("新增客户");
-        mTitleTv.setTextColor(getResources().getColor(R.color.white));
+        mTitleTv.setTextColor(getResources().getColor(R.color.color_f6f2ed));
         mRightTv.setVisibility(View.VISIBLE);
         mRightTv.setText("导入通讯录");
+        mRightTv.setTextColor(getResources().getColor(R.color.color_f6f2ed));
     }
 
     @Override
