@@ -9,8 +9,8 @@
         layout="@layout/layout_head_title"
         />
     <LinearLayout
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
+        android:paddingTop="23dp"
+        android:paddingBottom="23dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -20,6 +20,8 @@
             android:gravity="center"
             android:drawablePadding="10dp"
             android:text="添加客户"
+            android:textSize="15sp"
+            android:textColor="@color/color_222222"
             android:drawableTop="@drawable/ico_add_customer"
             android:layout_width="match_parent"
             android:layout_weight="1"
@@ -32,6 +34,8 @@
             android:id="@+id/tv_add_history"
             android:gravity="center"
             android:drawablePadding="10dp"
+            android:textSize="15sp"
+            android:textColor="@color/color_222222"
             android:text="添加消费记录"
             android:drawableTop="@drawable/ico_add_spend_history"
             android:layout_width="match_parent"
@@ -48,8 +52,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
-            android:textColor="@color/black"
-            android:textSize="15sp"
+            android:textColor="@color/color_222222"
+            android:textSize="16sp"
             android:layout_margin="15dp"
             android:text="最近操作"
             android:layout_width="wrap_content"

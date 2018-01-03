@@ -34,13 +34,14 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/rl_header"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
         <RelativeLayout
+            android:paddingTop="2dp"
             android:gravity="center_vertical"
             android:layout_marginLeft="10dp"
             android:layout_width="match_parent"
@@ -50,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="何竹冬"
-                android:textColor="@android:color/black"
+                android:textColor="@color/color_222222"
                 android:textSize="16sp" />
             <TextView
                 android:id="@+id/tv_history_time"
@@ -67,14 +68,15 @@
 
 
         <TextView
+            android:paddingBottom="2dp"
             android:id="@+id/tv_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:gravity="left|center_vertical"
             android:text="标题"
-            android:textColor="@android:color/black"
-            android:textSize="12sp" />
+            android:textColor="#666666"
+            android:textSize="14sp" />
     </LinearLayout>
 
 
