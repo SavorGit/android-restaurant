@@ -205,8 +205,15 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                 displayName = displayName.trim().replaceAll(" ","");
                 if(!isNumeric(displayName)&&!isLetter(displayName)) {
                     for(int i = 0;i<displayName.length();i++) {
-                        String str= removeDigital(String.valueOf(PinyinHelper.toHanyuPinyinStringArray(displayName.charAt(i))[0]));
-                        sb.append(str);
+                        String[] pinyinStringArray = PinyinHelper.toHanyuPinyinStringArray(displayName.charAt(i));
+                        String appendStr = "";
+                        if(pinyinStringArray == null || pinyinStringArray.length == 0) {
+                            appendStr = String.valueOf(displayName.charAt(i));
+                        }else {
+                            appendStr= removeDigital(String.valueOf(PinyinHelper.toHanyuPinyinStringArray(displayName.charAt(i))[0]));
+                        }
+
+                        sb.append(appendStr);
                     }
                 }else {
                     sb.append(displayName);
