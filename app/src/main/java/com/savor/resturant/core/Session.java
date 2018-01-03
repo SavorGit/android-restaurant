@@ -62,6 +62,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Administrator
@@ -249,7 +250,7 @@ public class Session {
     private AdvertProHistory advertProHistory;
     private RecommendProHistory recommendListHistory;
     private List<ContactFormat> contactList;
-    private List<OperationFailedItem> opFailedList;
+    private CopyOnWriteArrayList<OperationFailedItem> opFailedList;
     private List<ContactFormat> customerList;
     private ConAbilityList conAbilityList;
     private boolean isShowImportDialog;
@@ -493,7 +494,7 @@ public class Session {
 //        roomList = (List<RoomInfo>) getObj(P_ROMM_LIST);
         conAbilityList = (ConAbilityList) getObj(P_CON_ABILITY_LIST);
         customerList = (List<ContactFormat>) getObj(P_CUSTOMER_LIST);
-        opFailedList = (List<OperationFailedItem>) getObj(P_OPERATION_FAILED_LIST);
+        opFailedList = (CopyOnWriteArrayList<OperationFailedItem>) getObj(P_OPERATION_FAILED_LIST);
         recommendListHistory = (RecommendProHistory) getObj(P_RECOMEND_HISTORY_LIST);
         advertProHistory = (AdvertProHistory) getObj(P_ADVERT_HISTORY_LIST);
         mUploadFirstUse = mPreference.loadBooleanKey(P_APP_FIRST_USE,false);
@@ -1070,11 +1071,11 @@ public class Session {
         return contactList;
     }
 
-    public List<OperationFailedItem> getOpFailedList() {
+    public CopyOnWriteArrayList<OperationFailedItem> getOpFailedList() {
         return opFailedList;
     }
 
-    public void setOpFailedList(List<OperationFailedItem> opFailedList) {
+    public void setOpFailedList(CopyOnWriteArrayList<OperationFailedItem> opFailedList) {
         this.opFailedList = opFailedList;
         setObj(P_OPERATION_FAILED_LIST,opFailedList);
     }

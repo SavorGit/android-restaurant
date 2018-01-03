@@ -40,6 +40,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -614,11 +615,11 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
     }
 
     private void addOpFailedList(List<ContactFormat> selectedLsit, OperationFailedItem.OpType typeImportNew) {
-        List<OperationFailedItem> failedItemList = mSession.getOpFailedList();
+        CopyOnWriteArrayList<OperationFailedItem> failedItemList = mSession.getOpFailedList();
         OperationFailedItem item = new OperationFailedItem();
         if (isMultiSelectMode) {
             if (failedItemList == null) {
-                failedItemList = new ArrayList<>();
+                failedItemList = new CopyOnWriteArrayList<>();
             }
             item.setContactFormat(selectedLsit);
             item.setType(typeImportNew);
