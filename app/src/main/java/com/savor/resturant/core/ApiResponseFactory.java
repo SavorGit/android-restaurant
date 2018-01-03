@@ -270,7 +270,8 @@ public class ApiResponseFactory {
                 }.getType());;
                 break;
             case POST_ADD_ROOM_JSON:
-                result = "success";
+                result = gson.fromJson(info, new TypeToken<RoomListBean>() {
+                }.getType());
                 break;
             case POST_ORDER_LIST_JSON:
                 result = gson.fromJson(info, new TypeToken<List<OrderListBean>>() {
