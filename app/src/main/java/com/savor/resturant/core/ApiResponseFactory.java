@@ -131,6 +131,7 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.POST_ADD_LABEL_JSON
                     || action == AppApi.Action.POST_ADD_SIGNLE_CONSUME_RECORD_JSON
                     || action == AppApi.Action.POST_CUSTOMER_LABELS_JSON
+                    || action == AppApi.Action.POST_CUS_HISTORY_JSON
                     ){
                 int code = rSet.getInt("code");
                 if(rSet.has("result")) {

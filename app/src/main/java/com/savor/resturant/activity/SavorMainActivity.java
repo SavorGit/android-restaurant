@@ -43,8 +43,8 @@ public class SavorMainActivity extends BaseFragmentActivity implements MyTabWidg
         getViews();
         setViews();
         setListeners();
-        showImportDialog();
-//        checkShouldShowImportDialog();
+//        showImportDialog();
+        checkShouldShowImportDialog();
 
         regitsterSmallPlatformReciever();
     }
@@ -52,7 +52,8 @@ public class SavorMainActivity extends BaseFragmentActivity implements MyTabWidg
     private void checkShouldShowImportDialog() {
         List<ContactFormat> customerList = mSession.getCustomerList();
         String is_import_customer = mSession.getHotelBean().getIs_import_customer();
-        if(!"1".equals(is_import_customer)&&(customerList==null||customerList.size() == 0)) {
+        boolean showImportDialog = mSession.isShowImportDialog();
+        if(!"1".equals(is_import_customer)&&(customerList==null||customerList.size() == 0)&&!showImportDialog) {
             showImportDialog();
         }
     }
@@ -68,6 +69,7 @@ public class SavorMainActivity extends BaseFragmentActivity implements MyTabWidg
     }
 
     private void showImportDialog() {
+        mSession.setIsShowImportDialog(true);
         new ImportDialog(this, new ImportDialog.OnImportBtnClickListener() {
             @Override
             public void onImportBtnClick() {
