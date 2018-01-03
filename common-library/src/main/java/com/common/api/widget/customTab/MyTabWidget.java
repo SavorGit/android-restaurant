@@ -114,7 +114,7 @@ public class MyTabWidget extends LinearLayout {
 	 */
 	private void init(final Context context) {
 		this.setOrientation(LinearLayout.HORIZONTAL);
-		this.setBackgroundResource(R.drawable.index_bottom_bar);
+		this.setBackgroundResource(R.color.color_bottom_bg);
 
 		LayoutInflater inflater = LayoutInflater.from(context);
 

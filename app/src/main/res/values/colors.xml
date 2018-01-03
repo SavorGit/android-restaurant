@@ -107,7 +107,7 @@
     <color name="color_fefefe">#fefefe</color>
     <color name="color_e1dbd4">#e1dbd4</color>
     <color name="app_red_color">#922c3e</color>
-    <color name="app_divider_gray">#CCC5BD</color>
+    <color name="app_divider_gray">#CBC5BD</color>
 
     <color name="side_bar_text">#4A4A4A</color>
     <color name="shadow_bg">#66000000</color>
@@ -120,5 +120,7 @@
     <color name="app_gray">#999999</color>
     <color name="color_222222">#222222</color>
     <color name="color_f6f2ed">#f6f2ed</color>
+    <color name="color_bottom_text">#616161</color>
+    <color name="color_bottom_bg">#F6F2ED</color>
 
 </resources>
