@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.savor.resturant.activity.ContactCustomerListActivity.REQUEST_CODE_SELECT;
+
 
 /**
  * 欢迎词文背景置页
@@ -118,6 +120,10 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.iv_header:
                 //showDateDialog();
+                Intent intent;
+                intent = new Intent(this,ContactCustomerListActivity.class);
+                intent.putExtra("type", ContactCustomerListActivity.OperationType.CONSTACT_LIST_SELECT);
+                startActivityForResult(intent,REQUEST_CODE_SELECT);
                 break;
 
 
