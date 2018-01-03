@@ -83,7 +83,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         /**通讯录列表非首次导入*/
         CONSTACT_LIST_NOTFIST,
         /**选择客户*/
-        CONSTACT_LIST_SELECT,
+        CUSTOMER_LIST_SELECT,
     }
 
     @Override
@@ -106,7 +106,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
     protected void onRestart() {
         super.onRestart();
         switch (operationType) {
-            case CONSTACT_LIST_SELECT:
+            case CUSTOMER_LIST_SELECT:
             case CUSTOMER_LIST:
                 if(contactFormats != null&&contactFormats.size()>0) {
                     hideLoadingLayout();
@@ -119,7 +119,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
     public void initData() {
         showLoadingLayout();
         switch (operationType) {
-            case CONSTACT_LIST_SELECT:
+            case CUSTOMER_LIST_SELECT:
             case CUSTOMER_LIST:
                 contactFormats = mSession.getCustomerList();
                 if(contactFormats == null||contactFormats.size()==0) {
@@ -273,7 +273,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                 mRightTv.setVisibility(View.GONE);
                 mTitleTv.setText("客户列表");
                 break;
-            case CONSTACT_LIST_SELECT:
+            case CUSTOMER_LIST_SELECT:
                 mRightBtn.setVisibility(View.GONE);
                 break;
         }
@@ -477,7 +477,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                 startActivity(intent);
                 break;
             case R.id.tv_search:
-                if(operationType == OperationType.CONSTACT_LIST_SELECT) {
+                if(operationType == OperationType.CUSTOMER_LIST_SELECT) {
                     intent = new Intent(this,SearchActivity.class);
                     intent.putExtra("type",operationType);
                     startActivityForResult(intent,REQUEST_CODE_SELECT);
@@ -641,7 +641,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
     @Override
     public void onItemClick(int position, ContactFormat contactFormat) {
         switch (operationType) {
-            case CONSTACT_LIST_SELECT:
+            case CUSTOMER_LIST_SELECT:
                 Intent intent = new Intent();
                 intent.putExtra("customer",contactFormat);
                 setResult(RESULT_CODE_SELECT,intent);

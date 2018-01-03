@@ -30,7 +30,6 @@ import com.savor.resturant.core.AppApi;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -141,7 +140,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
                 //showDateDialog();
                 Intent intent;
                 intent = new Intent(this,ContactCustomerListActivity.class);
-                intent.putExtra("type", ContactCustomerListActivity.OperationType.CONSTACT_LIST_SELECT);
+                intent.putExtra("type", ContactCustomerListActivity.OperationType.CUSTOMER_LIST_SELECT);
                 startActivityForResult(intent,REQUEST_CODE_SELECT);
                 break;
 

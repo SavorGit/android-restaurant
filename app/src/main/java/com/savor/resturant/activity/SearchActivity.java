@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.common.api.utils.AppUtils;
@@ -36,6 +37,8 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
     private List<ContactFormat> contactList = new ArrayList<>();
     private ChineseComparator pinyinComparator;
     private int currentAddPosition;
+    private LinearLayout mEmptyHintLayout;
+    private TextView mAddCustomerTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,8 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
 
     @Override
     public void getViews() {
+        mEmptyHintLayout = (LinearLayout) findViewById(R.id.ll_empty_hint);
+        mAddCustomerTv = (TextView) findViewById(R.id.tv_add_customer);
         mSearchEt = (EditText) findViewById(R.id.et_search);
         mCancelBtn = (TextView) findViewById(R.id.tv_cancel_btn);
         mContactListView = (RecyclerView) findViewById(R.id.contact_member);
@@ -67,7 +72,7 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
             case CONSTACT_LIST_FIRST:
                 contactList = mSession.getContactList();
                 break;
-            case CONSTACT_LIST_SELECT:
+            case CUSTOMER_LIST_SELECT:
             case CUSTOMER_LIST:
                 contactList = mSession.getCustomerList();
                 break;
@@ -86,13 +91,13 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
 
     @Override
     public void setListeners() {
-
+        mAddCustomerTv.setOnClickListener(this);
         if(operationType == ContactCustomerListActivity.OperationType.CONSTACT_LIST_FIRST||operationType == ContactCustomerListActivity.OperationType.CONSTACT_LIST_NOTFIST) {
             mAdapter.setOnAddBtnClickListener(this);
             mAdapter.setOnItemClickListener(null);
         }else if(operationType == ContactCustomerListActivity.OperationType.CUSTOMER_LIST){
             mAdapter.setOnItemClickListener(this);
-        }else if(operationType == ContactCustomerListActivity.OperationType.CONSTACT_LIST_SELECT) {
+        }else if(operationType == ContactCustomerListActivity.OperationType.CUSTOMER_LIST_SELECT) {
             mAdapter.setOnItemClickListener(this);
         }
 
@@ -113,6 +118,17 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
                 if(!TextUtils.isEmpty(content)) {
                     if(contactList !=null&& contactList.size()>0) {
                         List<ContactFormat> contactFormatLike = getLikeList(contactList,content);
+                        switch (operationType) {
+                            case CUSTOMER_LIST_SELECT:
+                            case CUSTOMER_LIST:
+                                if(contactFormatLike==null||contactFormatLike.size()==0) {
+                                    showEmptyHintLayout();
+                                }else {
+                                    hideEmptyHintLayout();
+                                }
+                                break;
+                        }
+
                         mAdapter.setData(contactFormatLike);
                     }
                 }else {
@@ -123,6 +139,14 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
         });
 
         mCancelBtn.setOnClickListener(this);
+    }
+
+    private void hideEmptyHintLayout() {
+        mEmptyHintLayout.setVisibility(View.GONE);
+    }
+
+    private void showEmptyHintLayout() {
+        mEmptyHintLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -139,7 +163,7 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
 
     @Override
     public void onItemClick(int position, ContactFormat contactFormat) {
-        if(operationType == ContactCustomerListActivity.OperationType.CONSTACT_LIST_SELECT) {
+        if(operationType == ContactCustomerListActivity.OperationType.CUSTOMER_LIST_SELECT) {
             Intent intent = new Intent();
             intent.putExtra("customer",contactFormat);
             setResult(RESULT_CODE_SELECT,intent);
@@ -162,10 +186,15 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
             case R.id.tv_cancel_btn:
                 AppUtils.hideSoftKeybord(this);
                 finish();
+                break;
+            case R.id.tv_add_customer:
+                intent = new Intent(this, AddCustomerActivity.class);
+                startActivity(intent);
                 break;
         }
     }
