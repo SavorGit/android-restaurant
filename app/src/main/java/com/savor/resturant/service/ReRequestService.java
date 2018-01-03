@@ -59,7 +59,7 @@ public class ReRequestService extends IntentService {
                     String importInfo = new Gson().toJson(item.getContactFormat());
                     String invitation = session.getHotelBean().getInvite_id();
                     String tel = session.getHotelBean().getTel();
-                    AppApi.importInfoFirst(this, importInfo, invitation, tel, new ApiRequestListener() {
+                    AppApi.importInfoNew(this, importInfo, invitation, tel, new ApiRequestListener() {
                         @Override
                         public void onSuccess(AppApi.Action method, Object obj) {
                             LogUtils.d("savor:opr 通讯录重传成功\n "+item.getContactFormat());

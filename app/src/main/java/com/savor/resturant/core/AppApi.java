@@ -707,17 +707,17 @@ public class AppApi {
     }
 
     /**首次导入通讯录*/
-    public static void importInfoFirst(Context context,
-                                       String book_info,
-                                       String invite_id,
-                                       String mobile,
-                                       ApiRequestListener handler) {
-        final HashMap<String, Object> params = new HashMap<>();
-        params.put("invite_id", invite_id);
-        params.put("mobile", mobile);
-        params.put("book_info", book_info);
-        new AppServiceOk(context,Action.POST_IMPORT_INFO_JSON,handler,params).post();
-    }
+//    public static void importInfoFirst(Context context,
+//                                       String book_info,
+//                                       String invite_id,
+//                                       String mobile,
+//                                       ApiRequestListener handler) {
+//        final HashMap<String, Object> params = new HashMap<>();
+//        params.put("invite_id", invite_id);
+//        params.put("mobile", mobile);
+//        params.put("book_info", book_info);
+//        new AppServiceOk(context,Action.POST_IMPORT_INFO_JSON,handler,params).post();
+//    }
 
     /**导入通讯录非首次*/
     public static void importInfoNew(Context context,

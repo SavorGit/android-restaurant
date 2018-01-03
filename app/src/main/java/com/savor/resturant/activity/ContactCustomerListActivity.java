@@ -437,10 +437,8 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
 
             switch (operationType) {
                 case CONSTACT_LIST_NOTFIST:
-                    AppApi.importInfoNew(this,importInfo,invitation,tel,this);
-                    break;
                 case CONSTACT_LIST_FIRST:
-                    AppApi.importInfoFirst(this,importInfo,invitation,tel,this);
+                    AppApi.importInfoNew(this,importInfo,invitation,tel,this);
                     break;
             }
 
@@ -516,11 +514,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                     String importInfo = new Gson().toJson(selectedLsit);
                     String invitation = mSession.getHotelBean().getInvite_id();
                     String tel = mSession.getHotelBean().getTel();
-                    if (operationType == OperationType.CONSTACT_LIST_FIRST) {
-                        AppApi.importInfoFirst(this, importInfo, invitation, tel, this);
-                    } else if (operationType == OperationType.CONSTACT_LIST_NOTFIST) {
-                        AppApi.importInfoNew(this, importInfo, invitation, tel, this);
-                    }
+                    AppApi.importInfoNew(this, importInfo, invitation, tel, this);
                 }
 
                 break;

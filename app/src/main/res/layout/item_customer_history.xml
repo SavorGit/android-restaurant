@@ -16,9 +16,11 @@
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/iv_header"
+            android:src="@drawable/ico_header_default"
             android:layout_width="42dp"
             android:layout_height="42dp" />
         <TextView
+            android:visibility="gone"
             android:id="@+id/tv_label"
             android:layout_width="42dp"
             android:layout_height="42dp"
