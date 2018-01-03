@@ -30,8 +30,6 @@ import com.savor.resturant.R;
 import com.savor.resturant.SavorApplication;
 import com.savor.resturant.bean.AddSpendTicketNoBookInfo;
 import com.savor.resturant.bean.ContactFormat;
-import com.savor.resturant.bean.Customer;
-import com.savor.resturant.bean.CustomerBean;
 import com.savor.resturant.bean.CustomerLabel;
 import com.savor.resturant.bean.CustomerLabelList;
 import com.savor.resturant.core.AppApi;
@@ -300,7 +298,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
                 break;
             case R.id.ll_customer_select:
                 intent = new Intent(this,ContactCustomerListActivity.class);
-                intent.putExtra("type", ContactCustomerListActivity.OperationType.CONSTACT_LIST_SELECT);
+                intent.putExtra("type", ContactCustomerListActivity.OperationType.CUSTOMER_LIST_SELECT);
                 startActivityForResult(intent,REQUEST_CODE_SELECT);
                 break;
             case R.id.tv_edit_label:
