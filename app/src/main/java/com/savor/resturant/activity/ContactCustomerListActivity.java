@@ -285,7 +285,17 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                 hideSoftKeybord(ContactCustomerListActivity.this);
                 int position = adapter.getPositionForSection(s.charAt(0));
                 if (position != -1) {
-                    recyclerView.getLayoutManager().scrollToPosition(position);
+                    LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                    int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
+                    int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+                    if(position<=firstVisibleItem) {
+                        recyclerView.getLayoutManager().scrollToPosition(position);
+                    }else if(position<=lastVisibleItem) {
+                        int top = recyclerView.getChildAt(position - firstVisibleItem).getTop();
+                        recyclerView.scrollBy(0,top);
+                    }else {
+                        recyclerView.getLayoutManager().scrollToPosition(position);
+                    }
                 }
             }
         });

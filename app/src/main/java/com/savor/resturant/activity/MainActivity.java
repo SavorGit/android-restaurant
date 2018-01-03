@@ -275,24 +275,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
 
-    private void linkTv() {
-//        showLinkingDialog();
-        startSSDPServiceInOperation();
-        checkLinkStatusDelayed();
-    }
-
-    /**
-     * 15秒以后如果还没有收到ssdp，提示连接失败，重新连接
-     */
-    private void checkLinkStatusDelayed() {
-        mHandler.sendEmptyMessageDelayed(CHECK_LINK_STATUS,15*1000);
-    }
-
-    public void onTvLiked() {
-        LogUtils.d("savor:ssdp onTvLinked");
-        AppApi.notifyTvBoxStop(this,mSession.getTVBoxUrl(),this);
-    }
-
     private View.OnClickListener forUpdateListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -463,6 +445,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(smallPlatformReciver!=null) {
+            unregisterReceiver(smallPlatformReciver);
+        }
     }
 
     @Override

@@ -118,5 +118,7 @@
     <color name="grid_item_divider">#EAEAEA</color>
     <color name="color_label">#666666</color>
     <color name="app_gray">#999999</color>
+    <color name="color_222222">#222222</color>
+    <color name="color_f6f2ed">#f6f2ed</color>
 
 </resources>

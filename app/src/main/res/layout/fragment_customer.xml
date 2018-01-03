@@ -19,7 +19,7 @@
             android:id="@+id/tv_add_customer"
             android:gravity="center"
             android:drawablePadding="10dp"
-            android:text="新增客户"
+            android:text="添加客户"
             android:drawableTop="@drawable/ico_add_customer"
             android:layout_width="match_parent"
             android:layout_weight="1"

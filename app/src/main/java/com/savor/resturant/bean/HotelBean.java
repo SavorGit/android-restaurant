@@ -12,6 +12,8 @@ public class HotelBean implements Serializable {
     private String hotel_id;
     private String hotel_name;
     private String invite_id;
+    private String is_open_customer;
+    private String is_import_customer;
     private String tel;
     private List<ContactFormat> customer_list = new ArrayList<>();
     private String invitation;
@@ -22,6 +24,8 @@ public class HotelBean implements Serializable {
                 "hotel_id='" + hotel_id + '\'' +
                 ", hotel_name='" + hotel_name + '\'' +
                 ", invite_id='" + invite_id + '\'' +
+                ", is_open_customer='" + is_open_customer + '\'' +
+                ", is_import_customer='" + is_import_customer + '\'' +
                 ", tel='" + tel + '\'' +
                 ", customer_list=" + customer_list +
                 ", invitation='" + invitation + '\'' +
@@ -41,6 +45,10 @@ public class HotelBean implements Serializable {
             return false;
         if (invite_id != null ? !invite_id.equals(hotelBean.invite_id) : hotelBean.invite_id != null)
             return false;
+        if (is_open_customer != null ? !is_open_customer.equals(hotelBean.is_open_customer) : hotelBean.is_open_customer != null)
+            return false;
+        if (is_import_customer != null ? !is_import_customer.equals(hotelBean.is_import_customer) : hotelBean.is_import_customer != null)
+            return false;
         if (tel != null ? !tel.equals(hotelBean.tel) : hotelBean.tel != null) return false;
         if (customer_list != null ? !customer_list.equals(hotelBean.customer_list) : hotelBean.customer_list != null)
             return false;
@@ -52,6 +60,8 @@ public class HotelBean implements Serializable {
         int result = hotel_id != null ? hotel_id.hashCode() : 0;
         result = 31 * result + (hotel_name != null ? hotel_name.hashCode() : 0);
         result = 31 * result + (invite_id != null ? invite_id.hashCode() : 0);
+        result = 31 * result + (is_open_customer != null ? is_open_customer.hashCode() : 0);
+        result = 31 * result + (is_import_customer != null ? is_import_customer.hashCode() : 0);
         result = 31 * result + (tel != null ? tel.hashCode() : 0);
         result = 31 * result + (customer_list != null ? customer_list.hashCode() : 0);
         result = 31 * result + (invitation != null ? invitation.hashCode() : 0);
@@ -80,6 +90,22 @@ public class HotelBean implements Serializable {
 
     public void setInvite_id(String invite_id) {
         this.invite_id = invite_id;
+    }
+
+    public String getIs_open_customer() {
+        return is_open_customer;
+    }
+
+    public void setIs_open_customer(String is_open_customer) {
+        this.is_open_customer = is_open_customer;
+    }
+
+    public String getIs_import_customer() {
+        return is_import_customer;
+    }
+
+    public void setIs_import_customer(String is_import_customer) {
+        this.is_import_customer = is_import_customer;
     }
 
     public String getTel() {
