@@ -1,8 +1,13 @@
 package com.savor.resturant.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -10,15 +15,26 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.TimePickerView;
+import com.bumptech.glide.Glide;
+import com.common.api.utils.FileUtils;
+import com.common.api.widget.pulltorefresh.library.PullToRefreshBase;
+import com.common.api.widget.pulltorefresh.library.PullToRefreshListView;
 import com.savor.resturant.R;
+import com.savor.resturant.SavorApplication;
+import com.savor.resturant.adapter.BookAdapter;
+import com.savor.resturant.bean.ContactFormat;
+import com.savor.resturant.bean.CustomerLabel;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.OrderListBean;
 import com.savor.resturant.core.AppApi;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import static com.savor.resturant.activity.AddCustomerActivity.REQUEST_CODE_IMAGE;
+import static com.savor.resturant.activity.AddCustomerActivity.TAKE_PHOTO_REQUEST;
 import static com.savor.resturant.activity.ContactCustomerListActivity.REQUEST_CODE_SELECT;
 
 
@@ -41,6 +57,12 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
     private TextView tv_dining_room;
     private EditText et_note;
     private ImageView iv_header;
+    private String order_mobile;
+    private String order_name;
+    private String order_time;
+    private String person_nums;
+    private String room_id;
+    private String room_type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,15 +205,50 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
         super.onDestroy();
     }
 
+    private void AddBook(){
+      order_mobile = et_phone.getText().toString();
+      order_name = et_phone.getText().toString();
+      order_time = tv_dining_time.getText().toString();
+      person_nums = et_dining_num.getText().toString();
+      room_id = et_phone.getText().toString();
+      room_type = et_phone.getText().toString();
 
-    private void getOrderList(){
+        if (TextUtils.isEmpty(order_mobile)) {
+
+            return;
+        }
+
+        if (TextUtils.isEmpty(person_nums)) {
+
+            return;
+        }
+        if (TextUtils.isEmpty(order_time)) {
+
+            return;
+        }
+        AddOrderList();
+    }
+
+    private void AddOrderList(){
         HotelBean hotelBean = mSession.getHotelBean();
-        //AppApi.getOrderList(mContext,hotelBean.getInvite_id(),hotelBean.getTel(),curDate,page_num+"",this);
+        AppApi.addOrder(mContext,hotelBean.getInvite_id(),hotelBean.getTel(),order_mobile,order_name,order_time,person_nums,room_id,room_type,this);
     }
 
      private String getDataTime(Date date) {//可根据需要自行截取数据显示
                 SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd");
                 return format.format(date);
      }
+
+            @Override
+            protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+                super.onActivityResult(requestCode, resultCode, data);
+                if(requestCode == REQUEST_CODE_SELECT) {
+                    if(data!=null) {
+                        ContactFormat contactFormat = (ContactFormat) data.getSerializableExtra("customer");
+                        et_phone.setText(contactFormat.getMobile());
+                        et_name.setText(contactFormat.getName());
+                    }
+                }
+            }
 }
 

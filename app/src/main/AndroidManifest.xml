@@ -221,6 +221,11 @@
         <activity
             android:name=".activity.BookListByDateActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AddBookActivity"
+            android:screenOrientation="portrait" />
+
+
 
     </application>
 
