@@ -2,27 +2,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="9dp"
+    android:paddingTop="9dp"
     android:background="#EDE6DE"
     android:orientation="horizontal">
     <EditText
         android:layout_weight="1"
         android:id="@+id/et_search"
-        android:drawablePadding="10dp"
+        android:drawablePadding="5dp"
         android:drawableLeft="@drawable/ico_search"
-        android:textSize="14sp"
-        android:textColorHint="@color/text_content_black"
-        android:textColor="@color/black"
+        android:textSize="13sp"
+        android:textColorHint="#999999"
+        android:textColor="@color/color_222222"
         android:background="@drawable/bg_search_text"
         android:padding="10dp"
         android:hint="输入姓名或手机号查找客户"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="36dp" />
     <TextView
+        android:gravity="center"
         android:id="@+id/tv_cancel_btn"
         android:textColor="@color/colorPrimary"
-        android:padding="10dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
         android:layout_width="wrap_content"
         android:text="取消"
-        android:layout_height="wrap_content" />
+        android:textSize="16sp"
+        android:layout_height="36dp" />
 </LinearLayout>

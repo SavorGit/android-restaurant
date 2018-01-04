@@ -22,6 +22,7 @@ import com.savor.resturant.adapter.CustomerOpHistoryAdapter;
 import com.savor.resturant.bean.CustomerHistory;
 import com.savor.resturant.bean.CustomerHistoryBean;
 import com.savor.resturant.core.AppApi;
+import com.savor.resturant.widget.contact.DividerDecoration;
 
 import java.util.List;
 
@@ -107,6 +108,7 @@ public class CustomerFragment extends BaseFragment implements View.OnClickListen
 
         mHistoryAdapter = new CustomerOpHistoryAdapter(getContext());
         mHistoryRlv.setAdapter(mHistoryAdapter);
+        mHistoryRlv.addItemDecoration(new DividerDecoration(getContext()));
     }
 
     private void initViews(View parentLayout) {

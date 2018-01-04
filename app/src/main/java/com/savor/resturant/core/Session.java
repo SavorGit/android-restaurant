@@ -62,6 +62,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Administrator
@@ -114,6 +115,8 @@ public class Session {
     private static final String P_APP_AREA_ID = "p_app_area_id";
     /**首次使用*/
     private static final String P_APP_FIRST_USE = "p_app_first_use";
+    /**是否已经展示过导入对话框*/
+    private static final String P_APP_SHOW_IMPORT_DIALOG = "p_app_show_import_dialog";
     /**最近可投屏酒店*/
     private static final String P_APP_HOTEL_MAP = "p_app_hotel_map";
 
@@ -247,9 +250,10 @@ public class Session {
     private AdvertProHistory advertProHistory;
     private RecommendProHistory recommendListHistory;
     private List<ContactFormat> contactList;
-    private List<OperationFailedItem> opFailedList;
+    private CopyOnWriteArrayList<OperationFailedItem> opFailedList;
     private List<ContactFormat> customerList;
     private ConAbilityList conAbilityList;
+    private boolean isShowImportDialog;
 
     private Session(Context context) {
 
@@ -490,10 +494,11 @@ public class Session {
 //        roomList = (List<RoomInfo>) getObj(P_ROMM_LIST);
         conAbilityList = (ConAbilityList) getObj(P_CON_ABILITY_LIST);
         customerList = (List<ContactFormat>) getObj(P_CUSTOMER_LIST);
-        opFailedList = (List<OperationFailedItem>) getObj(P_OPERATION_FAILED_LIST);
+        opFailedList = (CopyOnWriteArrayList<OperationFailedItem>) getObj(P_OPERATION_FAILED_LIST);
         recommendListHistory = (RecommendProHistory) getObj(P_RECOMEND_HISTORY_LIST);
         advertProHistory = (AdvertProHistory) getObj(P_ADVERT_HISTORY_LIST);
         mUploadFirstUse = mPreference.loadBooleanKey(P_APP_FIRST_USE,false);
+        isShowImportDialog = mPreference.loadBooleanKey(P_APP_SHOW_IMPORT_DIALOG,false);
         mWaiterData = mPreference.loadStringKey(P_APP_WAITER_DATA,null);
         mPdfList = (List<PdfInfo>) getObj(P_APP_PDF_LIST);
         mStartUpSettingsBean = (StartUpSettingsBean) getObj(APP_START_UP_SETTINGS);
@@ -624,7 +629,9 @@ public class Session {
         }else if(P_APP_IS_SHOW_GUIDE.equals(key)
                 ||P_APP_FIRST_PLAY.equals(key)
                 ||P_APP_IS_SHOW_SCAN_GUIDE.equals(key)
-                ||P_APP_FIRST_USE.equals(key)){
+                ||P_APP_FIRST_USE.equals(key)
+                ||P_APP_SHOW_IMPORT_DIALOG.equals(key)
+                ){
             mPreference.saveBooleanKey(key,(boolean)updateItem.second);
         }else if(SLIDE_INTERVAL.equals(key)||P_APP_HOTELID.equals(key)){
             mPreference.saveIntKey(key,(Integer) updateItem.second);
@@ -1064,11 +1071,11 @@ public class Session {
         return contactList;
     }
 
-    public List<OperationFailedItem> getOpFailedList() {
+    public CopyOnWriteArrayList<OperationFailedItem> getOpFailedList() {
         return opFailedList;
     }
 
-    public void setOpFailedList(List<OperationFailedItem> opFailedList) {
+    public void setOpFailedList(CopyOnWriteArrayList<OperationFailedItem> opFailedList) {
         this.opFailedList = opFailedList;
         setObj(P_OPERATION_FAILED_LIST,opFailedList);
     }
@@ -1089,5 +1096,14 @@ public class Session {
 
     public ConAbilityList getConAbilityList() {
         return this.conAbilityList;
+    }
+
+    public void setIsShowImportDialog(boolean isShowImportDialog) {
+        this.isShowImportDialog = isShowImportDialog;
+        writePreference(new Pair<String, Object>(P_APP_SHOW_IMPORT_DIALOG, isShowImportDialog));
+    }
+
+    public boolean isShowImportDialog() {
+        return this.isShowImportDialog;
     }
 }

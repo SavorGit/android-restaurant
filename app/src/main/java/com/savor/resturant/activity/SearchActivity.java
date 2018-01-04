@@ -158,7 +158,7 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
         String importInfo = new Gson().toJson(contactFormats);
         String invitation = mSession.getHotelBean().getInvite_id();
         String tel = mSession.getHotelBean().getTel();
-        AppApi.importInfoFirst(this,importInfo,invitation,tel,this);
+        AppApi.importInfoNew(this,importInfo,invitation,tel,this);
     }
 
     @Override

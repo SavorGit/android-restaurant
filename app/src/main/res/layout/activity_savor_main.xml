@@ -14,6 +14,7 @@
         android:layout_weight="1.0" />
 
     <LinearLayout
+        android:background="@color/color_bottom_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -23,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
         <com.common.api.widget.customTab.MyTabWidget
+            android:background="#F6F2ED"
             android:id="@+id/tabwidget"
             android:layout_width="fill_parent"
             android:layout_height="49dp"

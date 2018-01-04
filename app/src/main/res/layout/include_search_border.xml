@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#EDE6DE"
-    android:paddingBottom="10dp"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp"
-    android:paddingTop="10dp">
+    android:paddingBottom="9dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="9dp">
 
     <TextView
         android:id="@+id/tv_search"
@@ -14,10 +14,10 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_search_text"
         android:drawableLeft="@drawable/ico_search"
-        android:drawablePadding="10dp"
+        android:drawablePadding="5dp"
         android:hint="输入姓名或手机号查找客户"
         android:padding="10dp"
         android:textColor="@color/white"
-        android:textColorHint="#9A9997"
-        android:textSize="14sp" />
+        android:textColorHint="#999999"
+        android:textSize="13sp" />
 </LinearLayout>

@@ -171,7 +171,7 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
         if(!TextUtils.isEmpty(face_url)) {
             holder.iv_header.setVisibility(View.VISIBLE);
             holder.tv_label.setVisibility(View.GONE);
-            Glide.with(mContext).load(face_url).transform(new GlideCircleTransform(mContext)).into(holder.iv_header);
+            Glide.with(mContext).load(face_url).transform(new GlideCircleTransform(mContext)).placeholder(R.drawable.ico_header_default).into(holder.iv_header);
         }else {
             holder.iv_header.setVisibility(View.GONE);
             holder.tv_label.setVisibility(View.VISIBLE);

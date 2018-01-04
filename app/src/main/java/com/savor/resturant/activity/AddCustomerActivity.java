@@ -54,6 +54,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -136,9 +137,10 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     public void setViews() {
         pinyinComparator = new ChineseComparator();
         mTitleTv.setText("新增客户");
-        mTitleTv.setTextColor(getResources().getColor(R.color.white));
+        mTitleTv.setTextColor(getResources().getColor(R.color.color_f6f2ed));
         mRightTv.setVisibility(View.VISIBLE);
         mRightTv.setText("导入通讯录");
+        mRightTv.setTextColor(getResources().getColor(R.color.color_f6f2ed));
     }
 
     @Override
@@ -521,9 +523,9 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     private void addOpFailedList() {
         List<ContactFormat> contactFormats = new ArrayList<>();
         contactFormats.add(currentAddCustomer);
-        List<OperationFailedItem> opFailedList = mSession.getOpFailedList();
+        CopyOnWriteArrayList<OperationFailedItem> opFailedList = mSession.getOpFailedList();
         if(opFailedList == null) {
-            opFailedList = new ArrayList<>();
+            opFailedList = new CopyOnWriteArrayList<>();
         }
         OperationFailedItem item = new OperationFailedItem();
         item.setType(OperationFailedItem.OpType.TYPE_ADD_CUSTOMER);

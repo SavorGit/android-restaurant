@@ -52,7 +52,7 @@ public class CustomerOpHistoryAdapter extends RecyclerView.Adapter<CustomerOpHis
         if(!TextUtils.isEmpty(face_url)) {
             holder.headerTv.setVisibility(View.GONE);
             holder.headerIv.setVisibility(View.VISIBLE);
-            Glide.with(mContext).load(false).transform(new GlideCircleTransform(mContext)).into(holder.headerIv);
+            Glide.with(mContext).load(face_url).transform(new GlideCircleTransform(mContext)).placeholder(R.drawable.ico_header_default).into(holder.headerIv);
         }else {
             holder.headerTv.setVisibility(View.VISIBLE);
             holder.headerIv.setVisibility(View.GONE);

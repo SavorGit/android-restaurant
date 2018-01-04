@@ -40,6 +40,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -437,10 +438,8 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
 
             switch (operationType) {
                 case CONSTACT_LIST_NOTFIST:
-                    AppApi.importInfoNew(this,importInfo,invitation,tel,this);
-                    break;
                 case CONSTACT_LIST_FIRST:
-                    AppApi.importInfoFirst(this,importInfo,invitation,tel,this);
+                    AppApi.importInfoNew(this,importInfo,invitation,tel,this);
                     break;
             }
 
@@ -516,11 +515,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                     String importInfo = new Gson().toJson(selectedLsit);
                     String invitation = mSession.getHotelBean().getInvite_id();
                     String tel = mSession.getHotelBean().getTel();
-                    if (operationType == OperationType.CONSTACT_LIST_FIRST) {
-                        AppApi.importInfoFirst(this, importInfo, invitation, tel, this);
-                    } else if (operationType == OperationType.CONSTACT_LIST_NOTFIST) {
-                        AppApi.importInfoNew(this, importInfo, invitation, tel, this);
-                    }
+                    AppApi.importInfoNew(this, importInfo, invitation, tel, this);
                 }
 
                 break;
@@ -620,11 +615,11 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
     }
 
     private void addOpFailedList(List<ContactFormat> selectedLsit, OperationFailedItem.OpType typeImportNew) {
-        List<OperationFailedItem> failedItemList = mSession.getOpFailedList();
+        CopyOnWriteArrayList<OperationFailedItem> failedItemList = mSession.getOpFailedList();
         OperationFailedItem item = new OperationFailedItem();
         if (isMultiSelectMode) {
             if (failedItemList == null) {
-                failedItemList = new ArrayList<>();
+                failedItemList = new CopyOnWriteArrayList<>();
             }
             item.setContactFormat(selectedLsit);
             item.setType(typeImportNew);
