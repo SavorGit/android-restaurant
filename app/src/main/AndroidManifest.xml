@@ -224,6 +224,9 @@
         <activity
             android:name=".activity.AddBookActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.UserInfoActivity"
+            android:screenOrientation="portrait" />
 
 
 
