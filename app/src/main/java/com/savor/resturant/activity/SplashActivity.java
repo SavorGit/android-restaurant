@@ -168,7 +168,7 @@ public class SplashActivity extends BaseActivity {
         registerNetWorkReceiver(mHandler);
         startJettyServer();
         regitsterSmallPlatformReciever();
-        startReRequestService();
+//        startReRequestService();
     }
 
     /**
