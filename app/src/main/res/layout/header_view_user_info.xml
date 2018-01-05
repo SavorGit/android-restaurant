@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/info_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/iv_header"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/ico_header" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="17dp"
+            android:layout_toRightOf="@id/iv_header"
+            android:gravity="center"
+            android:padding="1.5sp"
+            android:text="客户姓名"
+            android:textColor="@color/color_label"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/sex"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@id/name"
+            android:src="@drawable/nan" />
+
+        <TextView
+            android:id="@+id/tel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/name"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="1dp"
+            android:layout_toRightOf="@id/iv_header"
+            android:gravity="center"
+            android:padding="1.5sp"
+            android:text="电话：13910229112"
+            android:textColor="@color/color_label"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/consume_ability"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tel"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="1dp"
+            android:layout_toRightOf="@id/iv_header"
+            android:gravity="center"
+            android:padding="1.5sp"
+            android:text="人均消费能力：800"
+            android:textColor="@color/color_label"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/birthday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/consume_ability"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="1dp"
+            android:layout_toRightOf="@id/iv_header"
+            android:gravity="center"
+            android:padding="1.5sp"
+            android:text="生日："
+            android:textColor="@color/color_label"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/birthplace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/birthday"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="1dp"
+            android:layout_toRightOf="@id/iv_header"
+            android:gravity="center"
+            android:padding="1.5sp"
+            android:text="籍贯："
+            android:textColor="@color/color_label"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_edit_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/bg_corner_red"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:text="编辑"
+            android:textColor="@color/colorPrimaryDark" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/label_la"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/info_layout"
+        android:background="#F6F3EE"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:background="#EDE6DE" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="标签"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/edit_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/bg_corner_red"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp"
+                android:text="编辑"
+                android:textColor="@color/colorPrimaryDark" />
+        </RelativeLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp"
+            android:paddingTop="10dp">
+
+            <com.zhy.view.flowlayout.TagFlowLayout
+                android:id="@+id/rlv_labels"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_label_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="20dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="10dp"
+                android:text="选择或输入客人信息后，可以进行标签管理" />
+        </FrameLayout>
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/remark_la"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/label_la"
+        android:background="#F6F3EE"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/line1"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:background="#EDE6DE" />
+
+        <RelativeLayout
+            android:id="@+id/header_line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/line1"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="备注"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/edit_label_remark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/bg_corner_red"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp"
+                android:text="编辑"
+                android:textColor="@color/colorPrimaryDark" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/remark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/header_line"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="10dp"
+            android:text=""
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/spend_history_la"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/remark_la"
+        android:layout_weight="1"
+        android:background="#F6F3EE"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:background="#EDE6DE" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="消费记录"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_add_ticket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/bg_corner_red"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp"
+                android:text="添加"
+                android:textColor="@color/colorPrimaryDark" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_ticket_border">
+
+            <ImageView
+                android:id="@+id/iv_spend_history"
+                android:layout_width="300dp"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/empty_slide" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

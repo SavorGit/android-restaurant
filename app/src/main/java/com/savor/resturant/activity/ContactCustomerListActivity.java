@@ -152,6 +152,8 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                         recyclerView.setLayoutManager(layoutManager);
 
                         recyclerView.setAdapter(adapter);
+//                        final StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration(adapter);
+//                        recyclerView.addItemDecoration(headersDecor);
                         recyclerView.addItemDecoration(new DividerDecoration(ContactCustomerListActivity.this));
 
                         adapter.setOnCheckStateChangeListener(ContactCustomerListActivity.this);

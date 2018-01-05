@@ -285,7 +285,9 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 //			mHeaderText.setText(mPullLabel);
 		}
 		mHeaderImage.setVisibility(View.VISIBLE);
-		mHeaderTipIv.setVisibility(View.VISIBLE);
+		if(mHeaderTipIv!=null) {
+			mHeaderTipIv.setVisibility(View.VISIBLE);
+		}
 		if (mUseIntrinsicAnimation) {
 			((AnimationDrawable) mHeaderImage.getDrawable()).stop();
 		} else {
@@ -293,10 +295,13 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 			resetImpl();
 		}
 
-		if (null != mSubHeaderText&&TextUtils.isEmpty(mSubHeaderText.getText())) {
-			mSubHeaderText.setVisibility(View.GONE);
-		} else {
-			mSubHeaderText.setVisibility(View.VISIBLE);
+		if(null != mSubHeaderText) {
+
+			if (TextUtils.isEmpty(mSubHeaderText.getText())) {
+				mSubHeaderText.setVisibility(View.GONE);
+			} else {
+				mSubHeaderText.setVisibility(View.VISIBLE);
+			}
 		}
 	}
 
