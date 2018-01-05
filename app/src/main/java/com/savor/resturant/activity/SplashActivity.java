@@ -172,19 +172,6 @@ public class SplashActivity extends BaseActivity {
     }
 
     /**
-     * 操作失败的请求列表重新发起请求
-     */
-    private void startReRequestService() {
-        List<OperationFailedItem> opFailedList = mSession.getOpFailedList();
-        if(opFailedList!=null&&opFailedList.size()>0) {
-            LogUtils.d("savor:opr 有操作失败记录开始重新发起请求\n "+opFailedList);
-            ReRequestService.startActionRequest(this);
-        }else {
-            LogUtils.d("savor:opr 没有操作失败记录");
-        }
-    }
-
-    /**
      * 注册小平台发现广播
      */
     public void regitsterSmallPlatformReciever() {

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -73,6 +74,7 @@ public class CustomerOpHistoryAdapter extends RecyclerView.Adapter<CustomerOpHis
     }
 
     public class HistoryHolder extends RecyclerView.ViewHolder {
+        public RelativeLayout rl_hitory;
         public ImageView headerIv;
         public TextView headerTv;
         public TextView item_contact_title;
@@ -81,11 +83,16 @@ public class CustomerOpHistoryAdapter extends RecyclerView.Adapter<CustomerOpHis
 
         public HistoryHolder(View itemView) {
             super(itemView);
+            rl_hitory = (RelativeLayout) itemView.findViewById(R.id.rl_hitory);
             headerIv = (ImageView) itemView.findViewById(R.id.iv_header);
             headerTv = (TextView) itemView.findViewById(R.id.tv_label);
             item_contact_title = (TextView) itemView.findViewById(R.id.item_contact_title);
             tv_num = (TextView) itemView.findViewById(R.id.tv_num);
             tv_history_time = (TextView) itemView.findViewById(R.id.tv_history_time);
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(CustomerHistoryBean historyBean);
     }
 }

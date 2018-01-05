@@ -20,6 +20,7 @@ import com.savor.resturant.R;
 import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.CustomerListBean;
 import com.savor.resturant.bean.HotelBean;
+import com.savor.resturant.bean.OperationFailedItem;
 import com.savor.resturant.core.ApiRequestListener;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.ResponseErrorMessage;
@@ -31,6 +32,7 @@ import net.sourceforge.pinyin4j.PinyinHelper;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -252,6 +254,7 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
 
                         formatAndSaveCustomers(hotelBean);
 
+
                         // 启动跳转到首页
                         String is_open_customer = mSession.getHotelBean().getIs_open_customer();
                         Intent homeIntent;
@@ -297,8 +300,14 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
                     cacheList = customerList.getCustomerList();
                 }
 
-                // 如果本地缓存为空或者与当前登录手机号不一致 需要重新缓存
-                if((customer_list!=null&&cacheList == null)||(!hotelBean.getTel().equals(customerList.getMobile()))) {
+        // 检查操作失败历史记录如果之前账号与当前账号不一样 清楚操作失败记录
+        if(customerList!=null&&!hotelBean.getTel().equals(customerList.getMobile())) {
+            mSession.setOpFailedList(null);
+        }
+
+        // 如果本地缓存为空或者与当前登录手机号不一致 需要重新缓存
+        if((customer_list!=null&&cacheList == null)||(customerList!=null&&!hotelBean.getTel().equals(customerList.getMobile()))) {
+
 
                     for(ContactFormat contactFormat : customer_list) {
                         String name = contactFormat.getName();
