@@ -34,7 +34,7 @@ import static com.savor.resturant.activity.ContactCustomerListActivity.REQUEST_C
 
 
 /**
- * 添加预定
+ * 客户信息
  */
 public class UserInfoActivity extends BaseActivity implements View.OnClickListener
         {
