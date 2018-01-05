@@ -267,7 +267,7 @@ public class Session {
             AppUtils.clearExpiredCacheFile(context);
             readSettings();
         } catch (Exception e) {
-           // LogUtils.e(e.getMessage());
+//            LogUtils.e(e.getMessage());
         }
     }
     public void setNetType(String netType) {
@@ -492,9 +492,9 @@ public class Session {
     private void readSettings() {
 //        mHotelMapCache = (HotelMapCache) getObj(P_APP_HOTEL_MAP);
 //        roomList = (List<RoomInfo>) getObj(P_ROMM_LIST);
+        hotelBean = (HotelBean) getObj(P_APP_LOGIN);
         conAbilityList = (ConAbilityList) getObj(P_CON_ABILITY_LIST);
         customerList = (List<ContactFormat>) getObj(P_CUSTOMER_LIST);
-        opFailedList = (CopyOnWriteArrayList<OperationFailedItem>) getObj(P_OPERATION_FAILED_LIST);
         recommendListHistory = (RecommendProHistory) getObj(P_RECOMEND_HISTORY_LIST);
         advertProHistory = (AdvertProHistory) getObj(P_ADVERT_HISTORY_LIST);
         mUploadFirstUse = mPreference.loadBooleanKey(P_APP_FIRST_USE,false);
@@ -511,12 +511,13 @@ public class Session {
         lastTime = mPreference.loadLongKey(P_APP_LASTSTARTUP,0);
         isFirstPlay = mPreference.loadBooleanKey(P_APP_FIRST_PLAY,true);
         area_id = mPreference.loadStringKey(P_APP_AREA_ID, "");
-        hotelBean = (HotelBean) getObj(P_APP_LOGIN);
+
+        opFailedList = (CopyOnWriteArrayList<OperationFailedItem>) getObj(P_OPERATION_FAILED_LIST);
         setDeviceid(deviceid);
         getApplicationInfo();
 
         /** 清理App缓存 */
-        AppUtils.clearExpiredFile(mContext, false);
+//        AppUtils.clearExpiredFile(mContext, false);
 
         /** 刷机防止操作 */
 //        readDeviceNum();
