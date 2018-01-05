@@ -635,9 +635,15 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
 
     @Override
     public void onItemClick(int position, ContactFormat contactFormat) {
+        Intent intent;
         switch (operationType) {
+            case CUSTOMER_LIST:
+                intent = new Intent(this,UserInfoActivity.class);
+                intent.putExtra("customerID",contactFormat.getCustomer_id());
+                startActivity(intent);
+                break;
             case CUSTOMER_LIST_SELECT:
-                Intent intent = new Intent();
+                intent = new Intent();
                 intent.putExtra("customer",contactFormat);
                 setResult(RESULT_CODE_SELECT,intent);
                 finish();
