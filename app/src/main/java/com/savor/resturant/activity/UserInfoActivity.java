@@ -34,7 +34,7 @@ import static com.savor.resturant.activity.ContactCustomerListActivity.REQUEST_C
 
 
 /**
- * 添加预定
+ * 客户信息
  */
 public class UserInfoActivity extends BaseActivity implements View.OnClickListener
         {
@@ -293,7 +293,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
     private void getCustomerBaseInfo(){
         HotelBean hotelBean = mSession.getHotelBean();
-        AppApi.getCustomerBaseInfo(mContext,hotelBean.getInvite_id(),hotelBean.getTel(),customer_id,this);
+        AppApi.getCustomerBaseInfo(mContext,customer_id,hotelBean.getInvite_id(),hotelBean.getTel(),this);
     }
 
 
