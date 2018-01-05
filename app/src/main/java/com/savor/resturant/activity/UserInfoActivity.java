@@ -14,6 +14,7 @@ import com.bigkoo.pickerview.TimePickerView;
 import com.bumptech.glide.Glide;
 import com.common.api.widget.pulltorefresh.library.PullToRefreshListView;
 import com.savor.resturant.R;
+import com.savor.resturant.adapter.TicketAdapter;
 import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.Customer;
 import com.savor.resturant.bean.CustomerBean;
@@ -83,6 +84,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
     private static final int REQUEST_CODE_LABEL = 100;
             private PullToRefreshListView refreshListView;
+            private TicketAdapter ticketAdapter;
 
             @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +136,8 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         rlv_labels = (TagFlowLayout) headerView.findViewById(R.id.rlv_labels);
 
         refreshListView.getRefreshableView().addHeaderView(headerView);
+        ticketAdapter = new TicketAdapter(this);
+        refreshListView.setAdapter(ticketAdapter);
     }
 
     @Override
@@ -141,6 +145,22 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         tv_center.setText("详细资料");
         tv_center.setTextColor(getResources().getColor(R.color.color_f6f2ed));
 
+        final List<String> imageList = new ArrayList<>();
+        for(int i = 0;i<5;i++) {
+            imageList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515744348&di=df7a8a21f2dc6dca3b840939a1a9da98&imgtype=jpg&er=1&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2Fa50f4bfbfbedab64fe858d27f536afc378311e66.jpg");
+        }
+        ticketAdapter.setData(imageList);
+        refreshListView.onLoadComplete(true);
+        refreshListView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                refreshListView.onLoadComplete(false);
+                for(int i = 0;i<5;i++) {
+                    imageList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515744348&di=df7a8a21f2dc6dca3b840939a1a9da98&imgtype=jpg&er=1&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2Fa50f4bfbfbedab64fe858d27f536afc378311e66.jpg");
+                }
+                ticketAdapter.notifyDataSetChanged();
+            }
+        },3000);
     }
 
     @Override
