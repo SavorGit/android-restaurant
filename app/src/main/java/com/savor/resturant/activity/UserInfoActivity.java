@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bigkoo.pickerview.TimePickerView;
 import com.bumptech.glide.Glide;
+import com.common.api.widget.pulltorefresh.library.PullToRefreshListView;
 import com.savor.resturant.R;
 import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.Customer;
@@ -81,7 +82,9 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             };
 
     private static final int REQUEST_CODE_LABEL = 100;
-    @Override
+            private PullToRefreshListView refreshListView;
+
+            @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info_layout);
@@ -90,7 +93,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         getViews();
         setViews();
         setListeners();
-        getCustomerBaseInfo();
+//        getCustomerBaseInfo();
     }
 
     private void getDate(){
@@ -105,37 +108,47 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     public void getViews() {
         iv_left = (ImageView) findViewById(R.id.iv_left);
         tv_center = (TextView) findViewById(R.id.tv_center);
-        iv_header = (ImageView) findViewById(R.id.iv_header);
 
-        name = (TextView) findViewById(R.id.name);
-        consume_ability = (TextView) findViewById(R.id.consume_ability);
-        birthday = (TextView) findViewById(R.id.birthday);
-        birthplace = (TextView) findViewById(R.id.birthplace);
-        tv_edit_label = (TextView) findViewById(R.id.tv_edit_label);
-        tv_label_hint = (TextView) findViewById(R.id.tv_label_hint);
-        edit_label = (TextView) findViewById(R.id.edit_label);
-        remark = (TextView) findViewById(R.id.remark);
-        edit_label_remark = (TextView) findViewById(R.id.edit_label_remark);
-        tv_add_ticket = (TextView) findViewById(R.id.tv_add_ticket);
-        sex = (ImageView) findViewById(R.id.sex);
-        tel = (TextView) findViewById(R.id.tel);
-        rlv_labels = (TagFlowLayout) findViewById(R.id.rlv_labels);
+        refreshListView = (PullToRefreshListView) findViewById(R.id.listview);
 
+        initHeaderView();
+
+    }
+
+    private void initHeaderView() {
+        View headerView = View.inflate(this,R.layout.header_view_user_info,null);
+        iv_header = (ImageView) headerView.findViewById(R.id.iv_header);
+
+        name = (TextView) headerView.findViewById(R.id.name);
+        consume_ability = (TextView) headerView.findViewById(R.id.consume_ability);
+        birthday = (TextView) headerView.findViewById(R.id.birthday);
+        birthplace = (TextView) headerView.findViewById(R.id.birthplace);
+        tv_edit_label = (TextView) headerView.findViewById(R.id.tv_edit_label);
+        tv_label_hint = (TextView) headerView.findViewById(R.id.tv_label_hint);
+        edit_label = (TextView) headerView.findViewById(R.id.edit_label);
+        remark = (TextView) headerView.findViewById(R.id.remark);
+        edit_label_remark = (TextView) headerView.findViewById(R.id.edit_label_remark);
+        tv_add_ticket = (TextView) headerView.findViewById(R.id.tv_add_ticket);
+        sex = (ImageView) headerView.findViewById(R.id.sex);
+        tel = (TextView) headerView.findViewById(R.id.tel);
+        rlv_labels = (TagFlowLayout) headerView.findViewById(R.id.rlv_labels);
+
+        refreshListView.getRefreshableView().addHeaderView(headerView);
     }
 
     @Override
     public void setViews() {
         tv_center.setText("详细资料");
-
+        tv_center.setTextColor(getResources().getColor(R.color.color_f6f2ed));
 
     }
 
     @Override
     public void setListeners() {
 
-        iv_left.setOnClickListener(this);
-        tv_center.setOnClickListener(this);
-        edit_label.setOnClickListener(this);
+//        iv_left.setOnClickListener(this);
+//        tv_center.setOnClickListener(this);
+//        edit_label.setOnClickListener(this);
 
 
     }

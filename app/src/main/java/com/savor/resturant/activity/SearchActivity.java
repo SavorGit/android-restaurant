@@ -168,7 +168,10 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
             intent.putExtra("customer",contactFormat);
             setResult(RESULT_CODE_SELECT,intent);
         }else {
-            ShowMessage.showToast(this,"打开客户信息列表");
+            Intent intent = new Intent(this,UserInfoActivity.class);
+            intent.putExtra("customerID",contactFormat.getCustomer_id());
+            startActivity(intent);
+//            ShowMessage.showToast(this,"打开客户信息列表");
         }
         AppUtils.hideSoftKeybord(this);
         finish();
