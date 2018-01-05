@@ -74,7 +74,7 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
                 break;
             case CUSTOMER_LIST_SELECT:
             case CUSTOMER_LIST:
-                contactList = mSession.getCustomerList();
+                contactList = mSession.getCustomerList().getCustomerList();
                 break;
         }
 

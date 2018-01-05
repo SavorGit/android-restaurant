@@ -93,7 +93,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         getViews();
         setViews();
         setListeners();
-//        getCustomerBaseInfo();
+        getCustomerBaseInfo();
     }
 
     private void getDate(){
@@ -146,9 +146,9 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void setListeners() {
 
-//        iv_left.setOnClickListener(this);
-//        tv_center.setOnClickListener(this);
-//        edit_label.setOnClickListener(this);
+        iv_left.setOnClickListener(this);
+        tv_center.setOnClickListener(this);
+        edit_label.setOnClickListener(this);
 
 
     }
@@ -173,23 +173,14 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-
-
-
-
-
-
-
     @Override
     public void onSuccess(AppApi.Action method, Object obj) {
         hideLoadingLayout();
         switch (method) {
             case POST_CUSTOMER_INFO_JSON:
-
                 if (obj instanceof CustomerBean){
                     customerBean = (CustomerBean)obj;
                     handleData();
-
                 }
                 break;
 

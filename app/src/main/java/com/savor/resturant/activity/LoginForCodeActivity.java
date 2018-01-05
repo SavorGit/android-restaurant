@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
 import com.savor.resturant.bean.ContactFormat;
+import com.savor.resturant.bean.CustomerListBean;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.core.ApiRequestListener;
 import com.savor.resturant.core.AppApi;
@@ -286,12 +287,18 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void formatAndSaveCustomers(final HotelBean hotelBean) {
-        new Thread(){
-            @Override
-            public void run() {
+//        new Thread(){
+//            @Override
+//            public void run() {
                 List<ContactFormat> customer_list = hotelBean.getCustomer_list();
-                List<ContactFormat> cacheList = mSession.getCustomerList();
-                if(customer_list!=null&&cacheList == null) {
+                List<ContactFormat> cacheList = null;
+                CustomerListBean customerList= mSession.getCustomerList();
+                if(customerList!=null) {
+                    cacheList = customerList.getCustomerList();
+                }
+
+                // 如果本地缓存为空或者与当前登录手机号不一致 需要重新缓存
+                if((customer_list!=null&&cacheList == null)||(!hotelBean.getTel().equals(customerList.getMobile()))) {
 
                     for(ContactFormat contactFormat : customer_list) {
                         String name = contactFormat.getName();
@@ -323,10 +330,13 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
                         contactFormat.setKey(stuf+name+"#"+sb.toString().toLowerCase()+"#"+(TextUtils.isEmpty(contactFormat.getBirthplace())?"":contactFormat.getBirthplace())+"#"+(TextUtils.isEmpty(mobile)?"":mobile));
 
                     }
-                    mSession.setCustomerList(customer_list);
+                    CustomerListBean listBean = new CustomerListBean();
+                    listBean.setMobile(hotelBean.getTel());
+                    listBean.setCustomerList(customer_list);
+                    mSession.setCustomerList(listBean);
                 }
-            }
-        }.start();
+//            }
+//        }.start();
 
     }
 

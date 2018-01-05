@@ -37,6 +37,7 @@ import com.savor.resturant.R;
 import com.savor.resturant.SavorApplication;
 import com.savor.resturant.bean.ConAbilityList;
 import com.savor.resturant.bean.ContactFormat;
+import com.savor.resturant.bean.CustomerListBean;
 import com.savor.resturant.bean.OperationFailedItem;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.ResponseErrorMessage;
@@ -206,7 +207,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
             return;
         }
 
-        List<ContactFormat> customerList = mSession.getCustomerList();
+        List<ContactFormat> customerList = mSession.getCustomerList().getCustomerList();
         if(customerList!=null&&customerList.size()>0) {
             for(ContactFormat contactFormat : customerList) {
                 String cMobile = contactFormat.getMobile();
@@ -343,8 +344,8 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
 
         currentAddCustomer.setKey(stuf+name+"#"+sb.toString().toLowerCase()+"#"+(TextUtils.isEmpty(birthPlace)?"":birthPlace)+"#"+(TextUtils.isEmpty(mobile)?"":mobile));
 
-
-        List<ContactFormat> customerList = mSession.getCustomerList();
+        CustomerListBean cacheList = mSession.getCustomerList();
+        List<ContactFormat> customerList = mSession.getCustomerList().getCustomerList();
         if(customerList.contains(currentAddCustomer)) {
             ShowMessage.showToast(this,"该客户已存在");
         }else {
@@ -352,7 +353,8 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                     faceUrl,invite_id,tel,name,remark,sex,usermobile,this);
             customerList.add(currentAddCustomer);
             Collections.sort(customerList,pinyinComparator);
-            mSession.setCustomerList(customerList);
+            cacheList.setCustomerList(customerList);
+            mSession.setCustomerList(cacheList);
             ShowMessage.showToast(this,"添加成功");
             finish();
         }

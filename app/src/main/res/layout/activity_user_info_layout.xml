@@ -9,7 +9,7 @@
     <com.common.api.widget.pulltorefresh.library.PullToRefreshListView
         xmlns:ptr="http://schemas.android.com/apk/res-auto"
         ptr:ptrOrientationMode = "horizontal"
-        ptr:ptrMode = "pullFromEnd"
+        ptr:ptrMode = "disabled"
         android:layout_below="@id/top"
         android:id="@+id/listview"
         android:layout_width="fill_parent"

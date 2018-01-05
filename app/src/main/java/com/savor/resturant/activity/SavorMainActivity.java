@@ -50,7 +50,7 @@ public class SavorMainActivity extends BaseFragmentActivity implements MyTabWidg
     }
 
     private void checkShouldShowImportDialog() {
-        List<ContactFormat> customerList = mSession.getCustomerList();
+        List<ContactFormat> customerList = mSession.getCustomerList().getCustomerList();
         String is_import_customer = mSession.getHotelBean().getIs_import_customer();
         boolean showImportDialog = mSession.isShowImportDialog();
         if(!"1".equals(is_import_customer)&&(customerList==null||customerList.size() == 0)&&!showImportDialog) {

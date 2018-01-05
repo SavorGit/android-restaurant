@@ -108,7 +108,7 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
 
 
         // 判断是否已添加
-        List<ContactFormat> customer_list =session.getCustomerList();
+        List<ContactFormat> customer_list =session.getCustomerList().getCustomerList();
         if(customer_list!=null&&customer_list.size()>0) {
             if(customer_list.contains(item)) {
                 item.setAdded(true);
