@@ -124,11 +124,17 @@ public class CustomerFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getCustomerHistory();
+    }
+
+    @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if(!hidden) {
-            getCustomerHistory();
-        }
+//        if(!hidden) {
+//            getCustomerHistory();
+//        }
     }
 
     @Override

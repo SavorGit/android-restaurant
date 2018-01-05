@@ -35,6 +35,7 @@ import com.common.api.utils.ShowMessage;
 import com.google.gson.Gson;
 import com.savor.resturant.R;
 import com.savor.resturant.SavorApplication;
+import com.savor.resturant.bean.AddCustomerResponse;
 import com.savor.resturant.bean.ConAbilityList;
 import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.CustomerListBean;
@@ -487,7 +488,16 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         super.onSuccess(method, obj);
         switch (method) {
             case POST_ADD_CUS_JSON:
-                LogUtils.d("savor:add customer success");
+                if(obj instanceof AddCustomerResponse) {
+                    AddCustomerResponse response = (AddCustomerResponse) obj;
+                    AddCustomerResponse.ListBean list = response.getList();
+                    if(list!=null) {
+                        String customer_id = list.getCustomer_id();
+                        currentAddCustomer.setCustomer_id(customer_id);
+                        CustomerListBean customerList = mSession.getCustomerList();
+                        mSession.setCustomerList(customerList);
+                    }
+                }
                 break;
             case POST_CON_ABILITY_JSON:
                 if(obj instanceof ConAbilityList) {

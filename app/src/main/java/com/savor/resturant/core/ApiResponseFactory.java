@@ -24,6 +24,7 @@ import com.common.api.utils.LogUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.savor.resturant.bean.AddCustomerResponse;
 import com.savor.resturant.bean.AddSpendTicketNoBookInfo;
 import com.savor.resturant.bean.BaseProResponse;
 import com.savor.resturant.bean.ConAbilityList;
@@ -300,7 +301,8 @@ public class ApiResponseFactory {
                 result = "success";
                 break;
             case POST_ADD_CUS_JSON:
-                result = "success";
+                result = gson.fromJson(info, new TypeToken<AddCustomerResponse>() {
+                }.getType());
                 break;
             case POST_EDIT_CUS_JSON:
                 result = "success";
