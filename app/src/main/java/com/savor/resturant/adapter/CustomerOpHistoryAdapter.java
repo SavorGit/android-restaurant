@@ -25,6 +25,7 @@ import java.util.List;
 public class CustomerOpHistoryAdapter extends RecyclerView.Adapter<CustomerOpHistoryAdapter.HistoryHolder> {
     private Context mContext;
     private List<CustomerHistoryBean> mData;
+    private OnItemClickListener onItemClickLitener;
 
     public CustomerOpHistoryAdapter(Context context) {
         this.mContext = context;
@@ -43,7 +44,7 @@ public class CustomerOpHistoryAdapter extends RecyclerView.Adapter<CustomerOpHis
 
     @Override
     public void onBindViewHolder(HistoryHolder holder, int position) {
-        CustomerHistoryBean customerHistoryBean = mData.get(position);
+        final CustomerHistoryBean customerHistoryBean = mData.get(position);
         String create_time = customerHistoryBean.getCreate_time();
         String face_url = customerHistoryBean.getFace_url();
         String type = customerHistoryBean.getType();
@@ -66,6 +67,15 @@ public class CustomerOpHistoryAdapter extends RecyclerView.Adapter<CustomerOpHis
         holder.tv_num.setText(usermobile);
         holder.item_contact_title.setText(username);
         holder.tv_history_time.setText(create_time+" "+type);
+
+        holder.rl_hitory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onItemClickLitener!=null) {
+                    onItemClickLitener.onItemClick(customerHistoryBean);
+                }
+            }
+        });
     }
 
     @Override
@@ -90,6 +100,10 @@ public class CustomerOpHistoryAdapter extends RecyclerView.Adapter<CustomerOpHis
             tv_num = (TextView) itemView.findViewById(R.id.tv_num);
             tv_history_time = (TextView) itemView.findViewById(R.id.tv_history_time);
         }
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickLitener = listener;
     }
 
     public interface OnItemClickListener {
