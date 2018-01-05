@@ -39,7 +39,7 @@ import static com.savor.resturant.activity.ContactCustomerListActivity.REQUEST_C
 
 
 /**
- * 欢迎词文背景置页
+ * 添加预定
  */
 public class AddBookActivity extends BaseActivity implements View.OnClickListener
         {
