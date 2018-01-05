@@ -40,7 +40,7 @@
                         android:maxLength="8"
                         android:id="@+id/et_name"
                         android:layout_width="match_parent"
-                        android:layout_height="55dp"
+                        android:layout_height="50dp"
                         android:background="@color/transparent"
                         android:drawableLeft="@drawable/ico_person"
                         android:drawablePadding="15dp"
@@ -68,7 +68,7 @@
                             android:hint="请输入手机号"
                             android:drawableLeft="@drawable/ico_phone"
                             android:layout_width="match_parent"
-                            android:layout_height="55dp" />
+                            android:layout_height="50dp" />
                         <ImageView
                             android:id="@+id/iv_add"
                             android:layout_gravity="center_vertical"
@@ -93,7 +93,7 @@
                             android:id="@+id/et_second_mobile"
                             android:textSize="14sp"
                             android:layout_width="match_parent"
-                            android:layout_height="55dp"
+                            android:layout_height="50dp"
                             android:background="@color/transparent"
                             android:drawableLeft="@drawable/ico_phone"
                             android:drawablePadding="10dp"
@@ -107,7 +107,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="15dp"
                     android:gravity="center"
@@ -147,7 +147,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
                 <LinearLayout
-                    android:padding="15dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="15dp"
                     android:gravity="center_vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -197,15 +200,13 @@
                     android:layout_marginLeft="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="5dp"
                     android:background="@color/divider_list" />
                 <RelativeLayout
                     android:gravity="center_vertical"
                     android:id="@+id/rl_con_ability"
                     android:paddingRight="20dp"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="20dp"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="18dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
@@ -230,14 +231,12 @@
                     android:layout_marginLeft="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
                     android:background="@color/divider_list" />
                 <RelativeLayout
                     android:id="@+id/rl_birthday"
                     android:paddingRight="20dp"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="20dp"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="18dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
@@ -269,8 +268,8 @@
                     android:layout_height="wrap_content">
                     <EditText
                         android:id="@+id/et_birth_place"
-                        android:paddingTop="20dp"
-                        android:paddingBottom="20dp"
+                        android:paddingTop="18dp"
+                        android:paddingBottom="18dp"
                         android:layout_marginLeft="15dp"
                         android:background="@color/transparent"
                         android:drawablePadding="15dp"
@@ -294,10 +293,10 @@
                     android:layout_height="wrap_content">
                     <EditText
                         android:id="@+id/et_ticket_info"
-                        android:paddingTop="20dp"
-                        android:paddingBottom="20dp"
+                        android:paddingTop="18dp"
+                        android:paddingBottom="18dp"
                         android:textSize="15sp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="15dp"
                         android:background="@color/transparent"
                         android:drawablePadding="15dp"
                         android:gravity="center_vertical"
@@ -321,9 +320,9 @@
         </LinearLayout>
     </ScrollView>
     <LinearLayout
-        android:paddingTop="30dp"
+        android:paddingTop="25dp"
         android:gravity="center"
-        android:paddingBottom="30dp"
+        android:paddingBottom="25dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
