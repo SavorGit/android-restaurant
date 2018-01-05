@@ -228,6 +228,10 @@
             android:name=".activity.UserInfoActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".activity.RoomListActivity"
+            android:screenOrientation="portrait" />
+
 
 
     </application>
