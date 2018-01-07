@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EDE6DE">
+
+    <include
+        android:id="@+id/top"
+        layout="@layout/layout_head_title" />
+
+    <RelativeLayout
+        android:id="@+id/remark_la"
+        android:layout_below="@+id/top"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/bg_ticket_border"
+        android:layout_gravity="center"
+        android:layout_margin="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/et_remark"
+            android:layout_width="match_parent"
+            android:layout_margin="10dp"
+            android:layout_height="180dp"
+            android:gravity="left|top"
+            android:padding="8dp"
+            android:background="@color/transparent"
+            android:hint="请记录客户其他信息"
+            android:maxLength="30"
+            android:textSize="14sp" />
+    </RelativeLayout>
+    <TextView
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/remark_la"
+        android:layout_marginTop="20dp"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:background="@drawable/right_bg_button"
+        android:layout_marginBottom="20dp"
+        android:id="@+id/tv_save"
+        android:layout_gravity="center_horizontal"
+        android:text="保存"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

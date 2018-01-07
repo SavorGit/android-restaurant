@@ -83,6 +83,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             };
 
     private static final int REQUEST_CODE_LABEL = 100;
+            private static final int REQUEST_CODE_REMARK = 108;
             private PullToRefreshListView refreshListView;
             private TicketAdapter ticketAdapter;
 
@@ -169,6 +170,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         iv_left.setOnClickListener(this);
         tv_center.setOnClickListener(this);
         edit_label.setOnClickListener(this);
+        edit_label_remark.setOnClickListener(this);
 
 
     }
@@ -186,6 +188,12 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 intent.putExtra("customer_id",customer_id);
                 intent.putExtra("type",12);
                 startActivityForResult(intent,REQUEST_CODE_LABEL);
+                break;
+            case R.id.edit_label_remark:
+                intent = new Intent(this,AddRemarkActivity.class);
+                intent.putExtra("customer_id",customer_id);
+                intent.putExtra("remark",remarkStr);
+                startActivityForResult(intent,REQUEST_CODE_REMARK);
                 break;
 
 
@@ -340,7 +348,16 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                             hideLabel();
                         }
                     }
-                }
+                }else if(requestCode == REQUEST_CODE_REMARK){
+                    if(data!=null) {
+                        String remarkS = (String)data.getStringExtra("remark");
+                       // ArrayList<CustomerLabel> labelList = (ArrayList<CustomerLabel>) data.getSerializableExtra("selecteLabels");
+                        remark.setText(remarkS);
+                        }else {
+                            hideLabel();
+                        }
+                    }
+
             }
 
 

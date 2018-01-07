@@ -131,6 +131,8 @@ public class AppApi {
         POST_ADD_LABEL_JSON,
         /**获取客户标签(点亮的)*/
         POST_CUSTOMER_LABELS_JSON,
+        /**修改客户备注*/
+        POST_CUSTOMER_EDIT_REMARK_JSON,
     }
 
     /**
@@ -184,6 +186,8 @@ public class AppApi {
             put(Action.POST_LABEL_List_JSON, formatPhpUrl("Dinnerapp2/Label/getCustomerLable"));
             put(Action.POST_ADD_LABEL_JSON, formatPhpUrl("Dinnerapp2/Label/addLabel"));
             put(Action.POST_CUSTOMER_LABELS_JSON, formatPhpUrl("Dinnerapp2/Customer/getOnlyLabel"));
+            put(Action.POST_CUSTOMER_EDIT_REMARK_JSON, formatPhpUrl("Dinnerapp2/Customer/editRemark"));
+
         }
     };
 
@@ -949,6 +953,20 @@ public class AppApi {
         new AppServiceOk(context,Action.POST_CUSTOMER_LABELS_JSON,handler,params).post();
     }
 
+    /**修改客户备注*/
+    public static void editRemark(Context context,
+                                            String customer_id,
+                                            String invite_id,
+                                            String mobile,
+                                            String remark,
+                                            ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("customer_id", customer_id);
+        params.put("invite_id", invite_id);
+        params.put("mobile", mobile);
+        params.put("remark", remark);
+        new AppServiceOk(context,Action.POST_CUSTOMER_EDIT_REMARK_JSON,handler,params).post();
+    }
     // 超时（网络）异常
     public static final String ERROR_TIMEOUT = "3001";
     // 业务异常
