@@ -359,6 +359,8 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
 
         }
 
+        listItems.clear();
+        bookAdapter.setData(listItems);
         page_num = 1;
         isUp = true;
         getOrderList();

@@ -214,7 +214,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
 
     private void AddBook(){
       order_mobile = et_phone.getText().toString();
-      order_name = et_phone.getText().toString();
+      order_name = et_name.getText().toString();
       order_time = tv_dining_time.getText().toString();
       person_nums = et_dining_num.getText().toString();
       room_id = room.getRoom_id();

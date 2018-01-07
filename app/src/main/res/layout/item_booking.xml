@@ -69,6 +69,7 @@
 
         <RelativeLayout
             android:id="@+id/label1"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/custom_name"
@@ -105,6 +106,7 @@
 
         <RelativeLayout
             android:id="@+id/label2"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/custom_name"
@@ -140,6 +142,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:visibility="gone"
             android:id="@+id/label3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -173,6 +176,9 @@
                 />
 
         </RelativeLayout>
+
+
+
 
     </RelativeLayout>
 
