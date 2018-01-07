@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -41,7 +42,7 @@ import static com.savor.resturant.activity.ContactCustomerListActivity.REQUEST_C
 /**
  * 包间列表
  */
-public class RoomListActivity extends BaseActivity implements View.OnClickListener
+public class RoomListActivity extends BaseActivity implements View.OnClickListener,AdapterView.OnItemClickListener
         {
 
     private Context context;
@@ -92,6 +93,7 @@ public class RoomListActivity extends BaseActivity implements View.OnClickListen
         iv_left.setOnClickListener(this);
         tv_center.setOnClickListener(this);
         add.setOnClickListener(this);
+        room_list.setOnItemClickListener(this);
     }
 
 
@@ -132,6 +134,11 @@ public class RoomListActivity extends BaseActivity implements View.OnClickListen
                 if (obj instanceof RoomListBean){
                     RoomListBean room = (RoomListBean) obj;
                    // handleData(mlist);
+                    room.setRoom_name(et_note.getText().toString());
+                    Intent intent = new Intent();
+                    intent.putExtra("room",room);
+                    setResult(REQUEST_ADD_ROOM,intent);
+                    finish();
 
 
                 }
@@ -181,7 +188,7 @@ public class RoomListActivity extends BaseActivity implements View.OnClickListen
         HotelBean hotelBean = mSession.getHotelBean();
         String roomName = et_note.getText().toString();
         if (!TextUtils.isEmpty(roomName)) {
-            AppApi.addRoom(mContext,hotelBean.getInvite_id(),hotelBean.getTel(),"",this);
+            AppApi.addRoom(mContext,hotelBean.getInvite_id(),hotelBean.getTel(),roomName,this);
         }else {
 
         }
@@ -203,5 +210,13 @@ public class RoomListActivity extends BaseActivity implements View.OnClickListen
                 }
             }
 
-}
+     @Override
+     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+         RoomListBean room = (RoomListBean)roomAdapter.getItem(position);
+         Intent intent = new Intent();
+         intent.putExtra("room",room);
+         setResult(REQUEST_ADD_ROOM,intent);
+         finish();
+       }
+     }
 
