@@ -146,9 +146,9 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void setListeners() {
 
-//        iv_left.setOnClickListener(this);
-//        tv_center.setOnClickListener(this);
-//        edit_label.setOnClickListener(this);
+        iv_left.setOnClickListener(this);
+        tv_center.setOnClickListener(this);
+        edit_label.setOnClickListener(this);
 
 
     }
