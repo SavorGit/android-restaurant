@@ -1,8 +1,12 @@
 package com.savor.resturant.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -10,28 +14,48 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.sdk.android.oss.ClientException;
+import com.alibaba.sdk.android.oss.OSSClient;
+import com.alibaba.sdk.android.oss.ServiceException;
+import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
+import com.alibaba.sdk.android.oss.model.PutObjectRequest;
+import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.bigkoo.pickerview.TimePickerView;
 import com.bumptech.glide.Glide;
+import com.common.api.utils.FileUtils;
+import com.common.api.utils.ShowMessage;
 import com.common.api.widget.pulltorefresh.library.PullToRefreshListView;
+import com.google.gson.Gson;
 import com.savor.resturant.R;
+import com.savor.resturant.SavorApplication;
 import com.savor.resturant.adapter.TicketAdapter;
 import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.Customer;
 import com.savor.resturant.bean.CustomerBean;
 import com.savor.resturant.bean.CustomerLabel;
+import com.savor.resturant.bean.CustomerListBean;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.OrderListBean;
 import com.savor.resturant.core.AppApi;
+import com.savor.resturant.utils.ConstantValues;
 import com.savor.resturant.utils.GlideCircleTransform;
+import com.savor.resturant.utils.OSSClientUtil;
+import com.savor.resturant.widget.ChoosePicDialog;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
+import net.sourceforge.pinyin4j.PinyinHelper;
+
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import static com.savor.resturant.activity.AddCustomerActivity.REQUEST_CODE_IMAGE;
+import static com.savor.resturant.activity.AddCustomerActivity.TAKE_PHOTO_REQUEST;
 import static com.savor.resturant.activity.ContactCustomerListActivity.REQUEST_CODE_SELECT;
 
 
@@ -70,6 +94,8 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     private String consume_abilityStr;
     private String remarkStr;
     private List<CustomerLabel> labelList = new ArrayList<>();;
+    private String currentImagePath;
+    private String ticketOssUrl;
     private TagAdapter mTagAdapter = new  TagAdapter(labelList) {
                 @Override
                 public View getView(FlowLayout parent, int position, Object o) {
@@ -86,7 +112,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             private static final int REQUEST_CODE_REMARK = 108;
             private PullToRefreshListView refreshListView;
             private TicketAdapter ticketAdapter;
-
+    final List<String> imageList = new ArrayList<>();
             @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,7 +172,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         tv_center.setText("详细资料");
         tv_center.setTextColor(getResources().getColor(R.color.color_f6f2ed));
         rlv_labels.setAdapter(mTagAdapter);
-        final List<String> imageList = new ArrayList<>();
+
         for(int i = 0;i<5;i++) {
             imageList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515744348&di=df7a8a21f2dc6dca3b840939a1a9da98&imgtype=jpg&er=1&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2Fa50f4bfbfbedab64fe858d27f536afc378311e66.jpg");
         }
@@ -171,6 +197,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         tv_center.setOnClickListener(this);
         edit_label.setOnClickListener(this);
         edit_label_remark.setOnClickListener(this);
+        tv_add_ticket.setOnClickListener(this);
 
 
     }
@@ -194,6 +221,9 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 intent.putExtra("customer_id",customer_id);
                 intent.putExtra("remark",remarkStr);
                 startActivityForResult(intent,REQUEST_CODE_REMARK);
+                break;
+            case R.id.tv_add_ticket:
+                showPhotoDialog();
                 break;
 
 
@@ -356,10 +386,122 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                         }else {
                             hideLabel();
                         }
+                    }else if (requestCode == TAKE_PHOTO_REQUEST && resultCode == Activity.RESULT_OK) {
+                    // 拍照
+                   // Glide.with(this).load(currentImagePath).placeholder(R.drawable.empty_slide).into(mSpendHistoryIv);
+                    submit();
+                }else   if (requestCode == REQUEST_CODE_IMAGE&&resultCode == Activity.RESULT_OK && data != null) {
+                    // 从相册选择
+                    Uri selectedImage = data.getData();
+                    String[] filePathColumns = {MediaStore.Images.Media.DATA};
+                    Cursor c = getContentResolver().query(selectedImage, filePathColumns, null, null, null);
+                    c.moveToFirst();
+                    int columnIndex = c.getColumnIndex(filePathColumns[0]);
+                    String imagePath = c.getString(columnIndex);
+
+                    String cachePath = ((SavorApplication)mContext.getApplication()).imagePath;
+                    File dir = new File(cachePath);
+                    if(!dir.exists()) {
+                        dir.mkdirs();
                     }
 
-            }
+                    long timeMillis = System.currentTimeMillis();
+                    String tel = mSession.getHotelBean().getTel();
+                    String key = tel+"_"+timeMillis+".jpg";
+                    String copyPath = dir.getAbsolutePath()+File.separator+key;
 
+                    File sFile = new File(imagePath);
+                    FileUtils.copyFile(sFile, copyPath);
+
+                    currentImagePath = copyPath;
+                    submit();
+                    //Glide.with(this).load(currentImagePath).placeholder(R.drawable.empty_slide).into(mSpendHistoryIv);
+                }
+
+            }
+     private void submit() {
+
+//                final String usermobile = mMobileEt.getText().toString();
+//
+//                if(TextUtils.isEmpty(mNameEt.getText().toString())) {
+//                    ShowMessage.showToast(this,"请输入客户姓名");
+//                    return;
+//                }
+//
+//                if(TextUtils.isEmpty(usermobile)) {
+//                    ShowMessage.showToast(this,"请输入客户手机号");
+//                    return;
+//                }
+
+                File file = new File(currentImagePath);
+                String hotel_id = mSession.getHotelBean().getHotel_id();
+                final String objectKey = "log/resource/restaurant/mobile/userlogo/"+hotel_id+"/"+file.getName();
+                final OSSClient ossClient = OSSClientUtil.getOSSClient(this);
+                // 构造上传请求
+                PutObjectRequest put = new PutObjectRequest(ConstantValues.BUCKET_NAME,objectKey , currentImagePath);
+                ossClient.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+
+                    @Override
+                    public void onSuccess(PutObjectRequest putObjectRequest, PutObjectResult putObjectResult) {
+                        ticketOssUrl = ossClient.presignPublicObjectURL(ConstantValues.BUCKET_NAME, objectKey);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                //String name = mNameEt.getText().toString();
+                                String invite_id = mSession.getHotelBean().getInvite_id();
+                                String mobile = mSession.getHotelBean().getTel();
+                                String recipt = "";
+                                List<String> urlList = new ArrayList<>();
+                                urlList.add(ticketOssUrl);
+
+                                recipt = new Gson().toJson(urlList);
+
+                                if(TextUtils.isEmpty(customer_id)) {
+                                    // 如果客户id为空需要传客户信息bill_info，birthday，birthplace，consume_ability
+
+//                                    String bill_info = "";
+//                                    AppApi.addSignleConsumeRecord(UserInfoActivity.this,
+//                                            bill_info,birthday,birthplace,consume_ability,"",
+//                                            "",invite_id,"",mobile,name, recipt,usermobile,
+//                                            "",sex,UserInfoActivity.this);
+                                }else {
+                                    String lable_id_str = "";
+                                    List<String> labeIds = new ArrayList<>();
+                                    if(labelList.size()>0) {
+                                        for(int i = 0;i<labelList.size();i++) {
+                                            CustomerLabel label = labelList.get(i);
+                                            String label_id = label.getLabel_id();
+                                            labeIds.add(label_id);
+                                        }
+                                        lable_id_str = new Gson().toJson(labeIds);
+                                    }
+                                    // 如果客户id不为空 不需要传客户信息
+                                    AppApi.addSignleConsumeRecord(UserInfoActivity.this,
+                                            "","","","",customer_id,
+                                            "",invite_id,lable_id_str,mobile,usernameStr, recipt,usermobileStr,
+                                            "","",UserInfoActivity.this);
+                                }
+                            }
+                        });
+
+                        imageList.add(ticketOssUrl);
+                    }
+
+                    @Override
+                    public void onFailure(PutObjectRequest putObjectRequest, ClientException e, ServiceException e1) {
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ShowMessage.showToast(UserInfoActivity.this,"小票上传失败");
+                            }
+                        });
+                    }
+                });
+
+
+            }
 
     public void showLabel() {
         tv_label_hint.setVisibility(View.GONE);
@@ -370,5 +512,34 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         tv_label_hint.setVisibility(View.GONE);
         rlv_labels.setVisibility(View.VISIBLE);
      }
+     private void showPhotoDialog() {
+                final String tel = mSession.getHotelBean().getTel();
+                new ChoosePicDialog(this, new ChoosePicDialog.OnTakePhotoBtnClickListener() {
+                    @Override
+                    public void onTakePhotoClick() {
+
+                        String cacheDir = ((SavorApplication) getApplication()).imagePath;
+                        File cachePath = new File(cacheDir);
+                        if(!cachePath.exists()) {
+                            cachePath.mkdirs();
+                        }
+                        currentImagePath = cacheDir+ File.separator+tel+"_"+System.currentTimeMillis()+".jpg";
+                        File file = new File(currentImagePath);
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        Uri imageUri = Uri.fromFile(file);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
+                        UserInfoActivity.this.startActivityForResult(intent, TAKE_PHOTO_REQUEST);
+                    }
+                },
+                        new ChoosePicDialog.OnAlbumBtnClickListener() {
+                            @Override
+                            public void onAlbumBtnClick() {
+                                Intent intent = new Intent(Intent.ACTION_PICK,
+                                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                UserInfoActivity.this.startActivityForResult(intent, REQUEST_CODE_IMAGE);
+                            }
+                        }
+                ).show();
+            }
 }
 
