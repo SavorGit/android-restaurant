@@ -170,8 +170,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:visibility="gone" />
+                android:layout_marginRight="10dp" />
 
             <TextView
                 android:id="@+id/tv_label_hint"
@@ -181,6 +180,7 @@
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:paddingTop="10dp"
+                android:visibility="gone"
                 android:text="选择或输入客人信息后，可以进行标签管理" />
         </FrameLayout>
 

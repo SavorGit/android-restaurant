@@ -144,7 +144,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     public void setViews() {
         tv_center.setText("详细资料");
         tv_center.setTextColor(getResources().getColor(R.color.color_f6f2ed));
-
+        rlv_labels.setAdapter(mTagAdapter);
         final List<String> imageList = new ArrayList<>();
         for(int i = 0;i<5;i++) {
             imageList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515744348&di=df7a8a21f2dc6dca3b840939a1a9da98&imgtype=jpg&er=1&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2Fa50f4bfbfbedab64fe858d27f536afc378311e66.jpg");
@@ -184,6 +184,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             case R.id.edit_label:
                 intent = new Intent(this,LabelAddActivity.class);
                 intent.putExtra("customer_id",customer_id);
+                intent.putExtra("type",12);
                 startActivityForResult(intent,REQUEST_CODE_LABEL);
                 break;
 
@@ -286,11 +287,13 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                       remark.setText("");
                   }
 
-                  labelList = customer.getLabel();
-                  if (labelList != null && labelList.size()>0) {
-                      showLabel();
-                      rlv_labels.setAdapter(mTagAdapter);
+                  List<CustomerLabel> labelListl = customer.getLabel();
+                  if (labelListl != null && labelListl.size()>0) {
+
+                      this.labelList.clear();
+                      this.labelList.addAll(labelListl);
                       mTagAdapter.notifyDataChanged();
+                      showLabel();
                   }else {
                       hideLabel();
                   }

@@ -41,6 +41,7 @@ public class LabelAddActivity extends BaseActivity implements View.OnClickListen
     private String invite_id;
     private String tel;
     private List<CustomerLabel> list;
+    private int typeActivity = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class LabelAddActivity extends BaseActivity implements View.OnClickListen
         invite_id = mSession.getHotelBean().getInvite_id();
         tel = mSession.getHotelBean().getTel();
         customerId = getIntent().getStringExtra("customer_id");
+        typeActivity = getIntent().getIntExtra("type",0);
         AppApi.getLabelList(this, customerId, invite_id, tel,this);
     }
 
@@ -113,6 +115,9 @@ public class LabelAddActivity extends BaseActivity implements View.OnClickListen
         ArrayList<CustomerLabel> selectedList = new ArrayList<>();
         if(data!=null&&data.size()>0) {
             for(CustomerLabel label: data) {
+                if (12== typeActivity) {
+                    AppApi.addLabel(this,customerId,invite_id,label.getLabel_name(),tel,this);
+                }
                 if(label.getLight() == 1) {
                     selectedList.add(label);
                 }
