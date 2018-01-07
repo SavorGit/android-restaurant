@@ -271,7 +271,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             case POST_CUSTOMER_INFO_JSON:
 
                 default:
-                    super.onError(method,obj);
+                   // super.onError(method,obj);
                     break;
         }
     }
