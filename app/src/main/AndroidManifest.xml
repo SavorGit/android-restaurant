@@ -235,6 +235,16 @@
             android:name=".activity.AddRemarkActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".activity.BookInfoActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.UpDateBookActivity"
+            android:screenOrientation="portrait" />
+
+
+
 
 
     </application>

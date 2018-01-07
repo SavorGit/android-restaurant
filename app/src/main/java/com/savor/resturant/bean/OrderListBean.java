@@ -22,6 +22,7 @@ public class OrderListBean implements Serializable {
     private String room_type;
     private String face_url;
     private String moment_str;
+    private String remark;
 
 
     public String getOrder_id() {
@@ -136,6 +137,14 @@ public class OrderListBean implements Serializable {
         this.moment_str = moment_str;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     @Override
     public String toString() {
         return "OrderListBean{" +
@@ -153,6 +162,7 @@ public class OrderListBean implements Serializable {
                 ", room_type='" + room_type + '\'' +
                 ", face_url='" + face_url + '\'' +
                 ", moment_str='" + moment_str + '\'' +
+                ", remark='" + remark + '\'' +
                 '}';
     }
 }

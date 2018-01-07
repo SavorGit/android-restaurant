@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ece6de">
+    <include
+        android:id="@+id/top"
+        layout="@layout/layout_head_title" />
+    <RelativeLayout
+        android:layout_below="@id/top"
+        android:id="@+id/main_la"
+        android:layout_margin="10dp"
+        android:background="#f6f2ed"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ScrollView
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/room_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:padding="1.5sp"
+                    android:text="包间名称"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="17sp" />
+                <ImageView
+                    android:id="@+id/line1"
+                    android:layout_below="@id/room_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="#000000"/>
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/line1"
+                    android:layout_marginTop="18dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center"
+                    android:padding="1.5sp"
+                    android:text="订餐时间："
+                    android:textColor="@color/color_text_black"
+                    android:textSize="17sp" />
+                <TextView
+                    android:id="@+id/nums"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/time"
+                    android:layout_marginTop="14dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center"
+                    android:padding="1.5sp"
+                    android:text="就餐人数："
+                    android:textColor="@color/color_text_black"
+                    android:textSize="17sp" />
+                <TextView
+                    android:id="@+id/remark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/nums"
+                    android:layout_marginTop="14dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center"
+                    android:padding="1.5sp"
+                    android:text="备注："
+                    android:textColor="@color/color_text_black"
+                    android:textSize="17sp" />
+                
+                <RelativeLayout
+                    android:id="@+id/user_la"
+                    android:layout_below="@id/remark"
+                    android:layout_marginTop="15dp"
+                    android:layout_width="335dp"
+                    android:layout_height="72dp"
+                    android:background="#ffffff"
+                    android:layout_centerHorizontal="true">
+                    
+                    <ImageView
+                        android:id="@+id/iv_header"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:src="@drawable/mrtx"
+                        android:layout_marginLeft="10dp"/>
+                    <TextView
+                        android:id="@+id/user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/iv_header"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center"
+                        android:text="顾客姓名："
+                        android:textColor="@color/color_222222"
+                        android:textSize="16sp" />
+                    <TextView
+                        android:id="@+id/user_mobile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/iv_header"
+                        android:layout_below="@id/user_name"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center"
+                        android:text="139111303391"
+                        android:textColor="@color/color_label"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/to_user_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center"
+                        android:text="查看资料"
+                        android:drawableRight="@drawable/more"
+                        android:drawablePadding="5dp"
+                        android:textColor="@color/color_label"
+                        android:textSize="14sp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/del"
+                    android:layout_below="@id/user_la"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="20dp"
+                    android:padding="10dp"
+                    android:text="删除预定"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="60dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/app_red_color"
+                    android:background="@drawable/corner_remote_room_item"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:id="@+id/update"
+                    android:layout_below="@id/user_la"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="20dp"
+                    android:padding="10dp"
+                    android:text="修改预定"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="60dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/app_red_color"
+                    android:background="@drawable/corner_remote_room_item"
+                    android:gravity="center"/>
+                
+                <ImageView
+                    android:id="@+id/line2"
+                    android:layout_width="match_parent"
+                    android:layout_height="12dp"
+                    android:layout_below="@id/update"
+                    android:background="#ece6de"/>
+
+                <RelativeLayout
+                    android:id="@+id/function_la"
+                    android:layout_below="@id/line2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/function_lab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center"
+                        android:text="功能/服务"
+                        android:textColor="@color/color_text_black"
+                        android:textSize="17sp" />
+                    <ImageView
+                        android:id="@+id/line3"
+                        android:layout_below="@id/function_lab"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#f6f2ed"/>
+
+
+                    <TextView
+                        android:id="@+id/wel_lab"
+                        android:layout_below="@+id/line3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="欢迎词"
+                        android:textColor="@color/color_text_black"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="40dp"
+                        android:drawablePadding="5dp"
+                        android:drawableTop="@drawable/zhyc"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/wel_type"
+                        android:layout_below="@id/wel_lab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:padding="1dp"
+                        android:text="已完成"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="40dp"
+                        android:textSize="12sp"
+                        android:textColor="@color/app_red_color"
+                        android:background="@drawable/corner_remote_room_item"
+                        android:gravity="center"/>
+
+
+
+                    <TextView
+                        android:id="@+id/tjc_lab"
+                        android:layout_below="@+id/line3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="推荐特色菜"
+                        android:textColor="@color/color_text_black"
+                       android:layout_centerHorizontal="true"
+                        android:drawablePadding="5dp"
+                        android:drawableTop="@drawable/zhyc"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tjc_type"
+                        android:layout_below="@id/tjc_lab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:padding="1dp"
+                        android:text="已完成"
+                        android:layout_centerHorizontal="true"
+                        android:textSize="12sp"
+                        android:textColor="@color/app_red_color"
+                        android:background="@drawable/corner_remote_room_item"
+                        android:gravity="center"/>
+
+
+                    <TextView
+                        android:id="@+id/xp_lab"
+                        android:layout_below="@+id/line3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="上传小票照片"
+                        android:textColor="@color/color_text_black"
+                        android:layout_marginRight="20dp"
+                        android:layout_alignParentRight="true"
+                        android:drawablePadding="5dp"
+                        android:drawableTop="@drawable/zhyc"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/xp_type"
+                        android:layout_below="@id/wel_lab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:padding="1dp"
+                        android:text="已完成"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="40dp"
+                        android:textSize="12sp"
+                        android:textColor="@color/app_red_color"
+                        android:background="@drawable/corner_remote_room_item"
+                        android:gravity="center"/>
+
+
+
+                </RelativeLayout>
+
+
+
+
+
+
+            </RelativeLayout>
+
+        </ScrollView>
+
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

@@ -328,7 +328,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                      // Glide.with(mContext).
                       Glide.with(context).load(face_urlStr).centerCrop().transform(new GlideCircleTransform(context)).into(iv_header);
                   }else{
-                      birthplace.setText("");
+                     // birthplace.setText("");
                   }
                   consume_abilityStr = customer.getConsume_ability();
                   if (!TextUtils.isEmpty(birthplaceStr)) {

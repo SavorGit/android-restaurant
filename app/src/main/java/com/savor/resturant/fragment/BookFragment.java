@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,7 +21,9 @@ import com.common.api.widget.pulltorefresh.library.PullToRefreshListView;
 import com.savor.resturant.R;
 import com.savor.resturant.activity.AddBookActivity;
 import com.savor.resturant.activity.AddRemarkActivity;
+import com.savor.resturant.activity.BookInfoActivity;
 import com.savor.resturant.activity.BookListByDateActivity;
+import com.savor.resturant.activity.ContactCustomerListActivity;
 import com.savor.resturant.adapter.BookAdapter;
 import com.savor.resturant.bean.BookListResult;
 import com.savor.resturant.bean.ConAbilityList;
@@ -37,10 +40,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static com.savor.resturant.activity.ContactCustomerListActivity.REQUEST_CODE_SELECT;
+
 /**
  *@author hezd 2017
  */
-public class BookFragment extends BaseFragment implements View.OnClickListener,ApiRequestListener {
+public class BookFragment extends BaseFragment implements View.OnClickListener,ApiRequestListener,AdapterView.OnItemClickListener {
 
     private TextView tv_center;
     private ImageView iv_right;
@@ -165,6 +170,7 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
         tv_add.setOnClickListener(this);
         listview.setOnRefreshListener(onRefreshListener);
         listview.setOnLastItemVisibleListener(onLastItemVisibleListener);
+        listview.setOnItemClickListener(this);
     }
 
     @Override
@@ -459,5 +465,15 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
 //            }
 
         }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        OrderListBean orderListBean = (OrderListBean)bookAdapter.getItem(position-1);
+        Intent intent;
+        intent = new Intent(mContext,BookInfoActivity.class);
+        intent.putExtra("type", ContactCustomerListActivity.OperationType.CUSTOMER_LIST_SELECT);
+        intent.putExtra("orderListBean",orderListBean);
+        startActivityForResult(intent,REQUEST_ADD_BOOK);
     }
 }
