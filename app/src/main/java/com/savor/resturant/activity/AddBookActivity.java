@@ -56,6 +56,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
     private TextView tv_dining_time;
     private RelativeLayout dining_room_la;
     private TextView tv_dining_room;
+    private TextView tv_save;
     private EditText et_note;
     private ImageView iv_header;
     private String order_mobile;
@@ -65,6 +66,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
     private String room_id;
     private String room_type;
     private static final int REQUEST_ADD_ROOM = 208;
+    private static final int REQUEST_ADD_BOOK = 308;
     private RoomListBean room;
 
     @Override
@@ -99,6 +101,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
         tv_dining_room = (TextView) findViewById(R.id.tv_dining_room);
         et_note = (EditText) findViewById(R.id.et_note);
         iv_header = (ImageView) findViewById(R.id.iv_header);
+        tv_save = (TextView) findViewById(R.id.tv_save);
     }
 
     @Override
@@ -115,6 +118,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
         tv_center.setOnClickListener(this);
         iv_header.setOnClickListener(this);
         dining_room_la.setOnClickListener(this);
+        tv_save.setOnClickListener(this);
 
     }
 
@@ -154,6 +158,10 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
                 startActivityForResult(intent,REQUEST_ADD_ROOM);
                 break;
 
+            case R.id.tv_save:
+                AddBook();
+                break;
+
 
 
             default:
@@ -172,13 +180,11 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
     public void onSuccess(AppApi.Action method, Object obj) {
         hideLoadingLayout();
         switch (method) {
-            case POST_ORDER_LIST_JSON:
+            case POST_ADD_ORDER_JSON:
 
-                if (obj instanceof List<?>){
-                    List<OrderListBean> mlist = (List<OrderListBean>) obj;
-                    handleData(mlist);
-
-                }
+                Intent intent = new Intent();
+                setResult(REQUEST_ADD_BOOK,intent);
+                finish();
                 break;
 
         }
@@ -196,16 +202,6 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
-     private void handleData(List<OrderListBean> mList){
-
-          if (mList != null && mList.size() > 0){
-
-          }else {
-
-
-                }
-
-            }
 
 
 

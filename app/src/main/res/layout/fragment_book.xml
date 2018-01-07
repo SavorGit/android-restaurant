@@ -211,7 +211,7 @@
         xmlns:ptr="http://schemas.android.com/apk/res-auto"
         ptr:ptrOrientationMode = "vertical"
         android:layout_below="@id/time_la"
-        android:layout_above="@id/tv_save"
+        android:layout_above="@id/tv_add"
         android:id="@+id/listview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

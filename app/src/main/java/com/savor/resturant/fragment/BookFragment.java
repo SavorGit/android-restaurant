@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,6 +77,10 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
     private String after_tomorrowStr = "";
     private String currentDate = "";
     private boolean isUp = false;
+    private String yesterday_order_nums;
+    private String today_order_nums;
+    private String tomorrow_order_nums;
+    private String after_tomorrow_order_nums;
     private List<OrderListBean> listItems = new ArrayList<>();
     private static final int REQUEST_ADD_BOOK = 308;
     public BookFragment() {
@@ -406,6 +411,28 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
         }
     }
 
+    private void initDataNum(BookListResult bookListResult){
+        yesterday_order_nums = bookListResult.getYesterday_order_nums();
+        today_order_nums = bookListResult.getToday_order_nums();
+        tomorrow_order_nums = bookListResult.getTomorrow_order_nums();
+        after_tomorrow_order_nums = bookListResult.getAfter_tomorrow_order_nums();
+
+        if (!TextUtils.isEmpty(yesterday_order_nums)) {
+            yesterday.setText(yesterday_order_nums);
+        }
+
+        if (!TextUtils.isEmpty(today_order_nums)) {
+            today.setText(today_order_nums);
+        }
+
+        if (!TextUtils.isEmpty(tomorrow_order_nums)) {
+            tomorrow.setText(tomorrow_order_nums);
+        }
+
+        if (!TextUtils.isEmpty(after_tomorrow_order_nums)) {
+            after_tomorrow.setText(after_tomorrow_order_nums);
+        }
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

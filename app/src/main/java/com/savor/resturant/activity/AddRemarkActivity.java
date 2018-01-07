@@ -65,7 +65,7 @@ public class AddRemarkActivity extends BaseActivity implements View.OnClickListe
     public void setViews() {
         tv_center.setTextColor(getResources().getColor(R.color.color_f6f2ed));
         if (!TextUtils.isEmpty(remark)) {
-
+            et_remark.setText(remark);
         }
     }
 
