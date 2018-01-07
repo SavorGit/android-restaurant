@@ -21,7 +21,9 @@ import com.savor.resturant.activity.AddBookActivity;
 import com.savor.resturant.activity.AddRemarkActivity;
 import com.savor.resturant.activity.BookListByDateActivity;
 import com.savor.resturant.adapter.BookAdapter;
+import com.savor.resturant.bean.BookListResult;
 import com.savor.resturant.bean.ConAbilityList;
+import com.savor.resturant.bean.CustomerLabel;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.OrderListBean;
 import com.savor.resturant.core.ApiRequestListener;
@@ -75,7 +77,7 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
     private String currentDate = "";
     private boolean isUp = false;
     private List<OrderListBean> listItems = new ArrayList<>();
-    private static final int REQUEST_ADD_BOOK = 108;
+    private static final int REQUEST_ADD_BOOK = 308;
     public BookFragment() {
         // Required empty public constructor
     }
@@ -245,9 +247,13 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
         switch (method) {
             case POST_ORDER_LIST_JSON:
                 listview.onRefreshComplete();
-                if (obj instanceof List<?>){
-                    List<OrderListBean> mlist = (List<OrderListBean>) obj;
-                    handleData(mlist);
+                if (obj instanceof BookListResult){
+                    BookListResult bookListResult = (BookListResult) obj;
+                    if (bookListResult != null) {
+                        List<OrderListBean> mList = bookListResult.getOrder_list();
+                        handleData(mList);
+                    }
+
 
                 }
 
@@ -397,6 +403,26 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
             after_tomorrow.setTextColor(mContext.getResources().getColor(R.color.color_text_black));
             after_tomorrow_month.setTextColor(mContext.getResources().getColor(R.color.color_label));
             ia_4.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUEST_ADD_BOOK) {
+//            if(data!=null) {
+//                ArrayList<CustomerLabel> labelList = (ArrayList<CustomerLabel>) data.getSerializableExtra("selecteLabels");
+//                if(labelList!=null&&labelList.size()>0) {
+//                    this.labelList.clear();
+//                    this.labelList.addAll(labelList);
+//                    mTagAdapter.notifyDataChanged();
+//                    showLabel();
+//                }else {
+//                    hideLabel();
+//                }
+//            }
+
         }
     }
 }

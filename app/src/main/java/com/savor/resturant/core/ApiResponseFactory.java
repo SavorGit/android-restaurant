@@ -27,6 +27,7 @@ import com.google.gson.reflect.TypeToken;
 import com.savor.resturant.bean.AddCustomerResponse;
 import com.savor.resturant.bean.AddSpendTicketNoBookInfo;
 import com.savor.resturant.bean.BaseProResponse;
+import com.savor.resturant.bean.BookListResult;
 import com.savor.resturant.bean.ConAbilityList;
 import com.savor.resturant.bean.CustomerBean;
 import com.savor.resturant.bean.CustomerHistory;
@@ -279,7 +280,7 @@ public class ApiResponseFactory {
                 }.getType());
                 break;
             case POST_ORDER_LIST_JSON:
-                result = gson.fromJson(info, new TypeToken<List<OrderListBean>>() {
+                result = gson.fromJson(info, new TypeToken<BookListResult>() {
                 }.getType());;
                 break;
             case POST_UPDATE_ORDER_JSON:
