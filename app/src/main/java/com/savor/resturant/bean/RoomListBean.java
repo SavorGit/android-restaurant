@@ -8,24 +8,24 @@ import java.io.Serializable;
 
 public class RoomListBean implements Serializable {
     private static final long serialVersionUID = -1;
-    private String id;
-    private String name;
+    private String room_id;
+    private String room_name;
     private String room_type;
 
-    public String getId() {
-        return id;
+    public String getRoom_id() {
+        return room_id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setRoom_id(String room_id) {
+        this.room_id = room_id;
     }
 
-    public String getName() {
-        return name;
+    public String getRoom_name() {
+        return room_name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRoom_name(String room_name) {
+        this.room_name = room_name;
     }
 
     public String getRoom_type() {
@@ -39,8 +39,8 @@ public class RoomListBean implements Serializable {
     @Override
     public String toString() {
         return "RoomListBean{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
+                "room_id='" + room_id + '\'' +
+                ", room_name='" + room_name + '\'' +
                 ", room_type='" + room_type + '\'' +
                 '}';
     }

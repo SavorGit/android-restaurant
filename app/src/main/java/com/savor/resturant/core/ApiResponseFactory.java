@@ -138,6 +138,7 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.POST_TOP_LIST_JSON
                     || action == AppApi.Action.POST_ADD_ROOM_JSON
                     || action == AppApi.Action.POST_ADD_ORDER_JSON
+                    || action == AppApi.Action.POST_ROOM_LIST_JSON
 
                     ){
                 int code = rSet.getInt("code");

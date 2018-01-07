@@ -258,7 +258,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
                 }else if (requestCode == REQUEST_ADD_ROOM) {
                     if(data!=null) {
                         room = (RoomListBean) data.getSerializableExtra("room");
-                        tv_dining_room.setText(room.getName());
+                        tv_dining_room.setText(room.getRoom_name());
 //                        et_phone.setText(contactFormat.getMobile());
 //                        et_name.setText(contactFormat.getName());
                     }

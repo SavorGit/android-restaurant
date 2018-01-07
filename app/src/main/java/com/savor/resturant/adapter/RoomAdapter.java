@@ -70,7 +70,7 @@ public class RoomAdapter extends BaseAdapter {
             holder = (RoomAdapter.ViewHolder) convertView.getTag();
         }
         RoomListBean item = (RoomListBean) getItem(position);
-        holder.room_name.setText(item.getName());
+        holder.room_name.setText(item.getRoom_name());
 
 
         return convertView;
