@@ -1,27 +1,40 @@
 package com.savor.resturant.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.TimePickerView;
+import com.common.api.utils.FileUtils;
 import com.savor.resturant.R;
+import com.savor.resturant.SavorApplication;
+import com.savor.resturant.adapter.RoomAdapter;
 import com.savor.resturant.bean.ContactFormat;
+import com.savor.resturant.bean.CustomerLabel;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.OrderListBean;
 import com.savor.resturant.bean.RoomListBean;
 import com.savor.resturant.core.AppApi;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.savor.resturant.activity.AddCustomerActivity.REQUEST_CODE_IMAGE;
+import static com.savor.resturant.activity.AddCustomerActivity.TAKE_PHOTO_REQUEST;
 import static com.savor.resturant.activity.ContactCustomerListActivity.REQUEST_CODE_SELECT;
 
 
@@ -34,17 +47,23 @@ public class RoomListActivity extends BaseActivity implements View.OnClickListen
     private Context context;
     private ImageView iv_left;
     private TextView tv_center;
-
+    private RoomAdapter roomAdapter;
+    private GridView room_list;
+    private List<RoomListBean> allList = new ArrayList<RoomListBean>();
+    private EditText et_note;
+    private TextView add;
+    private static final int REQUEST_ADD_ROOM = 208;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_book_layout);
+        setContentView(R.layout.activity_room_list_layout);
 
         context = this;
         getViews();
         setViews();
         setListeners();
+        getList();
     }
 
 
@@ -52,12 +71,17 @@ public class RoomListActivity extends BaseActivity implements View.OnClickListen
     public void getViews() {
         iv_left = (ImageView) findViewById(R.id.iv_left);
         tv_center = (TextView) findViewById(R.id.tv_center);
-
+        room_list = (GridView) findViewById(R.id.room_list);
+        et_note = (EditText) findViewById(R.id.et_note);
+        add = (TextView) findViewById(R.id.add);
     }
 
     @Override
     public void setViews() {
-        tv_center.setText("添加预定");
+        tv_center.setText("选择包间");
+        roomAdapter = new RoomAdapter(context);
+        room_list.setAdapter(roomAdapter);
+        tv_center.setTextColor(getResources().getColor(R.color.color_f6f2ed));
 
 
     }
@@ -67,7 +91,7 @@ public class RoomListActivity extends BaseActivity implements View.OnClickListen
 
         iv_left.setOnClickListener(this);
         tv_center.setOnClickListener(this);
-
+        add.setOnClickListener(this);
     }
 
 
@@ -77,7 +101,9 @@ public class RoomListActivity extends BaseActivity implements View.OnClickListen
             case R.id.iv_left:
                 finish();
                 break;
-
+            case R.id.add:
+                AddRoom();
+                break;
 
 
             default:
@@ -97,10 +123,16 @@ public class RoomListActivity extends BaseActivity implements View.OnClickListen
         hideLoadingLayout();
         switch (method) {
             case POST_ROOM_LIST_JSON:
-
                 if (obj instanceof List<?>){
                     List<RoomListBean> mlist = (List<RoomListBean>) obj;
                     handleData(mlist);
+                }
+                break;
+            case POST_ADD_ROOM_JSON:
+                if (obj instanceof RoomListBean){
+                    RoomListBean room = (RoomListBean) obj;
+                   // handleData(mlist);
+
 
                 }
                 break;
@@ -123,6 +155,9 @@ public class RoomListActivity extends BaseActivity implements View.OnClickListen
      private void handleData(List<RoomListBean> mList){
 
           if (mList != null && mList.size() > 0){
+              allList.clear();
+              allList.addAll(mList);
+              roomAdapter.setData(allList);
 
           }else {
 
@@ -144,7 +179,13 @@ public class RoomListActivity extends BaseActivity implements View.OnClickListen
 
     private void AddRoom(){
         HotelBean hotelBean = mSession.getHotelBean();
-        AppApi.addRoom(mContext,hotelBean.getInvite_id(),hotelBean.getTel(),"",this);
+        String roomName = et_note.getText().toString();
+        if (!TextUtils.isEmpty(roomName)) {
+            AppApi.addRoom(mContext,hotelBean.getInvite_id(),hotelBean.getTel(),"",this);
+        }else {
+
+        }
+
     }
 
      private void getList(){
@@ -155,7 +196,12 @@ public class RoomListActivity extends BaseActivity implements View.OnClickListen
                 SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd");
                 return format.format(date);
      }
+     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+                super.onActivityResult(requestCode, resultCode, data);
+                if(requestCode == REQUEST_ADD_ROOM) {
 
+                }
+            }
 
 }
 

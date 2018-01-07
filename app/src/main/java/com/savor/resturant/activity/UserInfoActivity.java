@@ -111,9 +111,9 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             };
 
     private static final int REQUEST_CODE_LABEL = 100;
-            private static final int REQUEST_CODE_REMARK = 108;
-            private PullToRefreshListView refreshListView;
-            private TicketAdapter ticketAdapter;
+    private static final int REQUEST_CODE_REMARK = 108;
+    private PullToRefreshListView refreshListView;
+    private TicketAdapter ticketAdapter;
     final List<ConRecBean> imageList = new ArrayList<>();
     private String max_id = "0";
     private String min_id = "0";
@@ -393,8 +393,8 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
 
 
-            @Override
-            protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+     @Override
+     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
                 super.onActivityResult(requestCode, resultCode, data);
                 if(requestCode == REQUEST_CODE_LABEL) {
                     if(data!=null) {

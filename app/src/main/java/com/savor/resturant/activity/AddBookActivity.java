@@ -26,6 +26,7 @@ import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.CustomerLabel;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.OrderListBean;
+import com.savor.resturant.bean.RoomListBean;
 import com.savor.resturant.core.AppApi;
 
 import java.io.File;
@@ -63,6 +64,8 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
     private String person_nums;
     private String room_id;
     private String room_type;
+    private static final int REQUEST_ADD_ROOM = 208;
+    private RoomListBean room;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +95,8 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
         et_dining_num = (EditText) findViewById(R.id.et_dining_num);
         dining_time_la = (RelativeLayout) findViewById(R.id.dining_time_la);
         tv_dining_time = (TextView) findViewById(R.id.tv_dining_time);
-        dining_room_la = (RelativeLayout) findViewById(R.id.dining_time_la);
-        tv_dining_room = (TextView) findViewById(R.id.tv_dining_time);
+        dining_room_la = (RelativeLayout) findViewById(R.id.dining_room_la);
+        tv_dining_room = (TextView) findViewById(R.id.tv_dining_room);
         et_note = (EditText) findViewById(R.id.et_note);
         iv_header = (ImageView) findViewById(R.id.iv_header);
     }
@@ -111,6 +114,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
         iv_left.setOnClickListener(this);
         tv_center.setOnClickListener(this);
         iv_header.setOnClickListener(this);
+        dining_room_la.setOnClickListener(this);
 
     }
 
@@ -143,6 +147,13 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
                 intent.putExtra("type", ContactCustomerListActivity.OperationType.CUSTOMER_LIST_SELECT);
                 startActivityForResult(intent,REQUEST_CODE_SELECT);
                 break;
+            case R.id.dining_room_la:
+                intent = new Intent(this,RoomListActivity.class);
+                intent.putExtra("room",room);
+                //intent.putExtra("remark",remarkStr);
+                startActivityForResult(intent,REQUEST_ADD_ROOM);
+                break;
+
 
 
             default:
@@ -248,6 +259,14 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
                         et_phone.setText(contactFormat.getMobile());
                         et_name.setText(contactFormat.getName());
                     }
+                }else if (requestCode == REQUEST_ADD_ROOM) {
+                    if(data!=null) {
+                        room = (RoomListBean) data.getSerializableExtra("room");
+                        tv_dining_room.setText(room.getName());
+//                        et_phone.setText(contactFormat.getMobile());
+//                        et_name.setText(contactFormat.getName());
+                    }
+
                 }
             }
 }

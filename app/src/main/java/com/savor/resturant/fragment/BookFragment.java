@@ -17,6 +17,8 @@ import com.common.api.utils.LogUtils;
 import com.common.api.widget.pulltorefresh.library.PullToRefreshBase;
 import com.common.api.widget.pulltorefresh.library.PullToRefreshListView;
 import com.savor.resturant.R;
+import com.savor.resturant.activity.AddBookActivity;
+import com.savor.resturant.activity.AddRemarkActivity;
 import com.savor.resturant.activity.BookListByDateActivity;
 import com.savor.resturant.adapter.BookAdapter;
 import com.savor.resturant.bean.ConAbilityList;
@@ -62,6 +64,7 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
     private RelativeLayout after_tomorrow_la;
     private TextView after_tomorrow;
     private TextView after_tomorrow_month;
+    private TextView tv_add;
     private ImageView ia_4;
     private int page_num = 1;
 
@@ -72,6 +75,7 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
     private String currentDate = "";
     private boolean isUp = false;
     private List<OrderListBean> listItems = new ArrayList<>();
+    private static final int REQUEST_ADD_BOOK = 108;
     public BookFragment() {
         // Required empty public constructor
     }
@@ -131,6 +135,8 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
         after_tomorrow_month = (TextView) parent.findViewById(R.id.after_tomorrow_month);
         ia_4 = (ImageView) parent.findViewById(R.id.ia_4);
 
+        tv_add = (TextView) parent.findViewById(R.id.tv_add);
+
     }
     @Override
     public void setViews() {
@@ -149,12 +155,14 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
         today_la.setOnClickListener(this);
         tomorrow_la.setOnClickListener(this);
         after_tomorrow_la.setOnClickListener(this);
+        tv_add.setOnClickListener(this);
         listview.setOnRefreshListener(onRefreshListener);
         listview.setOnLastItemVisibleListener(onLastItemVisibleListener);
     }
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()){
             case R.id.iv_right:
                 showDateDialog();
@@ -170,6 +178,10 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
                 break;
             case R.id.after_tomorrow_la:
                 InitBtnData(3);
+                break;
+            case R.id.tv_add:
+                intent = new Intent(mContext,AddBookActivity.class);
+                startActivityForResult(intent,REQUEST_ADD_BOOK);
                 break;
 
         }
