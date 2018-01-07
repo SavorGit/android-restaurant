@@ -87,7 +87,7 @@ public class BookAdapter extends BaseAdapter {
 
 
 
-        if (position%0 == 0) {
+        if (position == 0||position%4 == 0) {
             holder.room_name.setBackgroundResource(R.drawable.corner_remote_b3);
         }else if (position%1 == 0) {
             holder.room_name.setBackgroundResource(R.drawable.corner_remote_b1);
