@@ -258,7 +258,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 }
                 break;
             case POST_ADD_SIGNLE_CONSUME_RECORD_JSON:
-                finish();
+                //finish();
                 break;
 
         }
