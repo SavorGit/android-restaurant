@@ -87,7 +87,7 @@ public class ReRequestService extends IntentService {
                     break;
                 case TYPE_ADD_CUSTOMER:
                     // 添加客户
-                    List<ContactFormat> customerList = session.getCustomerList();
+                    List<ContactFormat> customerList = session.getCustomerList().getCustomerList();
                     if(customerList.contains(item.getContactFormat())) {
                         opFailedList.remove(item);
                     }else {

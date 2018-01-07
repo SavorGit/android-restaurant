@@ -35,8 +35,10 @@ import com.common.api.utils.ShowMessage;
 import com.google.gson.Gson;
 import com.savor.resturant.R;
 import com.savor.resturant.SavorApplication;
+import com.savor.resturant.bean.AddCustomerResponse;
 import com.savor.resturant.bean.ConAbilityList;
 import com.savor.resturant.bean.ContactFormat;
+import com.savor.resturant.bean.CustomerListBean;
 import com.savor.resturant.bean.OperationFailedItem;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.ResponseErrorMessage;
@@ -206,7 +208,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
             return;
         }
 
-        List<ContactFormat> customerList = mSession.getCustomerList();
+        List<ContactFormat> customerList = mSession.getCustomerList().getCustomerList();
         if(customerList!=null&&customerList.size()>0) {
             for(ContactFormat contactFormat : customerList) {
                 String cMobile = contactFormat.getMobile();
@@ -343,8 +345,8 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
 
         currentAddCustomer.setKey(stuf+name+"#"+sb.toString().toLowerCase()+"#"+(TextUtils.isEmpty(birthPlace)?"":birthPlace)+"#"+(TextUtils.isEmpty(mobile)?"":mobile));
 
-
-        List<ContactFormat> customerList = mSession.getCustomerList();
+        CustomerListBean cacheList = mSession.getCustomerList();
+        List<ContactFormat> customerList = mSession.getCustomerList().getCustomerList();
         if(customerList.contains(currentAddCustomer)) {
             ShowMessage.showToast(this,"该客户已存在");
         }else {
@@ -352,7 +354,8 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                     faceUrl,invite_id,tel,name,remark,sex,usermobile,this);
             customerList.add(currentAddCustomer);
             Collections.sort(customerList,pinyinComparator);
-            mSession.setCustomerList(customerList);
+            cacheList.setCustomerList(customerList);
+            mSession.setCustomerList(cacheList);
             ShowMessage.showToast(this,"添加成功");
             finish();
         }
@@ -485,7 +488,16 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         super.onSuccess(method, obj);
         switch (method) {
             case POST_ADD_CUS_JSON:
-                LogUtils.d("savor:add customer success");
+                if(obj instanceof AddCustomerResponse) {
+                    AddCustomerResponse response = (AddCustomerResponse) obj;
+                    AddCustomerResponse.ListBean list = response.getList();
+                    if(list!=null) {
+                        String customer_id = list.getCustomer_id();
+                        currentAddCustomer.setCustomer_id(customer_id);
+                        CustomerListBean customerList = mSession.getCustomerList();
+                        mSession.setCustomerList(customerList);
+                    }
+                }
                 break;
             case POST_CON_ABILITY_JSON:
                 if(obj instanceof ConAbilityList) {

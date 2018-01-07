@@ -26,6 +26,7 @@ import com.google.gson.Gson;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.contact.MyContactAdapter;
 import com.savor.resturant.bean.ContactFormat;
+import com.savor.resturant.bean.CustomerListBean;
 import com.savor.resturant.bean.ImportInfoResponse;
 import com.savor.resturant.bean.OperationFailedItem;
 import com.savor.resturant.core.AppApi;
@@ -122,7 +123,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         switch (operationType) {
             case CUSTOMER_LIST_SELECT:
             case CUSTOMER_LIST:
-                contactFormats = mSession.getCustomerList();
+                contactFormats = mSession.getCustomerList().getCustomerList();
                 if(contactFormats == null||contactFormats.size()==0) {
                     showEmptyCustomerHintLayout();
                     return;
@@ -403,7 +404,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         String invitation = mSession.getHotelBean().getInvite_id();
         String tel = mSession.getHotelBean().getTel();
 
-        List<ContactFormat> customerList = mSession.getCustomerList();
+        List<ContactFormat> customerList = mSession.getCustomerList().getCustomerList();
         if(customerList == null) {
             customerList = new ArrayList<>();
         }
@@ -436,7 +437,9 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
             contactFormat.setAdded(true);
             customerList.add(contactFormat);
             Collections.sort(customerList,pinyinComparator);
-            mSession.setCustomerList(customerList);
+            CustomerListBean cacheListBean = mSession.getCustomerList();
+            cacheListBean.setCustomerList(customerList);
+            mSession.setCustomerList(cacheListBean);
 
             switch (operationType) {
                 case CONSTACT_LIST_NOTFIST:
@@ -568,7 +571,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                 if(obj instanceof ImportInfoResponse) {
                     ImportInfoResponse importInfoResponse = (ImportInfoResponse) obj;
                     List<ContactFormat> customer_list = importInfoResponse.getCustomer_list();
-                    List<ContactFormat> cacheList = mSession.getCustomerList();
+                    List<ContactFormat> cacheList = mSession.getCustomerList().getCustomerList();
                     if(customer_list!=null&&customer_list.size()>0) {
                         if(customer_list!=null) {
                             for(ContactFormat contactFormat:customer_list) {
@@ -578,7 +581,9 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                                     cacheCustomer.setCustomer_id(contactFormat.getCustomer_id());
                                 }
                             }
-                            mSession.setCustomerList(cacheList);
+                            CustomerListBean cacheListBean = mSession.getCustomerList();
+                            cacheListBean.setCustomerList(cacheList);
+                            mSession.setCustomerList(cacheListBean);
                         }
                     }
                 }

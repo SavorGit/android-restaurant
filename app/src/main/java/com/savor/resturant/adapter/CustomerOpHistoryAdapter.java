@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -24,6 +25,7 @@ import java.util.List;
 public class CustomerOpHistoryAdapter extends RecyclerView.Adapter<CustomerOpHistoryAdapter.HistoryHolder> {
     private Context mContext;
     private List<CustomerHistoryBean> mData;
+    private OnItemClickListener onItemClickLitener;
 
     public CustomerOpHistoryAdapter(Context context) {
         this.mContext = context;
@@ -42,7 +44,7 @@ public class CustomerOpHistoryAdapter extends RecyclerView.Adapter<CustomerOpHis
 
     @Override
     public void onBindViewHolder(HistoryHolder holder, int position) {
-        CustomerHistoryBean customerHistoryBean = mData.get(position);
+        final CustomerHistoryBean customerHistoryBean = mData.get(position);
         String create_time = customerHistoryBean.getCreate_time();
         String face_url = customerHistoryBean.getFace_url();
         String type = customerHistoryBean.getType();
@@ -65,6 +67,15 @@ public class CustomerOpHistoryAdapter extends RecyclerView.Adapter<CustomerOpHis
         holder.tv_num.setText(usermobile);
         holder.item_contact_title.setText(username);
         holder.tv_history_time.setText(create_time+" "+type);
+
+        holder.rl_hitory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onItemClickLitener!=null) {
+                    onItemClickLitener.onItemClick(customerHistoryBean);
+                }
+            }
+        });
     }
 
     @Override
@@ -73,6 +84,7 @@ public class CustomerOpHistoryAdapter extends RecyclerView.Adapter<CustomerOpHis
     }
 
     public class HistoryHolder extends RecyclerView.ViewHolder {
+        public RelativeLayout rl_hitory;
         public ImageView headerIv;
         public TextView headerTv;
         public TextView item_contact_title;
@@ -81,11 +93,20 @@ public class CustomerOpHistoryAdapter extends RecyclerView.Adapter<CustomerOpHis
 
         public HistoryHolder(View itemView) {
             super(itemView);
+            rl_hitory = (RelativeLayout) itemView.findViewById(R.id.rl_hitory);
             headerIv = (ImageView) itemView.findViewById(R.id.iv_header);
             headerTv = (TextView) itemView.findViewById(R.id.tv_label);
             item_contact_title = (TextView) itemView.findViewById(R.id.item_contact_title);
             tv_num = (TextView) itemView.findViewById(R.id.tv_num);
             tv_history_time = (TextView) itemView.findViewById(R.id.tv_history_time);
         }
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickLitener = listener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(CustomerHistoryBean historyBean);
     }
 }

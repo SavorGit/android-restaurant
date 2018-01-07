@@ -32,6 +32,7 @@ import com.savor.resturant.bean.AddSpendTicketNoBookInfo;
 import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.CustomerLabel;
 import com.savor.resturant.bean.CustomerLabelList;
+import com.savor.resturant.bean.CustomerListBean;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.utils.ChineseComparator;
 import com.savor.resturant.utils.ConstantValues;
@@ -235,7 +236,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
     }
 
     private ContactFormat getMobileInCustomerList(String content) {
-        List<ContactFormat> customerList = mSession.getCustomerList();
+        List<ContactFormat> customerList = mSession.getCustomerList().getCustomerList();
         if(customerList!=null&&customerList.size()>0) {
             for(ContactFormat contactFormat:customerList) {
                 if(content.equals(contactFormat.getMobile())||content.equals(contactFormat.getMobile1())) {
@@ -372,7 +373,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
                                 face_url = existContact.getFace_url();
                                 sex = String.valueOf(existContact.getSex());
                             }else {
-                                List<ContactFormat> customerList = mSession.getCustomerList();
+                                List<ContactFormat> customerList = mSession.getCustomerList().getCustomerList();
                                 if(customerList == null) {
                                     customerList = new ArrayList<>();
                                 }
@@ -400,7 +401,9 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
                                 customerList.add(contactFormat);
                                 contactFormat.setKey(stuf+name+"#"+sb.toString().toLowerCase()+"#"+(TextUtils.isEmpty(birthplace)?"":birthplace)+"#"+(TextUtils.isEmpty(mobile)?"":mobile));
                                 Collections.sort(customerList,pinyinComparator);
-                                mSession.setCustomerList(customerList);
+                                CustomerListBean customerListBean = mSession.getCustomerList();
+                                customerListBean.setCustomerList(customerList);
+                                mSession.setCustomerList(customerListBean);
                             }
 
                             List<String> labeIds = new ArrayList<>();
@@ -470,8 +473,10 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
                         ContactFormat mobileInCustomerList = getMobileInCustomerList(mobile);
                         if(!TextUtils.isEmpty(customer_id)&&existContact == null) {
                             mobileInCustomerList.setCustomer_id(customer_id);
-                            List<ContactFormat> customerList = mSession.getCustomerList();
-                            mSession.setCustomerList(customerList);
+                            CustomerListBean cacheCustomerList = mSession.getCustomerList();
+                            List<ContactFormat> customerList = cacheCustomerList.getCustomerList();
+                            cacheCustomerList.setCustomerList(customerList);
+                            mSession.setCustomerList(cacheCustomerList);
                         }
                     }
 

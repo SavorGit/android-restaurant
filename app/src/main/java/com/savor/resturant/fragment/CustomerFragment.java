@@ -18,6 +18,7 @@ import com.savor.resturant.activity.AddCustomerActivity;
 import com.savor.resturant.activity.ContactCustomerListActivity;
 import com.savor.resturant.activity.SearchActivity;
 import com.savor.resturant.activity.SpendHistoryAddActivity;
+import com.savor.resturant.activity.UserInfoActivity;
 import com.savor.resturant.adapter.CustomerOpHistoryAdapter;
 import com.savor.resturant.bean.CustomerHistory;
 import com.savor.resturant.bean.CustomerHistoryBean;
@@ -30,7 +31,7 @@ import java.util.List;
  * 客户管理
  * @author hezd 2019/09/19
  */
-public class CustomerFragment extends BaseFragment implements View.OnClickListener {
+public class CustomerFragment extends BaseFragment implements View.OnClickListener, CustomerOpHistoryAdapter.OnItemClickListener {
 
 
     private TextView mTitleTv;
@@ -94,6 +95,7 @@ public class CustomerFragment extends BaseFragment implements View.OnClickListen
         mAddHistoryTv.setOnClickListener(this);
         mSearchTv.setOnClickListener(this);
         mRightIv.setOnClickListener(this);
+        mHistoryAdapter.setOnItemClickListener(this);
     }
 
     public void setViews() {
@@ -124,11 +126,17 @@ public class CustomerFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getCustomerHistory();
+    }
+
+    @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if(!hidden) {
-            getCustomerHistory();
-        }
+//        if(!hidden) {
+//            getCustomerHistory();
+//        }
     }
 
     @Override
@@ -183,5 +191,12 @@ public class CustomerFragment extends BaseFragment implements View.OnClickListen
     public void hideHistoryLayout() {
         mHistoryRlv.setVisibility(View.GONE);
         mHistoryHintTv.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onItemClick(CustomerHistoryBean historyBean) {
+        Intent intent = new Intent(getContext(), UserInfoActivity.class);
+        intent.putExtra("customerID",historyBean.getCustomer_id());
+        startActivity(intent);
     }
 }

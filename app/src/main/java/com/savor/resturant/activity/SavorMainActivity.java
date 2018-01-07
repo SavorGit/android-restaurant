@@ -12,11 +12,13 @@ import com.common.api.utils.LogUtils;
 import com.common.api.widget.customTab.MyTabWidget;
 import com.savor.resturant.R;
 import com.savor.resturant.bean.ContactFormat;
+import com.savor.resturant.bean.OperationFailedItem;
 import com.savor.resturant.fragment.BookFragment;
 import com.savor.resturant.fragment.CustomerFragment;
 import com.savor.resturant.fragment.MyFragment;
 import com.savor.resturant.fragment.ProjectionFragment;
 import com.savor.resturant.presenter.SensePresenter;
+import com.savor.resturant.service.ReRequestService;
 import com.savor.resturant.utils.ConstantValues;
 import com.savor.resturant.widget.ImportDialog;
 
@@ -47,14 +49,28 @@ public class SavorMainActivity extends BaseFragmentActivity implements MyTabWidg
         checkShouldShowImportDialog();
 
         regitsterSmallPlatformReciever();
+        startReRequestService();
     }
 
     private void checkShouldShowImportDialog() {
-        List<ContactFormat> customerList = mSession.getCustomerList();
+        List<ContactFormat> customerList = mSession.getCustomerList().getCustomerList();
         String is_import_customer = mSession.getHotelBean().getIs_import_customer();
         boolean showImportDialog = mSession.isShowImportDialog();
         if(!"1".equals(is_import_customer)&&(customerList==null||customerList.size() == 0)&&!showImportDialog) {
             showImportDialog();
+        }
+    }
+
+    /**
+     * 操作失败的请求列表重新发起请求
+     */
+    private void startReRequestService() {
+        List<OperationFailedItem> opFailedList = mSession.getOpFailedList();
+        if(opFailedList!=null&&opFailedList.size()>0) {
+            LogUtils.d("savor:opr 有操作失败记录开始重新发起请求\n "+opFailedList);
+            ReRequestService.startActionRequest(this);
+        }else {
+            LogUtils.d("savor:opr 没有操作失败记录");
         }
     }
 

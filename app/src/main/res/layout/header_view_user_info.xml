@@ -288,20 +288,13 @@
                 android:textColor="@color/colorPrimaryDark" />
         </RelativeLayout>
 
-        <LinearLayout
+        <TextView
+            android:paddingLeft="15dp"
+            android:textSize="15sp"
+            android:textColor="@color/app_gray"
+            android:text="请添加就餐小票，更好了解客户喜好"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/bg_ticket_border">
-
-            <ImageView
-                android:id="@+id/iv_spend_history"
-                android:layout_width="300dp"
-                android:layout_height="150dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/empty_slide" />
-        </LinearLayout>
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
