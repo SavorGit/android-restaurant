@@ -134,6 +134,8 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.POST_CUSTOMER_LABELS_JSON
                     || action == AppApi.Action.POST_CUS_HISTORY_JSON
                     || action == AppApi.Action.POST_CUSTOMER_EDIT_REMARK_JSON
+                    || action == AppApi.Action.POST_TOP_LIST_JSON
+
                     ){
                 int code = rSet.getInt("code");
                 if(rSet.has("result")) {

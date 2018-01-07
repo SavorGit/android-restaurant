@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.savor.resturant.R;
+import com.savor.resturant.bean.ConRecBean;
 
 import java.util.List;
 
@@ -18,13 +19,13 @@ import java.util.List;
 
 public class TicketAdapter extends BaseAdapter {
     private Context mContext;
-    private List<String> mData;
+    private List<ConRecBean> mData;
 
     public TicketAdapter(Context context) {
         this.mContext = context;
     }
 
-    public void setData(List<String> data) {
+    public void setData(List<ConRecBean> data) {
         this.mData = data;
         notifyDataSetChanged();
     }
@@ -62,12 +63,12 @@ public class TicketAdapter extends BaseAdapter {
         }else {
             holder = (TicketHolder) convertView.getTag();
         }
-        String leftUrl = mData.get(position*2);
+        String leftUrl = mData.get(position*2).getRecipt();
         Glide.with(mContext).load(leftUrl).centerCrop().placeholder(R.drawable.empty_slide).into(holder.iv_left);
 
         if(position*2+1<mData.size()) {
             holder.iv_right.setVisibility(View.VISIBLE);
-            String righUrl = mData.get(position+1);
+            String righUrl = mData.get(position+1).getRecipt();
             Glide.with(mContext).load(righUrl).centerCrop().placeholder(R.drawable.empty_slide).into(holder.iv_right);
         }else {
             holder.iv_right.setVisibility(View.INVISIBLE);

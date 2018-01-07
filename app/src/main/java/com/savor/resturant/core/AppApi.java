@@ -886,14 +886,12 @@ public class AppApi {
 
 
     /**上下拉消费记录*/
-    public static void reportLog(Context context,
+    public static void getConRecTopList(Context context,
                                  String customer_id,
                                  String invite_id,
+                                 String mobile,
                                  String max_id,
                                  String min_id,
-                                 String mobile,
-                                 String order_id,
-                                 String recipt,
                                  String type,
                                  ApiRequestListener handler) {
         final HashMap<String, Object> params = new HashMap<String, Object>();
@@ -902,8 +900,6 @@ public class AppApi {
         params.put("max_id", max_id);
         params.put("min_id", min_id);
         params.put("mobile", mobile);
-        params.put("order_id", order_id);
-        params.put("recipt", recipt);
         params.put("type", type);
 
         new AppServiceOk(context,Action.POST_TOP_LIST_JSON,handler,params).post();

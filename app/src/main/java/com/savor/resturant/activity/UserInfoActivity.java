@@ -29,6 +29,7 @@ import com.google.gson.Gson;
 import com.savor.resturant.R;
 import com.savor.resturant.SavorApplication;
 import com.savor.resturant.adapter.TicketAdapter;
+import com.savor.resturant.bean.ConRecBean;
 import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.Customer;
 import com.savor.resturant.bean.CustomerBean;
@@ -36,6 +37,7 @@ import com.savor.resturant.bean.CustomerLabel;
 import com.savor.resturant.bean.CustomerListBean;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.OrderListBean;
+import com.savor.resturant.bean.RecTopList;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.utils.ConstantValues;
 import com.savor.resturant.utils.GlideCircleTransform;
@@ -112,8 +114,13 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             private static final int REQUEST_CODE_REMARK = 108;
             private PullToRefreshListView refreshListView;
             private TicketAdapter ticketAdapter;
-    final List<String> imageList = new ArrayList<>();
-            @Override
+    final List<ConRecBean> imageList = new ArrayList<>();
+    private String max_id = "0";
+    private String min_id = "0";
+    private String Rectype = "2";
+    private RecTopList recTopList;
+    private List<ConRecBean> TopList = new ArrayList<ConRecBean>() ;
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info_layout);
@@ -123,6 +130,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         setViews();
         setListeners();
         getCustomerBaseInfo();
+        getConRecTopList();
     }
 
     private void getDate(){
@@ -173,18 +181,19 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         tv_center.setTextColor(getResources().getColor(R.color.color_f6f2ed));
         rlv_labels.setAdapter(mTagAdapter);
 
-        for(int i = 0;i<5;i++) {
-            imageList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515744348&di=df7a8a21f2dc6dca3b840939a1a9da98&imgtype=jpg&er=1&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2Fa50f4bfbfbedab64fe858d27f536afc378311e66.jpg");
-        }
+//        for(int i = 0;i<5;i++) {
+//            imageList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515744348&di=df7a8a21f2dc6dca3b840939a1a9da98&imgtype=jpg&er=1&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2Fa50f4bfbfbedab64fe858d27f536afc378311e66.jpg");
+//        }
+
         ticketAdapter.setData(imageList);
         refreshListView.onLoadComplete(true);
         refreshListView.postDelayed(new Runnable() {
             @Override
             public void run() {
                 refreshListView.onLoadComplete(false);
-                for(int i = 0;i<5;i++) {
-                    imageList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515744348&di=df7a8a21f2dc6dca3b840939a1a9da98&imgtype=jpg&er=1&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2Fa50f4bfbfbedab64fe858d27f536afc378311e66.jpg");
-                }
+//                for(int i = 0;i<5;i++) {
+//                    imageList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515744348&di=df7a8a21f2dc6dca3b840939a1a9da98&imgtype=jpg&er=1&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2Fa50f4bfbfbedab64fe858d27f536afc378311e66.jpg");
+//                }
                 ticketAdapter.notifyDataSetChanged();
             }
         },3000);
@@ -241,6 +250,15 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                     customerBean = (CustomerBean)obj;
                     handleData();
                 }
+                break;
+            case POST_TOP_LIST_JSON:
+                if (obj instanceof RecTopList){
+                    recTopList = (RecTopList)obj;
+                    handleTopList();
+                }
+                break;
+            case POST_ADD_SIGNLE_CONSUME_RECORD_JSON:
+                finish();
                 break;
 
         }
@@ -344,8 +362,20 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 }
 
             }
+     private void handleTopList(){
+         if (recTopList != null) {
+             List<ConRecBean> list = recTopList.getList();
+             if (list != null && list.size()>0) {
+                 imageList.clear();
+                 imageList.addAll(list);
+                 ticketAdapter.notifyDataSetChanged();
 
+             }
+             max_id = recTopList.getMax_id();
+             min_id = recTopList.getMin_id();
+         }
 
+     }
 
     @Override
     protected void onDestroy() {
@@ -484,8 +514,10 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                                 }
                             }
                         });
-
-                        imageList.add(ticketOssUrl);
+                        ConRecBean conRecBean = new ConRecBean();
+                        conRecBean.setRecipt(ticketOssUrl);
+                        imageList.add(conRecBean);
+                        ticketAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -541,5 +573,9 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                         }
                 ).show();
             }
+     private void getConRecTopList(){
+         HotelBean hotelBean = mSession.getHotelBean();
+        AppApi.getConRecTopList(context,customer_id,hotelBean.getInvite_id(),hotelBean.getTel(),max_id,min_id,Rectype,this);
+     }
 }
 
