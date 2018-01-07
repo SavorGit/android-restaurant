@@ -257,6 +257,7 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
                     if (bookListResult != null) {
                         List<OrderListBean> mList = bookListResult.getOrder_list();
                         handleData(mList);
+                        initDataNum( bookListResult);
                     }
 
 
@@ -420,19 +421,19 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
         after_tomorrow_order_nums = bookListResult.getAfter_tomorrow_order_nums();
 
         if (!TextUtils.isEmpty(yesterday_order_nums)) {
-            yesterday.setText(yesterday_order_nums);
+            yesterday.setText("昨天("+yesterday_order_nums+")");
         }
 
         if (!TextUtils.isEmpty(today_order_nums)) {
-            today.setText(today_order_nums);
+            today.setText("今天("+today_order_nums+")");
         }
 
         if (!TextUtils.isEmpty(tomorrow_order_nums)) {
-            tomorrow.setText(tomorrow_order_nums);
+            tomorrow.setText("明天("+tomorrow_order_nums+")");
         }
 
         if (!TextUtils.isEmpty(after_tomorrow_order_nums)) {
-            after_tomorrow.setText(after_tomorrow_order_nums);
+            after_tomorrow.setText("后天("+after_tomorrow_order_nums+")");
         }
     }
     @Override
@@ -440,6 +441,11 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == REQUEST_ADD_BOOK) {
+            listItems.clear();
+            bookAdapter.setData(listItems);
+            page_num = 1;
+            isUp = true;
+            getOrderList();
 //            if(data!=null) {
 //                ArrayList<CustomerLabel> labelList = (ArrayList<CustomerLabel>) data.getSerializableExtra("selecteLabels");
 //                if(labelList!=null&&labelList.size()>0) {

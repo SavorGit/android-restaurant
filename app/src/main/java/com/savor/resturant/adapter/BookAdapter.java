@@ -67,6 +67,7 @@ public class BookAdapter extends BaseAdapter {
             holder.custom_num = (TextView) convertView.findViewById(R.id.custom_num);
             holder.time = (TextView) convertView.findViewById(R.id.time);
             holder.custom_name = (TextView) convertView.findViewById(R.id.custom_name);
+            holder.custom_mobile = (TextView) convertView.findViewById(R.id.custom_mobile);
             holder.is_hyc = (ImageView) convertView.findViewById(R.id.is_hyc);
             holder.is_tjc = (ImageView) convertView.findViewById(R.id.is_tjc);
             holder.is_xfjl = (ImageView) convertView.findViewById(R.id.is_xfjl);
@@ -122,6 +123,14 @@ public class BookAdapter extends BaseAdapter {
             holder.custom_name.setVisibility(View.INVISIBLE);
         }
 
+        String order_mobile = item.getOrder_mobile();
+        if (!TextUtils.isEmpty(order_mobile)) {
+            holder.custom_mobile.setVisibility(View.VISIBLE);
+            holder.custom_mobile.setText(order_mobile);
+        }else {
+            holder.custom_mobile.setVisibility(View.INVISIBLE);
+        }
+
         int is_expense = item.getIs_expense();
         if (is_expense == 1) {
             holder.is_xfjl.setVisibility(View.VISIBLE);
@@ -161,6 +170,7 @@ public class BookAdapter extends BaseAdapter {
         public TextView time;
         public TextView custom_num;
         public TextView custom_name;
+        public TextView custom_mobile;
         public ImageView is_hyc;
         public ImageView is_tjc;
         public ImageView is_xfjl;

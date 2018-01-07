@@ -67,11 +67,22 @@
             android:textColor="@color/app_text_type"
             android:textSize="16sp" />
 
-        <RelativeLayout
-            android:id="@+id/label1"
-            android:visibility="gone"
+        <TextView
+            android:id="@+id/custom_mobile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/time"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@id/custom_name"
+            android:text="13811966726"
+            android:textColor="@color/app_text_type"
+            android:textSize="16sp" />
+
+        <RelativeLayout
+            android:id="@+id/label1"
+            android:layout_width="60dp"
+            android:layout_height="28dp"
             android:layout_below="@id/custom_name"
             android:layout_marginLeft="14dp"
             android:layout_marginTop="2dp"
@@ -97,8 +108,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:visibility="gone"
                 android:src="@drawable/dx_xzh"
+                android:visibility="gone"
 
                 />
 
@@ -106,9 +117,8 @@
 
         <RelativeLayout
             android:id="@+id/label2"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="28dp"
             android:layout_below="@id/custom_name"
             android:layout_marginLeft="14dp"
             android:layout_marginTop="2dp"
@@ -119,7 +129,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-
                 android:gravity="center"
                 android:paddingBottom="3dp"
                 android:paddingLeft="5dp"
@@ -142,10 +151,9 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:visibility="gone"
             android:id="@+id/label3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="75dp"
+            android:layout_height="28dp"
             android:layout_below="@id/custom_name"
             android:layout_marginLeft="14dp"
             android:layout_marginTop="2dp"

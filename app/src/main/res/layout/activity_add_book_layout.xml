@@ -200,7 +200,7 @@
                     android:gravity="center|left|top"
                     android:background="@drawable/corner_edit_view_bg"
                     android:padding="10dp"
-                    android:hint="请输入就餐人数"
+                    android:hint="记录其他信息。如：需要两个宝宝椅"
                     android:textSize="14sp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
@@ -213,9 +213,10 @@
     <TextView
         android:textSize="16sp"
         android:gravity="center"
+        android:layout_marginTop="15dp"
         android:textColor="@color/white"
         android:background="@drawable/right_bg_button"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:id="@+id/tv_save"
         android:layout_gravity="center_horizontal"
         android:text="保存"
