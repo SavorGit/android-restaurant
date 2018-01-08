@@ -9,7 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_height="@dimen/top_height"
         android:layout_alignParentTop="true"
-        android:background="@color/title_bg">
+        android:background="@color/colorPrimaryDark">
 
         <ImageView
             android:id="@+id/iv_back"
@@ -29,7 +29,7 @@
             android:maxEms="12"
             android:maxLines="1"
             android:text="幻灯片名"
-            android:textColor="@color/black"
+            android:textColor="@color/color_f6f2ed"
             android:textSize="@dimen/title_text_size" />
 
         <RelativeLayout
@@ -44,7 +44,7 @@
                 android:id="@+id/iv_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:textColor="@color/color_f6f2ed"
                 android:textSize="16sp"
                 android:text="编辑" />
 
