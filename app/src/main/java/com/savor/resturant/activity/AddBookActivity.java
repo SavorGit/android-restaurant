@@ -1,12 +1,8 @@
 package com.savor.resturant.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -15,27 +11,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.TimePickerView;
-import com.bumptech.glide.Glide;
-import com.common.api.utils.FileUtils;
-import com.common.api.widget.pulltorefresh.library.PullToRefreshBase;
-import com.common.api.widget.pulltorefresh.library.PullToRefreshListView;
+import com.common.api.utils.AppUtils;
 import com.savor.resturant.R;
-import com.savor.resturant.SavorApplication;
-import com.savor.resturant.adapter.BookAdapter;
 import com.savor.resturant.bean.ContactFormat;
-import com.savor.resturant.bean.CustomerLabel;
 import com.savor.resturant.bean.HotelBean;
-import com.savor.resturant.bean.OrderListBean;
 import com.savor.resturant.bean.RoomListBean;
 import com.savor.resturant.core.AppApi;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
-import static com.savor.resturant.activity.AddCustomerActivity.REQUEST_CODE_IMAGE;
-import static com.savor.resturant.activity.AddCustomerActivity.TAKE_PHOTO_REQUEST;
 import static com.savor.resturant.activity.ContactCustomerListActivity.REQUEST_CODE_SELECT;
 
 
@@ -142,6 +127,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
                 finish();
                 break;
             case R.id.dining_time_la:
+                AppUtils.hideSoftKeybord(this);
                 showDateDialog();
                 break;
             case R.id.iv_header:
