@@ -23,6 +23,7 @@ import com.common.api.widget.pulltorefresh.library.PullToRefreshListView;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.BookAdapter;
 import com.savor.resturant.adapter.RoomListAdapter;
+import com.savor.resturant.bean.BookListResult;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.OrderListBean;
 import com.savor.resturant.bean.RoomInfo;
@@ -53,9 +54,13 @@ public class BookListByDateActivity extends BaseActivity implements View.OnClick
     private String curDate;
     private PullToRefreshListView listview;
     private boolean isUp = false;
-    private List<OrderListBean> listItems = new ArrayList<>();
     private BookAdapter bookAdapter;
     private int page_num = 1;
+            private String yesterday_order_nums;
+            private String today_order_nums;
+            private String tomorrow_order_nums;
+            private String after_tomorrow_order_nums;
+            private List<OrderListBean> listItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,9 +154,15 @@ public class BookListByDateActivity extends BaseActivity implements View.OnClick
         switch (method) {
             case POST_ORDER_LIST_JSON:
                 listview.onRefreshComplete();
-                if (obj instanceof List<?>){
-                    List<OrderListBean> mlist = (List<OrderListBean>) obj;
-                    handleData(mlist);
+                listview.onRefreshComplete();
+                if (obj instanceof BookListResult){
+                    BookListResult bookListResult = (BookListResult) obj;
+                    if (bookListResult != null) {
+                        List<OrderListBean> mList = bookListResult.getOrder_list();
+                        handleData(mList);
+                       // initDataNum( bookListResult);
+                    }
+
 
                 }
                 break;
