@@ -5,10 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Process;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 
 import com.common.api.utils.LogUtils;
+import com.common.api.utils.ShowMessage;
 import com.common.api.widget.customTab.MyTabWidget;
 import com.savor.resturant.R;
 import com.savor.resturant.bean.ContactFormat;
@@ -18,8 +21,13 @@ import com.savor.resturant.fragment.CustomerFragment;
 import com.savor.resturant.fragment.MyFragment;
 import com.savor.resturant.fragment.ProjectionFragment;
 import com.savor.resturant.presenter.SensePresenter;
+import com.savor.resturant.service.ClearImageCacheService;
+import com.savor.resturant.service.LocalJettyService;
 import com.savor.resturant.service.ReRequestService;
+import com.savor.resturant.service.SSDPService;
+import com.savor.resturant.utils.ActivitiesManager;
 import com.savor.resturant.utils.ConstantValues;
+import com.savor.resturant.utils.GlideImageLoader;
 import com.savor.resturant.widget.ImportDialog;
 
 import java.util.List;
@@ -34,6 +42,7 @@ public class SavorMainActivity extends BaseFragmentActivity implements MyTabWidg
     private ProjectionFragment projectionFragment;
     private MyFragment myFragment;
     private SmallPlatformReciver smallPlatformReciver;
+    private long exitTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,5 +217,40 @@ public class SavorMainActivity extends BaseFragmentActivity implements MyTabWidg
         if(smallPlatformReciver!=null) {
             unregisterReceiver(smallPlatformReciver);
         }
+    }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+                ShowMessage.showToast(this,getString(R.string.confirm_exit_app));
+                exitTime = System.currentTimeMillis();
+            } else {
+                exitApp();
+            }
+        }
+        return true;
+    }
+
+    private void exitApp() {
+        // 清楚图片内存缓存
+        GlideImageLoader.getInstance().clearMemory(getApplicationContext());
+        // 清楚activity任务栈
+        ActivitiesManager.getInstance().popAllActivities();
+
+        // 关闭jetty服务
+        Intent stopIntent = new Intent(this,LocalJettyService.class);
+        stopService(stopIntent);
+
+        // 关闭发现小平台的service
+        Intent stopDescoveryIntent = new Intent(this,SSDPService.class);
+        stopService(stopDescoveryIntent);
+
+        Intent intent = new Intent(this, ClearImageCacheService.class);
+        intent.putExtra("path",mSession.getCompressPath());
+        startService(intent);
+
+        Process.killProcess(android.os.Process.myPid());
     }
 }

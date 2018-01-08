@@ -144,6 +144,8 @@ public class LabelAddActivity extends BaseActivity implements View.OnClickListen
                         }
                         this.list.add(label);
                         mLabelAdapter.setData(this.list);
+
+                        mLabelEt.setText("");
                     }
                 }
 
