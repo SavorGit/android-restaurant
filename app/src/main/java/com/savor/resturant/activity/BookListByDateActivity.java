@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -44,8 +45,8 @@ import java.util.List;
 /**
  * 欢迎词文背景置页
  */
-public class BookListByDateActivity extends BaseActivity implements View.OnClickListener
-        {
+public class BookListByDateActivity extends BaseActivity implements View.OnClickListener,AdapterView.OnItemClickListener
+{
 
     private Context context;
     private ImageView iv_left;
@@ -61,6 +62,7 @@ public class BookListByDateActivity extends BaseActivity implements View.OnClick
             private String tomorrow_order_nums;
             private String after_tomorrow_order_nums;
             private List<OrderListBean> listItems = new ArrayList<>();
+    private static final int REQUEST_ADD_BOOK = 308;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +109,7 @@ public class BookListByDateActivity extends BaseActivity implements View.OnClick
         iv_right.setOnClickListener(this);
         listview.setOnRefreshListener(onRefreshListener);
         listview.setOnLastItemVisibleListener(onLastItemVisibleListener);
+        listview.setOnItemClickListener(this);
 
     }
 
@@ -245,5 +248,15 @@ public class BookListByDateActivity extends BaseActivity implements View.OnClick
                 SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd");
                 return format.format(date);
      }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        OrderListBean orderListBean = (OrderListBean)bookAdapter.getItem(position-1);
+        Intent intent;
+        intent = new Intent(mContext,BookInfoActivity.class);
+        intent.putExtra("type", ContactCustomerListActivity.OperationType.CUSTOMER_LIST_SELECT);
+        intent.putExtra("orderListBean",orderListBean);
+        startActivityForResult(intent,REQUEST_ADD_BOOK);
+    }
 }
 
