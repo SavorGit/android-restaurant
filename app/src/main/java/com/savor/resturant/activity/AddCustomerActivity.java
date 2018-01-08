@@ -8,7 +8,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -154,6 +156,58 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         mAddBtn.setOnClickListener(this);
         mUploadHeaderLayout.setOnClickListener(this);
         mSaveBtn.setOnClickListener(this);
+
+        mMobileEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String mobile = mMobileEt.getText().toString();
+                String regex = "^1[34578]\\d{9}$";
+                if(!TextUtils.isEmpty(mobile)&&mobile.length()==11) {
+                    boolean matches = mobile.matches(regex);
+                    if(!matches) {
+                        mMobileEt.setText("");
+                        ShowMessage.showToast(AddCustomerActivity.this,"请输入正确的手机号");
+                    }
+                }
+
+            }
+        });
+
+        mSecondMobileEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String secondMobile = mSecondMobileEt.getText().toString();
+                if(!TextUtils.isEmpty(secondMobile)&&secondMobile.length() == 11) {
+                    String regex = "^1[34578]\\d{9}$";
+                    boolean matches = secondMobile.matches(regex);
+                    if(!matches) {
+                        mSecondMobileEt.setText("");
+                        ShowMessage.showToast(AddCustomerActivity.this,"请输入正确的手机号");
+                        return;
+                    }
+                }
+            }
+        });
     }
 
     private String getTime(Date date) {//可根据需要自行截取数据显示
@@ -208,12 +262,14 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
             return;
         }
 
+
         List<ContactFormat> customerList = mSession.getCustomerList().getCustomerList();
         if(customerList!=null&&customerList.size()>0) {
             for(ContactFormat contactFormat : customerList) {
                 String cMobile = contactFormat.getMobile();
                 String cMobile1 = contactFormat.getMobile1();
                 if(!TextUtils.isEmpty(cMobile1)) {
+
                     if(!TextUtils.isEmpty(cMobile)) {
                         if(cMobile.equals(mobile)||cMobile.equals(secondMobile) || cMobile1.equals(mobile)||cMobile1.equals(secondMobile)) {
                             ShowMessage.showToast(this,"已存在相同手机号的客户");
