@@ -49,6 +49,7 @@ import com.savor.resturant.utils.ConstantValues;
 import com.savor.resturant.utils.GlideCircleTransform;
 import com.savor.resturant.utils.OSSClientUtil;
 import com.savor.resturant.widget.ChoosePicDialog;
+import com.savor.resturant.widget.LoadingDialog;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 
@@ -96,6 +97,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     private EditText mTicketInfoEt;
     private ContactFormat currentAddCustomer;
     private ChineseComparator pinyinComparator;
+    private LoadingDialog mLoadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -294,6 +296,8 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
             }
         }
 
+        showLoadingLayout();
+
         if(!TextUtils.isEmpty(currentImagePath)) {
             faceUrl = "";
             String hotel_id = mSession.getHotelBean().getHotel_id();
@@ -333,6 +337,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void submit() {
+
         String name = mNameEt.getText().toString();
         String mobile = mMobileEt.getText().toString();
         String secondMobile = mSecondMobileEt.getText().toString();
@@ -544,6 +549,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         super.onSuccess(method, obj);
         switch (method) {
             case POST_ADD_CUS_JSON:
+                hideLoadingLayout();
                 if(obj instanceof AddCustomerResponse) {
                     AddCustomerResponse response = (AddCustomerResponse) obj;
                     AddCustomerResponse.ListBean list = response.getList();
@@ -572,6 +578,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         switch (method) {
             case POST_ADD_CUS_JSON:
                 LogUtils.d("savor:add customer failed");
+                hideLoadingLayout();
                 if(obj instanceof ResponseErrorMessage) {
                     ResponseErrorMessage message = (ResponseErrorMessage) obj;
                     int code = message.getCode();
@@ -634,5 +641,20 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     public static boolean isLetter(String str) {
         String regex = "^[a-zA-Z]+$";
         return str.matches(regex);
+    }
+
+    @Override
+    public void showLoadingLayout() {
+        if(mLoadingDialog == null) {
+            mLoadingDialog = new LoadingDialog(this);
+        }
+        mLoadingDialog.show();
+    }
+
+    @Override
+    public void hideLoadingLayout() {
+        if(mLoadingDialog!=null) {
+            mLoadingDialog.dismiss();
+        }
     }
 }
