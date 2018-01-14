@@ -152,6 +152,8 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
     }
     @Override
     public void setViews() {
+        HotelBean hotelBean = mSession.getHotelBean();
+        tv_center.setText(hotelBean.getHotel_name());
         bookAdapter = new BookAdapter(mContext);
         listview.setAdapter(bookAdapter);
         iv_left.setVisibility(View.GONE);

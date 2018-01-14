@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -48,6 +49,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
     private TextView tv_save;
     private EditText et_note;
     private ImageView iv_header;
+    private LinearLayout ll_customer_select;
     private String order_time;
     private static final int REQUEST_ADD_ROOM = 208;
     private RoomListBean room;
@@ -105,6 +107,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
         et_note = (EditText) findViewById(R.id.et_note);
         iv_header = (ImageView) findViewById(R.id.iv_header);
         tv_save = (TextView) findViewById(R.id.tv_save);
+        ll_customer_select = (LinearLayout) findViewById(R.id.ll_customer_select);
     }
 
     @Override
@@ -125,7 +128,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
         iv_header.setOnClickListener(this);
         dining_room_la.setOnClickListener(this);
         tv_save.setOnClickListener(this);
-
+        ll_customer_select.setOnClickListener(this);
     }
 
       private void showDateDialog() {
@@ -151,6 +154,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
                 showDateDialog();
                 break;
             case R.id.iv_header:
+            case R.id.ll_customer_select:
                 //showDateDialog();
                 Intent intent;
                 intent = new Intent(this,ContactCustomerListActivity.class);

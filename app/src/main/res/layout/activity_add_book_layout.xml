@@ -72,15 +72,33 @@
                 </LinearLayout>
 
             </RelativeLayout>
-            <ImageView
+            <LinearLayout
+                android:id="@+id/ll_customer_select"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="15dp"
-                android:id="@+id/iv_header"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/tjkh" />
+                android:background="@drawable/corner_blue_bg"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/iv_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ico_customer_select" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingTop="10dp"
+                    android:text="选择客户"
+                    android:textColor="@color/white" />
+            </LinearLayout>
             <View
                 android:id="@+id/line1"
                 android:layout_below="@id/user_info_la"

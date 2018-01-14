@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -42,6 +43,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
     private RelativeLayout dining_time_la;
     private TextView tv_dining_time;
     private RelativeLayout dining_room_la;
+    private LinearLayout ll_customer_select;
     private TextView tv_dining_room;
     private TextView tv_save;
     private EditText et_note;
@@ -88,6 +90,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
         tv_dining_room = (TextView) findViewById(R.id.tv_dining_room);
         et_note = (EditText) findViewById(R.id.et_note);
         iv_header = (ImageView) findViewById(R.id.iv_header);
+        ll_customer_select = (LinearLayout) findViewById(R.id.ll_customer_select);
         tv_save = (TextView) findViewById(R.id.tv_save);
     }
 
@@ -104,6 +107,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
         iv_left.setOnClickListener(this);
         tv_center.setOnClickListener(this);
         iv_header.setOnClickListener(this);
+        ll_customer_select.setOnClickListener(this);
         dining_room_la.setOnClickListener(this);
         tv_save.setOnClickListener(this);
 
@@ -133,6 +137,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
                 showDateDialog();
                 break;
             case R.id.iv_header:
+            case R.id.ll_customer_select:
                 //showDateDialog();
                 Intent intent;
                 intent = new Intent(this,ContactCustomerListActivity.class);
