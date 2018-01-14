@@ -222,6 +222,7 @@
             android:name=".activity.BookListByDateActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:windowSoftInputMode="stateHidden|adjustPan"
             android:name=".activity.AddBookActivity"
             android:screenOrientation="portrait" />
         <activity

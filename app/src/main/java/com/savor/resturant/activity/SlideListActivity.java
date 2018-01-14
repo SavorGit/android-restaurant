@@ -23,7 +23,6 @@ import com.savor.resturant.utils.RecordUtils;
 import com.savor.resturant.utils.SlideManager;
 import com.savor.resturant.utils.ToastUtil;
 import com.savor.resturant.widget.CommonDialog;
-import com.savor.resturant.widget.InputAlertDialog;
 
 import java.util.ArrayList;
 
@@ -44,9 +43,8 @@ public class SlideListActivity extends BaseActivity implements View.OnClickListe
     private ImageView add;
     private LinearLayout ll_create;
     private Button create;
-    private ArrayList<SlideSetInfo> slideList = new ArrayList<SlideSetInfo>();
+    private ArrayList<SlideSetInfo> slideList = new ArrayList<>();
     private PullToRefreshListView mPullTorefreshListView;
-    private ListView mListView;
     private SlideListActivity mContext;
     private SlideListAdapter mAdapter;
     private View mFooterView;
@@ -122,7 +120,6 @@ public class SlideListActivity extends BaseActivity implements View.OnClickListe
         ll_create = (LinearLayout) findViewById(R.id.ll_create_first);
         create = (Button) findViewById(R.id.btn_create);
         mPullTorefreshListView = (PullToRefreshListView) findViewById(R.id.main_list);
-        mListView = mPullTorefreshListView.getRefreshableView();
         mFooterView = LayoutInflater.from(mContext).inflate(R.layout.slide_footer_layout, null);
         mFootHintTv = (TextView) mFooterView.findViewById(R.id.tv_load_hint);
     }

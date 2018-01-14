@@ -278,6 +278,7 @@
                         android:textColorHint="@color/app_gray"
                         android:textColor="@color/color_222222"
                         android:textSize="15sp"
+                        android:maxLength="10"
                         android:drawableLeft="@drawable/ico_birhtplace"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -292,6 +293,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <EditText
+                        android:maxLength="50"
                         android:id="@+id/et_ticket_info"
                         android:paddingTop="18dp"
                         android:paddingBottom="18dp"
