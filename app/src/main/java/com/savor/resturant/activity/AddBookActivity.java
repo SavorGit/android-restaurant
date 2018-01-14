@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.bigkoo.pickerview.TimePickerView;
 import com.bumptech.glide.Glide;
 import com.common.api.utils.FileUtils;
+import com.common.api.utils.ShowMessage;
 import com.common.api.widget.pulltorefresh.library.PullToRefreshBase;
 import com.common.api.widget.pulltorefresh.library.PullToRefreshListView;
 import com.savor.resturant.R;
@@ -28,6 +29,7 @@ import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.OrderListBean;
 import com.savor.resturant.bean.RoomListBean;
 import com.savor.resturant.core.AppApi;
+import com.savor.resturant.core.ResponseErrorMessage;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -132,7 +134,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
 
 
                     }
-                }).setType(new boolean[]{true, true, true, false, false, false}).isCenterLabel(false).build();
+                }).setType(new boolean[]{true, true, true, true, true, false}).isCenterLabel(false).build();
                 timePickerView.show();
       }
     @Override
@@ -194,8 +196,15 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
     public void onError(AppApi.Action method, Object obj) {
         hideLoadingLayout();
         switch (method) {
-            case POST_ORDER_LIST_JSON:
+            case POST_ADD_ORDER_JSON:
+                if(obj instanceof ResponseErrorMessage) {
+                    ResponseErrorMessage message = (ResponseErrorMessage) obj;
+                    int code = message.getCode();
+                    String msg = message.getMessage();
+                    ShowMessage.showToast(AddBookActivity.this,msg);
+                }else {
 
+                }
                 default:
                     super.onError(method,obj);
                     break;
@@ -242,7 +251,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
     }
 
      private String getDataTime(Date date) {//可根据需要自行截取数据显示
-                SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd");
+                SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd HH:mm");
                 return format.format(date);
      }
 

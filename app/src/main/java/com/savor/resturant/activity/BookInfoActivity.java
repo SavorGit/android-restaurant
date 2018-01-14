@@ -114,8 +114,6 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
         update.setOnClickListener(this);
         iv_left.setOnClickListener(this);
         to_user_info.setOnClickListener(this);
-
-
     }
 
     @Override
