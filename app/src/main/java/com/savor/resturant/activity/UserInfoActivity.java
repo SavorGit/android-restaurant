@@ -116,7 +116,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     private PullToRefreshListView refreshListView;
     private TicketAdapter ticketAdapter;
     final List<ConRecBean> imageList = new ArrayList<>();
-    private String max_id = "0";
+    private String max_id = "1";
     private String min_id = "1";
     private String Rectype = "2";
     private RecTopList recTopList;
@@ -259,7 +259,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 }
                 break;
             case POST_ADD_SIGNLE_CONSUME_RECORD_JSON:
-                //finish();
+                finish();
                 break;
 
         }
@@ -513,9 +513,14 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                                         lable_id_str = new Gson().toJson(labeIds);
                                     }
                                     // 如果客户id不为空 不需要传客户信息
+//                                    AppApi.addSignleConsumeRecord(UserInfoActivity.this,
+//                                            "","","","",customer_id,
+//                                            "",invite_id,lable_id_str,mobile,usernameStr, recipt,usermobileStr,
+//                                            "","",UserInfoActivity.this);
+
                                     AppApi.addSignleConsumeRecord(UserInfoActivity.this,
                                             "","","","",customer_id,
-                                            "",invite_id,lable_id_str,mobile,usernameStr, recipt,usermobileStr,
+                                            "",invite_id,lable_id_str,mobile,"李丛", recipt,"15555555555",
                                             "","",UserInfoActivity.this);
                                 }
                             }

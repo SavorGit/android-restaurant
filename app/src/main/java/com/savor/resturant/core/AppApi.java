@@ -869,6 +869,7 @@ public class AppApi {
         final HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("bill_info", bill_info);
         params.put("birthday", birthday);
+        params.put("birthplace", birthplace);
         params.put("consume_ability", consume_ability);
         params.put("customer_id", customer_id);
         params.put("face_url", face_url);
@@ -895,7 +896,7 @@ public class AppApi {
                                  String type,
                                  ApiRequestListener handler) {
         final HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("hotel_id", customer_id);
+        params.put("customer_id", customer_id);
         params.put("invite_id", invite_id);
         params.put("max_id", max_id);
         params.put("min_id", min_id);
