@@ -266,7 +266,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 }
                 break;
             case POST_ADD_SIGNLE_CONSUME_RECORD_JSON:
-                finish();
+               // finish();
                 break;
 
         }
@@ -429,7 +429,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                         }else {
                             hideLabel();
                         }
-                    }else if (requestCode == TAKE_PHOTO_REQUEST && resultCode == Activity.RESULT_OK) {
+                }else if (requestCode == TAKE_PHOTO_REQUEST && resultCode == Activity.RESULT_OK) {
                     // 拍照
                    // Glide.with(this).load(currentImagePath).placeholder(R.drawable.empty_slide).into(mSpendHistoryIv);
                     submit();
