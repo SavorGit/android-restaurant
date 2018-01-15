@@ -116,9 +116,9 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     private PullToRefreshListView refreshListView;
     private TicketAdapter ticketAdapter;
     final List<ConRecBean> imageList = new ArrayList<>();
-    private String max_id = "1";
-    private String min_id = "1";
-    private String Rectype = "2";
+    private String max_id = "0";
+    private String min_id = "0";
+    private String Rectype = "1";
     private RecTopList recTopList;
     private List<ConRecBean> TopList = new ArrayList<ConRecBean>() ;
     @Override
@@ -208,6 +208,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         edit_label.setOnClickListener(this);
         edit_label_remark.setOnClickListener(this);
         tv_add_ticket.setOnClickListener(this);
+        tv_edit_label.setOnClickListener(this);
 
 
     }
@@ -234,6 +235,11 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.tv_add_ticket:
                 showPhotoDialog();
+                break;
+            case R.id.tv_edit_label:
+//                intent = new Intent(this,AddCustomerActivity.class);
+//                intent.putExtra("type",AddCustomerActivity.E);
+//                intent.putExtra("remark",remarkStr);
                 break;
 
 
@@ -287,7 +293,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
           if (customerBean != null){
               Customer customer = customerBean.getList();
               if (customer != null){
-                  usernameStr = customer.getUsername();
+                  usernameStr = customer.getName();
                   if (!TextUtils.isEmpty(usernameStr)) {
                       name.setText(usernameStr);
                   }else{
@@ -295,7 +301,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                   }
                   
                   
-                  usermobileStr = customer.getUsermobile();
+                  usermobileStr = customer.getMobile();
                   if (!TextUtils.isEmpty(usermobileStr)) {
                       tel.setText(usermobileStr);
                   }else{

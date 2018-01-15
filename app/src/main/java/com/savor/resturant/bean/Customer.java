@@ -10,39 +10,49 @@ import java.util.List;
 
 public class Customer implements Serializable {
     private static final long serialVersionUID = -1;
-    private String username;
-    private String usermobile;
-    private String usermobile1;
+    private String name;
+    private String mobile;
+    private String mobile1;
+    private String customer_id;
     private String sex;
     private String birthday;
     private String birthplace;
     private String face_url;
     private String consume_ability;
+    private String consume_ability_id;
     private String remark;
     private List<CustomerLabel> label = new ArrayList<CustomerLabel>();
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getUsermobile() {
-        return usermobile;
+    public String getMobile() {
+        return mobile;
     }
 
-    public void setUsermobile(String usermobile) {
-        this.usermobile = usermobile;
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
-    public String getUsermobile1() {
-        return usermobile1;
+    public String getMobile1() {
+        return mobile1;
     }
 
-    public void setUsermobile1(String usermobile1) {
-        this.usermobile1 = usermobile1;
+    public void setMobile1(String mobile1) {
+        this.mobile1 = mobile1;
+    }
+
+    public String getCustomer_id() {
+        return customer_id;
+    }
+
+    public void setCustomer_id(String customer_id) {
+        this.customer_id = customer_id;
     }
 
     public String getSex() {
@@ -85,6 +95,14 @@ public class Customer implements Serializable {
         this.consume_ability = consume_ability;
     }
 
+    public String getConsume_ability_id() {
+        return consume_ability_id;
+    }
+
+    public void setConsume_ability_id(String consume_ability_id) {
+        this.consume_ability_id = consume_ability_id;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -104,14 +122,16 @@ public class Customer implements Serializable {
     @Override
     public String toString() {
         return "Customer{" +
-                "username='" + username + '\'' +
-                ", usermobile='" + usermobile + '\'' +
-                ", usermobile1='" + usermobile1 + '\'' +
+                "name='" + name + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", mobile1='" + mobile1 + '\'' +
+                ", customer_id='" + customer_id + '\'' +
                 ", sex='" + sex + '\'' +
                 ", birthday='" + birthday + '\'' +
                 ", birthplace='" + birthplace + '\'' +
                 ", face_url='" + face_url + '\'' +
                 ", consume_ability='" + consume_ability + '\'' +
+                ", consume_ability_id='" + consume_ability_id + '\'' +
                 ", remark='" + remark + '\'' +
                 ", label=" + label +
                 '}';

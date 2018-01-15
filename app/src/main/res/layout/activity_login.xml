@@ -72,6 +72,7 @@
         android:textColor="@color/color_fd7a40"
         android:gravity="center"
         android:padding="3dp"
+        android:background="@drawable/corner_remote_view_click"
         android:layout_marginTop="17dp"
         android:layout_below="@id/num_la"
         android:layout_toRightOf="@id/code_la"
