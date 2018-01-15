@@ -237,9 +237,10 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 showPhotoDialog();
                 break;
             case R.id.tv_edit_label:
-//                intent = new Intent(this,AddCustomerActivity.class);
-//                intent.putExtra("type",AddCustomerActivity.E);
-//                intent.putExtra("remark",remarkStr);
+                intent = new Intent(this,AddCustomerActivity.class);
+                intent.putExtra("type",AddCustomerActivity.CustomerOpType.TYPE_EDIT);
+                intent.putExtra("customer",customerBean);
+                startActivityForResult(intent,REQUEST_CODE_REMARK);
                 break;
 
 
