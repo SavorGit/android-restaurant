@@ -188,15 +188,15 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void initCustomerInfo(Customer list) {
-        String username = list.getUsername();
+        String username = list.getName();
         if(!TextUtils.isEmpty(username)) {
             mNameEt.setText(username);
         }
 
-        String usermobile = getFormatStr(list.getUsermobile());
+        String usermobile = getFormatStr(list.getMobile());
         mMobileEt.setText(usermobile);
 
-        String usermobile1 = list.getUsermobile1();
+        String usermobile1 = list.getMobile1();
         if(!TextUtils.isEmpty(usermobile1)) {
             mSeconMobileLayout.setVisibility(View.VISIBLE);
             mSecondMobileEt.setText(usermobile1);
