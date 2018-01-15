@@ -7,16 +7,19 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.TimePickerView;
 import com.common.api.utils.AppUtils;
+import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
 import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.RoomListBean;
 import com.savor.resturant.core.AppApi;
+import com.savor.resturant.core.ResponseErrorMessage;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,6 +43,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
     private RelativeLayout dining_time_la;
     private TextView tv_dining_time;
     private RelativeLayout dining_room_la;
+    private LinearLayout ll_customer_select;
     private TextView tv_dining_room;
     private TextView tv_save;
     private EditText et_note;
@@ -86,6 +90,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
         tv_dining_room = (TextView) findViewById(R.id.tv_dining_room);
         et_note = (EditText) findViewById(R.id.et_note);
         iv_header = (ImageView) findViewById(R.id.iv_header);
+        ll_customer_select = (LinearLayout) findViewById(R.id.ll_customer_select);
         tv_save = (TextView) findViewById(R.id.tv_save);
     }
 
@@ -102,6 +107,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
         iv_left.setOnClickListener(this);
         tv_center.setOnClickListener(this);
         iv_header.setOnClickListener(this);
+        ll_customer_select.setOnClickListener(this);
         dining_room_la.setOnClickListener(this);
         tv_save.setOnClickListener(this);
 
@@ -117,7 +123,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
 
 
                     }
-                }).setType(new boolean[]{true, true, true, false, false, false}).isCenterLabel(false).build();
+                }).setType(new boolean[]{true, true, true, true, true, false}).isCenterLabel(false).build();
                 timePickerView.show();
       }
     @Override
@@ -131,6 +137,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
                 showDateDialog();
                 break;
             case R.id.iv_header:
+            case R.id.ll_customer_select:
                 //showDateDialog();
                 Intent intent;
                 intent = new Intent(this,ContactCustomerListActivity.class);
@@ -180,8 +187,15 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
     public void onError(AppApi.Action method, Object obj) {
         hideLoadingLayout();
         switch (method) {
-            case POST_ORDER_LIST_JSON:
+            case POST_ADD_ORDER_JSON:
+                if(obj instanceof ResponseErrorMessage) {
+                    ResponseErrorMessage message = (ResponseErrorMessage) obj;
+                    int code = message.getCode();
+                    String msg = message.getMessage();
+                    ShowMessage.showToast(AddBookActivity.this,msg);
+                }else {
 
+                }
                 default:
                     super.onError(method,obj);
                     break;
@@ -228,7 +242,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
     }
 
      private String getDataTime(Date date) {//可根据需要自行截取数据显示
-                SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd");
+                SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd HH:mm");
                 return format.format(date);
      }
 

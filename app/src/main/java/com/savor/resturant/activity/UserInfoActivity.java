@@ -39,6 +39,7 @@ import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.OrderListBean;
 import com.savor.resturant.bean.RecTopList;
 import com.savor.resturant.core.AppApi;
+import com.savor.resturant.core.ResponseErrorMessage;
 import com.savor.resturant.utils.ConstantValues;
 import com.savor.resturant.utils.GlideCircleTransform;
 import com.savor.resturant.utils.OSSClientUtil;
@@ -115,8 +116,8 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     private PullToRefreshListView refreshListView;
     private TicketAdapter ticketAdapter;
     final List<ConRecBean> imageList = new ArrayList<>();
-    private String max_id = "0";
-    private String min_id = "0";
+    private String max_id = "1";
+    private String min_id = "1";
     private String Rectype = "2";
     private RecTopList recTopList;
     private List<ConRecBean> TopList = new ArrayList<ConRecBean>() ;
@@ -258,7 +259,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 }
                 break;
             case POST_ADD_SIGNLE_CONSUME_RECORD_JSON:
-                //finish();
+                finish();
                 break;
 
         }
@@ -268,10 +269,15 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     public void onError(AppApi.Action method, Object obj) {
         hideLoadingLayout();
         switch (method) {
-            case POST_CUSTOMER_INFO_JSON:
-
+            case POST_TOP_LIST_JSON:
+                if(obj instanceof ResponseErrorMessage) {
+                    ResponseErrorMessage message = (ResponseErrorMessage) obj;
+                    int code = message.getCode();
+                    String msg = message.getMessage();
+                    ShowMessage.showToast(UserInfoActivity.this,msg);
+                }
                 default:
-                   // super.onError(method,obj);
+                   super.onError(method,obj);
                     break;
         }
     }
@@ -371,8 +377,8 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                  ticketAdapter.notifyDataSetChanged();
 
              }
-             max_id = recTopList.getMax_id();
-             min_id = recTopList.getMin_id();
+//             max_id = recTopList.getMax_id();
+//             min_id = recTopList.getMin_id();
          }
 
      }
@@ -507,9 +513,14 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                                         lable_id_str = new Gson().toJson(labeIds);
                                     }
                                     // 如果客户id不为空 不需要传客户信息
+//                                    AppApi.addSignleConsumeRecord(UserInfoActivity.this,
+//                                            "","","","",customer_id,
+//                                            "",invite_id,lable_id_str,mobile,usernameStr, recipt,usermobileStr,
+//                                            "","",UserInfoActivity.this);
+
                                     AppApi.addSignleConsumeRecord(UserInfoActivity.this,
                                             "","","","",customer_id,
-                                            "",invite_id,lable_id_str,mobile,usernameStr, recipt,usermobileStr,
+                                            "",invite_id,lable_id_str,mobile,"李丛", recipt,"15555555555",
                                             "","",UserInfoActivity.this);
                                 }
                             }

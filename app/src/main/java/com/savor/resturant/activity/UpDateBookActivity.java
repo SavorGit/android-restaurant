@@ -7,17 +7,20 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.TimePickerView;
 import com.bumptech.glide.Glide;
+import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
 import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.OrderListBean;
 import com.savor.resturant.bean.RoomListBean;
 import com.savor.resturant.core.AppApi;
+import com.savor.resturant.core.ResponseErrorMessage;
 import com.savor.resturant.utils.GlideCircleTransform;
 
 import java.text.SimpleDateFormat;
@@ -46,6 +49,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
     private TextView tv_save;
     private EditText et_note;
     private ImageView iv_header;
+    private LinearLayout ll_customer_select;
     private String order_time;
     private static final int REQUEST_ADD_ROOM = 208;
     private RoomListBean room;
@@ -103,6 +107,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
         et_note = (EditText) findViewById(R.id.et_note);
         iv_header = (ImageView) findViewById(R.id.iv_header);
         tv_save = (TextView) findViewById(R.id.tv_save);
+        ll_customer_select = (LinearLayout) findViewById(R.id.ll_customer_select);
     }
 
     @Override
@@ -123,7 +128,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
         iv_header.setOnClickListener(this);
         dining_room_la.setOnClickListener(this);
         tv_save.setOnClickListener(this);
-
+        ll_customer_select.setOnClickListener(this);
     }
 
       private void showDateDialog() {
@@ -136,7 +141,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
 
 
                     }
-                }).setType(new boolean[]{true, true, true, false, false, false}).isCenterLabel(false).build();
+                }).setType(new boolean[]{true, true, true, true, true, false}).isCenterLabel(false).build();
                 timePickerView.show();
       }
     @Override
@@ -149,6 +154,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
                 showDateDialog();
                 break;
             case R.id.iv_header:
+            case R.id.ll_customer_select:
                 //showDateDialog();
                 Intent intent;
                 intent = new Intent(this,ContactCustomerListActivity.class);
@@ -184,7 +190,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
     public void onSuccess(AppApi.Action method, Object obj) {
         hideLoadingLayout();
         switch (method) {
-            case POST_ADD_ORDER_JSON:
+            case POST_UPDATE_ORDER_JSON:
 
                 Intent intent = new Intent();
                 setResult(REQUEST_ADD_BOOK,intent);
@@ -198,8 +204,15 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
     public void onError(AppApi.Action method, Object obj) {
         hideLoadingLayout();
         switch (method) {
-            case POST_ORDER_LIST_JSON:
+            case POST_UPDATE_ORDER_JSON:
+                if(obj instanceof ResponseErrorMessage) {
+                    ResponseErrorMessage message = (ResponseErrorMessage) obj;
+                    int code = message.getCode();
+                    String msg = message.getMessage();
+                    ShowMessage.showToast(UpDateBookActivity.this,msg);
+                }else {
 
+                }
                 default:
                     super.onError(method,obj);
                     break;
@@ -246,7 +259,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
     }
 
      private String getDataTime(Date date) {//可根据需要自行截取数据显示
-                SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd");
+                SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd HH:mm");
                 return format.format(date);
      }
 
