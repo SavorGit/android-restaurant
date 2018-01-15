@@ -220,17 +220,17 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
       room_id = room.getRoom_id();
       room_type = room.getRoom_type();
 
-        if (TextUtils.isEmpty(order_mobile)) {
-
+        if (TextUtils.isEmpty(order_name)) {
+            ShowMessage.showToast(AddBookActivity.this,"请填写用户姓名");
             return;
         }
 
         if (TextUtils.isEmpty(person_nums)) {
-
+            ShowMessage.showToast(AddBookActivity.this,"请填就餐人数");
             return;
         }
         if (TextUtils.isEmpty(order_time)) {
-
+            ShowMessage.showToast(AddBookActivity.this,"请选择就餐时间");
             return;
         }
         AddOrderList();
