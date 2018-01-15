@@ -795,6 +795,7 @@ public class AppApi {
                                    String birthplace,
                                    String consume_ability,
                                    String face_url,
+                                   String customer_id,
                                    String invite_id,
                                    String mobile,
                                    String name,
@@ -808,6 +809,7 @@ public class AppApi {
         params.put("birthplace", birthplace);
         params.put("consume_ability", consume_ability);
         params.put("face_url", face_url);
+        params.put("customer_id", customer_id);
         params.put("invite_id", invite_id);
         params.put("mobile", mobile);
         params.put("remark", remark);

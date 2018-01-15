@@ -143,7 +143,7 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.POST_DELETE_ORDER_JSON
                     || action == AppApi.Action.POST_UPDATE_ORDER_SERVICE_JSON
                     || action == AppApi.Action.POST_UPDATE_ORDER_JSON
-
+                    || action == AppApi.Action.POST_EDIT_CUS_JSON
                     ){
                 int code = rSet.getInt("code");
                 if(rSet.has("result")) {

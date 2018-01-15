@@ -107,6 +107,8 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     private CustomerBean customerBean;
     private RadioButton mManRb;
     private RadioButton mWomanRb;
+    /**是否保存编辑失败历史 如果是修改手机号 不保存否则保存*/
+    private boolean isSaveEditFailed;
 
     public enum CustomerOpType implements Serializable {
         TYPE_ADD,
@@ -492,13 +494,31 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         if(customerList.contains(currentAddCustomer)) {
             ShowMessage.showToast(this,"该客户已存在");
         }else {
-            AppApi.addCustomer(this,bill_info,birthdDay,birthPlace,consume_ability,
-                    faceUrl,invite_id,tel,name,remark,sex,usermobile,this);
-            customerList.add(currentAddCustomer);
-            Collections.sort(customerList,pinyinComparator);
-            cacheList.setCustomerList(customerList);
-            mSession.setCustomerList(cacheList);
-            ShowMessage.showToast(this,"添加成功");
+            switch (type) {
+                case TYPE_EDIT:
+                    AppApi.editCustomer(this,bill_info,birthdDay,birthPlace,consume_ability,
+                            faceUrl,customerBean.getList().getCustomer_id(),invite_id,tel,name,remark,sex,usermobile,this);
+                    String userPhone = currentAddCustomer.getMobile();
+                    Customer list = customerBean.getList();
+                    if(list!=null&&!userPhone.equals(list.getMobile())) {
+                        isSaveEditFailed = true;
+                        ShowMessage.showToast(this,"修改成功");
+                    }else {
+                        isSaveEditFailed = false;
+                    }
+                    break;
+                case TYPE_ADD:
+                    AppApi.addCustomer(this,bill_info,birthdDay,birthPlace,consume_ability,
+                            faceUrl,invite_id,tel,name,remark,sex,usermobile,this);
+                    customerList.add(currentAddCustomer);
+                    Collections.sort(customerList,pinyinComparator);
+                    cacheList.setCustomerList(customerList);
+                    mSession.setCustomerList(cacheList);
+                    ShowMessage.showToast(this,"添加成功");
+                    break;
+            }
+
+
             finish();
         }
     }
@@ -657,6 +677,21 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onError(AppApi.Action method, Object obj) {
         switch (method) {
+            case POST_EDIT_CUS_JSON:
+                hideLoadingLayout();
+                if(obj instanceof ResponseErrorMessage) {
+                    ResponseErrorMessage message = (ResponseErrorMessage) obj;
+                    int code = message.getCode();
+                    String msg = message.getMessage();
+                    if(code == 60105||code == 60106) {
+//                        showToast(msg);
+                    }else {
+                        addEditOpFailedList();
+                    }
+                }else {
+                    addEditOpFailedList();
+                }
+                break;
             case POST_ADD_CUS_JSON:
                 LogUtils.d("savor:add customer failed");
                 hideLoadingLayout();
@@ -674,6 +709,20 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                 }
                 break;
         }
+    }
+
+    private void addEditOpFailedList() {
+        List<ContactFormat> contactFormats = new ArrayList<>();
+        contactFormats.add(currentAddCustomer);
+        CopyOnWriteArrayList<OperationFailedItem> opFailedList = mSession.getOpFailedList();
+        if(opFailedList == null) {
+            opFailedList = new CopyOnWriteArrayList<>();
+        }
+        OperationFailedItem item = new OperationFailedItem();
+        item.setType(OperationFailedItem.OpType.TYPE_EDIT_CUSTOMER);
+        item.setContactFormat(contactFormats);
+        opFailedList.add(item);
+        mSession.setOpFailedList(opFailedList);
     }
 
     private void addOpFailedList() {
