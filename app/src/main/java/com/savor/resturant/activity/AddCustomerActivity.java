@@ -12,12 +12,14 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Display;
+import android.view.TextureView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -40,6 +42,8 @@ import com.savor.resturant.SavorApplication;
 import com.savor.resturant.bean.AddCustomerResponse;
 import com.savor.resturant.bean.ConAbilityList;
 import com.savor.resturant.bean.ContactFormat;
+import com.savor.resturant.bean.Customer;
+import com.savor.resturant.bean.CustomerBean;
 import com.savor.resturant.bean.CustomerListBean;
 import com.savor.resturant.bean.OperationFailedItem;
 import com.savor.resturant.core.AppApi;
@@ -54,6 +58,7 @@ import com.savor.resturant.widget.LoadingDialog;
 import net.sourceforge.pinyin4j.PinyinHelper;
 
 import java.io.File;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -98,16 +103,32 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     private ContactFormat currentAddCustomer;
     private ChineseComparator pinyinComparator;
     private LoadingDialog mLoadingDialog;
+    private CustomerOpType type;
+    private CustomerBean customerBean;
+    private RadioButton mManRb;
+    private RadioButton mWomanRb;
+
+    public enum CustomerOpType implements Serializable {
+        TYPE_ADD,
+        TYPE_EDIT
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_customer);
 
+        handleIntent();
         getViews();
         setViews();
         setListeners();
         getConAbility();
+    }
+
+    private void handleIntent() {
+        type = (CustomerOpType) getIntent().getSerializableExtra("type");
+        customerBean = (CustomerBean) getIntent().getSerializableExtra("customer");
+
     }
 
     /**
@@ -119,6 +140,8 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void getViews() {
+        mManRb = (RadioButton) findViewById(R.id.rb_man);
+        mWomanRb = (RadioButton) findViewById(R.id.rb_woman);
         mTicketInfoEt = (EditText) findViewById(R.id.et_ticket_info);
         mBirthPlaceEt = (EditText) findViewById(R.id.et_birth_place);
         mSexRG = (RadioGroup) findViewById(R.id.rg_sex);
@@ -142,11 +165,69 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void setViews() {
         pinyinComparator = new ChineseComparator();
-        mTitleTv.setText("新增客户");
         mTitleTv.setTextColor(getResources().getColor(R.color.color_f6f2ed));
-        mRightTv.setVisibility(View.VISIBLE);
-        mRightTv.setText("导入通讯录");
-        mRightTv.setTextColor(getResources().getColor(R.color.color_f6f2ed));
+        switch (type) {
+            case TYPE_ADD:
+                mTitleTv.setText("新增客户");
+                mRightTv.setVisibility(View.VISIBLE);
+                mRightTv.setText("导入通讯录");
+                mRightTv.setTextColor(getResources().getColor(R.color.color_f6f2ed));
+                break;
+            case TYPE_EDIT:
+                mTitleTv.setText("修改客户");
+                mRightTv.setVisibility(View.GONE);
+                if(customerBean!=null) {
+                    Customer list = customerBean.getList();
+                    if(list!=null) {
+                        initCustomerInfo(list);
+                    }
+                }
+                break;
+        }
+
+    }
+
+    private void initCustomerInfo(Customer list) {
+        String username = list.getUsername();
+        if(!TextUtils.isEmpty(username)) {
+            mNameEt.setText(username);
+        }
+
+        String usermobile = getFormatStr(list.getUsermobile());
+        mMobileEt.setText(usermobile);
+
+        String usermobile1 = list.getUsermobile1();
+        if(!TextUtils.isEmpty(usermobile1)) {
+            mSeconMobileLayout.setVisibility(View.VISIBLE);
+            mSecondMobileEt.setText(usermobile1);
+        }
+
+        String face_url = list.getFace_url();
+        if(!TextUtils.isEmpty(face_url)) {
+            Glide.with(this).load(face_url).placeholder(R.drawable.empty_slide).into(mHeaderIv);
+        }
+
+        String sex = list.getSex();
+        if("1".equals(sex)) {
+            mManRb.setChecked(true);
+        }else if("2".equals(sex)) {
+            mWomanRb.setChecked(true);
+        }
+
+        String consume_ability = list.getConsume_ability();
+        if(!TextUtils.isEmpty(consume_ability)) {
+            mAbilityTv.setText(consume_ability);
+        }
+
+        String birthday = list.getBirthday();
+        if(!TextUtils.isEmpty(birthday)) {
+            mBirthDayTv.setText(birthday);
+        }
+
+        String birthplace = list.getBirthplace();
+        if(!TextUtils.isEmpty(birthplace)) {
+            mBirthPlaceEt.setText(birthplace);
+        }
     }
 
     @Override

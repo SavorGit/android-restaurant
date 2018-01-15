@@ -145,6 +145,7 @@ public class CustomerFragment extends BaseFragment implements View.OnClickListen
         switch (v.getId()) {
             case R.id.tv_add_customer:
                 intent = new Intent(getActivity(), AddCustomerActivity.class);
+                intent.putExtra("type", AddCustomerActivity.CustomerOpType.TYPE_ADD);
                 startActivity(intent);
                 break;
             case R.id.tv_add_history:

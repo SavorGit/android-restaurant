@@ -197,6 +197,7 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
                 break;
             case R.id.tv_add_customer:
                 intent = new Intent(this, AddCustomerActivity.class);
+                intent.putExtra("type", AddCustomerActivity.CustomerOpType.TYPE_ADD);
                 startActivity(intent);
                 break;
         }

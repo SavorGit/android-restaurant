@@ -474,10 +474,12 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         switch (v.getId()) {
             case R.id.tv_add_customer:
                 intent = new Intent(this, AddCustomerActivity.class);
+                intent.putExtra("type", AddCustomerActivity.CustomerOpType.TYPE_ADD);
                 startActivity(intent);
                 break;
             case R.id.iv_right:
                 intent = new Intent(this,AddCustomerActivity.class);
+                intent.putExtra("type", AddCustomerActivity.CustomerOpType.TYPE_ADD);
                 startActivity(intent);
                 break;
             case R.id.tv_search:
