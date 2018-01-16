@@ -114,6 +114,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
     private static final int REQUEST_CODE_LABEL = 100;
     private static final int REQUEST_CODE_REMARK = 108;
+    private static final int REQUEST_CODE_USERINFO = 109;
     private PullToRefreshListView refreshListView;
     private TicketAdapter ticketAdapter;
     final List<ConRecBean> imageList = new ArrayList<>();
@@ -241,7 +242,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 intent = new Intent(this,AddCustomerActivity.class);
                 intent.putExtra("type",AddCustomerActivity.CustomerOpType.TYPE_EDIT);
                 intent.putExtra("customer",customerBean);
-                startActivityForResult(intent,REQUEST_CODE_REMARK);
+                startActivityForResult(intent,REQUEST_CODE_USERINFO);
                 break;
 
 
@@ -470,7 +471,11 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                     currentImagePath = copyPath;
                     submit();
                     //Glide.with(this).load(currentImagePath).placeholder(R.drawable.empty_slide).into(mSpendHistoryIv);
+                }else   if (requestCode == REQUEST_CODE_USERINFO) {
+                    getCustomerBaseInfo();
                 }
+
+
 
             }
      private void submit() {
