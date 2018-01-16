@@ -24,6 +24,7 @@ import com.bigkoo.pickerview.TimePickerView;
 import com.bumptech.glide.Glide;
 import com.common.api.utils.FileUtils;
 import com.common.api.utils.ShowMessage;
+import com.common.api.widget.pulltorefresh.library.PullToRefreshBase;
 import com.common.api.widget.pulltorefresh.library.PullToRefreshListView;
 import com.google.gson.Gson;
 import com.savor.resturant.R;
@@ -209,7 +210,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         edit_label_remark.setOnClickListener(this);
         tv_add_ticket.setOnClickListener(this);
         tv_edit_label.setOnClickListener(this);
-
+        refreshListView.setOnLastItemVisibleListener(onLastItemVisibleListener);
 
     }
 
@@ -383,9 +384,19 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                  imageList.addAll(list);
                  ticketAdapter.notifyDataSetChanged();
 
+                 if (list!=null && list.size()<10) {
+                     refreshListView.onLoadComplete(false,true);
+                 }else {
+                     refreshListView.onLoadComplete(true,false);
+                 }
+
+             }else {
+                 refreshListView.onLoadComplete(false,true);
              }
-//             max_id = recTopList.getMax_id();
-//             min_id = recTopList.getMin_id();
+             max_id = recTopList.getMax_id();
+             min_id = recTopList.getMin_id();
+         }else {
+             refreshListView.onLoadComplete(false,true);
          }
 
      }
@@ -595,5 +606,12 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
          HotelBean hotelBean = mSession.getHotelBean();
         AppApi.getConRecTopList(context,customer_id,hotelBean.getInvite_id(),hotelBean.getTel(),max_id,min_id,Rectype,this);
      }
+
+     PullToRefreshBase.OnLastItemVisibleListener onLastItemVisibleListener = new PullToRefreshBase.OnLastItemVisibleListener() {
+                @Override
+      public void onLastItemVisible() {
+                    getConRecTopList();
+      }
+   };
 }
 
