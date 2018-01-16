@@ -133,32 +133,32 @@ public class BookAdapter extends BaseAdapter {
 
         int is_expense = item.getIs_expense();
         if (is_expense == 1) {
-            holder.is_xfjl.setVisibility(View.VISIBLE);
+            holder.is_xfjl.setImageResource(R.drawable.sy_xfjl);
         }else {
-            holder.is_xfjl.setVisibility(View.INVISIBLE);
+            holder.is_xfjl.setImageResource(R.drawable.sy_xfjl2);
         }
 
         String is_welcome = item.getIs_welcome();
         if (!TextUtils.isEmpty(is_welcome)) {
             if ("1".equals(is_welcome)) {
-                holder.is_hyc.setVisibility(View.VISIBLE);
+                holder.is_hyc.setImageResource(R.drawable.sy_hyc);
             }else {
-                holder.is_hyc.setVisibility(View.INVISIBLE);
+                holder.is_hyc.setImageResource(R.drawable.sy_hyc2);
             }
         }else {
-            holder.is_hyc.setVisibility(View.INVISIBLE);
+            holder.is_hyc.setImageResource(R.drawable.sy_hyc2);
         }
 
 
         String is_recfood = item.getIs_recfood();
         if (!TextUtils.isEmpty(is_recfood)) {
             if ("1".equals(is_recfood)) {
-                holder.is_tjc.setVisibility(View.VISIBLE);
+                holder.is_tjc.setImageResource(R.drawable.sy_tjc);
             }else {
-                holder.is_tjc.setVisibility(View.INVISIBLE);
+                holder.is_tjc.setImageResource(R.drawable.sy_tjc2);
             }
         }else {
-            holder.is_tjc.setVisibility(View.INVISIBLE);
+            holder.is_tjc.setImageResource(R.drawable.sy_tjc2);
         }
 
 

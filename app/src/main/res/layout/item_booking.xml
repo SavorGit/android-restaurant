@@ -82,34 +82,21 @@
         <RelativeLayout
             android:id="@+id/label1"
             android:layout_width="60dp"
-            android:layout_height="28dp"
+            android:layout_height="38dp"
             android:layout_below="@id/custom_name"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="2dp"
-            android:layout_toRightOf="@id/room_name"
-            android:background="@drawable/corner_remote_view_black">
+            android:layout_toRightOf="@id/room_name">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:paddingBottom="3dp"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
-                android:paddingTop="3dp"
-                android:text="欢迎词"
-                android:textColor="@color/app_text_type"
-                android:textSize="14sp" />
+
 
             <ImageView
                 android:id="@+id/is_hyc"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/dx_ytj"
-                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:src="@drawable/sy_hyc2"
+                android:visibility="visible"
 
                 />
 
@@ -118,34 +105,21 @@
         <RelativeLayout
             android:id="@+id/label2"
             android:layout_width="60dp"
-            android:layout_height="28dp"
+            android:layout_height="38dp"
             android:layout_below="@id/custom_name"
             android:layout_marginLeft="14dp"
             android:layout_marginTop="2dp"
-            android:background="@drawable/corner_remote_view_black"
             android:layout_toRightOf="@id/label1">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:paddingBottom="3dp"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
-                android:paddingTop="3dp"
-                android:text="推荐菜"
-                android:textColor="@color/app_text_type"
-                android:textSize="14sp" />
+
 
             <ImageView
                 android:id="@+id/is_tjc"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/dx_ytj"
-                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:src="@drawable/sy_tjc2"
+                android:visibility="visible"
                 />
 
         </RelativeLayout>
@@ -153,34 +127,20 @@
         <RelativeLayout
             android:id="@+id/label3"
             android:layout_width="75dp"
-            android:layout_height="28dp"
+            android:layout_height="38dp"
             android:layout_below="@id/custom_name"
             android:layout_marginLeft="14dp"
             android:layout_marginTop="2dp"
-            android:background="@drawable/corner_remote_view_black"
             android:layout_toRightOf="@id/label2">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:paddingBottom="3dp"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
-                android:paddingTop="3dp"
-                android:text="消费记录"
-                android:textColor="@color/app_text_type"
-                android:textSize="14sp" />
 
             <ImageView
                 android:id="@+id/is_xfjl"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/dx_ytj"
-                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+               android:layout_centerInParent="true"
+                android:src="@drawable/sy_xfjl2"
+                android:visibility="visible"
                 />
 
         </RelativeLayout>
