@@ -14,8 +14,8 @@
 
         <TextView
             android:id="@+id/room_name"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginBottom="14dp"
@@ -29,7 +29,7 @@
             android:paddingTop="4dp"
             android:text="包间名称"
             android:textColor="@color/white"
-            android:textSize="15dp" />
+            android:textSize="16dp" />
 
         <TextView
             android:id="@+id/time"
@@ -65,7 +65,7 @@
             android:layout_toRightOf="@id/room_name"
             android:text="王先生"
             android:textColor="@color/app_text_type"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/custom_mobile"
@@ -77,14 +77,14 @@
             android:layout_toRightOf="@id/custom_name"
             android:text="13811966726"
             android:textColor="@color/app_text_type"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <RelativeLayout
             android:id="@+id/label1"
             android:layout_width="60dp"
             android:layout_height="28dp"
             android:layout_below="@id/custom_name"
-            android:layout_marginLeft="14dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="2dp"
             android:layout_toRightOf="@id/room_name"
             android:background="@drawable/corner_remote_view_black">
@@ -95,8 +95,8 @@
                 android:layout_centerInParent="true"
                 android:gravity="center"
                 android:paddingBottom="3dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
                 android:paddingTop="3dp"
                 android:text="欢迎词"
                 android:textColor="@color/app_text_type"
@@ -104,11 +104,11 @@
 
             <ImageView
                 android:id="@+id/is_hyc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/dx_xzh"
+                android:src="@drawable/dx_ytj"
                 android:visibility="gone"
 
                 />
@@ -131,8 +131,8 @@
                 android:layout_centerInParent="true"
                 android:gravity="center"
                 android:paddingBottom="3dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
                 android:paddingTop="3dp"
                 android:text="推荐菜"
                 android:textColor="@color/app_text_type"
@@ -140,11 +140,11 @@
 
             <ImageView
                 android:id="@+id/is_tjc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/dx_xzh"
+                android:src="@drawable/dx_ytj"
                 android:visibility="gone"
                 />
 
@@ -166,8 +166,8 @@
                 android:layout_centerInParent="true"
                 android:gravity="center"
                 android:paddingBottom="3dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
                 android:paddingTop="3dp"
                 android:text="消费记录"
                 android:textColor="@color/app_text_type"
@@ -175,11 +175,11 @@
 
             <ImageView
                 android:id="@+id/is_xfjl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/dx_xzh"
+                android:src="@drawable/dx_ytj"
                 android:visibility="gone"
                 />
 

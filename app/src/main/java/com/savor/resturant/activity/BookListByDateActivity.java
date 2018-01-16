@@ -73,6 +73,7 @@ public class BookListByDateActivity extends BaseActivity implements View.OnClick
         getViews();
         setViews();
         setListeners();
+        getOrderList();
     }
 
     private void getDate(){
