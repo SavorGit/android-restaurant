@@ -316,7 +316,8 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void upateOrderService(){
-        AppApi.upateOrderService(context,hotelBean.getInvite_id(),hotelBean.getTel(),order_id,ticket_url,OrderServiceType,this);
+
+        AppApi.upateOrderService(context,hotelBean.getInvite_id(),hotelBean.getTel(),order_id,ticketOssUrl,OrderServiceType,this);
     }
     @Override
     public void onSuccess(AppApi.Action method, Object obj) {
