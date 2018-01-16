@@ -110,7 +110,7 @@ public class BookAdapter extends BaseAdapter {
         String person_nums = item.getPerson_nums();
         if (!TextUtils.isEmpty(person_nums)) {
             holder.custom_num.setVisibility(View.VISIBLE);
-            holder.custom_num.setText(person_nums);
+            holder.custom_num.setText(person_nums+"人");
         }else {
             holder.custom_num.setVisibility(View.INVISIBLE);
         }
