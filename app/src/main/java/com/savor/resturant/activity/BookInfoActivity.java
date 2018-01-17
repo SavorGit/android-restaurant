@@ -1,19 +1,45 @@
 package com.savor.resturant.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.sdk.android.oss.ClientException;
+import com.alibaba.sdk.android.oss.OSSClient;
+import com.alibaba.sdk.android.oss.ServiceException;
+import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
+import com.alibaba.sdk.android.oss.model.PutObjectRequest;
+import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.bumptech.glide.Glide;
+import com.common.api.utils.FileUtils;
+import com.common.api.utils.ShowMessage;
+import com.google.gson.Gson;
 import com.savor.resturant.R;
+import com.savor.resturant.SavorApplication;
+import com.savor.resturant.bean.ConRecBean;
+import com.savor.resturant.bean.CustomerLabel;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.OrderListBean;
 import com.savor.resturant.core.AppApi;
+import com.savor.resturant.utils.ConstantValues;
 import com.savor.resturant.utils.GlideCircleTransform;
+import com.savor.resturant.utils.OSSClientUtil;
+import com.savor.resturant.widget.ChoosePicDialog;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.savor.resturant.activity.AddCustomerActivity.REQUEST_CODE_IMAGE;
+import static com.savor.resturant.activity.AddCustomerActivity.TAKE_PHOTO_REQUEST;
 
 /**
  * 预定详情
@@ -58,6 +84,10 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
     private static final int REQUEST_ADD_BOOK = 308;
     private String ticket_url;
     private String OrderServiceType = "";
+    private String currentImagePath;
+    private String ticketOssUrl;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,7 +166,8 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.xp_type:
                 OrderServiceType = "3";
-                upateOrderService();
+                showPhotoDialog();
+               // upateOrderService();
                 break;
             case R.id.del:
                 Del();
@@ -285,7 +316,8 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void upateOrderService(){
-        AppApi.upateOrderService(context,hotelBean.getInvite_id(),hotelBean.getTel(),order_id,ticket_url,OrderServiceType,this);
+
+        AppApi.upateOrderService(context,hotelBean.getInvite_id(),hotelBean.getTel(),order_id,ticketOssUrl,OrderServiceType,this);
     }
     @Override
     public void onSuccess(AppApi.Action method, Object obj) {
@@ -315,6 +347,10 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
                     xp_type.setText("已完成");
                 }
                 break;
+            case POST_ADD_SIGNLE_CONSUME_RECORD_JSON:
+                upateOrderService();
+                // finish();
+                break;
 
 
         }
@@ -332,4 +368,161 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+    private void showPhotoDialog() {
+        final String tel = mSession.getHotelBean().getTel();
+        new ChoosePicDialog(this, new ChoosePicDialog.OnTakePhotoBtnClickListener() {
+            @Override
+            public void onTakePhotoClick() {
+
+                String cacheDir = ((SavorApplication) getApplication()).imagePath;
+                File cachePath = new File(cacheDir);
+                if(!cachePath.exists()) {
+                    cachePath.mkdirs();
+                }
+                currentImagePath = cacheDir+ File.separator+tel+"_"+System.currentTimeMillis()+".jpg";
+                File file = new File(currentImagePath);
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Uri imageUri = Uri.fromFile(file);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
+                BookInfoActivity.this.startActivityForResult(intent, TAKE_PHOTO_REQUEST);
+            }
+        },
+                new ChoosePicDialog.OnAlbumBtnClickListener() {
+                    @Override
+                    public void onAlbumBtnClick() {
+                        Intent intent = new Intent(Intent.ACTION_PICK,
+                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        BookInfoActivity.this.startActivityForResult(intent, REQUEST_CODE_IMAGE);
+                    }
+                }
+        ).show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == TAKE_PHOTO_REQUEST && resultCode == Activity.RESULT_OK) {
+            // 拍照
+            // Glide.with(this).load(currentImagePath).placeholder(R.drawable.empty_slide).into(mSpendHistoryIv);
+            submit();
+        }else   if (requestCode == REQUEST_CODE_IMAGE&&resultCode == Activity.RESULT_OK && data != null) {
+            // 从相册选择
+            Uri selectedImage = data.getData();
+            String[] filePathColumns = {MediaStore.Images.Media.DATA};
+            Cursor c = getContentResolver().query(selectedImage, filePathColumns, null, null, null);
+            c.moveToFirst();
+            int columnIndex = c.getColumnIndex(filePathColumns[0]);
+            String imagePath = c.getString(columnIndex);
+
+            String cachePath = ((SavorApplication)mContext.getApplication()).imagePath;
+            File dir = new File(cachePath);
+            if(!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            long timeMillis = System.currentTimeMillis();
+            String tel = mSession.getHotelBean().getTel();
+            String key = tel+"_"+timeMillis+".jpg";
+            String copyPath = dir.getAbsolutePath()+File.separator+key;
+
+            File sFile = new File(imagePath);
+            FileUtils.copyFile(sFile, copyPath);
+
+            currentImagePath = copyPath;
+            submit();
+            //Glide.with(this).load(currentImagePath).placeholder(R.drawable.empty_slide).into(mSpendHistoryIv);
+        }
+
+    }
+
+    private void submit() {
+
+//                final String usermobile = mMobileEt.getText().toString();
+//
+//                if(TextUtils.isEmpty(mNameEt.getText().toString())) {
+//                    ShowMessage.showToast(this,"请输入客户姓名");
+//                    return;
+//                }
+//
+//                if(TextUtils.isEmpty(usermobile)) {
+//                    ShowMessage.showToast(this,"请输入客户手机号");
+//                    return;
+//                }
+
+        File file = new File(currentImagePath);
+        String hotel_id = mSession.getHotelBean().getHotel_id();
+        final String objectKey = "log/resource/restaurant/mobile/userlogo/"+hotel_id+"/"+file.getName();
+        final OSSClient ossClient = OSSClientUtil.getOSSClient(this);
+        // 构造上传请求
+        PutObjectRequest put = new PutObjectRequest(ConstantValues.BUCKET_NAME,objectKey , currentImagePath);
+        ossClient.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+
+            @Override
+            public void onSuccess(PutObjectRequest putObjectRequest, PutObjectResult putObjectResult) {
+                ticketOssUrl = ossClient.presignPublicObjectURL(ConstantValues.BUCKET_NAME, objectKey);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        //String name = mNameEt.getText().toString();
+                        String invite_id = mSession.getHotelBean().getInvite_id();
+                        String mobile = mSession.getHotelBean().getTel();
+                        String recipt = "";
+                        List<String> urlList = new ArrayList<>();
+                        urlList.add(ticketOssUrl);
+
+                        recipt = new Gson().toJson(urlList);
+
+                        if(TextUtils.isEmpty(customer_id)) {
+                            // 如果客户id为空需要传客户信息bill_info，birthday，birthplace，consume_ability
+
+//                                    String bill_info = "";
+//                                    AppApi.addSignleConsumeRecord(UserInfoActivity.this,
+//                                            bill_info,birthday,birthplace,consume_ability,"",
+//                                            "",invite_id,"",mobile,name, recipt,usermobile,
+//                                            "",sex,UserInfoActivity.this);
+                        }else {
+//                            String lable_id_str = "";
+//                            List<String> labeIds = new ArrayList<>();
+//                            if(labelList.size()>0) {
+//                                for(int i = 0;i<labelList.size();i++) {
+//                                    CustomerLabel label = labelList.get(i);
+//                                    String label_id = label.getLabel_id();
+//                                    labeIds.add(label_id);
+//                                }
+//                                lable_id_str = new Gson().toJson(labeIds);
+//                            }
+                            // 如果客户id不为空 不需要传客户信息
+                                    AppApi.addSignleConsumeRecord(BookInfoActivity.this,
+                                            "","","","",customer_id,
+                                            "",invite_id,"",mobile,orderListBean.getOrder_name(), recipt,orderListBean.getOrder_mobile(),
+                                            "","",BookInfoActivity.this);
+
+//                            AppApi.addSignleConsumeRecord(BookInfoActivity.this,
+//                                    "","","","",customer_id,
+//                                    "",invite_id,lable_id_str,mobile,"李丛", recipt,"15555555555",
+//                                    "","",BookInfoActivity.this);
+                        }
+                    }
+                });
+//                ConRecBean conRecBean = new ConRecBean();
+//                conRecBean.setRecipt(ticketOssUrl);
+//                imageList.add(conRecBean);
+//                ticketAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(PutObjectRequest putObjectRequest, ClientException e, ServiceException e1) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ShowMessage.showToast(BookInfoActivity.this,"小票上传失败");
+                    }
+                });
+            }
+        });
+
+
+    }
 }

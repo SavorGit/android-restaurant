@@ -24,6 +24,7 @@ import com.bigkoo.pickerview.TimePickerView;
 import com.bumptech.glide.Glide;
 import com.common.api.utils.FileUtils;
 import com.common.api.utils.ShowMessage;
+import com.common.api.widget.pulltorefresh.library.PullToRefreshBase;
 import com.common.api.widget.pulltorefresh.library.PullToRefreshListView;
 import com.google.gson.Gson;
 import com.savor.resturant.R;
@@ -113,6 +114,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
     private static final int REQUEST_CODE_LABEL = 100;
     private static final int REQUEST_CODE_REMARK = 108;
+    private static final int REQUEST_CODE_USERINFO = 109;
     private PullToRefreshListView refreshListView;
     private TicketAdapter ticketAdapter;
     final List<ConRecBean> imageList = new ArrayList<>();
@@ -209,7 +211,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         edit_label_remark.setOnClickListener(this);
         tv_add_ticket.setOnClickListener(this);
         tv_edit_label.setOnClickListener(this);
-
+        refreshListView.setOnLastItemVisibleListener(onLastItemVisibleListener);
 
     }
 
@@ -240,7 +242,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 intent = new Intent(this,AddCustomerActivity.class);
                 intent.putExtra("type",AddCustomerActivity.CustomerOpType.TYPE_EDIT);
                 intent.putExtra("customer",customerBean);
-                startActivityForResult(intent,REQUEST_CODE_REMARK);
+                startActivityForResult(intent,REQUEST_CODE_USERINFO);
                 break;
 
 
@@ -266,7 +268,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 }
                 break;
             case POST_ADD_SIGNLE_CONSUME_RECORD_JSON:
-                finish();
+               // finish();
                 break;
 
         }
@@ -383,9 +385,19 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                  imageList.addAll(list);
                  ticketAdapter.notifyDataSetChanged();
 
+                 if (list!=null && list.size()<10) {
+                     refreshListView.onLoadComplete(false,true);
+                 }else {
+                     refreshListView.onLoadComplete(true,false);
+                 }
+
+             }else {
+                 refreshListView.onLoadComplete(false,true);
              }
-//             max_id = recTopList.getMax_id();
-//             min_id = recTopList.getMin_id();
+             max_id = recTopList.getMax_id();
+             min_id = recTopList.getMin_id();
+         }else {
+             refreshListView.onLoadComplete(false,true);
          }
 
      }
@@ -429,7 +441,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                         }else {
                             hideLabel();
                         }
-                    }else if (requestCode == TAKE_PHOTO_REQUEST && resultCode == Activity.RESULT_OK) {
+                }else if (requestCode == TAKE_PHOTO_REQUEST && resultCode == Activity.RESULT_OK) {
                     // 拍照
                    // Glide.with(this).load(currentImagePath).placeholder(R.drawable.empty_slide).into(mSpendHistoryIv);
                     submit();
@@ -459,7 +471,11 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                     currentImagePath = copyPath;
                     submit();
                     //Glide.with(this).load(currentImagePath).placeholder(R.drawable.empty_slide).into(mSpendHistoryIv);
+                }else   if (requestCode == REQUEST_CODE_USERINFO) {
+                    getCustomerBaseInfo();
                 }
+
+
 
             }
      private void submit() {
@@ -595,5 +611,12 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
          HotelBean hotelBean = mSession.getHotelBean();
         AppApi.getConRecTopList(context,customer_id,hotelBean.getInvite_id(),hotelBean.getTel(),max_id,min_id,Rectype,this);
      }
+
+     PullToRefreshBase.OnLastItemVisibleListener onLastItemVisibleListener = new PullToRefreshBase.OnLastItemVisibleListener() {
+                @Override
+      public void onLastItemVisible() {
+                    getConRecTopList();
+      }
+   };
 }
 
