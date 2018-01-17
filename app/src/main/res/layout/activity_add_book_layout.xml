@@ -75,7 +75,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
                         <EditText
-                            android:maxLength="11"
+                            android:maxLength="15"
                             android:inputType="number"
                             android:textSize="14sp"
                             android:id="@+id/et_phone"
