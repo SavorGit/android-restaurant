@@ -94,14 +94,14 @@
                 android:id="@+id/ll_customer_select"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginRight="15dp"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:background="@drawable/corner_blue_bg"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:padding="2dp">
 
                 <ImageView
                     android:id="@+id/iv_header"
@@ -112,8 +112,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingTop="10dp"
+                    android:gravity="center|top"
+                    android:paddingTop="2dp"
+                    android:textSize="12sp"
                     android:text="选择客户"
                     android:textColor="@color/white" />
             </LinearLayout>
