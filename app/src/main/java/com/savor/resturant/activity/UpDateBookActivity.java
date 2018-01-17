@@ -242,7 +242,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
             return;
         }
 
-        if (TextUtils.isEmpty(person_nums)) {
+        if (TextUtils.isEmpty(room_id)) {
 
             return;
         }
