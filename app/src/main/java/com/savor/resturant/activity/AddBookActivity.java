@@ -3,7 +3,9 @@ package com.savor.resturant.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -54,6 +56,9 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
     private String person_nums;
     private String room_id;
     private String room_type;
+    private TextView la_a;
+    private TextView la_b;
+    private TextView la_c;
     private static final int REQUEST_ADD_ROOM = 208;
     private static final int REQUEST_ADD_BOOK = 308;
     private RoomListBean room;
@@ -92,12 +97,39 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
         iv_header = (ImageView) findViewById(R.id.iv_header);
         ll_customer_select = (LinearLayout) findViewById(R.id.ll_customer_select);
         tv_save = (TextView) findViewById(R.id.tv_save);
+        la_a = (TextView) findViewById(R.id.la_a);
+        la_b = (TextView) findViewById(R.id.la_b);
+        la_c = (TextView) findViewById(R.id.la_c);
     }
 
     @Override
     public void setViews() {
         tv_center.setText("添加预定");
+        et_name.addTextChangedListener(new TextWatcher() {
 
+            // 第二个执行
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,int count) {
+                System.out.println("onTextChanged:" + "start:" + start + "before:" + before + "count:" + count);
+            }
+
+            // 第一个执行
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,int after) {
+                System.out.println("beforeTextChanged:" + "start:" + start + "count:" + count + "after:" + after);
+            }
+
+            // 第三个执行
+            @Override
+            public void afterTextChanged(Editable s) { // Edittext中实时的内容
+               int size =  s.toString().length();
+                if (size >0) {
+                    la_a.setVisibility(View.VISIBLE);
+                }else {
+                    la_a.setVisibility(View.GONE);
+                }
+            }
+        });
 
     }
 
@@ -120,7 +152,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
                         curDate = getDataTime(date);
                         //setTime(date);
                         tv_dining_time.setText(curDate);
-
+                        la_b.setVisibility(View.GONE);
 
                     }
                 }).setType(new boolean[]{true, true, true, true, true, false}).isCenterLabel(false).build();
@@ -217,16 +249,19 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
       order_name = et_name.getText().toString();
       order_time = tv_dining_time.getText().toString();
       person_nums = et_dining_num.getText().toString();
-      room_id = room.getRoom_id();
-      room_type = room.getRoom_type();
+     if (room != null){
+         room_id = room.getRoom_id();
+         room_type = room.getRoom_type();
+     }
+
 
         if (TextUtils.isEmpty(order_name)) {
             ShowMessage.showToast(AddBookActivity.this,"请填写用户姓名");
             return;
         }
 
-        if (TextUtils.isEmpty(person_nums)) {
-            ShowMessage.showToast(AddBookActivity.this,"请填就餐人数");
+        if (TextUtils.isEmpty(room_id)) {
+            ShowMessage.showToast(AddBookActivity.this,"请选择就餐包间");
             return;
         }
         if (TextUtils.isEmpty(order_time)) {
@@ -259,6 +294,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
                     if(data!=null) {
                         room = (RoomListBean) data.getSerializableExtra("room");
                         tv_dining_room.setText(room.getRoom_name());
+                        la_c.setVisibility(View.GONE);
 //                        et_phone.setText(contactFormat.getMobile());
 //                        et_name.setText(contactFormat.getName());
                     }

@@ -56,6 +56,7 @@ public class BookListByDateActivity extends BaseActivity implements View.OnClick
     private PullToRefreshListView listview;
     private boolean isUp = false;
     private BookAdapter bookAdapter;
+    private TextView tv_add;
     private int page_num = 1;
             private String yesterday_order_nums;
             private String today_order_nums;
@@ -90,6 +91,7 @@ public class BookListByDateActivity extends BaseActivity implements View.OnClick
         tv_center = (TextView) findViewById(R.id.tv_center);
         iv_right = (ImageView) findViewById(R.id.iv_right);
         listview = (PullToRefreshListView) findViewById(R.id.listview);
+        tv_add = (TextView) findViewById(R.id.tv_add);
     }
 
     @Override
@@ -111,6 +113,7 @@ public class BookListByDateActivity extends BaseActivity implements View.OnClick
         listview.setOnRefreshListener(onRefreshListener);
         listview.setOnLastItemVisibleListener(onLastItemVisibleListener);
         listview.setOnItemClickListener(this);
+        tv_add.setOnClickListener(this);
 
     }
 
@@ -131,12 +134,17 @@ public class BookListByDateActivity extends BaseActivity implements View.OnClick
       }
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()){
             case R.id.iv_left:
                 finish();
                 break;
             case R.id.iv_right:
                 showDateDialog();
+                break;
+            case R.id.tv_add:
+                intent = new Intent(mContext,AddBookActivity.class);
+                startActivityForResult(intent,REQUEST_ADD_BOOK);
                 break;
 
 
@@ -146,7 +154,18 @@ public class BookListByDateActivity extends BaseActivity implements View.OnClick
     }
 
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if(requestCode == REQUEST_ADD_BOOK) {
+            page_num = 1;
+            isUp = true;
+            getOrderList();
+
+
+        }
+    }
 
 
 
@@ -203,14 +222,14 @@ public class BookListByDateActivity extends BaseActivity implements View.OnClick
                     listItems.addAll(mList);
                     bookAdapter.setData(listItems);
 
-                    if (mList!=null && mList.size()<15) {
-                        listview.onLoadComplete(false,true);
+                    if (mList!=null && mList.size()<10) {
+                        listview.onLoadComplete(false,false);
                     }else {
                         listview.onLoadComplete(true,false);
                     }
                 }else {
 
-                    listview.onLoadComplete(false,true);
+                    listview.onLoadComplete(false,false);
                 }
 
             }
