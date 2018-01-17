@@ -125,6 +125,8 @@ public class BookListByDateActivity extends BaseActivity implements View.OnClick
                         curDate = getDataTime(date);
                         //setTime(date);
                         tv_center.setText(curDate);
+                        listItems.clear();
+                        bookAdapter.clear();
                         page_num = 1;
                         isUp = true;
                         getOrderList();
