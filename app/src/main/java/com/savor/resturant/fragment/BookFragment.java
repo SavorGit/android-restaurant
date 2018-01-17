@@ -127,7 +127,7 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
         iv_right = (ImageView) parent.findViewById(R.id.iv_right);
         iv_left = (ImageView) parent.findViewById(R.id.iv_left);
         listview = (PullToRefreshListView) parent.findViewById(R.id.listview);
-
+        hit = (TextView) parent.findViewById(R.id.hit);
         yesterday_la = (RelativeLayout) parent.findViewById(R.id.yesterday_la);
         yesterday = (TextView) parent.findViewById(R.id.yesterday);
         yesterday_month = (TextView) parent.findViewById(R.id.yesterday_month);
@@ -149,7 +149,7 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
         ia_4 = (ImageView) parent.findViewById(R.id.ia_4);
 
         tv_add = (TextView) parent.findViewById(R.id.tv_add);
-        hit = (TextView) parent.findViewById(R.id.hit);
+
 
     }
     @Override
