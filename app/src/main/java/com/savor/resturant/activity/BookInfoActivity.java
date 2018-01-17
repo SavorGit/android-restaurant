@@ -217,7 +217,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
             if (!TextUtils.isEmpty(person_nums)) {
                 nums.setText("就餐人数："+person_nums);
             }else{
-                nums.setText("");
+                nums.setText("就餐人数：未填写");
             }
 
             if (!TextUtils.isEmpty(order_name)) {
@@ -234,15 +234,15 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
             }
 
             if (!TextUtils.isEmpty(time_str)) {
-                time.setText("订餐时间:"+time_str);
+                time.setText("预定时间:"+time_str);
             }else{
                 time.setText("");
             }
 
             if (!TextUtils.isEmpty(remarkStr)) {
-                remark.setText("订餐时间:"+remarkStr);
+                remark.setText("备注:"+remarkStr);
             }else{
-                remark.setText("");
+                remark.setText("备注:未填写");
             }
 
             if (is_expense == 1) {
