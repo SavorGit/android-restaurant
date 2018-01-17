@@ -181,11 +181,15 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
                 startActivityForResult(intent, REQUEST_ADD_BOOK );
                 break;
             case R.id.to_user_info:
-                intent = new Intent(this,UserInfoActivity.class);
-                intent.putExtra("customerID",customer_id);
-                startActivityForResult(intent, REQUEST_ADD_BOOK );
+               intent = new Intent(this,UserInfoActivity.class);
+               intent.putExtra("customerID",customer_id);
+               startActivityForResult(intent, REQUEST_ADD_BOOK );
+
+
+
                 break;
 
+            //REQUEST_ADD_USER
 
             default:
                 break;
