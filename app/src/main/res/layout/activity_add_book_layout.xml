@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:layout_marginRight="80dp"
+                android:layout_marginRight="70dp"
                 android:orientation="vertical">
                 >
                 <LinearLayout
@@ -103,7 +103,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="12dp"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:background="@drawable/corner_blue_bg"
