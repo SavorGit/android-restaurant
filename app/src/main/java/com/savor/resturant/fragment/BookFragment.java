@@ -73,6 +73,7 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
     private TextView after_tomorrow;
     private TextView after_tomorrow_month;
     private TextView tv_add;
+    private TextView hit;
     private ImageView ia_4;
     private int page_num = 1;
 
@@ -148,6 +149,7 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
         ia_4 = (ImageView) parent.findViewById(R.id.ia_4);
 
         tv_add = (TextView) parent.findViewById(R.id.tv_add);
+        hit = (TextView) parent.findViewById(R.id.hit);
 
     }
     @Override
@@ -281,6 +283,16 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
         switch (method) {
             case POST_ORDER_LIST_JSON:
                 listview.onRefreshComplete();
+                if (listItems != null&& listItems.size()>0) {
+                    listview.setVisibility(View.VISIBLE);
+                    hit.setVisibility(View.GONE);
+                }else {
+                    listview.setVisibility(View.GONE);
+                    hit.setVisibility(View.VISIBLE);
+
+                }
+
+                listview.onLoadComplete(false,false);
                 break;
         }
     }
@@ -302,12 +314,23 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
             listItems.addAll(mList);
             bookAdapter.setData(listItems);
 
-            if (mList!=null && mList.size()<15) {
+            if (mList!=null && mList.size()<10) {
                 listview.onLoadComplete(false,false);
             }else {
                 listview.onLoadComplete(true,false);
             }
+            listview.setVisibility(View.VISIBLE);
+            hit.setVisibility(View.GONE);
         }else {
+
+            if (listItems != null&& listItems.size()>0) {
+                listview.setVisibility(View.VISIBLE);
+                hit.setVisibility(View.GONE);
+            }else {
+                listview.setVisibility(View.GONE);
+                hit.setVisibility(View.VISIBLE);
+
+            }
 
             listview.onLoadComplete(false,false);
         }
