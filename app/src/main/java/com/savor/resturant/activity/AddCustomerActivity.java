@@ -109,6 +109,8 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     private RadioButton mWomanRb;
     /**是否保存编辑失败历史 如果是修改手机号 不保存否则保存*/
     private boolean isSaveEditFailed;
+    private String name;
+    private String mobile;
 
     public enum CustomerOpType implements Serializable {
         TYPE_ADD,
@@ -130,6 +132,8 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     private void handleIntent() {
         type = (CustomerOpType) getIntent().getSerializableExtra("type");
         customerBean = (CustomerBean) getIntent().getSerializableExtra("customer");
+        name = getIntent().getStringExtra("name");
+        mobile = getIntent().getStringExtra("mobile");
 
     }
 
@@ -174,6 +178,14 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                 mRightTv.setVisibility(View.VISIBLE);
                 mRightTv.setText("导入通讯录");
                 mRightTv.setTextColor(getResources().getColor(R.color.color_f6f2ed));
+                if(!TextUtils.isEmpty(name)) {
+                    mNameEt.setText(name);
+                }
+
+                if(!TextUtils.isEmpty(mobile)) {
+                    mMobileEt.setText(mobile);
+                }
+
                 break;
             case TYPE_EDIT:
                 mTitleTv.setText("修改客户");
