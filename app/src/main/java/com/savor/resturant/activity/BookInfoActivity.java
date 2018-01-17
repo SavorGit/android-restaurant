@@ -329,12 +329,18 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
                 finish();
                 break;
             case POST_UPDATE_ORDER_SERVICE_JSON:
+                Intent intent1 = new Intent();
                 if ("1".equals(OrderServiceType)) {
+                    intent = new Intent(mContext, WelComeSetTextActivity.class);
+                    mContext.startActivity(intent);
                     wel_type.setBackgroundResource(R.drawable.corner_remote_book_btn);
                     wel_type.setTextColor(context.getResources().getColor(R.color.color_14b2fc));
                     wel_type.setClickable(false);
                     wel_type.setText("已完成");
                 }else if ("2".equals(OrderServiceType)) {
+                    intent = new Intent(mContext, RecommendFoodActivity.class);
+                    intent.putExtra("type", RecommendFoodActivity.OperationType.TYPE_RECOMMEND_FOODS);
+                    mContext.startActivity(intent);
                     tjc_type.setBackgroundResource(R.drawable.corner_remote_book_btn);
                     tjc_type.setTextColor(context.getResources().getColor(R.color.color_14b2fc));
                     tjc_type.setClickable(false);
