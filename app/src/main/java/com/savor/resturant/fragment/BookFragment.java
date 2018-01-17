@@ -303,13 +303,13 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
             bookAdapter.setData(listItems);
 
             if (mList!=null && mList.size()<15) {
-                listview.onLoadComplete(false,true);
+                listview.onLoadComplete(false,false);
             }else {
                 listview.onLoadComplete(true,false);
             }
         }else {
 
-            listview.onLoadComplete(false,true);
+            listview.onLoadComplete(false,false);
         }
 
     }

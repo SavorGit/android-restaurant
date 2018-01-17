@@ -222,14 +222,14 @@ public class BookListByDateActivity extends BaseActivity implements View.OnClick
                     listItems.addAll(mList);
                     bookAdapter.setData(listItems);
 
-                    if (mList!=null && mList.size()<15) {
-                        listview.onLoadComplete(false,true);
+                    if (mList!=null && mList.size()<10) {
+                        listview.onLoadComplete(false,false);
                     }else {
                         listview.onLoadComplete(true,false);
                     }
                 }else {
 
-                    listview.onLoadComplete(false,true);
+                    listview.onLoadComplete(false,false);
                 }
 
             }
