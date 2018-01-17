@@ -33,6 +33,7 @@ import com.savor.resturant.utils.ConstantValues;
 import com.savor.resturant.utils.GlideCircleTransform;
 import com.savor.resturant.utils.OSSClientUtil;
 import com.savor.resturant.widget.ChoosePicDialog;
+import com.savor.resturant.widget.CommonDialog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ import static com.savor.resturant.activity.AddCustomerActivity.TAKE_PHOTO_REQUES
  * Created by bushlee on 2018/1/7.
  */
 
-public class BookInfoActivity extends BaseActivity implements View.OnClickListener{
+public class BookInfoActivity extends BaseActivity implements View.OnClickListener,CommonDialog.OnConfirmListener {
 
     private Context context;
     private ImageView iv_left;
@@ -86,6 +87,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
     private String OrderServiceType = "";
     private String currentImagePath;
     private String ticketOssUrl;
+    private CommonDialog dialog;
 
 
     @Override
@@ -312,7 +314,14 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
 
     private void Del(){
 
-        AppApi.deleteOrder(context,hotelBean.getInvite_id(),hotelBean.getTel(),order_id,this);
+        if (dialog != null) {
+            dialog.show();
+        }else {
+            dialog = new CommonDialog(context,"是否删除",this);
+            dialog.show();
+        }
+
+
     }
 
     private void upateOrderService(){
@@ -530,5 +539,10 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
         });
 
 
+    }
+
+    @Override
+    public void onConfirm() {
+        AppApi.deleteOrder(context,hotelBean.getInvite_id(),hotelBean.getTel(),order_id,this);
     }
 }
