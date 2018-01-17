@@ -130,6 +130,8 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
                         }
 
                         mAdapter.setData(contactFormatLike);
+                    }else {
+                        showEmptyHintLayout();
                     }
                 }else {
                     List<ContactFormat> emptyList = new ArrayList<>();

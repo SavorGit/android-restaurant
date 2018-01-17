@@ -134,6 +134,45 @@ public class ReRequestService extends IntentService {
                     break;
                 case TYPE_EDIT_CUSTOMER:
                     // 编辑客户
+                    String invite_id = session.getHotelBean().getInvite_id();
+                    String mobile = session.getHotelBean().getTel();
+                    ContactFormat editCustomer = item.getContactFormat().get(0);
+                    String usermobile = editCustomer.getMobile();
+                    String usermobile1 = editCustomer.getMobile1();
+                    String userm = "";
+                    List<String> telList = new ArrayList<>();
+                    if(!TextUtils.isEmpty(usermobile)) {
+                        telList.add(usermobile);
+                    }
+
+                    if(!TextUtils.isEmpty(usermobile1)) {
+                        telList.add(usermobile1);
+                    }
+
+                    if(telList.size()>0) {
+                        userm = new Gson().toJson(telList);
+                    }
+
+                    AppApi.editCustomer(this, editCustomer.getBill_info(), editCustomer.getBirthday(), editCustomer.getBirthplace()
+                            , editCustomer.getConsume_ability(),
+                            editCustomer.getFace_url(), editCustomer.getCustomer_id(),invite_id, mobile, editCustomer.getName(), "", "", userm, new ApiRequestListener() {
+                                @Override
+                                public void onSuccess(AppApi.Action method, Object obj) {
+                                    LogUtils.d("savor:opr 通讯录重传添加修改客户成功\n "+item.getContactFormat());
+                                    opFailedList.remove(item);
+                                    session.setOpFailedList(opFailedList);
+                                }
+
+                                @Override
+                                public void onError(AppApi.Action method, Object obj) {
+                                    LogUtils.d("savor:opr 通讯录重传修改客户失败\n "+item.getContactFormat()+"\n；失败原因："+obj);
+                                }
+
+                                @Override
+                                public void onNetworkFailed(AppApi.Action method) {
+                                    LogUtils.d("savor:opr 通讯录重传修改客户失败\n "+item.getContactFormat()+"\n；失败原因：onNetworkFailed");
+                                }
+                            });
                     break;
             }
         }
