@@ -174,9 +174,9 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         mTitleTv.setTextColor(getResources().getColor(R.color.color_f6f2ed));
         switch (type) {
             case TYPE_ADD:
-                mTitleTv.setText("新增客户");
+                mTitleTv.setText("添加客户");
                 mRightTv.setVisibility(View.VISIBLE);
-                mRightTv.setText("导入通讯录");
+                mRightTv.setText("从通讯录导入");
                 mRightTv.setTextColor(getResources().getColor(R.color.color_f6f2ed));
                 if(!TextUtils.isEmpty(name)) {
                     mNameEt.setText(name);
