@@ -50,6 +50,7 @@
                             android:drawablePadding="10dp"
                             android:hint="请输入客户名称" />
                         <TextView
+                            android:id="@+id/la_a"
                             android:layout_marginLeft="20dp"
                             android:textColor="@color/app_red_color"
                             android:text="( 必填 )"
@@ -183,7 +184,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
-
+                    android:id="@+id/la_b"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="150dp"
                     android:layout_marginTop="8dp"
@@ -225,6 +226,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
+                    android:id="@+id/la_c"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="150dp"
                     android:layout_marginTop="8dp"
