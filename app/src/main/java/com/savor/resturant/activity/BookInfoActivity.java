@@ -83,6 +83,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
     private String order_id;
     private HotelBean hotelBean;
     private static final int REQUEST_ADD_BOOK = 308;
+    private static final int REQUEST_ADD_USER = 408;
     private String ticket_url;
     private String OrderServiceType = "";
     private String currentImagePath;
