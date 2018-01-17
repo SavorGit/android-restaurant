@@ -33,6 +33,7 @@ import com.savor.resturant.utils.ConstantValues;
 import com.savor.resturant.utils.GlideCircleTransform;
 import com.savor.resturant.utils.OSSClientUtil;
 import com.savor.resturant.widget.ChoosePicDialog;
+import com.savor.resturant.widget.CommonDialog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ import static com.savor.resturant.activity.AddCustomerActivity.TAKE_PHOTO_REQUES
  * Created by bushlee on 2018/1/7.
  */
 
-public class BookInfoActivity extends BaseActivity implements View.OnClickListener{
+public class BookInfoActivity extends BaseActivity implements View.OnClickListener,CommonDialog.OnConfirmListener {
 
     private Context context;
     private ImageView iv_left;
@@ -86,6 +87,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
     private String OrderServiceType = "";
     private String currentImagePath;
     private String ticketOssUrl;
+    private CommonDialog dialog;
 
 
     @Override
@@ -217,7 +219,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
             if (!TextUtils.isEmpty(person_nums)) {
                 nums.setText("就餐人数："+person_nums);
             }else{
-                nums.setText("");
+                nums.setText("就餐人数：未填写");
             }
 
             if (!TextUtils.isEmpty(order_name)) {
@@ -234,15 +236,15 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
             }
 
             if (!TextUtils.isEmpty(time_str)) {
-                time.setText("订餐时间:"+time_str);
+                time.setText("预定时间:"+time_str);
             }else{
                 time.setText("");
             }
 
             if (!TextUtils.isEmpty(remarkStr)) {
-                remark.setText("订餐时间:"+remarkStr);
+                remark.setText("备注:"+remarkStr);
             }else{
-                remark.setText("");
+                remark.setText("备注:未填写");
             }
 
             if (is_expense == 1) {
@@ -312,7 +314,14 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
 
     private void Del(){
 
-        AppApi.deleteOrder(context,hotelBean.getInvite_id(),hotelBean.getTel(),order_id,this);
+        if (dialog != null) {
+            dialog.show();
+        }else {
+            dialog = new CommonDialog(context,"是否删除",this);
+            dialog.show();
+        }
+
+
     }
 
     private void upateOrderService(){
@@ -329,12 +338,18 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
                 finish();
                 break;
             case POST_UPDATE_ORDER_SERVICE_JSON:
+                Intent intent1 = new Intent();
                 if ("1".equals(OrderServiceType)) {
+                    intent = new Intent(mContext, WelComeSetTextActivity.class);
+                    mContext.startActivity(intent);
                     wel_type.setBackgroundResource(R.drawable.corner_remote_book_btn);
                     wel_type.setTextColor(context.getResources().getColor(R.color.color_14b2fc));
                     wel_type.setClickable(false);
                     wel_type.setText("已完成");
                 }else if ("2".equals(OrderServiceType)) {
+                    intent = new Intent(mContext, RecommendFoodActivity.class);
+                    intent.putExtra("type", RecommendFoodActivity.OperationType.TYPE_RECOMMEND_FOODS);
+                    mContext.startActivity(intent);
                     tjc_type.setBackgroundResource(R.drawable.corner_remote_book_btn);
                     tjc_type.setTextColor(context.getResources().getColor(R.color.color_14b2fc));
                     tjc_type.setClickable(false);
@@ -524,5 +539,10 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
         });
 
 
+    }
+
+    @Override
+    public void onConfirm() {
+        AppApi.deleteOrder(context,hotelBean.getInvite_id(),hotelBean.getTel(),order_id,this);
     }
 }

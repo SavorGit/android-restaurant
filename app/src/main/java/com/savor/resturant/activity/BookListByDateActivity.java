@@ -64,7 +64,7 @@ public class BookListByDateActivity extends BaseActivity implements View.OnClick
             private String after_tomorrow_order_nums;
             private List<OrderListBean> listItems = new ArrayList<>();
     private static final int REQUEST_ADD_BOOK = 308;
-
+    private TextView hit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +92,7 @@ public class BookListByDateActivity extends BaseActivity implements View.OnClick
         iv_right = (ImageView) findViewById(R.id.iv_right);
         listview = (PullToRefreshListView) findViewById(R.id.listview);
         tv_add = (TextView) findViewById(R.id.tv_add);
+        hit = (TextView) findViewById(R.id.hit);
     }
 
     @Override
@@ -177,7 +178,6 @@ public class BookListByDateActivity extends BaseActivity implements View.OnClick
         switch (method) {
             case POST_ORDER_LIST_JSON:
                 listview.onRefreshComplete();
-                listview.onRefreshComplete();
                 if (obj instanceof BookListResult){
                     BookListResult bookListResult = (BookListResult) obj;
                     if (bookListResult != null) {
@@ -227,8 +227,17 @@ public class BookListByDateActivity extends BaseActivity implements View.OnClick
                     }else {
                         listview.onLoadComplete(true,false);
                     }
+                listview.setVisibility(View.VISIBLE);
+                hit.setVisibility(View.GONE);
                 }else {
+                if (listItems != null&& listItems.size()>0) {
+                    listview.setVisibility(View.VISIBLE);
+                    hit.setVisibility(View.GONE);
+                }else {
+                    listview.setVisibility(View.GONE);
+                    hit.setVisibility(View.VISIBLE);
 
+                }
                     listview.onLoadComplete(false,false);
                 }
 

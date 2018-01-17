@@ -128,7 +128,8 @@ public class BookAdapter extends BaseAdapter {
             holder.custom_mobile.setVisibility(View.VISIBLE);
             holder.custom_mobile.setText(order_mobile);
         }else {
-            holder.custom_mobile.setVisibility(View.INVISIBLE);
+            holder.custom_mobile.setVisibility(View.VISIBLE);
+            holder.custom_mobile.setText("未输入电话");
         }
 
         int is_expense = item.getIs_expense();

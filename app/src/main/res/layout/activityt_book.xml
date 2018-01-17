@@ -8,6 +8,16 @@
         layout="@layout/layout_head_title"
         />
 
+    <TextView
+        android:id="@+id/hit"
+        android:textSize="15sp"
+        android:visibility="visible"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="请添加预定信息，开始大数据管理"
+        android:textColor="@color/color_text_black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <RelativeLayout
         android:id="@+id/add_la"
         android:layout_width="match_parent"
