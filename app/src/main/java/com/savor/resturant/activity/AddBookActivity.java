@@ -59,6 +59,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
     private TextView la_a;
     private TextView la_b;
     private TextView la_c;
+    private TextView la_d;
     private static final int REQUEST_ADD_ROOM = 208;
     private static final int REQUEST_ADD_BOOK = 308;
     private RoomListBean room;
@@ -100,6 +101,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
         la_a = (TextView) findViewById(R.id.la_a);
         la_b = (TextView) findViewById(R.id.la_b);
         la_c = (TextView) findViewById(R.id.la_c);
+        la_d = (TextView) findViewById(R.id.la_d);
     }
 
     @Override
@@ -127,6 +129,33 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
                     la_a.setVisibility(View.VISIBLE);
                 }else {
                     la_a.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
+        et_phone.addTextChangedListener(new TextWatcher() {
+
+            // 第二个执行
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,int count) {
+                System.out.println("onTextChanged:" + "start:" + start + "before:" + before + "count:" + count);
+            }
+
+            // 第一个执行
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,int after) {
+                System.out.println("beforeTextChanged:" + "start:" + start + "count:" + count + "after:" + after);
+            }
+
+            // 第三个执行
+            @Override
+            public void afterTextChanged(Editable s) { // Edittext中实时的内容
+                int size =  s.toString().length();
+                if (size >0) {
+                    la_d.setVisibility(View.VISIBLE);
+                }else {
+                    la_d.setVisibility(View.GONE);
                 }
             }
         });
@@ -268,6 +297,11 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
             ShowMessage.showToast(AddBookActivity.this,"请选择就餐时间");
             return;
         }
+        if (TextUtils.isEmpty(order_mobile)) {
+            ShowMessage.showToast(AddBookActivity.this,"请填写用户手机号");
+            return;
+        }
+
         AddOrderList();
     }
 
