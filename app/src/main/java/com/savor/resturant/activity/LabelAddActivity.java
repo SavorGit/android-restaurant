@@ -115,11 +115,11 @@ public class LabelAddActivity extends BaseActivity implements View.OnClickListen
         ArrayList<CustomerLabel> selectedList = new ArrayList<>();
         if(data!=null&&data.size()>0) {
             for(CustomerLabel label: data) {
-                if (12== typeActivity) {
-                    AppApi.addLabel(this,customerId,invite_id,label.getLabel_name(),tel,this);
-                }
                 if(label.getLight() == 1) {
                     selectedList.add(label);
+                    if (12 == typeActivity) {
+                        AppApi.addLabel(this,customerId,invite_id,label.getLabel_name(),tel,this);
+                    }
                 }
             }
         }
