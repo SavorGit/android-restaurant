@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.bigkoo.pickerview.TimePickerView;
 import com.bumptech.glide.Glide;
+import com.common.api.utils.AppUtils;
 import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
 import com.savor.resturant.bean.ContactFormat;
@@ -216,6 +217,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
                 finish();
                 break;
             case R.id.dining_time_la:
+                AppUtils.hideSoftKeybord(this);
                 showDateDialog();
                 break;
             case R.id.iv_header:
@@ -227,6 +229,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
                 startActivityForResult(intent,REQUEST_CODE_SELECT);
                 break;
             case R.id.dining_room_la:
+                AppUtils.hideSoftKeybord(this);
                 intent = new Intent(this,RoomListActivity.class);
                 intent.putExtra("room",room);
                 //intent.putExtra("remark",remarkStr);
