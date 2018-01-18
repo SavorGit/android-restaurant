@@ -20,7 +20,7 @@
             android:gravity="center|left|top"
             android:background="@color/transparent"
             android:padding="10dp"
-            android:hint="请输入就餐人数"
+            android:hint="请手动添加列表中没有的包间"
             android:textSize="14sp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
