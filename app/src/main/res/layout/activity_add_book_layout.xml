@@ -32,7 +32,7 @@
                     android:paddingRight="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -79,7 +79,6 @@
                             android:inputType="number"
                             android:textSize="14sp"
                             android:id="@+id/et_phone"
-                            android:layout_weight="1"
                             android:drawablePadding="10dp"
                             android:background="@color/transparent"
                             android:hint="请输入手机号"

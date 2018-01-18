@@ -230,6 +230,7 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:windowSoftInputMode="stateHidden|adjustPan"
             android:name=".activity.RoomListActivity"
             android:screenOrientation="portrait" />
         <activity

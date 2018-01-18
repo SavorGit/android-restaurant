@@ -206,6 +206,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
                 startActivityForResult(intent,REQUEST_CODE_SELECT);
                 break;
             case R.id.dining_room_la:
+                AppUtils.hideSoftKeybord(this);
                 intent = new Intent(this,RoomListActivity.class);
                 intent.putExtra("room",room);
                 //intent.putExtra("remark",remarkStr);

@@ -19,6 +19,7 @@
             android:id="@+id/et_note"
             android:gravity="center|left|top"
             android:background="@color/transparent"
+            android:maxLength="10"
             android:padding="10dp"
             android:hint="请手动添加列表中没有的包间"
             android:textSize="14sp"

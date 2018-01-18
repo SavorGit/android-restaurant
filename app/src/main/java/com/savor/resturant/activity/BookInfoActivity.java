@@ -89,6 +89,9 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
     private String currentImagePath;
     private String ticketOssUrl;
     private CommonDialog dialog;
+    private TextView wel_lab;
+    private TextView tjc_lab;
+    private TextView xp_lab;
 
 
     @Override
@@ -130,6 +133,11 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
         iv_header= (ImageView) findViewById(R.id.iv_header);
         iv_left= (ImageView) findViewById(R.id.iv_left);
 
+        wel_lab = (TextView) findViewById(R.id.wel_lab);
+        tjc_lab = (TextView) findViewById(R.id.tjc_lab);
+        xp_lab = (TextView) findViewById(R.id.xp_lab);
+
+
     }
 
     @Override
@@ -148,6 +156,9 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
         update.setOnClickListener(this);
         iv_left.setOnClickListener(this);
         to_user_info.setOnClickListener(this);
+        wel_lab.setOnClickListener(this);
+        tjc_lab.setOnClickListener(this);
+        xp_lab.setOnClickListener(this);
     }
 
     @Override
@@ -158,16 +169,19 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
                 finish();
                 break;
             case R.id.wel_type:
+            case R.id.wel_lab:
                 ticket_url = "";
                 OrderServiceType = "1";
                 upateOrderService();
                 break;
             case R.id.tjc_type:
+            case R.id.tjc_lab:
                 ticket_url = "";
                 OrderServiceType = "2";
                 upateOrderService();
                 break;
             case R.id.xp_type:
+            case R.id.xp_lab:
                 OrderServiceType = "3";
                 showPhotoDialog();
                // upateOrderService();
