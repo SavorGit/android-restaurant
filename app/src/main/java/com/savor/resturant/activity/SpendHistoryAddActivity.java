@@ -89,6 +89,8 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
     private ContactFormat existContact;
     private ChineseComparator pinyinComparator;
     private LoadingDialog mLoadingDialog;
+    private TextView mHistoryHintTv;
+    private LinearLayout mTicketImageLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +105,8 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
     @Override
     public void getViews() {
         pinyinComparator = new ChineseComparator();
-
+        mTicketImageLayout = (LinearLayout)findViewById(R.id.ll_ticket_image);
+        mHistoryHintTv = (TextView) findViewById(R.id.tv_history_hint);
         mSaveTv = (TextView) findViewById(R.id.tv_save);
         mTicketTv = (TextView) findViewById(R.id.tv_add_ticket);
         mSpendHistoryIv = (ImageView) findViewById(R.id.iv_spend_history);
@@ -544,7 +547,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
             }
         }else if (requestCode == TAKE_PHOTO_REQUEST && resultCode == Activity.RESULT_OK) {
             // 拍照
-            Glide.with(this).load(currentImagePath).placeholder(R.drawable.empty_slide).into(mSpendHistoryIv);
+            showTicketImageLayout();
         }else   if (requestCode == REQUEST_CODE_IMAGE&&resultCode == Activity.RESULT_OK && data != null) {
             // 从相册选择
             Uri selectedImage = data.getData();
@@ -570,8 +573,16 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
 
             currentImagePath = copyPath;
 
+            mHistoryHintTv.setVisibility(View.GONE);
+            mTicketImageLayout.setVisibility(View.VISIBLE);
             Glide.with(this).load(currentImagePath).placeholder(R.drawable.empty_slide).into(mSpendHistoryIv);
         }
+    }
+
+    private void showTicketImageLayout() {
+        mHistoryHintTv.setVisibility(View.GONE);
+        mTicketImageLayout.setVisibility(View.VISIBLE);
+        Glide.with(this).load(currentImagePath).placeholder(R.drawable.empty_slide).into(mSpendHistoryIv);
     }
 
     public boolean isNumeric(String str){

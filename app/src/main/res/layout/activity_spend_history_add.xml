@@ -29,9 +29,15 @@
                 />
 
             <!--消费小票-->
-            <include
-                layout="@layout/include_customer_ticket"
-                />
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <include
+                    layout="@layout/include_customer_ticket"
+                    />
+            </LinearLayout>
+
 
             <TextView
                 android:layout_marginTop="20dp"
