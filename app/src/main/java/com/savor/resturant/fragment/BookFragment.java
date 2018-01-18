@@ -323,14 +323,26 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
             hit.setVisibility(View.GONE);
         }else {
 
-            if (listItems != null&& listItems.size()>0) {
-                listview.setVisibility(View.VISIBLE);
-                hit.setVisibility(View.GONE);
-            }else {
+            if (isUp) {
+                listItems.clear();
+                bookAdapter.clear();
+                listview.onLoadComplete(true,false);
                 listview.setVisibility(View.GONE);
                 hit.setVisibility(View.VISIBLE);
 
+            }else {
+                if (listItems != null&& listItems.size()>0) {
+                    listview.setVisibility(View.VISIBLE);
+                    hit.setVisibility(View.GONE);
+                }else {
+                    listview.setVisibility(View.GONE);
+                    hit.setVisibility(View.VISIBLE);
+
+                }
+                listview.onLoadComplete(true,false);
             }
+
+
 
             listview.onLoadComplete(false,false);
         }
