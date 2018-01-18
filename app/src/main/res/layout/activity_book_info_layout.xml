@@ -239,7 +239,7 @@
                         android:textColor="@color/color_text_black"
                        android:layout_centerHorizontal="true"
                         android:drawablePadding="5dp"
-                        android:drawableTop="@drawable/zhyc"
+                        android:drawableTop="@drawable/tjc"
                         android:textSize="15sp" />
 
                     <TextView
@@ -268,7 +268,7 @@
                         android:layout_marginRight="20dp"
                         android:layout_alignParentRight="true"
                         android:drawablePadding="5dp"
-                        android:drawableTop="@drawable/zhyc"
+                        android:drawableTop="@drawable/pxp"
                         android:textSize="15sp" />
 
                     <TextView
