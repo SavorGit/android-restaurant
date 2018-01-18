@@ -232,14 +232,27 @@ public class BookListByDateActivity extends BaseActivity implements View.OnClick
                 listview.setVisibility(View.VISIBLE);
                 hit.setVisibility(View.GONE);
                 }else {
-                if (listItems != null&& listItems.size()>0) {
-                    listview.setVisibility(View.VISIBLE);
-                    hit.setVisibility(View.GONE);
-                }else {
-                    listview.setVisibility(View.GONE);
-                    hit.setVisibility(View.VISIBLE);
+              if (isUp) {
+                  listItems.clear();
+                  bookAdapter.clear();
+                  listview.onLoadComplete(true,false);
+                  listview.setVisibility(View.GONE);
+                  hit.setVisibility(View.VISIBLE);
 
-                }
+              }else {
+                  if (listItems != null&& listItems.size()>0) {
+                      listview.setVisibility(View.VISIBLE);
+                      hit.setVisibility(View.GONE);
+                  }else {
+                      listview.setVisibility(View.GONE);
+                      hit.setVisibility(View.VISIBLE);
+
+                  }
+                  listview.onLoadComplete(true,false);
+              }
+
+
+
                     listview.onLoadComplete(false,false);
                 }
 

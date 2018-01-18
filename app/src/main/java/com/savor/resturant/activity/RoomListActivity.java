@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.TimePickerView;
+import com.common.api.utils.AppUtils;
 import com.common.api.utils.FileUtils;
 import com.savor.resturant.R;
 import com.savor.resturant.SavorApplication;
@@ -101,6 +102,7 @@ public class RoomListActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.iv_left:
+                AppUtils.hideSoftKeybord(this);
                 finish();
                 break;
             case R.id.add:
