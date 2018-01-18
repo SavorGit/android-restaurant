@@ -242,6 +242,7 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:windowSoftInputMode="stateHidden|adjustPan"
             android:name=".activity.UpDateBookActivity"
             android:screenOrientation="portrait" />
 
