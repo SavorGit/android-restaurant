@@ -47,7 +47,7 @@ import static com.savor.resturant.activity.AddCustomerActivity.TAKE_PHOTO_REQUES
  * Created by bushlee on 2018/1/7.
  */
 
-public class BookInfoActivity extends BaseActivity implements View.OnClickListener,CommonDialog.OnConfirmListener {
+public class BookInfoActivity extends BaseActivity implements View.OnClickListener,CommonDialog.OnConfirmListener,CommonDialog.OnCancelListener {
 
     private Context context;
     private ImageView iv_left;
@@ -322,7 +322,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
         if (dialog != null) {
             dialog.show();
         }else {
-            dialog = new CommonDialog(context,"是否删除",this);
+            dialog = new CommonDialog(context,"是否删除",this,this);
             dialog.show();
         }
 
@@ -549,5 +549,10 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onConfirm() {
         AppApi.deleteOrder(context,hotelBean.getInvite_id(),hotelBean.getTel(),order_id,this);
+    }
+
+    @Override
+    public void onCancel() {
+
     }
 }

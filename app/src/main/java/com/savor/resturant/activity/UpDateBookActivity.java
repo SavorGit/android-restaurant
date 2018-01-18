@@ -145,9 +145,9 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
             public void afterTextChanged(Editable s) { // Edittext中实时的内容
                 int size =  s.toString().length();
                 if (size >0) {
-                    la_a.setVisibility(View.VISIBLE);
-                }else {
                     la_a.setVisibility(View.GONE);
+                }else {
+                    la_a.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -172,9 +172,9 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
             public void afterTextChanged(Editable s) { // Edittext中实时的内容
                 int size =  s.toString().length();
                 if (size >0) {
-                    la_d.setVisibility(View.VISIBLE);
-                }else {
                     la_d.setVisibility(View.GONE);
+                }else {
+                    la_d.setVisibility(View.VISIBLE);
                 }
             }
         });

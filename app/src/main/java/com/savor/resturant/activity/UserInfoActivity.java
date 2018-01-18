@@ -306,9 +306,9 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                   
                   usermobileStr = customer.getMobile();
                   if (!TextUtils.isEmpty(usermobileStr)) {
-                      tel.setText(usermobileStr);
+                      tel.setText("电话："+usermobileStr);
                   }else{
-                      tel.setText("");
+                      tel.setText("电话：未填写");
                   }
                  
                   sexStr = customer.getSex();
@@ -327,16 +327,16 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
                   birthdayStr = customer.getBirthday();
                   if (!TextUtils.isEmpty(birthdayStr)) {
-                      birthday.setText(birthdayStr);
+                      birthday.setText("生日："+birthdayStr);
                   }else{
-                      birthday.setText("");
+                      birthday.setText("生日：未填写");
                   }
 
                   birthplaceStr = customer.getBirthplace();
                   if (!TextUtils.isEmpty(birthplaceStr)) {
-                      birthplace.setText(birthplaceStr);
+                      birthplace.setText("籍贯："+birthplaceStr);
                   }else{
-                      birthplace.setText("");
+                      birthplace.setText("籍贯：未填写");
                   }
                   face_urlStr = customer.getFace_url();
                   if (!TextUtils.isEmpty(face_urlStr)) {
@@ -346,10 +346,10 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                      // birthplace.setText("");
                   }
                   consume_abilityStr = customer.getConsume_ability();
-                  if (!TextUtils.isEmpty(birthplaceStr)) {
-                      consume_ability.setText(birthplaceStr);
+                  if (!TextUtils.isEmpty(consume_abilityStr)) {
+                      consume_ability.setText("消费能力："+consume_abilityStr);
                   }else{
-                      consume_ability.setText("");
+                      consume_ability.setText("消费能力：未填写");
                   }
                   remarkStr = customer.getRemark();
                   if (!TextUtils.isEmpty(remarkStr)) {
