@@ -32,6 +32,7 @@ import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.bigkoo.pickerview.TimePickerView;
 import com.bumptech.glide.Glide;
+import com.common.api.utils.AppUtils;
 import com.common.api.utils.DensityUtil;
 import com.common.api.utils.FileUtils;
 import com.common.api.utils.LogUtils;
@@ -324,6 +325,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                 startActivity(intent);
                 break;
             case R.id.rl_birthday:
+                AppUtils.hideSoftKeybord(this);
                 showDateDialog();
                 break;
             case R.id.rl_con_ability:
