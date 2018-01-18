@@ -51,7 +51,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
     private TextView tv_save;
     private EditText et_note;
     private ImageView iv_header;
-    private LinearLayout ll_customer_select;
+    private RelativeLayout ll_customer_select;
     private String order_time;
     private static final int REQUEST_ADD_ROOM = 208;
     private RoomListBean room;
@@ -81,7 +81,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_book_layout);
+        setContentView(R.layout.activity_book_layout);
         getDate();
         context = this;
         getViews();
@@ -113,7 +113,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
         et_note = (EditText) findViewById(R.id.et_note);
         iv_header = (ImageView) findViewById(R.id.iv_header);
         tv_save = (TextView) findViewById(R.id.tv_save);
-        ll_customer_select = (LinearLayout) findViewById(R.id.ll_customer_select);
+        ll_customer_select = (RelativeLayout) findViewById(R.id.ll_customer_select);
         la_a = (TextView) findViewById(R.id.la_a);
         la_b = (TextView) findViewById(R.id.la_b);
         la_c = (TextView) findViewById(R.id.la_c);

@@ -45,7 +45,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
     private RelativeLayout dining_time_la;
     private TextView tv_dining_time;
     private RelativeLayout dining_room_la;
-    private LinearLayout ll_customer_select;
+    private RelativeLayout ll_customer_select;
     private TextView tv_dining_room;
     private TextView tv_save;
     private EditText et_note;
@@ -67,7 +67,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_book_layout);
+        setContentView(R.layout.activity_book_layout);
         getDate();
         context = this;
         getViews();
@@ -96,7 +96,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
         tv_dining_room = (TextView) findViewById(R.id.tv_dining_room);
         et_note = (EditText) findViewById(R.id.et_note);
         iv_header = (ImageView) findViewById(R.id.iv_header);
-        ll_customer_select = (LinearLayout) findViewById(R.id.ll_customer_select);
+        ll_customer_select = (RelativeLayout) findViewById(R.id.ll_customer_select);
         tv_save = (TextView) findViewById(R.id.tv_save);
         la_a = (TextView) findViewById(R.id.la_a);
         la_b = (TextView) findViewById(R.id.la_b);

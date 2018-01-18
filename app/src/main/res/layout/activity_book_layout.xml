@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f6f2ed">
+    <include
+        android:id="@+id/top"
+        layout="@layout/layout_head_title" />
+
+    <ScrollView
+        android:layout_below="@id/top"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#f6f2ed"
+        android:fillViewport="true">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:id="@+id/user_info_la"
+                android:layout_alignParentTop="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="70dp"
+                android:orientation="vertical">
+            >
+                <EditText
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:maxLength="8"
+                    android:textSize="14sp"
+                    android:id="@+id/et_name"
+                    android:layout_marginRight="90dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:background="@color/transparent"
+                    android:drawableLeft="@drawable/ico_person"
+                    android:drawablePadding="10dp"
+                    android:hint="请输入客户名称" />
+                <TextView
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="85dp"
+                    android:id="@+id/la_a"
+                    android:textColor="@color/app_red_color"
+                    android:text="(必填)"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <View
+                    android:id="@+id/line1"
+                    android:layout_below="@+id/et_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:background="@color/divider_list" />
+
+                <EditText
+                    android:layout_below="@id/line1"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="10dp"
+                    android:maxLength="15"
+                    android:inputType="number"
+                    android:textSize="14sp"
+                    android:id="@+id/et_phone"
+                    android:drawablePadding="10dp"
+                    android:background="@color/transparent"
+                    android:hint="请输入手机号"
+                    android:drawableLeft="@drawable/ico_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp" />
+
+                <TextView
+                    android:layout_below="@id/line1"
+                    android:id="@+id/la_d"
+                    android:layout_marginLeft="20dp"
+                    android:textColor="@color/app_red_color"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="85dp"
+                    android:layout_marginTop="5dp"
+                    android:text="(必填)"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <View
+                    android:id="@+id/line2"
+                    android:layout_below="@+id/et_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:background="@color/divider_list" />
+        </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/ll_customer_select"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="12dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/corner_blue_bg">
+
+                <ImageView
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="15dp"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/iv_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ico_customer_select" />
+
+                <TextView
+                    android:layout_below="@id/iv_header"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingTop="6dp"
+                    android:textSize="12sp"
+                    android:text="选择客户"
+                    android:textColor="@color/white" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_below="@id/user_info_la"
+                android:id="@+id/dining_num_la"
+                android:paddingBottom="3dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/et_dining_num"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:background="@color/transparent"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:hint="请输入就餐人数"
+                    android:textSize="14sp"
+                    android:drawableLeft="@drawable/tjyd_rs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+            <View
+                android:id="@+id/line3"
+                android:layout_below="@id/dining_num_la"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="15dp"
+                android:background="@color/divider_list" />
+            <RelativeLayout
+                android:id="@+id/dining_time_la"
+                android:layout_below="@id/line3"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_marginLeft="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="45dp">
+                <TextView
+                    android:id="@+id/tv_dining_time"
+                    android:layout_centerVertical="true"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:hint="请选择就餐时间"
+                    android:drawableLeft="@drawable/tjyd_shjian"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/arraw_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/la_b"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="145dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/app_red_color"
+                    android:text="(必填)"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+            <View
+                android:id="@+id/line4"
+                android:layout_below="@id/dining_time_la"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="15dp"
+                android:background="@color/divider_list" />
+            <RelativeLayout
+                android:id="@+id/dining_room_la"
+                android:layout_below="@id/line4"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_marginLeft="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="45dp">
+                <TextView
+                    android:layout_centerVertical="true"
+                    android:id="@+id/tv_dining_room"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:hint="请选择就餐包间"
+                    android:drawableLeft="@drawable/tjyd_bj"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/arraw_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/la_c"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="145dp"
+                   android:layout_centerVertical="true"
+                    android:textColor="@color/app_red_color"
+                    android:text="(必填)"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+            <View
+                android:id="@+id/line5"
+                android:layout_below="@id/dining_room_la"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="15dp"
+                android:background="@color/divider_list" />
+            <RelativeLayout
+                android:layout_marginTop="15dp"
+                android:layout_below="@id/line5"
+                android:id="@+id/note_la"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_height="150dp">
+                <EditText
+                    android:id="@+id/et_note"
+                    android:gravity="center|left|top"
+                    android:background="@drawable/corner_edit_view_bg"
+                    android:padding="10dp"
+                    android:hint="记录其他信息。如：需要两个宝宝椅"
+                    android:textSize="14sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+    <TextView
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:background="@drawable/right_bg_button"
+        android:layout_marginBottom="15dp"
+        android:id="@+id/tv_save"
+        android:layout_gravity="center_horizontal"
+        android:text="保存"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content" />
+
+
+
+</RelativeLayout>
