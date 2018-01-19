@@ -144,6 +144,7 @@
                     android:background="@color/transparent"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
+                    android:maxLength="3"
                     android:hint="请输入就餐人数"
                     android:textSize="14sp"
                     android:drawableLeft="@drawable/tjyd_rs"

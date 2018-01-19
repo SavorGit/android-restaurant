@@ -72,13 +72,13 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
     private String room_nameStr;
     private String time_str;
     private int is_expense;
+    private String moment_str;
     private String is_welcome;
     private String is_recfood;
     private String customer_id;
     private String room_id;
     private String room_type;
     private String face_url;
-    private String moment_str;
     private String remarkStr;
     private String order_id;
     private HotelBean hotelBean;
@@ -226,6 +226,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
             face_url = orderListBean.getFace_url();
             moment_str = orderListBean.getMoment_str();
             remarkStr = orderListBean.getRemark();
+            moment_str = orderListBean.getMoment_str();
 
 
 
@@ -255,7 +256,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
             }
 
             if (!TextUtils.isEmpty(time_str)) {
-                time.setText("预定时间:"+time_str);
+                time.setText("预定时间:"+time_str+" "+moment_str);
             }else{
                 time.setText("");
             }
