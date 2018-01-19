@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.common.api.utils.AppUtils;
 import com.common.api.utils.ShowMessage;
 import com.github.tamir7.contacts.Address;
 import com.github.tamir7.contacts.Contact;
@@ -52,6 +53,8 @@ import java.util.regex.Pattern;
 public class ContactCustomerListActivity extends BaseActivity implements View.OnClickListener, MyContactAdapter.OnAddBtnClickListener, MyContactAdapter.OnCheckStateChangeListener, MyContactAdapter.OnItemClickListener {
     public static final int RESULT_CODE_SELECT = 1000;
     public static final int REQUEST_CODE_SELECT = 1001;
+    public static final int REQUEST_CODE_ADD = 1002;
+    public static final int RESULT_CODE_ADD = 1003;
     private List<ContactFormat> contactFormats;
     private ChineseComparator pinyinComparator;
     private MyContactAdapter adapter;
@@ -116,6 +119,8 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                 }
                 break;
         }
+
+        initData();
     }
 
     public void initData() {
@@ -470,6 +475,8 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         mCustomerEmptyHintLayout.setVisibility(View.GONE);
     }
 
+
+
     @Override
     public void onClick(View v) {
         Intent intent;
@@ -477,7 +484,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
             case R.id.tv_add_customer:
                 intent = new Intent(this, AddCustomerActivity.class);
                 intent.putExtra("type", AddCustomerActivity.CustomerOpType.TYPE_ADD);
-                startActivity(intent);
+                startActivityForResult(intent,REQUEST_CODE_ADD);
                 break;
             case R.id.iv_right:
                 intent = new Intent(this,AddCustomerActivity.class);
@@ -646,6 +653,8 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
 
     @Override
     public void onItemClick(int position, ContactFormat contactFormat) {
+        if(AppUtils.isFastDoubleClick(1))
+            return;
         Intent intent;
         switch (operationType) {
             case CUSTOMER_LIST:
@@ -665,6 +674,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if(requestCode == REQUEST_CODE_SELECT || resultCode == RESULT_CODE_SELECT) {
             if(data!=null) {
                 ContactFormat contactFormat = (ContactFormat) data.getSerializableExtra("customer");
@@ -673,6 +683,8 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                 setResult(RESULT_CODE_SELECT,intent);
                 finish();
             }
+        }else if(requestCode == REQUEST_CODE_ADD&&resultCode == RESULT_CODE_ADD) {
+            initData();
         }
     }
 }

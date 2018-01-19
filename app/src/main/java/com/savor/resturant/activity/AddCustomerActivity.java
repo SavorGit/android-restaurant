@@ -540,6 +540,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                         cacheList.setCustomerList(customerList);
                         mSession.setCustomerList(cacheList);
                         ShowMessage.showToast(this,"添加成功");
+                        setResult(ContactCustomerListActivity.RESULT_CODE_ADD);
                         finish();
                     }
                     break;
