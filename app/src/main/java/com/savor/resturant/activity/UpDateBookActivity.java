@@ -260,7 +260,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
         hideLoadingLayout();
         switch (method) {
             case POST_UPDATE_ORDER_JSON:
-
+                ShowMessage.showToast(UpDateBookActivity.this,"修改成功");
                 Intent intent = new Intent();
                 setResult(REQUEST_ADD_BOOK,intent);
                 finish();
