@@ -361,36 +361,9 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
             return;
         }
 
-
-        List<ContactFormat> customerList = mSession.getCustomerList().getCustomerList();
-        if(customerList!=null&&customerList.size()>0) {
-            for(ContactFormat contactFormat : customerList) {
-                String cMobile = contactFormat.getMobile();
-                String cMobile1 = contactFormat.getMobile1();
-                if(!TextUtils.isEmpty(cMobile1)) {
-
-                    if(!TextUtils.isEmpty(cMobile)) {
-                        if(cMobile.equals(mobile)||cMobile.equals(secondMobile) || cMobile1.equals(mobile)||cMobile1.equals(secondMobile)) {
-                            ShowMessage.showToast(this,"已存在相同手机号的客户");
-                            return;
-                        }
-                    }else {
-                        if(cMobile1.equals(mobile)||cMobile1.equals(secondMobile)) {
-                            ShowMessage.showToast(this,"已存在相同手机号的客户");
-                            return;
-                        }
-                    }
-
-                }else {
-                    if(!TextUtils.isEmpty(cMobile)) {
-                        if(cMobile.equals(mobile)||cMobile.equals(secondMobile)) {
-                            ShowMessage.showToast(this,"已存在相同手机号的客户");
-                            return;
-                        }
-                    }
-                }
-
-            }
+        if (type == CustomerOpType.TYPE_ADD) {
+            if (checkIfExitInCustomerList(mobile, secondMobile))
+                return;
         }
 
         showLoadingLayout();
@@ -431,6 +404,40 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         }else {
             submit();
         }
+    }
+
+    private boolean checkIfExitInCustomerList(String mobile, String secondMobile) {
+        List<ContactFormat> customerList = mSession.getCustomerList().getCustomerList();
+        if(customerList!=null&&customerList.size()>0) {
+            for(ContactFormat contactFormat : customerList) {
+                String cMobile = contactFormat.getMobile();
+                String cMobile1 = contactFormat.getMobile1();
+                if(!TextUtils.isEmpty(cMobile1)) {
+
+                    if(!TextUtils.isEmpty(cMobile)) {
+                        if(cMobile.equals(mobile)||cMobile.equals(secondMobile) || cMobile1.equals(mobile)||cMobile1.equals(secondMobile)) {
+                            ShowMessage.showToast(this,"已存在相同手机号的客户");
+                            return true;
+                        }
+                    }else {
+                        if(cMobile1.equals(mobile)||cMobile1.equals(secondMobile)) {
+                            ShowMessage.showToast(this,"已存在相同手机号的客户");
+                            return true;
+                        }
+                    }
+
+                }else {
+                    if(!TextUtils.isEmpty(cMobile)) {
+                        if(cMobile.equals(mobile)||cMobile.equals(secondMobile)) {
+                            ShowMessage.showToast(this,"已存在相同手机号的客户");
+                            return true;
+                        }
+                    }
+                }
+
+            }
+        }
+        return false;
     }
 
     private void submit() {
@@ -510,9 +517,6 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
 
         CustomerListBean cacheList = mSession.getCustomerList();
         List<ContactFormat> customerList = mSession.getCustomerList().getCustomerList();
-        if(customerList.contains(currentAddCustomer)) {
-            ShowMessage.showToast(this,"该客户已存在");
-        }else {
             switch (type) {
                 case TYPE_EDIT:
                     AppApi.editCustomer(this,bill_info,birthdDay,birthPlace,consume_ability,
@@ -521,25 +525,26 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                     Customer list = customerBean.getList();
                     if(list!=null&&!userPhone.equals(list.getMobile())) {
                         isSaveEditFailed = true;
-                        ShowMessage.showToast(this,"修改成功");
                     }else {
                         isSaveEditFailed = false;
                     }
                     break;
                 case TYPE_ADD:
-                    AppApi.addCustomer(this,bill_info,birthdDay,birthPlace,consume_ability,
-                            faceUrl,invite_id,tel,name,remark,sex,usermobile,this);
-                    customerList.add(currentAddCustomer);
-                    Collections.sort(customerList,pinyinComparator);
-                    cacheList.setCustomerList(customerList);
-                    mSession.setCustomerList(cacheList);
-                    ShowMessage.showToast(this,"添加成功");
+                    if(customerList.contains(currentAddCustomer)) {
+                        ShowMessage.showToast(this,"该客户已存在");
+                    }else {
+                        AppApi.addCustomer(this,bill_info,birthdDay,birthPlace,consume_ability,
+                                faceUrl,invite_id,tel,name,remark,sex,usermobile,this);
+                        customerList.add(currentAddCustomer);
+                        Collections.sort(customerList,pinyinComparator);
+                        cacheList.setCustomerList(customerList);
+                        mSession.setCustomerList(cacheList);
+                        ShowMessage.showToast(this,"添加成功");
+                        finish();
+                    }
                     break;
             }
 
-
-            finish();
-        }
     }
 
     public String getFormatStr(String str) {
@@ -668,6 +673,10 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     public void onSuccess(AppApi.Action method, Object obj) {
         super.onSuccess(method, obj);
         switch (method) {
+            case POST_EDIT_CUS_JSON:
+                finish();
+                ShowMessage.showToast(this,"修改成功");
+                break;
             case POST_ADD_CUS_JSON:
                 hideLoadingLayout();
                 if(obj instanceof AddCustomerResponse) {

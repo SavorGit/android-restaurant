@@ -166,6 +166,15 @@ public class UserLabelAddActivity extends BaseActivity implements View.OnClickLi
     }
 
     @Override
+    public void onError(AppApi.Action method, Object obj) {
+        switch (method) {
+            case POST_ADD_LABEL_JSON:
+                ShowMessage.showToast(this,"标签添加失败");
+                break;
+        }
+    }
+
+    @Override
     public void setLabelLight(CustomerLabel clickLabel) {
         AppApi.lightLabel(this,customerId,invite_id,clickLabel.getLabel_id(),tel,"2",this);
     }
