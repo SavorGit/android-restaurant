@@ -225,7 +225,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 finish();
                 break;
             case R.id.edit_label:
-                intent = new Intent(this,LabelAddActivity.class);
+                intent = new Intent(this,UserLabelAddActivity.class);
                 intent.putExtra("customer_id",customer_id);
                 intent.putExtra("type",12);
                 startActivityForResult(intent,REQUEST_CODE_LABEL);
