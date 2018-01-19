@@ -377,7 +377,9 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
               et_phone.setText(order_mobile);
               et_dining_num.setText(person_nums);
               tv_dining_time.setText(time_str);
+              la_b.setVisibility(View.GONE);
               tv_dining_room.setText(room_nameStr);
+              la_c.setVisibility(View.GONE);
 
               room = new RoomListBean();
               room.setRoom_name(room_nameStr);
