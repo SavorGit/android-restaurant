@@ -41,6 +41,7 @@ import com.savor.resturant.bean.OrderListBean;
 import com.savor.resturant.bean.RecTopList;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.ResponseErrorMessage;
+import com.savor.resturant.interfaces.SetLabel;
 import com.savor.resturant.utils.ConstantValues;
 import com.savor.resturant.utils.GlideCircleTransform;
 import com.savor.resturant.utils.OSSClientUtil;
@@ -618,5 +619,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                     getConRecTopList();
       }
    };
+
+
 }
 
