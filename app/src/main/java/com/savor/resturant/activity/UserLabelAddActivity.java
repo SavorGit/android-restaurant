@@ -14,10 +14,13 @@ import com.common.api.utils.DensityUtil;
 import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.LabelAdapter;
+import com.savor.resturant.adapter.UserLabelAdapter;
 import com.savor.resturant.bean.CustomerLabel;
 import com.savor.resturant.bean.CustomerLabelList;
+import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.LabelAddRessponse;
 import com.savor.resturant.core.AppApi;
+import com.savor.resturant.interfaces.SetLabel;
 import com.savor.resturant.widget.flowlayout.FlowLayoutManager;
 import com.savor.resturant.widget.flowlayout.SpaceItemDecoration;
 
@@ -28,14 +31,14 @@ import java.util.List;
  * 添加标签页面
  * @author bushlee created on 2017/12/28
  */
-public class UserLabelAddActivity extends BaseActivity implements View.OnClickListener {
+public class UserLabelAddActivity extends BaseActivity implements View.OnClickListener,SetLabel {
 
     public static final int RESULT_CODE_LABEL = 10002;
     private ImageView mBackBtn;
     private TextView mTitleTv;
     private TextView mAddTv;
     private RecyclerView mLabelListRlv;
-    private LabelAdapter mLabelAdapter;
+    private UserLabelAdapter mLabelAdapter;
     private EditText mLabelEt;
     private String customerId;
     private String invite_id;
@@ -78,7 +81,7 @@ public class UserLabelAddActivity extends BaseActivity implements View.OnClickLi
         mTitleTv.setText("选择标签");
 
 
-        mLabelAdapter = new LabelAdapter(this);
+        mLabelAdapter = new UserLabelAdapter(this,this);
         FlowLayoutManager flowLayoutManager = new FlowLayoutManager();
         mLabelListRlv.addItemDecoration(new SpaceItemDecoration(DensityUtil.dip2px(this,5),DensityUtil.dip2px(this,10)));
         mLabelListRlv.setLayoutManager(flowLayoutManager);
@@ -160,5 +163,15 @@ public class UserLabelAddActivity extends BaseActivity implements View.OnClickLi
                 }
                 break;
         }
+    }
+
+    @Override
+    public void setLabelLight(CustomerLabel clickLabel) {
+        AppApi.lightLabel(this,customerId,invite_id,clickLabel.getLabel_id(),tel,"2",this);
+    }
+
+    @Override
+    public void setLabelOff(CustomerLabel clickLabel) {
+        AppApi.lightLabel(this,customerId,invite_id,clickLabel.getLabel_id(),tel,"3",this);
     }
 }

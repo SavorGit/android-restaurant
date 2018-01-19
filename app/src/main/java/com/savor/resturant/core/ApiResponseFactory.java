@@ -144,6 +144,7 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.POST_UPDATE_ORDER_SERVICE_JSON
                     || action == AppApi.Action.POST_UPDATE_ORDER_JSON
                     || action == AppApi.Action.POST_EDIT_CUS_JSON
+                    || action == AppApi.Action.POST_LIGHT_LABEL_JSON
                     ){
                 int code = rSet.getInt("code");
                 if(rSet.has("result")) {

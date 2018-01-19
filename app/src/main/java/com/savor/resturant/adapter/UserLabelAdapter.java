@@ -8,21 +8,24 @@ import android.widget.TextView;
 
 import com.savor.resturant.R;
 import com.savor.resturant.bean.CustomerLabel;
+import com.savor.resturant.interfaces.SetLabel;
 
 import java.util.List;
 
 /**
  * 标签列表适配器
- * Created by hezd on 2017/12/27.
+ * Created by bushlee on 2017/12/27.
  */
 
 public class UserLabelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private List<CustomerLabel> list;
+    private SetLabel setLabel;
 
-    public UserLabelAdapter(Context context) {
+    public UserLabelAdapter(Context context,SetLabel setLabel) {
         this.mContext = context;
+        this.setLabel = setLabel;
     }
 
     public void setData(List<CustomerLabel> list) {
@@ -63,8 +66,10 @@ public class UserLabelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 int clickStatus = clickLabel.getLight();
                 if(clickStatus == 1) {
                     clickLabel.setLight(0);
+                    setLabel.setLabelOff(clickLabel);
                 }else {
                     clickLabel.setLight(1);
+                    setLabel.setLabelLight(clickLabel);
                 }
                 notifyDataSetChanged();
             }
