@@ -94,7 +94,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
     private void getDate(){
         Intent intent = getIntent();
         if (intent != null) {
-            curDate = intent.getStringExtra("Date");
+            //curDate = intent.getStringExtra("Date");
             orderListBean = (OrderListBean)intent.getSerializableExtra("orderListBean");
 
         }
@@ -377,6 +377,11 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
               et_phone.setText(order_mobile);
               et_dining_num.setText(person_nums);
               tv_dining_time.setText(time_str);
+
+             // curDate = getDataTime(date);
+              //setTime(date);
+              tv_dining_time.setText(time_str+" "+orderListBean.getMoment_str());
+
               la_b.setVisibility(View.GONE);
               tv_dining_room.setText(room_nameStr);
               la_c.setVisibility(View.GONE);
