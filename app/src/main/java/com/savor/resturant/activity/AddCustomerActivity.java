@@ -489,8 +489,13 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
             name = name.trim().replaceAll(" ","");
             if(!isNumeric(name)&&!isLetter(name)) {
                 for(int i = 0;i<name.length();i++) {
-                    String str= removeDigital(String.valueOf(PinyinHelper.toHanyuPinyinStringArray(name.charAt(i))[0]));
-                    sb.append(str);
+                    String[] pinyinStringArray = PinyinHelper.toHanyuPinyinStringArray(name.charAt(i));
+                    if(pinyinStringArray!=null&&pinyinStringArray.length>0) {
+                        String str= removeDigital(String.valueOf(pinyinStringArray[0]));
+                        sb.append(str);
+                    }else {
+                        sb.append(name.charAt(i));
+                    }
                 }
             }else {
                 sb.append(name);
