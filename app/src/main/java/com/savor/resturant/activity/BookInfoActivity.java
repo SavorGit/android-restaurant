@@ -270,7 +270,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
                // holder.is_xfjl.setVisibility(View.VISIBLE);
                 xp_type.setBackgroundResource(R.drawable.corner_remote_book_btn);
                 xp_type.setTextColor(context.getResources().getColor(R.color.color_14b2fc));
-                xp_type.setClickable(false);
+                xp_type.setClickable(true);
                 xp_type.setText("已完成");
 
             }else {
@@ -286,7 +286,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
 
                     wel_type.setBackgroundResource(R.drawable.corner_remote_book_btn);
                     wel_type.setTextColor(context.getResources().getColor(R.color.color_14b2fc));
-                    wel_type.setClickable(false);
+                    wel_type.setClickable(true);
                     wel_type.setText("已完成");
                 }else {
                     wel_type.setBackgroundResource(R.drawable.corner_remote_room_item);
@@ -306,7 +306,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
                 if ("1".equals(is_recfood)) {
                     tjc_type.setBackgroundResource(R.drawable.corner_remote_book_btn);
                     tjc_type.setTextColor(context.getResources().getColor(R.color.color_14b2fc));
-                    tjc_type.setClickable(false);
+                    tjc_type.setClickable(true);
                     tjc_type.setText("已完成");
                 }else {
                     tjc_type.setBackgroundResource(R.drawable.corner_remote_room_item);
@@ -363,7 +363,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
                     mContext.startActivity(intent);
                     wel_type.setBackgroundResource(R.drawable.corner_remote_book_btn);
                     wel_type.setTextColor(context.getResources().getColor(R.color.color_14b2fc));
-                    wel_type.setClickable(false);
+                    wel_type.setClickable(true);
                     wel_type.setText("已完成");
                 }else if ("2".equals(OrderServiceType)) {
                     intent = new Intent(mContext, RecommendFoodActivity.class);
@@ -371,13 +371,13 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
                     mContext.startActivity(intent);
                     tjc_type.setBackgroundResource(R.drawable.corner_remote_book_btn);
                     tjc_type.setTextColor(context.getResources().getColor(R.color.color_14b2fc));
-                    tjc_type.setClickable(false);
+                    tjc_type.setClickable(true);
                     tjc_type.setText("已完成");
 
                 }else if ("3".equals(OrderServiceType)) {
                     xp_type.setBackgroundResource(R.drawable.corner_remote_book_btn);
                     xp_type.setTextColor(context.getResources().getColor(R.color.color_14b2fc));
-                    xp_type.setClickable(false);
+                    xp_type.setClickable(true);
                     xp_type.setText("已完成");
                 }
                 break;
