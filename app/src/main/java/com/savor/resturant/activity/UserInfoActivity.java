@@ -87,6 +87,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     private TextView remark;
     private TextView edit_label_remark;
     private TextView tv_add_ticket;
+    private TextView la_a;
     private String customer_id;
     private CustomerBean customerBean;
     private String usernameStr;
@@ -172,8 +173,8 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         tv_add_ticket = (TextView) headerView.findViewById(R.id.tv_add_ticket);
         sex = (ImageView) headerView.findViewById(R.id.sex);
         tel = (TextView) headerView.findViewById(R.id.tel);
+        la_a = (TextView) headerView.findViewById(R.id.la_a);
         rlv_labels = (TagFlowLayout) headerView.findViewById(R.id.rlv_labels);
-
         refreshListView.getRefreshableView().addHeaderView(headerView);
         ticketAdapter = new TicketAdapter(this);
         refreshListView.setAdapter(ticketAdapter);
@@ -286,6 +287,11 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                     String msg = message.getMessage();
                     ShowMessage.showToast(UserInfoActivity.this,msg);
                 }
+                if (imageList != null && imageList.size()>0) {
+                    la_a.setVisibility(View.GONE);
+                }else {
+                    la_a.setVisibility(View.VISIBLE);
+                }
                 default:
                    super.onError(method,obj);
                     break;
@@ -379,9 +385,11 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
             }
      private void handleTopList(){
+
          if (recTopList != null) {
              List<ConRecBean> list = recTopList.getList();
              if (list != null && list.size()>0) {
+                 la_a.setVisibility(View.GONE);
                  imageList.clear();
                  imageList.addAll(list);
                  ticketAdapter.notifyDataSetChanged();
@@ -393,11 +401,21 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                  }
 
              }else {
+                 if (imageList != null && imageList.size()>0) {
+                     la_a.setVisibility(View.GONE);
+                 }else {
+                     la_a.setVisibility(View.VISIBLE);
+                 }
                  refreshListView.onLoadComplete(false,true);
              }
              max_id = recTopList.getMax_id();
              min_id = recTopList.getMin_id();
          }else {
+             if (imageList != null && imageList.size()>0) {
+                 la_a.setVisibility(View.GONE);
+             }else {
+                 la_a.setVisibility(View.VISIBLE);
+             }
              refreshListView.onLoadComplete(false,true);
          }
 
@@ -552,6 +570,11 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                         ConRecBean conRecBean = new ConRecBean();
                         conRecBean.setRecipt(ticketOssUrl);
                         imageList.add(conRecBean);
+                        if (imageList != null && imageList.size()>0) {
+                            la_a.setVisibility(View.GONE);
+                        }else {
+                            la_a.setVisibility(View.VISIBLE);
+                        }
                         ticketAdapter.notifyDataSetChanged();
                     }
 
