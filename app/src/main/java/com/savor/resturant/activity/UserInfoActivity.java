@@ -362,7 +362,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                   if (!TextUtils.isEmpty(remarkStr)) {
                       remark.setText(remarkStr);
                   }else{
-                      remark.setText("");
+                     // remark.setText("");
                   }
 
                   List<CustomerLabel> labelListl = customer.getLabel();
@@ -599,8 +599,8 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
      }
 
     public void hideLabel() {
-        tv_label_hint.setVisibility(View.GONE);
-        rlv_labels.setVisibility(View.VISIBLE);
+        tv_label_hint.setVisibility(View.VISIBLE);
+        rlv_labels.setVisibility(View.GONE);
      }
      private void showPhotoDialog() {
                 final String tel = mSession.getHotelBean().getTel();
