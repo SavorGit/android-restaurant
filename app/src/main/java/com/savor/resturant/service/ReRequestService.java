@@ -62,6 +62,7 @@ public class ReRequestService extends IntentService {
         for(final OperationFailedItem item : opFailedList) {
             OperationFailedItem.OpType type = item.getType();
             switch (type) {
+                case TYPE_IMPORT_NEW:
                 case TYPE_IMPORT_FIRST:
                     // 导入通讯录
                     String importInfo = new Gson().toJson(item.getContactFormat());

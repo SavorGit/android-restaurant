@@ -440,6 +440,8 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
             CustomerListBean cacheListBean = mSession.getCustomerList();
             cacheListBean.setCustomerList(customerList);
             mSession.setCustomerList(cacheListBean);
+            contactFormat.setAdded(true);
+            adapter.notifyDataSetChanged();
 
             switch (operationType) {
                 case CONSTACT_LIST_NOTFIST:
