@@ -161,4 +161,13 @@ public class LabelAddActivity extends BaseActivity implements View.OnClickListen
                 break;
         }
     }
+
+    @Override
+    public void onError(AppApi.Action method, Object obj) {
+        switch (method) {
+            case POST_ADD_LABEL_JSON:
+                ShowMessage.showToast(this,"标签添加失败");
+                break;
+        }
+    }
 }
