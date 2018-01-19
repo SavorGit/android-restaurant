@@ -312,8 +312,15 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                   
                   
                   usermobileStr = customer.getMobile();
+                  String usermobileStr2 = customer.getMobile1();
+                  if (TextUtils.isEmpty(usermobileStr2)){
+                      usermobileStr2 = "";
+                  }else {
+                      usermobileStr2 = "/"+usermobileStr2;
+                  }
+
                   if (!TextUtils.isEmpty(usermobileStr)) {
-                      tel.setText("电话："+usermobileStr);
+                      tel.setText("电话："+usermobileStr+usermobileStr2);
                   }else{
                       tel.setText("电话：未填写");
                   }
