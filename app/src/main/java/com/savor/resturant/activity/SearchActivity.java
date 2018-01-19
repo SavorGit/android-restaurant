@@ -201,6 +201,7 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
                 intent = new Intent(this, AddCustomerActivity.class);
                 intent.putExtra("type", AddCustomerActivity.CustomerOpType.TYPE_ADD);
                 startActivity(intent);
+                finish();
                 break;
         }
     }
