@@ -619,6 +619,7 @@ public class AppApi {
                                 String person_nums,
                                 String room_id,
                                 String room_type,
+                                String remark,
                                 ApiRequestListener handler) {
         final HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("invite_id", invite_id);
@@ -629,6 +630,7 @@ public class AppApi {
         params.put("person_nums", person_nums);
         params.put("room_id", room_id);
         params.put("room_type", room_type);
+        params.put("remark", remark);
         new AppServiceOk(context,Action.POST_ADD_ORDER_JSON,handler,params).post();
     }
 
@@ -669,6 +671,7 @@ public class AppApi {
                                 String person_nums,
                                 String room_id,
                                 String room_type,
+                                String remark,
                                 ApiRequestListener handler) {
         final HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("invite_id", invite_id);
@@ -680,6 +683,7 @@ public class AppApi {
         params.put("room_id", room_id);
         params.put("room_type", room_type);
         params.put("order_id", order_id);
+        params.put("remark", remark);
 
         new AppServiceOk(context,Action.POST_UPDATE_ORDER_JSON,handler,params).post();
     }

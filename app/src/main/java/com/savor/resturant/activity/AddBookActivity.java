@@ -56,6 +56,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
     private String person_nums;
     private String room_id;
     private String room_type;
+    private String remark;
     private TextView la_a;
     private TextView la_b;
     private TextView la_c;
@@ -279,6 +280,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
       order_name = et_name.getText().toString();
       order_time = tv_dining_time.getText().toString();
       person_nums = et_dining_num.getText().toString();
+      remark = et_note.getText().toString();
      if (room != null){
          room_id = room.getRoom_id();
          room_type = room.getRoom_type();
@@ -308,7 +310,7 @@ public class AddBookActivity extends BaseActivity implements View.OnClickListene
 
     private void AddOrderList(){
         HotelBean hotelBean = mSession.getHotelBean();
-        AppApi.addOrder(mContext,hotelBean.getInvite_id(),hotelBean.getTel(),order_mobile,order_name,order_time,person_nums,room_id,room_type,this);
+        AppApi.addOrder(mContext,hotelBean.getInvite_id(),hotelBean.getTel(),order_mobile,order_name,order_time,person_nums,room_id,room_type,remark,this);
     }
 
      private String getDataTime(Date date) {//可根据需要自行截取数据显示
