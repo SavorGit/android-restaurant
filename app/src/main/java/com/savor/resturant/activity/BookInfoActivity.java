@@ -24,6 +24,7 @@ import com.common.api.utils.ShowMessage;
 import com.google.gson.Gson;
 import com.savor.resturant.R;
 import com.savor.resturant.SavorApplication;
+import com.savor.resturant.bean.BookListResult;
 import com.savor.resturant.bean.ConRecBean;
 import com.savor.resturant.bean.CustomerLabel;
 import com.savor.resturant.bean.HotelBean;
@@ -386,6 +387,16 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
                 upateOrderService();
                 // finish();
                 break;
+            case POST_ORDER_DETAIL_JSON:
+
+                if (obj instanceof OrderListBean){
+                    orderListBean = (OrderListBean) obj;
+                    init();
+                }
+
+
+                // finish();
+                break;
 
 
         }
@@ -466,8 +477,11 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
             currentImagePath = copyPath;
             submit();
             //Glide.with(this).load(currentImagePath).placeholder(R.drawable.empty_slide).into(mSpendHistoryIv);
+        }else if (requestCode == REQUEST_ADD_BOOK){
+            getOrderDetail();
         }
 
+        //
     }
 
     private void submit() {
@@ -569,5 +583,10 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onCancel() {
 
+    }
+
+
+    private void getOrderDetail(){
+        AppApi.getOrderDetail(context,hotelBean.getInvite_id(),hotelBean.getTel(),order_id,this);
     }
 }
