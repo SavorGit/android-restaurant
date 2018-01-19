@@ -380,7 +380,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
 
              // curDate = getDataTime(date);
               //setTime(date);
-              tv_dining_time.setText( time_str+" "+orderListBean.getMoment_str());
+              tv_dining_time.setText(time_str+" "+orderListBean.getMoment_str());
 
               la_b.setVisibility(View.GONE);
               tv_dining_room.setText(room_nameStr);
