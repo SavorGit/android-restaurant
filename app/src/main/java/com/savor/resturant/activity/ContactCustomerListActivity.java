@@ -148,6 +148,15 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
             public void run() {
                 Collections.sort(contactFormats, pinyinComparator);
 
+                CustomerListBean customerList = mSession.getCustomerList();
+                if(customerList!=null&&customerList.getCustomerList()!=null&&customerList.getCustomerList().size()>0) {
+                    List<ContactFormat> customers = customerList.getCustomerList();
+                    for(ContactFormat contactFormat:contactFormats) {
+                        if(customers.contains(contactFormat)) {
+                            contactFormat.setAdded(true);
+                        }
+                    }
+                }
                 // 通讯录保存全局
                 mSession.setContactList(contactFormats);
 
@@ -466,6 +475,16 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
     @Override
     public void onCheckStateChange(boolean isChecked, ContactFormat contactFormat) {
         if(isChecked) {
+            List<ContactFormat> data = adapter.getData();
+            int count = 0;
+            for(ContactFormat contat:data) {
+                if(contat.isSelected()||contat.isAdded()) {
+                    count++;
+                }
+            }
+            if(count == data.size()) {
+                mSelectAllCb.setChecked(true);
+            }
 //            selectedLsit.add(contactFormat);
         }else {
 //            selectedLsit.remove(contactFormat);
@@ -624,6 +643,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
 //        super.onError(method, obj);
         switch (method) {
             case POST_IMPORT_INFO_NEW_JSON:
+                mImportTv.setEnabled(true);
                 hideLoadingLayout();
                 if(obj instanceof ResponseErrorMessage) {
                     ResponseErrorMessage message = (ResponseErrorMessage) obj;
