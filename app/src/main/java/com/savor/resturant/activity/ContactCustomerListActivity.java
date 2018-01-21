@@ -159,6 +159,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                         final LinearLayoutManager layoutManager = new LinearLayoutManager(ContactCustomerListActivity.this, orientation, false);
                         recyclerView.setLayoutManager(layoutManager);
 
+                        adapter.setSelectMode(isMultiSelectMode);
                         recyclerView.setAdapter(adapter);
 //                        final StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration(adapter);
 //                        recyclerView.addItemDecoration(headersDecor);
@@ -168,6 +169,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                         adapter.setOnAddBtnClickListener(ContactCustomerListActivity.this);
                         adapter.setOnItemClickListener(ContactCustomerListActivity.this);
                         hideLoadingLayout();
+
                     }
                 });
             }
