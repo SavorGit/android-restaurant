@@ -24,6 +24,7 @@ import com.common.api.utils.LogUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.savor.resturant.bean.AddBookResponse;
 import com.savor.resturant.bean.AddCustomerResponse;
 import com.savor.resturant.bean.AddSpendTicketNoBookInfo;
 import com.savor.resturant.bean.BaseProResponse;
@@ -277,11 +278,12 @@ public class ApiResponseFactory {
                 result = "success";
                 break;
             case POST_ADD_ORDER_JSON:
-                result = "success";
+                result = gson.fromJson(info, new TypeToken<AddBookResponse>() {
+                }.getType());
                 break;
             case POST_ROOM_LIST_JSON:
                 result = gson.fromJson(info, new TypeToken<List<RoomListBean>>() {
-                }.getType());;
+                }.getType());
                 break;
             case POST_ADD_ROOM_JSON:
                 result = gson.fromJson(info, new TypeToken<RoomListBean>() {
