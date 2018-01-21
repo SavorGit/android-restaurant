@@ -145,6 +145,7 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.POST_UPDATE_ORDER_JSON
                     || action == AppApi.Action.POST_EDIT_CUS_JSON
                     || action == AppApi.Action.POST_LIGHT_LABEL_JSON
+                    | action == AppApi.Action.POST_ORDER_DETAIL_JSON
                     ){
                 int code = rSet.getInt("code");
                 if(rSet.has("result")) {
@@ -352,6 +353,10 @@ public class ApiResponseFactory {
                 break;
             case POST_CUSTOMER_EDIT_REMARK_JSON:
                 result = "success";
+                break;
+            case POST_ORDER_DETAIL_JSON:
+                result = gson.fromJson(info, new TypeToken<OrderListBean>() {
+                }.getType());
                 break;
 
             default:

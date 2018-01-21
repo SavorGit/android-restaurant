@@ -241,6 +241,7 @@
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:paddingTop="10dp"
+            android:hint="请记录客户其他信息"
             android:text=""
             android:textSize="15sp" />
     </RelativeLayout>

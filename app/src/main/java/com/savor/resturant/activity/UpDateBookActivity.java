@@ -77,6 +77,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
     private TextView la_b;
     private TextView la_c;
     private TextView la_d;
+    private String remark;
     private static final int REQUEST_ADD_BOOK = 308;
 
     @Override
@@ -259,7 +260,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
         hideLoadingLayout();
         switch (method) {
             case POST_UPDATE_ORDER_JSON:
-
+                ShowMessage.showToast(UpDateBookActivity.this,"修改成功");
                 Intent intent = new Intent();
                 setResult(REQUEST_ADD_BOOK,intent);
                 finish();
@@ -304,6 +305,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
       person_nums = et_dining_num.getText().toString();
       room_id = room.getRoom_id();
       room_type = room.getRoom_type();
+      remark = et_note.getText().toString();
 
         if (TextUtils.isEmpty(order_name)) {
             ShowMessage.showToast(UpDateBookActivity.this,"请填写用户姓名");
@@ -327,7 +329,7 @@ public class UpDateBookActivity extends BaseActivity implements View.OnClickList
 
     private void AddOrderList(){
         HotelBean hotelBean = mSession.getHotelBean();
-        AppApi.updateOrder(mContext,hotelBean.getInvite_id(),hotelBean.getTel(),order_mobile,order_id,order_name,order_time,person_nums,room_id,room_type,this);
+        AppApi.updateOrder(mContext,hotelBean.getInvite_id(),hotelBean.getTel(),order_mobile,order_id,order_name,order_time,person_nums,room_id,room_type,remark,this);
     }
 
      private String getDataTime(Date date) {//可根据需要自行截取数据显示
