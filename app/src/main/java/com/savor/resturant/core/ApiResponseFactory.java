@@ -124,7 +124,7 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.GET_RECOMMEND_PRO_JSON
                     || action == AppApi.Action.GET_WORD_PRO_JSON
                     || action == AppApi.Action.POST_REPORT_LOG_JSON
-                    || action == AppApi.Action.POST_IMPORT_INFO_JSON
+//                    || action == AppApi.Action.POST_IMPORT_INFO_JSON
                     || action == AppApi.Action.POST_IMPORT_INFO_NEW_JSON
                     || action == AppApi.Action.POST_CON_ABILITY_JSON
                     || action == AppApi.Action.POST_ADD_CUS_JSON
@@ -299,9 +299,9 @@ public class ApiResponseFactory {
             case POST_UPDATE_ORDER_SERVICE_JSON:
                 result = "success";
                 break;
-            case POST_IMPORT_INFO_JSON:
-                result = gson.fromJson(info,new TypeToken<ImportInfoResponse>(){}.getType());
-                break;
+//            case POST_IMPORT_INFO_JSON:
+//                result = gson.fromJson(info,new TypeToken<ImportInfoResponse>(){}.getType());
+//                break;
             case POST_IMPORT_INFO_NEW_JSON:
                 result = gson.fromJson(info,new TypeToken<ImportInfoResponse>(){}.getType());
                 break;
