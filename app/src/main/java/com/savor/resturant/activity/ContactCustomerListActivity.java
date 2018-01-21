@@ -624,6 +624,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
 //        super.onError(method, obj);
         switch (method) {
             case POST_IMPORT_INFO_NEW_JSON:
+                hideLoadingLayout();
                 if(obj instanceof ResponseErrorMessage) {
                     ResponseErrorMessage message = (ResponseErrorMessage) obj;
                     String msg = message.getMessage();
