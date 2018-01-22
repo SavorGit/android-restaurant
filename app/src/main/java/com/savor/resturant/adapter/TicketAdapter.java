@@ -65,6 +65,13 @@ public class TicketAdapter extends BaseAdapter {
         }
         String leftUrl = mData.get(position*2).getRecipt();
         Glide.with(mContext).load(leftUrl).centerCrop().placeholder(R.drawable.empty_slide).into(holder.iv_left);
+        holder.iv_left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                new ShowPicDialog(context,item.getFault_img_url()).show();
+               // PhotoShowActivity.startPhotoShowActivity(context,item.getFault_img_url());
+            }
+        });
 
         if(position*2+1<mData.size()) {
             holder.iv_right.setVisibility(View.VISIBLE);
