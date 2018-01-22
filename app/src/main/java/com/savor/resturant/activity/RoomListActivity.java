@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.bigkoo.pickerview.TimePickerView;
 import com.common.api.utils.AppUtils;
 import com.common.api.utils.FileUtils;
+import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
 import com.savor.resturant.SavorApplication;
 import com.savor.resturant.adapter.RoomAdapter;
@@ -192,7 +193,7 @@ public class RoomListActivity extends BaseActivity implements View.OnClickListen
         if (!TextUtils.isEmpty(roomName)) {
             AppApi.addRoom(mContext,hotelBean.getInvite_id(),hotelBean.getTel(),roomName,this);
         }else {
-
+            ShowMessage.showToast(RoomListActivity.this,"请输入包间名称");
         }
 
     }
