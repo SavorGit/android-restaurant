@@ -12,6 +12,7 @@ public class ConRecBean implements Serializable {
     private String recipt;
     private String id;
     private String room_name;
+    private String bigrecipt;
 
     public String getCreate_time() {
         return create_time;
@@ -45,6 +46,14 @@ public class ConRecBean implements Serializable {
         this.room_name = room_name;
     }
 
+    public String getBigrecipt() {
+        return bigrecipt;
+    }
+
+    public void setBigrecipt(String bigrecipt) {
+        this.bigrecipt = bigrecipt;
+    }
+
     @Override
     public String toString() {
         return "ConRecBean{" +
@@ -52,6 +61,7 @@ public class ConRecBean implements Serializable {
                 ", recipt='" + recipt + '\'' +
                 ", id='" + id + '\'' +
                 ", room_name='" + room_name + '\'' +
+                ", bigrecipt='" + bigrecipt + '\'' +
                 '}';
     }
 }
