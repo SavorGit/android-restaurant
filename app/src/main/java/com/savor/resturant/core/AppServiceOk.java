@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -270,7 +271,11 @@ public class AppServiceOk {
             @Override
             public void onError(Call call, Exception e) {
                 // TODO Auto-generated method stub
-                handler.onError(action, AppApi.ERROR_TIMEOUT);
+                if(e.getCause().equals(SocketTimeoutException.class) ){
+                    handler.onError(action, AppApi.ERROR_TIMEOUT);
+                }else {
+                    handler.onError(action, AppApi.ERROR_NETWORK_FAILED);
+                }
             }
 
             @Override
