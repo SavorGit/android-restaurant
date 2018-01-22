@@ -20,6 +20,7 @@ import com.savor.resturant.activity.SearchActivity;
 import com.savor.resturant.activity.SpendHistoryAddActivity;
 import com.savor.resturant.activity.UserInfoActivity;
 import com.savor.resturant.adapter.CustomerOpHistoryAdapter;
+import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.CustomerHistory;
 import com.savor.resturant.bean.CustomerHistoryBean;
 import com.savor.resturant.core.AppApi;
@@ -197,6 +198,11 @@ public class CustomerFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onItemClick(CustomerHistoryBean historyBean) {
         Intent intent = new Intent(getContext(), UserInfoActivity.class);
+        ContactFormat contactFormat = new ContactFormat();
+        contactFormat.setName(historyBean.getUsername());
+        contactFormat.setMobile(historyBean.getUsermobile());
+        contactFormat.setCustomer_id(historyBean.getCustomer_id());
+        intent.putExtra("customer",contactFormat);
         intent.putExtra("customerID",historyBean.getCustomer_id());
         startActivity(intent);
     }

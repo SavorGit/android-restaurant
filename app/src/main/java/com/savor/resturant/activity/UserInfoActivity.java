@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 import com.savor.resturant.R;
 import com.savor.resturant.SavorApplication;
 import com.savor.resturant.adapter.TicketAdapter;
+import com.savor.resturant.bean.AddCustomerResponse;
 import com.savor.resturant.bean.ConRecBean;
 import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.Customer;
@@ -42,6 +43,7 @@ import com.savor.resturant.bean.RecTopList;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.ResponseErrorMessage;
 import com.savor.resturant.interfaces.SetLabel;
+import com.savor.resturant.utils.ChineseComparator;
 import com.savor.resturant.utils.ConstantValues;
 import com.savor.resturant.utils.GlideCircleTransform;
 import com.savor.resturant.utils.OSSClientUtil;
@@ -67,8 +69,7 @@ import static com.savor.resturant.activity.ContactCustomerListActivity.REQUEST_C
 /**
  * 客户信息
  */
-public class UserInfoActivity extends BaseActivity implements View.OnClickListener
-        {
+public class UserInfoActivity extends BaseActivity implements View.OnClickListener {
 
     private Context context;
     private ImageView iv_left;
@@ -99,20 +100,21 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     private String face_urlStr;
     private String consume_abilityStr;
     private String remarkStr;
-    private List<CustomerLabel> labelList = new ArrayList<>();;
+    private List<CustomerLabel> labelList = new ArrayList<>();
+    ;
     private String currentImagePath;
     private String ticketOssUrl;
-    private TagAdapter mTagAdapter = new  TagAdapter(labelList) {
-                @Override
-                public View getView(FlowLayout parent, int position, Object o) {
-                    TextView tv = (TextView) getLayoutInflater().inflate(R.layout.flow_item,
-                            rlv_labels, false);
-                    tv.setBackgroundResource(R.drawable.label_bg);
-                    tv.setTextColor(mContext.getResources().getColor(R.color.color_label));
-                    tv.setText(labelList.get(position).getLabel_name());
-                    return tv;
-                }
-            };
+    private TagAdapter mTagAdapter = new TagAdapter(labelList) {
+        @Override
+        public View getView(FlowLayout parent, int position, Object o) {
+            TextView tv = (TextView) getLayoutInflater().inflate(R.layout.flow_item,
+                    rlv_labels, false);
+            tv.setBackgroundResource(R.drawable.label_bg);
+            tv.setTextColor(mContext.getResources().getColor(R.color.color_label));
+            tv.setText(labelList.get(position).getLabel_name());
+            return tv;
+        }
+    };
 
     private static final int REQUEST_CODE_LABEL = 100;
     private static final int REQUEST_CODE_REMARK = 108;
@@ -124,7 +126,10 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     private String min_id = "0";
     private String Rectype = "1";
     private RecTopList recTopList;
-    private List<ConRecBean> TopList = new ArrayList<ConRecBean>() ;
+    private List<ConRecBean> TopList = new ArrayList<ConRecBean>();
+    private ContactFormat contactFormat;
+    private ChineseComparator pinyinComparator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,20 +139,40 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         getViews();
         setViews();
         setListeners();
-        getCustomerBaseInfo();
-        getConRecTopList();
+        getData();
+
     }
 
-    private void getDate(){
+    private void getData() {
+        if(!TextUtils.isEmpty(customer_id)) {
+            getCustomerBaseInfo();
+            getConRecTopList();
+        }else if(contactFormat!=null){
+            String invite_id = mSession.getHotelBean().getInvite_id();
+            String tel = mSession.getHotelBean().getTel();
+            String name = contactFormat.getName();
+            String mobile = contactFormat.getMobile();
+            List<String> mobiles = new ArrayList<>();
+            mobiles.add(mobile);
+            String phone = new Gson().toJson(mobiles);
+            AppApi.addCustomer(this,"","","","","",invite_id,tel,name,""
+            ,"",phone,this);
+
+        }
+    }
+
+    private void getDate() {
         Intent intent = getIntent();
         if (intent != null) {
             customer_id = intent.getStringExtra("customerID");
-
+            contactFormat = (ContactFormat) intent.getSerializableExtra("customer");
         }
     }
 
     @Override
     public void getViews() {
+        pinyinComparator = new ChineseComparator();
+
         iv_left = (ImageView) findViewById(R.id.iv_left);
         tv_center = (TextView) findViewById(R.id.tv_center);
 
@@ -158,7 +183,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void initHeaderView() {
-        View headerView = View.inflate(this,R.layout.header_view_user_info,null);
+        View headerView = View.inflate(this, R.layout.header_view_user_info, null);
         iv_header = (ImageView) headerView.findViewById(R.id.iv_header);
 
         name = (TextView) headerView.findViewById(R.id.name);
@@ -201,7 +226,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 //                }
                 ticketAdapter.notifyDataSetChanged();
             }
-        },3000);
+        }, 3000);
     }
 
     @Override
@@ -221,30 +246,30 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         Intent intent;
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.iv_left:
                 finish();
                 break;
             case R.id.edit_label:
-                intent = new Intent(this,UserLabelAddActivity.class);
-                intent.putExtra("customer_id",customer_id);
-                intent.putExtra("type",12);
-                startActivityForResult(intent,REQUEST_CODE_LABEL);
+                intent = new Intent(this, UserLabelAddActivity.class);
+                intent.putExtra("customer_id", customer_id);
+                intent.putExtra("type", 12);
+                startActivityForResult(intent, REQUEST_CODE_LABEL);
                 break;
             case R.id.edit_label_remark:
-                intent = new Intent(this,AddRemarkActivity.class);
-                intent.putExtra("customer_id",customer_id);
-                intent.putExtra("remark",remarkStr);
-                startActivityForResult(intent,REQUEST_CODE_REMARK);
+                intent = new Intent(this, AddRemarkActivity.class);
+                intent.putExtra("customer_id", customer_id);
+                intent.putExtra("remark", remarkStr);
+                startActivityForResult(intent, REQUEST_CODE_REMARK);
                 break;
             case R.id.tv_add_ticket:
                 showPhotoDialog();
                 break;
             case R.id.tv_edit_label:
-                intent = new Intent(this,AddCustomerActivity.class);
-                intent.putExtra("type",AddCustomerActivity.CustomerOpType.TYPE_EDIT);
-                intent.putExtra("customer",customerBean);
-                startActivityForResult(intent,REQUEST_CODE_USERINFO);
+                intent = new Intent(this, AddCustomerActivity.class);
+                intent.putExtra("type", AddCustomerActivity.CustomerOpType.TYPE_EDIT);
+                intent.putExtra("customer", customerBean);
+                startActivityForResult(intent, REQUEST_CODE_USERINFO);
                 break;
 
 
@@ -257,23 +282,68 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     public void onSuccess(AppApi.Action method, Object obj) {
         hideLoadingLayout();
         switch (method) {
+            case POST_ADD_CUS_JSON:
+                if(obj instanceof AddCustomerResponse) {
+                    AddCustomerResponse addCustomerResponse = (AddCustomerResponse) obj;
+                    customer_id = addCustomerResponse.getList().getCustomer_id();
+                    getCustomerBaseInfo();
+                    getConRecTopList();
+                    if(!isCustomerInLocalList(contactFormat.getMobile())) {
+                        contactFormat.setCustomer_id(customer_id);
+                        CustomerListBean customerListBean = mSession.getCustomerList();
+                        if(customerListBean!=null) {
+                            List<ContactFormat> customerList = customerListBean.getCustomerList();
+                            if(customerList==null) {
+                                customerList = new ArrayList<>();
+                            }
+                            customerList.add(contactFormat);
+                            Collections.sort(customerList,pinyinComparator);
+                            customerListBean.setCustomerList(customerList);
+                            mSession.setCustomerList(customerListBean);
+                        }else {
+                            customerListBean = new CustomerListBean();
+                            List<ContactFormat> customerList = new ArrayList<>();
+
+                            customerList.add(contactFormat);
+                            Collections.sort(customerList,pinyinComparator);
+                            customerListBean.setCustomerList(customerList);
+                            mSession.setCustomerList(customerListBean);
+                        }
+                    }
+                }
+                break;
             case POST_CUSTOMER_INFO_JSON:
-                if (obj instanceof CustomerBean){
-                    customerBean = (CustomerBean)obj;
+                if (obj instanceof CustomerBean) {
+                    customerBean = (CustomerBean) obj;
                     handleData();
                 }
                 break;
             case POST_TOP_LIST_JSON:
-                if (obj instanceof RecTopList){
-                    recTopList = (RecTopList)obj;
+                if (obj instanceof RecTopList) {
+                    recTopList = (RecTopList) obj;
                     handleTopList();
                 }
                 break;
             case POST_ADD_SIGNLE_CONSUME_RECORD_JSON:
-               // finish();
+                // finish();
                 break;
 
         }
+    }
+
+    private boolean isCustomerInLocalList(String mobile) {
+        CustomerListBean customerListBean = mSession.getCustomerList();
+        if(customerListBean!=null) {
+            List<ContactFormat> customerList = customerListBean.getCustomerList();
+            if(customerList!=null&&customerList.size()>0) {
+                for(ContactFormat contactFormat: customerList) {
+                    if(mobile.equals(contactFormat.getMobile())||mobile.equals(contactFormat.getMobile1()))
+                        return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -281,152 +351,153 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         hideLoadingLayout();
         switch (method) {
             case POST_TOP_LIST_JSON:
-                if(obj instanceof ResponseErrorMessage) {
+                if (obj instanceof ResponseErrorMessage) {
                     ResponseErrorMessage message = (ResponseErrorMessage) obj;
                     int code = message.getCode();
                     String msg = message.getMessage();
-                    ShowMessage.showToast(UserInfoActivity.this,msg);
+                    ShowMessage.showToast(UserInfoActivity.this, msg);
                 }
-                if (imageList != null && imageList.size()>0) {
+                if (imageList != null && imageList.size() > 0) {
                     la_a.setVisibility(View.GONE);
-                }else {
+                } else {
                     la_a.setVisibility(View.VISIBLE);
                 }
-                default:
-                   super.onError(method,obj);
-                    break;
+            default:
+                super.onError(method, obj);
+                break;
         }
     }
 
-     private void handleData( ){
+    private void handleData() {
 
-          if (customerBean != null){
-              Customer customer = customerBean.getList();
-              if (customer != null){
-                  usernameStr = customer.getName();
-                  if (!TextUtils.isEmpty(usernameStr)) {
-                      name.setText(usernameStr);
-                  }else{
-                      name.setText("");
-                  }
-                  
-                  
-                  usermobileStr = customer.getMobile();
-                  String usermobileStr2 = customer.getMobile1();
-                  if (TextUtils.isEmpty(usermobileStr2)){
-                      usermobileStr2 = "";
-                  }else {
-                      usermobileStr2 = "/"+usermobileStr2;
-                  }
-
-                  if (!TextUtils.isEmpty(usermobileStr)) {
-                      tel.setText("电话："+usermobileStr+usermobileStr2);
-                  }else{
-                      tel.setText("电话：未填写");
-                  }
-                 
-                  sexStr = customer.getSex();
-                  if (!TextUtils.isEmpty(sexStr)) {
-                      sex.setVisibility(View.VISIBLE);
-                      if ("男".equals(sexStr)) {
-                          sex.setImageResource(R.drawable.nan);
-                      }else if ("女".equals(sexStr)){
-                          sex.setImageResource(R.drawable.nv);
-                      }else {
-                          sex.setVisibility(View.GONE);
-                      }
-                  }else{
-                      sex.setVisibility(View.GONE);
-                  }
-
-                  birthdayStr = customer.getBirthday();
-                  if (!TextUtils.isEmpty(birthdayStr)) {
-                      birthday.setText("生日："+birthdayStr);
-                  }else{
-                      birthday.setText("生日：未填写");
-                  }
-
-                  birthplaceStr = customer.getBirthplace();
-                  if (!TextUtils.isEmpty(birthplaceStr)) {
-                      birthplace.setText("籍贯："+birthplaceStr);
-                  }else{
-                      birthplace.setText("籍贯：未填写");
-                  }
-                  face_urlStr = customer.getFace_url();
-                  if (!TextUtils.isEmpty(face_urlStr)) {
-                     // Glide.with(mContext).
-                      Glide.with(context).load(face_urlStr).centerCrop().transform(new GlideCircleTransform(context)).into(iv_header);
-                  }else{
-                     // birthplace.setText("");
-                  }
-                  consume_abilityStr = customer.getConsume_ability();
-                  if (!TextUtils.isEmpty(consume_abilityStr)) {
-                      consume_ability.setText("消费能力："+consume_abilityStr);
-                  }else{
-                      consume_ability.setText("消费能力：未填写");
-                  }
-                  remarkStr = customer.getRemark();
-                  if (!TextUtils.isEmpty(remarkStr)) {
-                      remark.setText(remarkStr);
-                  }else{
-                     // remark.setText("");
-                  }
-
-                  List<CustomerLabel> labelListl = customer.getLabel();
-                  if (labelListl != null && labelListl.size()>0) {
-
-                      this.labelList.clear();
-                      this.labelList.addAll(labelListl);
-                      mTagAdapter.notifyDataChanged();
-                      showLabel();
-                  }else {
-                      hideLabel();
-                  }
-              }else {
-                  hideLabel();
-              }
-          }else {
-
-
+        if (customerBean != null) {
+            Customer customer = customerBean.getList();
+            if (customer != null) {
+                usernameStr = customer.getName();
+                if (!TextUtils.isEmpty(usernameStr)) {
+                    name.setText(usernameStr);
+                } else {
+                    name.setText("");
                 }
 
+
+                usermobileStr = customer.getMobile();
+                String usermobileStr2 = customer.getMobile1();
+                if (TextUtils.isEmpty(usermobileStr2)) {
+                    usermobileStr2 = "";
+                } else {
+                    usermobileStr2 = "/" + usermobileStr2;
+                }
+
+                if (!TextUtils.isEmpty(usermobileStr)) {
+                    tel.setText("电话：" + usermobileStr + usermobileStr2);
+                } else {
+                    tel.setText("电话：未填写");
+                }
+
+                sexStr = customer.getSex();
+                if (!TextUtils.isEmpty(sexStr)) {
+                    sex.setVisibility(View.VISIBLE);
+                    if ("男".equals(sexStr)) {
+                        sex.setImageResource(R.drawable.nan);
+                    } else if ("女".equals(sexStr)) {
+                        sex.setImageResource(R.drawable.nv);
+                    } else {
+                        sex.setVisibility(View.GONE);
+                    }
+                } else {
+                    sex.setVisibility(View.GONE);
+                }
+
+                birthdayStr = customer.getBirthday();
+                if (!TextUtils.isEmpty(birthdayStr)) {
+                    birthday.setText("生日：" + birthdayStr);
+                } else {
+                    birthday.setText("生日：未填写");
+                }
+
+                birthplaceStr = customer.getBirthplace();
+                if (!TextUtils.isEmpty(birthplaceStr)) {
+                    birthplace.setText("籍贯：" + birthplaceStr);
+                } else {
+                    birthplace.setText("籍贯：未填写");
+                }
+                face_urlStr = customer.getFace_url();
+                if (!TextUtils.isEmpty(face_urlStr)) {
+                    // Glide.with(mContext).
+                    Glide.with(context).load(face_urlStr).centerCrop().transform(new GlideCircleTransform(context)).into(iv_header);
+                } else {
+                    // birthplace.setText("");
+                }
+                consume_abilityStr = customer.getConsume_ability();
+                if (!TextUtils.isEmpty(consume_abilityStr)) {
+                    consume_ability.setText("消费能力：" + consume_abilityStr);
+                } else {
+                    consume_ability.setText("消费能力：未填写");
+                }
+                remarkStr = customer.getRemark();
+                if (!TextUtils.isEmpty(remarkStr)) {
+                    remark.setText(remarkStr);
+                } else {
+                    // remark.setText("");
+                }
+
+                List<CustomerLabel> labelListl = customer.getLabel();
+                if (labelListl != null && labelListl.size() > 0) {
+
+                    this.labelList.clear();
+                    this.labelList.addAll(labelListl);
+                    mTagAdapter.notifyDataChanged();
+                    showLabel();
+                } else {
+                    hideLabel();
+                }
+            } else {
+                hideLabel();
             }
-     private void handleTopList(){
+        } else {
 
-         if (recTopList != null) {
-             List<ConRecBean> list = recTopList.getList();
-             if (list != null && list.size()>0) {
-                 la_a.setVisibility(View.GONE);
-                 imageList.clear();
-                 imageList.addAll(list);
-                 ticketAdapter.notifyDataSetChanged();
 
-                 if (list!=null && list.size()<10) {
-                     refreshListView.onLoadComplete(false,true);
-                 }else {
-                     refreshListView.onLoadComplete(true,false);
-                 }
+        }
 
-             }else {
-                 if (imageList != null && imageList.size()>0) {
-                     la_a.setVisibility(View.GONE);
-                 }else {
-                     la_a.setVisibility(View.VISIBLE);
-                 }
-                 refreshListView.onLoadComplete(false,true);
-             }
-             max_id = recTopList.getMax_id();
-             min_id = recTopList.getMin_id();
-         }else {
-             if (imageList != null && imageList.size()>0) {
-                 la_a.setVisibility(View.GONE);
-             }else {
-                 la_a.setVisibility(View.VISIBLE);
-             }
-             refreshListView.onLoadComplete(false,true);
-         }
+    }
 
-     }
+    private void handleTopList() {
+
+        if (recTopList != null) {
+            List<ConRecBean> list = recTopList.getList();
+            if (list != null && list.size() > 0) {
+                la_a.setVisibility(View.GONE);
+                imageList.clear();
+                imageList.addAll(list);
+                ticketAdapter.notifyDataSetChanged();
+
+                if (list != null && list.size() < 10) {
+                    refreshListView.onLoadComplete(false, true);
+                } else {
+                    refreshListView.onLoadComplete(true, false);
+                }
+
+            } else {
+                if (imageList != null && imageList.size() > 0) {
+                    la_a.setVisibility(View.GONE);
+                } else {
+                    la_a.setVisibility(View.VISIBLE);
+                }
+                refreshListView.onLoadComplete(false, true);
+            }
+            max_id = recTopList.getMax_id();
+            min_id = recTopList.getMin_id();
+        } else {
+            if (imageList != null && imageList.size() > 0) {
+                la_a.setVisibility(View.GONE);
+            } else {
+                la_a.setVisibility(View.VISIBLE);
+            }
+            refreshListView.onLoadComplete(false, true);
+        }
+
+    }
 
     @Override
     protected void onDestroy() {
@@ -436,75 +507,73 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     }
 
 
-
-    private void getCustomerBaseInfo(){
+    private void getCustomerBaseInfo() {
         HotelBean hotelBean = mSession.getHotelBean();
-        AppApi.getCustomerBaseInfo(mContext,customer_id,hotelBean.getInvite_id(),hotelBean.getTel(),this);
+        AppApi.getCustomerBaseInfo(mContext, customer_id, hotelBean.getInvite_id(), hotelBean.getTel(), this);
     }
 
 
-
-     @Override
-     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-                super.onActivityResult(requestCode, resultCode, data);
-                if(requestCode == REQUEST_CODE_LABEL) {
-                    if(data!=null) {
-                        ArrayList<CustomerLabel> labelList = (ArrayList<CustomerLabel>) data.getSerializableExtra("selecteLabels");
-                        if(labelList!=null&&labelList.size()>0) {
-                            this.labelList.clear();
-                            this.labelList.addAll(labelList);
-                            mTagAdapter.notifyDataChanged();
-                            showLabel();
-                        }else {
-                            hideLabel();
-                        }
-                    }
-                }else if(requestCode == REQUEST_CODE_REMARK){
-                    if(data!=null) {
-                        String remarkS = (String)data.getStringExtra("remark");
-                       // ArrayList<CustomerLabel> labelList = (ArrayList<CustomerLabel>) data.getSerializableExtra("selecteLabels");
-                        remark.setText(remarkS);
-                        }else {
-                            hideLabel();
-                        }
-                }else if (requestCode == TAKE_PHOTO_REQUEST && resultCode == Activity.RESULT_OK) {
-                    // 拍照
-                   // Glide.with(this).load(currentImagePath).placeholder(R.drawable.empty_slide).into(mSpendHistoryIv);
-                    submit();
-                }else   if (requestCode == REQUEST_CODE_IMAGE&&resultCode == Activity.RESULT_OK && data != null) {
-                    // 从相册选择
-                    Uri selectedImage = data.getData();
-                    String[] filePathColumns = {MediaStore.Images.Media.DATA};
-                    Cursor c = getContentResolver().query(selectedImage, filePathColumns, null, null, null);
-                    c.moveToFirst();
-                    int columnIndex = c.getColumnIndex(filePathColumns[0]);
-                    String imagePath = c.getString(columnIndex);
-
-                    String cachePath = ((SavorApplication)mContext.getApplication()).imagePath;
-                    File dir = new File(cachePath);
-                    if(!dir.exists()) {
-                        dir.mkdirs();
-                    }
-
-                    long timeMillis = System.currentTimeMillis();
-                    String tel = mSession.getHotelBean().getTel();
-                    String key = tel+"_"+timeMillis+".jpg";
-                    String copyPath = dir.getAbsolutePath()+File.separator+key;
-
-                    File sFile = new File(imagePath);
-                    FileUtils.copyFile(sFile, copyPath);
-
-                    currentImagePath = copyPath;
-                    submit();
-                    //Glide.with(this).load(currentImagePath).placeholder(R.drawable.empty_slide).into(mSpendHistoryIv);
-                }else   if (requestCode == REQUEST_CODE_USERINFO) {
-                    getCustomerBaseInfo();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_LABEL) {
+            if (data != null) {
+                ArrayList<CustomerLabel> labelList = (ArrayList<CustomerLabel>) data.getSerializableExtra("selecteLabels");
+                if (labelList != null && labelList.size() > 0) {
+                    this.labelList.clear();
+                    this.labelList.addAll(labelList);
+                    mTagAdapter.notifyDataChanged();
+                    showLabel();
+                } else {
+                    hideLabel();
                 }
-
-
-
             }
-     private void submit() {
+        } else if (requestCode == REQUEST_CODE_REMARK) {
+            if (data != null) {
+                String remarkS = (String) data.getStringExtra("remark");
+                // ArrayList<CustomerLabel> labelList = (ArrayList<CustomerLabel>) data.getSerializableExtra("selecteLabels");
+                remark.setText(remarkS);
+            } else {
+                hideLabel();
+            }
+        } else if (requestCode == TAKE_PHOTO_REQUEST && resultCode == Activity.RESULT_OK) {
+            // 拍照
+            // Glide.with(this).load(currentImagePath).placeholder(R.drawable.empty_slide).into(mSpendHistoryIv);
+            submit();
+        } else if (requestCode == REQUEST_CODE_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
+            // 从相册选择
+            Uri selectedImage = data.getData();
+            String[] filePathColumns = {MediaStore.Images.Media.DATA};
+            Cursor c = getContentResolver().query(selectedImage, filePathColumns, null, null, null);
+            c.moveToFirst();
+            int columnIndex = c.getColumnIndex(filePathColumns[0]);
+            String imagePath = c.getString(columnIndex);
+
+            String cachePath = ((SavorApplication) mContext.getApplication()).imagePath;
+            File dir = new File(cachePath);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            long timeMillis = System.currentTimeMillis();
+            String tel = mSession.getHotelBean().getTel();
+            String key = tel + "_" + timeMillis + ".jpg";
+            String copyPath = dir.getAbsolutePath() + File.separator + key;
+
+            File sFile = new File(imagePath);
+            FileUtils.copyFile(sFile, copyPath);
+
+            currentImagePath = copyPath;
+            submit();
+            //Glide.with(this).load(currentImagePath).placeholder(R.drawable.empty_slide).into(mSpendHistoryIv);
+        } else if (requestCode == REQUEST_CODE_USERINFO) {
+            getCustomerBaseInfo();
+        }
+
+
+    }
+
+    private void submit() {
 
 //                final String usermobile = mMobileEt.getText().toString();
 //
@@ -518,137 +587,139 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 //                    return;
 //                }
 
-                File file = new File(currentImagePath);
-                String hotel_id = mSession.getHotelBean().getHotel_id();
-                final String objectKey = "log/resource/restaurant/mobile/userlogo/"+hotel_id+"/"+file.getName();
-                final OSSClient ossClient = OSSClientUtil.getOSSClient(this);
-                // 构造上传请求
-                PutObjectRequest put = new PutObjectRequest(ConstantValues.BUCKET_NAME,objectKey , currentImagePath);
-                ossClient.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+        File file = new File(currentImagePath);
+        String hotel_id = mSession.getHotelBean().getHotel_id();
+        final String objectKey = "log/resource/restaurant/mobile/userlogo/" + hotel_id + "/" + file.getName();
+        final OSSClient ossClient = OSSClientUtil.getOSSClient(this);
+        // 构造上传请求
+        PutObjectRequest put = new PutObjectRequest(ConstantValues.BUCKET_NAME, objectKey, currentImagePath);
+        ossClient.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
 
+            @Override
+            public void onSuccess(PutObjectRequest putObjectRequest, PutObjectResult putObjectResult) {
+                ticketOssUrl = ossClient.presignPublicObjectURL(ConstantValues.BUCKET_NAME, objectKey);
+                runOnUiThread(new Runnable() {
                     @Override
-                    public void onSuccess(PutObjectRequest putObjectRequest, PutObjectResult putObjectResult) {
-                        ticketOssUrl = ossClient.presignPublicObjectURL(ConstantValues.BUCKET_NAME, objectKey);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                    public void run() {
 
-                                //String name = mNameEt.getText().toString();
-                                String invite_id = mSession.getHotelBean().getInvite_id();
-                                String mobile = mSession.getHotelBean().getTel();
-                                String recipt = "";
-                                List<String> urlList = new ArrayList<>();
-                                urlList.add(ticketOssUrl);
+                        //String name = mNameEt.getText().toString();
+                        String invite_id = mSession.getHotelBean().getInvite_id();
+                        String mobile = mSession.getHotelBean().getTel();
+                        String recipt = "";
+                        List<String> urlList = new ArrayList<>();
+                        urlList.add(ticketOssUrl);
 
-                                recipt = new Gson().toJson(urlList);
+                        recipt = new Gson().toJson(urlList);
 
-                                if(TextUtils.isEmpty(customer_id)) {
-                                    // 如果客户id为空需要传客户信息bill_info，birthday，birthplace，consume_ability
+                        if (TextUtils.isEmpty(customer_id)) {
+                            // 如果客户id为空需要传客户信息bill_info，birthday，birthplace，consume_ability
 
 //                                    String bill_info = "";
 //                                    AppApi.addSignleConsumeRecord(UserInfoActivity.this,
 //                                            bill_info,birthday,birthplace,consume_ability,"",
 //                                            "",invite_id,"",mobile,name, recipt,usermobile,
 //                                            "",sex,UserInfoActivity.this);
-                                }else {
-                                    String lable_id_str = "";
-                                    List<String> labeIds = new ArrayList<>();
-                                    if(labelList.size()>0) {
-                                        for(int i = 0;i<labelList.size();i++) {
-                                            CustomerLabel label = labelList.get(i);
-                                            String label_id = label.getLabel_id();
-                                            labeIds.add(label_id);
-                                        }
-                                        lable_id_str = new Gson().toJson(labeIds);
-                                    }
-                                    // 如果客户id不为空 不需要传客户信息
-                                    AppApi.addSignleConsumeRecord(UserInfoActivity.this,
-                                            "","","","",customer_id,
-                                            "",invite_id,lable_id_str,mobile,usernameStr, recipt,usermobileStr,
-                                            "","",UserInfoActivity.this);
+                        } else {
+                            String lable_id_str = "";
+                            List<String> labeIds = new ArrayList<>();
+                            if (labelList.size() > 0) {
+                                for (int i = 0; i < labelList.size(); i++) {
+                                    CustomerLabel label = labelList.get(i);
+                                    String label_id = label.getLabel_id();
+                                    labeIds.add(label_id);
+                                }
+                                lable_id_str = new Gson().toJson(labeIds);
+                            }
+                            // 如果客户id不为空 不需要传客户信息
+                            AppApi.addSignleConsumeRecord(UserInfoActivity.this,
+                                    "", "", "", "", customer_id,
+                                    "", invite_id, lable_id_str, mobile, usernameStr, recipt, usermobileStr,
+                                    "", "", UserInfoActivity.this);
 
 //                                    AppApi.addSignleConsumeRecord(UserInfoActivity.this,
 //                                            "","","","",customer_id,
 //                                            "",invite_id,lable_id_str,mobile,"李丛", recipt,"15555555555",
 //                                            "","",UserInfoActivity.this);
-                                }
-                            }
-                        });
-                        ConRecBean conRecBean = new ConRecBean();
-                        conRecBean.setRecipt(ticketOssUrl);
-                        imageList.add(conRecBean);
-                        if (imageList != null && imageList.size()>0) {
-                            la_a.setVisibility(View.GONE);
-                        }else {
-                            la_a.setVisibility(View.VISIBLE);
                         }
-                        ticketAdapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onFailure(PutObjectRequest putObjectRequest, ClientException e, ServiceException e1) {
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ShowMessage.showToast(UserInfoActivity.this,"小票上传失败");
-                            }
-                        });
                     }
                 });
-
-
+                ConRecBean conRecBean = new ConRecBean();
+                conRecBean.setRecipt(ticketOssUrl);
+                imageList.add(conRecBean);
+                if (imageList != null && imageList.size() > 0) {
+                    la_a.setVisibility(View.GONE);
+                } else {
+                    la_a.setVisibility(View.VISIBLE);
+                }
+                ticketAdapter.notifyDataSetChanged();
             }
+
+            @Override
+            public void onFailure(PutObjectRequest putObjectRequest, ClientException e, ServiceException e1) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ShowMessage.showToast(UserInfoActivity.this, "小票上传失败");
+                    }
+                });
+            }
+        });
+
+
+    }
 
     public void showLabel() {
         tv_label_hint.setVisibility(View.GONE);
         rlv_labels.setVisibility(View.VISIBLE);
-     }
+    }
 
     public void hideLabel() {
         tv_label_hint.setVisibility(View.VISIBLE);
         rlv_labels.setVisibility(View.GONE);
-     }
-     private void showPhotoDialog() {
-                final String tel = mSession.getHotelBean().getTel();
-                new ChoosePicDialog(this, new ChoosePicDialog.OnTakePhotoBtnClickListener() {
-                    @Override
-                    public void onTakePhotoClick() {
+    }
 
-                        String cacheDir = ((SavorApplication) getApplication()).imagePath;
-                        File cachePath = new File(cacheDir);
-                        if(!cachePath.exists()) {
-                            cachePath.mkdirs();
-                        }
-                        currentImagePath = cacheDir+ File.separator+tel+"_"+System.currentTimeMillis()+".jpg";
-                        File file = new File(currentImagePath);
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        Uri imageUri = Uri.fromFile(file);
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
-                        UserInfoActivity.this.startActivityForResult(intent, TAKE_PHOTO_REQUEST);
-                    }
-                },
-                        new ChoosePicDialog.OnAlbumBtnClickListener() {
-                            @Override
-                            public void onAlbumBtnClick() {
-                                Intent intent = new Intent(Intent.ACTION_PICK,
-                                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                UserInfoActivity.this.startActivityForResult(intent, REQUEST_CODE_IMAGE);
-                            }
-                        }
-                ).show();
+    private void showPhotoDialog() {
+        final String tel = mSession.getHotelBean().getTel();
+        new ChoosePicDialog(this, new ChoosePicDialog.OnTakePhotoBtnClickListener() {
+            @Override
+            public void onTakePhotoClick() {
+
+                String cacheDir = ((SavorApplication) getApplication()).imagePath;
+                File cachePath = new File(cacheDir);
+                if (!cachePath.exists()) {
+                    cachePath.mkdirs();
+                }
+                currentImagePath = cacheDir + File.separator + tel + "_" + System.currentTimeMillis() + ".jpg";
+                File file = new File(currentImagePath);
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Uri imageUri = Uri.fromFile(file);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                UserInfoActivity.this.startActivityForResult(intent, TAKE_PHOTO_REQUEST);
             }
-     private void getConRecTopList(){
-         HotelBean hotelBean = mSession.getHotelBean();
-        AppApi.getConRecTopList(context,customer_id,hotelBean.getInvite_id(),hotelBean.getTel(),max_id,min_id,Rectype,this);
-     }
+        },
+                new ChoosePicDialog.OnAlbumBtnClickListener() {
+                    @Override
+                    public void onAlbumBtnClick() {
+                        Intent intent = new Intent(Intent.ACTION_PICK,
+                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        UserInfoActivity.this.startActivityForResult(intent, REQUEST_CODE_IMAGE);
+                    }
+                }
+        ).show();
+    }
 
-     PullToRefreshBase.OnLastItemVisibleListener onLastItemVisibleListener = new PullToRefreshBase.OnLastItemVisibleListener() {
-                @Override
-      public void onLastItemVisible() {
-                    getConRecTopList();
-      }
-   };
+    private void getConRecTopList() {
+        HotelBean hotelBean = mSession.getHotelBean();
+        AppApi.getConRecTopList(context, customer_id, hotelBean.getInvite_id(), hotelBean.getTel(), max_id, min_id, Rectype, this);
+    }
+
+    PullToRefreshBase.OnLastItemVisibleListener onLastItemVisibleListener = new PullToRefreshBase.OnLastItemVisibleListener() {
+        @Override
+        public void onLastItemVisible() {
+            getConRecTopList();
+        }
+    };
 
 
 }

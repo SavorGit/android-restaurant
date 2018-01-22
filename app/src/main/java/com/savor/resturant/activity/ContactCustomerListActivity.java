@@ -688,6 +688,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         switch (operationType) {
             case CUSTOMER_LIST:
                 intent = new Intent(this,UserInfoActivity.class);
+                intent.putExtra("customer",contactFormat);
                 intent.putExtra("customerID",contactFormat.getCustomer_id());
                 startActivity(intent);
                 break;

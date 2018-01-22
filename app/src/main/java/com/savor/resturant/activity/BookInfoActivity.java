@@ -26,6 +26,7 @@ import com.savor.resturant.R;
 import com.savor.resturant.SavorApplication;
 import com.savor.resturant.bean.BookListResult;
 import com.savor.resturant.bean.ConRecBean;
+import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.CustomerLabel;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.OrderListBean;
@@ -197,6 +198,10 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.to_user_info:
                intent = new Intent(this,UserInfoActivity.class);
+                ContactFormat contactFormat = new ContactFormat();
+                contactFormat.setName(order_name);
+                contactFormat.setMobile(order_mobile);
+                intent.putExtra("customer",contactFormat);
                intent.putExtra("customerID",customer_id);
                startActivityForResult(intent, REQUEST_ADD_BOOK );
 

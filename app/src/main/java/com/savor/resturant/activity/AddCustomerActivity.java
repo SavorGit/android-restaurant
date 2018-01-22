@@ -712,14 +712,15 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                     ResponseErrorMessage message = (ResponseErrorMessage) obj;
                     int code = message.getCode();
                     String msg = message.getMessage();
-                    if(code == 60105||code == 60106) {
-//                        showToast(msg);
-                    }else {
-                        addEditOpFailedList();
-                    }
-                }else {
-                    addEditOpFailedList();
+                        showToast(msg);
+//                    if(code == 60105||code == 60106) {
+//                    }else {
+//                        addEditOpFailedList();
+//                    }
                 }
+//                else {
+//                    addEditOpFailedList();
+//                }
                 break;
             case POST_ADD_CUS_JSON:
                 LogUtils.d("savor:add customer failed");
@@ -740,19 +741,19 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private void addEditOpFailedList() {
-        List<ContactFormat> contactFormats = new ArrayList<>();
-        contactFormats.add(currentAddCustomer);
-        CopyOnWriteArrayList<OperationFailedItem> opFailedList = mSession.getOpFailedList();
-        if(opFailedList == null) {
-            opFailedList = new CopyOnWriteArrayList<>();
-        }
-        OperationFailedItem item = new OperationFailedItem();
-        item.setType(OperationFailedItem.OpType.TYPE_EDIT_CUSTOMER);
-        item.setContactFormat(contactFormats);
-        opFailedList.add(item);
-        mSession.setOpFailedList(opFailedList);
-    }
+//    private void addEditOpFailedList() {
+//        List<ContactFormat> contactFormats = new ArrayList<>();
+//        contactFormats.add(currentAddCustomer);
+//        CopyOnWriteArrayList<OperationFailedItem> opFailedList = mSession.getOpFailedList();
+//        if(opFailedList == null) {
+//            opFailedList = new CopyOnWriteArrayList<>();
+//        }
+//        OperationFailedItem item = new OperationFailedItem();
+//        item.setType(OperationFailedItem.OpType.TYPE_EDIT_CUSTOMER);
+//        item.setContactFormat(contactFormats);
+//        opFailedList.add(item);
+//        mSession.setOpFailedList(opFailedList);
+//    }
 
     private void addOpFailedList() {
         List<ContactFormat> contactFormats = new ArrayList<>();

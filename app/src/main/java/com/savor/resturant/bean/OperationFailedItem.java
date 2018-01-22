@@ -17,8 +17,6 @@ public class OperationFailedItem implements Serializable {
         TYPE_IMPORT_FIRST,
         /**新增客户*/
         TYPE_ADD_CUSTOMER,
-        /**修改客户*/
-        TYPE_EDIT_CUSTOMER,
         /**新增导入通讯录*/
         TYPE_IMPORT_NEW,
     }

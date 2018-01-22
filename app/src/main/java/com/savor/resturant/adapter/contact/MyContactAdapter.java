@@ -133,6 +133,7 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
             item.setSelected(false);
             holder.checkBox.setChecked(added);
         }
+
         if(added) {
             holder.mAdd.setBackground(null);
             holder.mAdd.setTextColor(mContext.getResources().getColor(R.color.app_gray));
@@ -155,6 +156,8 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
                 }
             });
         }
+
+
 
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

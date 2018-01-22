@@ -171,6 +171,7 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
             setResult(RESULT_CODE_SELECT,intent);
         }else {
             Intent intent = new Intent(this,UserInfoActivity.class);
+            intent.putExtra("customer",contactFormat);
             intent.putExtra("customerID",contactFormat.getCustomer_id());
             startActivity(intent);
 //            ShowMessage.showToast(this,"打开客户信息列表");
