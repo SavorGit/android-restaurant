@@ -402,7 +402,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                  ticketAdapter.notifyDataSetChanged();
 
                  if (list!=null && list.size()<10) {
-                     refreshListView.onLoadComplete(false,true);
+                     refreshListView.onLoadComplete(false,false);
                  }else {
                      refreshListView.onLoadComplete(true,false);
                  }
@@ -413,7 +413,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                  }else {
                      la_a.setVisibility(View.VISIBLE);
                  }
-                 refreshListView.onLoadComplete(false,true);
+                 refreshListView.onLoadComplete(false,false);
              }
              max_id = recTopList.getMax_id();
              min_id = recTopList.getMin_id();
@@ -423,7 +423,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
              }else {
                  la_a.setVisibility(View.VISIBLE);
              }
-             refreshListView.onLoadComplete(false,true);
+             refreshListView.onLoadComplete(false,false);
          }
 
      }
