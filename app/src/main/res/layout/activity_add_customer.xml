@@ -211,7 +211,7 @@
                     android:layout_height="wrap_content">
                     <TextView
                         android:id="@+id/tv_con_ability"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="15dp"
                         android:drawablePadding="15dp"
                         android:gravity="center_vertical"
                         android:text="标记客户消费能力（人均）"

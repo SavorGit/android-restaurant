@@ -229,7 +229,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
 
         String face_url = list.getFace_url();
         if(!TextUtils.isEmpty(face_url)) {
-            Glide.with(this).load(face_url).placeholder(R.drawable.empty_slide).into(mHeaderIv);
+            Glide.with(this).load(face_url).placeholder(R.drawable.empty_slide).transform(new GlideCircleTransform(this)).into(mHeaderIv);
         }
 
         String sex = list.getSex();

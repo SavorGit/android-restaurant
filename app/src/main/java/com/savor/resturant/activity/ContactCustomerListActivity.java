@@ -238,6 +238,8 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                         format.setMobile1(phoneNumber1.getNormalizedNumber());
                     }
                 }
+            }else {
+                continue;
             }
 
             StringBuilder sb = new StringBuilder();
@@ -449,7 +451,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         String mobile1 = contactFormat.getMobile1();
         String mobile = contactFormat.getMobile();
         if(TextUtils.isEmpty(mobile)&&TextUtils.isEmpty(mobile1)) {
-            ShowMessage.showToast(this,"不能添加手机号为空的客户");
+            ShowMessage.showToast(this,"该客户没有手机号，请手动添加");
             return;
         }
 
