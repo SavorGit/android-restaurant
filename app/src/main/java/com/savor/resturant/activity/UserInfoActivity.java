@@ -272,7 +272,6 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 startActivityForResult(intent, REQUEST_CODE_USERINFO);
                 break;
 
-
             default:
                 break;
         }

@@ -187,9 +187,14 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                     mMobileEt.setText(mobile);
                 }
 
-                String bill_info = customerBean.getList().getBill_info();
-                if(!TextUtils.isEmpty(bill_info)) {
-                    mTicketInfoEt.setText(bill_info);
+                if(customerBean!=null) {
+                    Customer customer = customerBean.getList();
+                    if(customer!=null) {
+                        String bill_info = customer.getBill_info();
+                        if(!TextUtils.isEmpty(bill_info)) {
+                            mTicketInfoEt.setText(bill_info);
+                        }
+                    }
                 }
 
                 break;

@@ -154,6 +154,23 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                     for(ContactFormat contactFormat:contactFormats) {
                         if(customers.contains(contactFormat)) {
                             contactFormat.setAdded(true);
+                        }else {
+                            outer:
+                            for(ContactFormat customer : customers) {
+                                String mobile = customer.getMobile();
+                                String mobile1 = customer.getMobile1();
+                                if(!TextUtils.isEmpty(mobile)) {
+                                    if(mobile.equals(contactFormat.getMobile())||mobile.equals(contactFormat.getMobile1())) {
+                                        contactFormat.setAdded(true);
+                                        break outer;
+                                    }
+                                }else if(!TextUtils.isEmpty(mobile1)) {
+                                    if(mobile1.equals(contactFormat.getMobile())||mobile.equals(contactFormat.getMobile1())) {
+                                        contactFormat.setAdded(true);
+                                        break outer;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -652,13 +669,37 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                     if(code == 60016) {
                         ShowMessage.showToast(this,msg);
                     }else {
+                        addLocal();
                         addOpFailedList(selectedLsit, OperationFailedItem.OpType.TYPE_IMPORT_NEW);
                     }
                 }else  {
+                    addLocal();
                     addOpFailedList(selectedLsit, OperationFailedItem.OpType.TYPE_IMPORT_NEW);
                 }
                 break;
         }
+    }
+
+    private void addLocal() {
+        CustomerListBean customerListBean = mSession.getCustomerList();
+        if(customerListBean==null) {
+            customerListBean = new CustomerListBean();
+
+        }
+        List<ContactFormat> customerList = customerListBean.getCustomerList();
+        if(customerList==null) {
+            customerList = new ArrayList<>();
+        }
+        customerList.addAll(selectedLsit);
+        Collections.sort(customerList,pinyinComparator);
+        customerListBean.setCustomerList(customerList);
+        mSession.setCustomerList(customerListBean);
+
+        for(ContactFormat customer : selectedLsit) {
+            customer.setAdded(true);
+        }
+        adapter.notifyDataSetChanged();
+        ShowMessage.showToast(this,"导入成功!");
     }
 
     private void addOpFailedList(List<ContactFormat> selectedLsit, OperationFailedItem.OpType typeImportNew) {
