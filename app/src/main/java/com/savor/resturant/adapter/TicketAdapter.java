@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.savor.resturant.R;
+import com.savor.resturant.activity.PhotoShowActivity;
 import com.savor.resturant.bean.ConRecBean;
 
 import java.util.List;
@@ -64,19 +65,29 @@ public class TicketAdapter extends BaseAdapter {
             holder = (TicketHolder) convertView.getTag();
         }
         String leftUrl = mData.get(position*2).getRecipt();
+        final String  lurl = leftUrl;
         Glide.with(mContext).load(leftUrl).centerCrop().placeholder(R.drawable.empty_slide).into(holder.iv_left);
         holder.iv_left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                new ShowPicDialog(context,item.getFault_img_url()).show();
-               // PhotoShowActivity.startPhotoShowActivity(context,item.getFault_img_url());
+                PhotoShowActivity.startPhotoShowActivity(mContext,lurl);
             }
         });
 
         if(position*2+1<mData.size()) {
             holder.iv_right.setVisibility(View.VISIBLE);
             String righUrl = mData.get(position+1).getRecipt();
+            final String  rurl = righUrl;
             Glide.with(mContext).load(righUrl).centerCrop().placeholder(R.drawable.empty_slide).into(holder.iv_right);
+
+            holder.iv_right.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                new ShowPicDialog(context,item.getFault_img_url()).show();
+                    PhotoShowActivity.startPhotoShowActivity(mContext,rurl);
+                }
+            });
         }else {
             holder.iv_right.setVisibility(View.INVISIBLE);
         }

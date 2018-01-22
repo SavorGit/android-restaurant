@@ -242,6 +242,11 @@
         <activity
             android:name=".activity.BookInfoActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PhotoShowActivity"
+            android:screenOrientation="portrait" />
+
+
 
         <activity
             android:windowSoftInputMode="stateHidden|adjustPan"
