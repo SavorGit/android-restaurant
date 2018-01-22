@@ -35,6 +35,7 @@ import com.savor.resturant.utils.GlideCircleTransform;
 import com.savor.resturant.utils.OSSClientUtil;
 import com.savor.resturant.widget.ChoosePicDialog;
 import com.savor.resturant.widget.CommonDialog;
+import com.savor.resturant.widget.CommonDialog2;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ import static com.savor.resturant.activity.AddCustomerActivity.TAKE_PHOTO_REQUES
  * Created by bushlee on 2018/1/7.
  */
 
-public class BookInfoActivity extends BaseActivity implements View.OnClickListener,CommonDialog.OnConfirmListener,CommonDialog.OnCancelListener {
+public class BookInfoActivity extends BaseActivity implements View.OnClickListener,CommonDialog2.OnConfirmListener,CommonDialog2.OnCancelListener {
 
     private Context context;
     private ImageView iv_left;
@@ -89,7 +90,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
     private String OrderServiceType = "";
     private String currentImagePath;
     private String ticketOssUrl;
-    private CommonDialog dialog;
+    private CommonDialog2 dialog;
     private TextView wel_lab;
     private TextView tjc_lab;
     private TextView xp_lab;
@@ -338,7 +339,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
         if (dialog != null) {
             dialog.show();
         }else {
-            dialog = new CommonDialog(context,"是否删除",this,this);
+            dialog = new CommonDialog2(context,"是否删除",this,this);
             dialog.show();
         }
 
