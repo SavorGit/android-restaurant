@@ -59,7 +59,7 @@
                             android:textColorHint="@color/app_gray"
                             android:textColor="@color/color_222222"
                             android:textSize="15sp"
-                            android:maxLength="11"
+                            android:maxLength="20"
                             android:inputType="number"
                             android:id="@+id/et_phone"
                             android:layout_weight="1"
@@ -89,7 +89,7 @@
                             android:layout_marginBottom="10dp"
                             android:background="@color/divider_list" />
                         <EditText
-                            android:maxLength="11"
+                            android:maxLength="20"
                             android:id="@+id/et_second_mobile"
                             android:textSize="14sp"
                             android:layout_width="match_parent"
