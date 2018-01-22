@@ -145,6 +145,7 @@
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
                     android:maxLength="3"
+                    android:textColor="@color/black"
                     android:hint="请输入就餐人数"
                     android:textSize="14sp"
                     android:drawableLeft="@drawable/tjyd_rs"
@@ -174,6 +175,7 @@
                     android:layout_centerVertical="true"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
+                    android:textColor="@color/black"
                     android:hint="请选择就餐时间"
                     android:drawableLeft="@drawable/tjyd_shjian"
                     android:layout_width="match_parent"
@@ -220,6 +222,7 @@
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
                     android:hint="请选择就餐包间"
+                    android:textColor="@color/black"
                     android:drawableLeft="@drawable/tjyd_bj"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
