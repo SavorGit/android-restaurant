@@ -63,7 +63,7 @@ public class AddRemarkActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void setViews() {
-        tv_center.setText("维修");
+        tv_center.setText("备注");
         tv_center.setTextColor(getResources().getColor(R.color.color_f6f2ed));
         if (!TextUtils.isEmpty(remark)) {
             et_remark.setText(remark);
