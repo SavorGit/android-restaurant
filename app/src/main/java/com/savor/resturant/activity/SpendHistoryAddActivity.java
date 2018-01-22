@@ -339,37 +339,41 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
 
         showLoadingLayout();
 
-        File file = new File(currentImagePath);
-        String hotel_id = mSession.getHotelBean().getHotel_id();
-        final String objectKey = "log/resource/restaurant/mobile/userlogo/"+hotel_id+"/"+file.getName();
-        final OSSClient ossClient = OSSClientUtil.getOSSClient(this);
-        // 构造上传请求
-        PutObjectRequest put = new PutObjectRequest(ConstantValues.BUCKET_NAME,objectKey , currentImagePath);
-        ossClient.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+        if(!TextUtils.isEmpty(currentImagePath)) {
+            File file = new File(currentImagePath);
+            String hotel_id = mSession.getHotelBean().getHotel_id();
+            final String objectKey = "log/resource/restaurant/mobile/userlogo/"+hotel_id+"/"+file.getName();
+            final OSSClient ossClient = OSSClientUtil.getOSSClient(this);
+            // 构造上传请求
+            PutObjectRequest put = new PutObjectRequest(ConstantValues.BUCKET_NAME,objectKey , currentImagePath);
+            ossClient.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
 
-            @Override
-            public void onSuccess(PutObjectRequest putObjectRequest, PutObjectResult putObjectResult) {
-                ticketOssUrl = ossClient.presignPublicObjectURL(ConstantValues.BUCKET_NAME, objectKey);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        submitApi(usermobile);
-                    }
-                });
+                @Override
+                public void onSuccess(PutObjectRequest putObjectRequest, PutObjectResult putObjectResult) {
+                    ticketOssUrl = ossClient.presignPublicObjectURL(ConstantValues.BUCKET_NAME, objectKey);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            submitApi(usermobile);
+                        }
+                    });
 
-            }
+                }
 
-            @Override
-            public void onFailure(PutObjectRequest putObjectRequest, ClientException e, ServiceException e1) {
+                @Override
+                public void onFailure(PutObjectRequest putObjectRequest, ClientException e, ServiceException e1) {
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        submitApi(usermobile);
-                    }
-                });
-            }
-        });
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            submitApi(usermobile);
+                        }
+                    });
+                }
+            });
+        }else {
+            submitApi(usermobile);
+        }
 
 
     }
@@ -532,6 +536,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
             if(data!=null) {
                 ContactFormat contactFormat = (ContactFormat) data.getSerializableExtra("customer");
                 mMobileEt.setText(contactFormat.getMobile());
+                mNameEt.setText(contactFormat.getName());
             }
         }else if(requestCode == REQUEST_CODE_LABEL) {
             if(data!=null) {

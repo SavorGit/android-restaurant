@@ -434,9 +434,9 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 sexStr = customer.getSex();
                 if (!TextUtils.isEmpty(sexStr)) {
                     sex.setVisibility(View.VISIBLE);
-                    if ("男".equals(sexStr)) {
+                    if ("1".equals(sexStr)) {
                         sex.setImageResource(R.drawable.nan);
-                    } else if ("女".equals(sexStr)) {
+                    } else if ("2".equals(sexStr)) {
                         sex.setImageResource(R.drawable.nv);
                     } else {
                         sex.setVisibility(View.GONE);
