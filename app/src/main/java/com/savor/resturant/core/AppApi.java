@@ -135,6 +135,10 @@ public class AppApi {
         POST_CUSTOMER_EDIT_REMARK_JSON,
         /**获取订单详情*/
         POST_ORDER_DETAIL_JSON,
+
+        /**用户登录确认绑定酒楼*/
+        POST_HOTEL_INFO_JSON,
+
     }
 
     /**
@@ -190,6 +194,7 @@ public class AppApi {
             put(Action.POST_CUSTOMER_LABELS_JSON, formatPhpUrl("Dinnerapp2/Customer/getOnlyLabel"));
             put(Action.POST_CUSTOMER_EDIT_REMARK_JSON, formatPhpUrl("Dinnerapp2/Customer/editRemark"));
             put(Action.POST_ORDER_DETAIL_JSON, formatPhpUrl("Dinnerapp2/Order/getOrderDetail"));
+            put(Action.POST_HOTEL_INFO_JSON, formatPhpUrl("Dinnerapp/login/getHotelInfo"));
 
 
         }
@@ -984,6 +989,14 @@ public class AppApi {
         new AppServiceOk(context,Action.POST_ORDER_DETAIL_JSON,handler,params).post();
     }
 
+    /**用户登录确认绑定酒楼*/
+    public static void getHotelInfo(Context context,String invite_code, String mobile, String verify_code, ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("invite_code", invite_code);
+        params.put("mobile", mobile);
+        params.put("verify_code", verify_code);
+        new AppServiceOk(context,Action.POST_HOTEL_INFO_JSON,handler,params).post();
+    }
     // 超时（网络）异常
     public static final String ERROR_TIMEOUT = "3001";
     // 业务异常

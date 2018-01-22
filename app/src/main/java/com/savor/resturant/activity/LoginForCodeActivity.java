@@ -19,6 +19,7 @@ import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
 import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.CustomerListBean;
+import com.savor.resturant.bean.Hotel;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.OperationFailedItem;
 import com.savor.resturant.core.ApiRequestListener;
@@ -213,7 +214,8 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
                 getverifyCode();
                 break;
             case R.id.login_btn:
-                login();
+                Login();
+               // login();
                 break;
             default:
                 break;
@@ -227,11 +229,11 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
-    private void login(){
+    private void bind(Hotel hotel){
         invitation = invitation_num.getText().toString();
         if (!TextUtils.isEmpty(invitation)) {
             loginDialog = new LoginDialog(context,
-                    "您正在使用"+invitation+"的邀请码\n"+"确认无误，我们将为您的手机号与此酒楼进行绑定！",this);
+                    "您正在使用"+hotel.getHotel_name()+"的邀请码\n"+"确认无误，我们将为您的手机号与此酒楼进行绑定！",this);
             loginDialog.show();
         }
 
@@ -251,7 +253,6 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
                         hotelBean.setInvitation(invitation);
                         hotelBean.setTel(tel);
                         mSession.setHotelBean(hotelBean);
-
                         formatAndSaveCustomers(hotelBean);
 
 
@@ -274,17 +275,15 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
                         finish();
                     }
                 }
-//                UserBean userBean = new UserBean();
-//                userBean.setUserNum(ev_num.getText().toString());
-//                mSession.setUserBean(userBean);
-//
-//                PropertyBean property = mSession.getProperty();
-//                if(property!=null) {
-//                    property.setUploadPro(true);
-//                    mSession.setProperty(property);
-//                }
+                break;
+            case POST_HOTEL_INFO_JSON:
+                if (obj instanceof Hotel) {
+                    Hotel hotel = (Hotel)obj;
+                    if (hotel != null) {
+                        bind(hotel);
+                    }
+                }
 
-                finish();
                 break;
         }
     }
@@ -454,6 +453,17 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
 
     }
 
+
+
+    public void Login() {
+        tel = ev_num.getText().toString();
+        code = ev_code.getText().toString();
+        invitation = invitation_num.getText().toString();
+//        String ptype = mSession.getProperty().getProperty()+"";
+        if (!TextUtils.isEmpty(tel)&&!TextUtils.isEmpty(code) ) {
+            AppApi.getHotelInfo(this,invitation,tel,code,this);
+        }
+    }
 
     @Override
     public void onConfirm() {
