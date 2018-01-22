@@ -198,6 +198,7 @@ public class BookListByDateActivity extends BaseActivity implements View.OnClick
     @Override
     public void onError(AppApi.Action method, Object obj) {
         hideLoadingLayout();
+        super.onError(method,obj);
         switch (method) {
             case POST_ORDER_LIST_JSON:
                 listview.onRefreshComplete();

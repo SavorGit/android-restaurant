@@ -280,6 +280,16 @@ public class BookFragment extends BaseFragment implements View.OnClickListener,A
 
     @Override
     public void onError(AppApi.Action method, Object obj) {
+        if(obj instanceof ResponseErrorMessage) {
+            ResponseErrorMessage message = (ResponseErrorMessage) obj;
+            int code = message.getCode();
+            String msg = message.getMessage();
+            showToast(msg);
+        }else if(obj == AppApi.ERROR_TIMEOUT) {
+            showToast("网络连接超时，请重试");
+        }else if(obj == AppApi.ERROR_NETWORK_FAILED) {
+            showToast("网络连接失败，请重试");
+        }
         switch (method) {
             case POST_ORDER_LIST_JSON:
                 listview.onRefreshComplete();
