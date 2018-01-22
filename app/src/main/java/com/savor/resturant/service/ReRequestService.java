@@ -3,10 +3,11 @@ package com.savor.resturant.service;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 
 import com.common.api.utils.LogUtils;
-import com.common.api.utils.ShowMessage;
 import com.google.gson.Gson;
 import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.OperationFailedItem;
@@ -15,7 +16,6 @@ import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.Session;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -25,6 +25,43 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ReRequestService extends IntentService {
     /**重新发起已失败的请求操作*/
     private static final String ACTION_UPLOAD_FAILE_LIST = "com.savor.resturant.service.action.request";
+    private int requestCount;
+    private int successCount;
+    private int failedCount;
+
+    private static final int MSG_SUCCESS = 0x1;
+    private static final int MSG_FAILED = 0x2;
+    private static final int MSG_RESET = 0x3;
+
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_SUCCESS:
+                    successCount++;
+                    if(successCount+failedCount==requestCount) {
+                        LogUtils.d("savor:opr 当前请求完毕 成功 "+successCount+";失败 "+failedCount);
+                        mHandler.sendEmptyMessage(MSG_RESET);
+                    }
+                    break;
+                case MSG_FAILED:
+                    failedCount++;
+                    if(successCount+failedCount==requestCount && successCount>0) {
+                        LogUtils.d("savor:opr 当前请求完毕 成功 "+successCount+";失败 "+failedCount);
+                        mHandler.sendEmptyMessage(MSG_RESET);
+                    }
+                    break;
+                case MSG_RESET:
+                    mHandler.removeMessages(MSG_SUCCESS);
+                    mHandler.removeMessages(MSG_FAILED);
+                    mHandler.removeMessages(MSG_RESET);
+                    LogUtils.d("savor:opr 清空失败记录");
+                    Session session = Session.get(ReRequestService.this);
+                    session.setOpFailedList(null);
+                    break;
+            }
+        }
+    };
 
     public ReRequestService() {
         super("ReRequestService");
@@ -59,6 +96,9 @@ public class ReRequestService extends IntentService {
     private void handleActionRequest() {
         final Session session = Session.get(this);
         final CopyOnWriteArrayList<OperationFailedItem> opFailedList = session.getOpFailedList();
+        if(opFailedList==null)
+            return;
+        requestCount = opFailedList.size();
         for(final OperationFailedItem item : opFailedList) {
             OperationFailedItem.OpType type = item.getType();
             switch (type) {
@@ -72,17 +112,20 @@ public class ReRequestService extends IntentService {
                         @Override
                         public void onSuccess(AppApi.Action method, Object obj) {
                             LogUtils.d("savor:opr 通讯录重传导入成功\n "+item.getContactFormat());
-                            opFailedList.remove(item);
+                            mHandler.sendEmptyMessage(MSG_SUCCESS);
+//                            opFailedList.remove(item);
                         }
 
                         @Override
                         public void onError(AppApi.Action method, Object obj) {
                             LogUtils.d("savor:opr 通讯录重传导入失败\n "+item.getContactFormat()+"\n；失败原因："+obj);
+                            mHandler.sendEmptyMessage(MSG_FAILED);
                         }
 
                         @Override
                         public void onNetworkFailed(AppApi.Action method) {
                             LogUtils.d("savor:opr 通讯录重传导入失败\n "+item.getContactFormat()+"\n；失败原因：onNetworkFailed");
+                            mHandler.sendEmptyMessage(MSG_FAILED);
                         }
                     });
                     break;
@@ -117,18 +160,21 @@ public class ReRequestService extends IntentService {
                                     @Override
                                     public void onSuccess(AppApi.Action method, Object obj) {
                                         LogUtils.d("savor:opr 通讯录重传添加客户成功\n "+item.getContactFormat());
-                                        opFailedList.remove(item);
-                                        session.setOpFailedList(opFailedList);
+                                        mHandler.sendEmptyMessage(MSG_SUCCESS);
+//                                        opFailedList.remove(item);
+//                                        session.setOpFailedList(opFailedList);
                                     }
 
                                     @Override
                                     public void onError(AppApi.Action method, Object obj) {
                                         LogUtils.d("savor:opr 通讯录重传添加客户失败\n "+item.getContactFormat()+"\n；失败原因："+obj);
+                                        mHandler.sendEmptyMessage(MSG_FAILED);
                                     }
 
                                     @Override
                                     public void onNetworkFailed(AppApi.Action method) {
                                         LogUtils.d("savor:opr 通讯录重传添加客户失败\n "+item.getContactFormat()+"\n；失败原因：onNetworkFailed");
+                                        mHandler.sendEmptyMessage(MSG_FAILED);
                                     }
                                 });
                     }
@@ -160,18 +206,21 @@ public class ReRequestService extends IntentService {
                                 @Override
                                 public void onSuccess(AppApi.Action method, Object obj) {
                                     LogUtils.d("savor:opr 通讯录重传添加修改客户成功\n "+item.getContactFormat());
-                                    opFailedList.remove(item);
-                                    session.setOpFailedList(opFailedList);
+                                    mHandler.sendEmptyMessage(MSG_SUCCESS);
+//                                    opFailedList.remove(item);
+//                                    session.setOpFailedList(opFailedList);
                                 }
 
                                 @Override
                                 public void onError(AppApi.Action method, Object obj) {
                                     LogUtils.d("savor:opr 通讯录重传修改客户失败\n "+item.getContactFormat()+"\n；失败原因："+obj);
+                                    mHandler.sendEmptyMessage(MSG_FAILED);
                                 }
 
                                 @Override
                                 public void onNetworkFailed(AppApi.Action method) {
                                     LogUtils.d("savor:opr 通讯录重传修改客户失败\n "+item.getContactFormat()+"\n；失败原因：onNetworkFailed");
+                                    mHandler.sendEmptyMessage(MSG_FAILED);
                                 }
                             });
                     break;

@@ -335,7 +335,7 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
                         if(isLetter(name)||isNumeric(name)) {
                             stuf = "#";
                         }
-
+                        contactFormat.setAdded(true);
                         contactFormat.setKey(stuf+name+"#"+sb.toString().toLowerCase()+"#"+(TextUtils.isEmpty(contactFormat.getBirthplace())?"":contactFormat.getBirthplace())+"#"+(TextUtils.isEmpty(mobile)?"":mobile));
 
                     }

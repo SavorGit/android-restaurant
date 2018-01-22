@@ -212,30 +212,30 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
 
             @Override
             public void afterTextChanged(Editable s) {
-                String content = mMobileEt.getText().toString();
-                if(!TextUtils.isEmpty(content)&&content.length()==11) {
-                    String regex = "^1[34578]\\d{9}$";
-                    boolean matches = content.matches(regex);
-                    if(matches) {
-                        // 1.从客户列表查找是否存在这个用户如果存在，判断customerid是否为空
-                        existContact = getMobileInCustomerList(content);
-                        String invite_id = mSession.getHotelBean().getInvite_id();
-                        customer_id = "";
-                        if(existContact !=null) {// 已存在
-                            String customerId = existContact.getCustomer_id();
-                            String name = existContact.getName();
-                            mNameEt.setText(name);
-                            if(!TextUtils.isEmpty(customerId)) {
-                                customer_id = customerId;
-                                AppApi.getCustomerLabelList(SpendHistoryAddActivity.this, customer_id,invite_id,mSession.getHotelBean().getTel(),SpendHistoryAddActivity.this);
-                            }
-                        }
-
-                    }else {
-                        mMobileEt.setText("");
-                        ShowMessage.showToast(SpendHistoryAddActivity.this,"请输入正确的手机号");
-                    }
-                }
+//                String content = mMobileEt.getText().toString();
+//                if(!TextUtils.isEmpty(content)&&content.length()==11) {
+//                    String regex = "^1[34578]\\d{9}$";
+//                    boolean matches = content.matches(regex);
+//                    if(matches) {
+//                        // 1.从客户列表查找是否存在这个用户如果存在，判断customerid是否为空
+//                        existContact = getMobileInCustomerList(content);
+//                        String invite_id = mSession.getHotelBean().getInvite_id();
+//                        customer_id = "";
+//                        if(existContact !=null) {// 已存在
+//                            String customerId = existContact.getCustomer_id();
+//                            String name = existContact.getName();
+//                            mNameEt.setText(name);
+//                            if(!TextUtils.isEmpty(customerId)) {
+//                                customer_id = customerId;
+//                                AppApi.getCustomerLabelList(SpendHistoryAddActivity.this, customer_id,invite_id,mSession.getHotelBean().getTel(),SpendHistoryAddActivity.this);
+//                            }
+//                        }
+//
+//                    }else {
+//                        mMobileEt.setText("");
+//                        ShowMessage.showToast(SpendHistoryAddActivity.this,"请输入正确的手机号");
+//                    }
+//                }
             }
         });
     }

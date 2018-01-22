@@ -83,6 +83,7 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
         boolean selected = item.isSelected();
 
         String mobile = item.getMobile();
+        String mobile1 = item.getMobile1();
         String name = item.getName();
         String face_url = item.getFace_url();
 
@@ -90,11 +91,17 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
 
 //        holder.mAdd.setVisibility(isMultiSelectMode?View.GONE:View.VISIBLE);
 
-        if(TextUtils.isEmpty(mobile)) {
+        if(TextUtils.isEmpty(mobile)&&TextUtils.isEmpty(mobile1)) {
             holder.mNum.setVisibility(View.GONE);
         }else {
             holder.mNum.setVisibility(View.VISIBLE);
-            holder.mNum.setText(mobile);
+            if(!TextUtils.isEmpty(mobile)&&!TextUtils.isEmpty(mobile1)) {
+                holder.mNum.setText(mobile+" / "+mobile1);
+            }else if(!TextUtils.isEmpty(mobile)) {
+                holder.mNum.setText(mobile);
+            }else {
+                holder.mNum.setText(mobile1);
+            }
         }
 
         holder.checkBox.setVisibility(isMultiSelectMode?View.VISIBLE:View.GONE);
@@ -111,13 +118,13 @@ public class MyContactAdapter extends ContactBaseAdapter<ContactFormat, MyContac
         holder.checkBox.setTag(position);
 
 
-        // 判断是否已添加
-        List<ContactFormat> customer_list =session.getCustomerList().getCustomerList();
-        if(customer_list!=null&&customer_list.size()>0) {
-            if(customer_list.contains(item)) {
-                item.setAdded(true);
-            }
-        }
+//        // 判断是否已添加
+//        List<ContactFormat> customer_list =session.getCustomerList().getCustomerList();
+//        if(customer_list!=null&&customer_list.size()>0) {
+//            if(customer_list.contains(item)) {
+//                item.setAdded(true);
+//            }
+//        }
 
         boolean added = item.isAdded();
         if(isMultiSelectMode) {

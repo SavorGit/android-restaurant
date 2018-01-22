@@ -209,7 +209,7 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
     @Override
     public void onSuccess(AppApi.Action method, Object obj) {
         switch (method) {
-            case POST_IMPORT_INFO_JSON:
+            case POST_IMPORT_INFO_NEW_JSON:
                 ShowMessage.showToast(this,"导入成功");
                 contactList.get(currentAddPosition).setAdded(true);
                 mAdapter.notifyDataSetChanged();

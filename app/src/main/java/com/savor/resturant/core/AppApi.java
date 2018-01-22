@@ -109,8 +109,8 @@ public class AppApi {
         POST_CUS_HISTORY_JSON,
         /**添加客户*/
         POST_ADD_CUS_JSON,
-        /**导入通讯录*/
-        POST_IMPORT_INFO_JSON,
+//        /**导入通讯录*/
+//        POST_IMPORT_INFO_JSON,
         /**修改客户*/
         POST_EDIT_CUS_JSON,
         /**消费能力列表*/
@@ -174,7 +174,7 @@ public class AppApi {
             put(Action.POST_UPDATE_ORDER_JSON, formatPhpUrl("Dinnerapp2/Order/updateOrder"));
             put(Action.POST_DELETE_ORDER_JSON, formatPhpUrl("Dinnerapp2/Order/deleteOrder"));
             put(Action.POST_UPDATE_ORDER_SERVICE_JSON, formatPhpUrl("Dinnerapp2/Order/upateOrderService"));
-            put(Action.POST_IMPORT_INFO_JSON, formatPhpUrl("Dinnerapp2/Customer/importInfoFirst"));
+//            put(Action.POST_IMPORT_INFO_JSON, formatPhpUrl("Dinnerapp2/Customer/importInfoFirst"));
             put(Action.POST_LIGHT_LABEL_JSON, formatPhpUrl("Dinnerapp2/Label/lightLabel"));
             put(Action.POST_CUS_HISTORY_JSON, formatPhpUrl("Dinnerapp2/Customer/getCustomerHistory"));
             put(Action.POST_ADD_CUS_JSON, formatPhpUrl("Dinnerapp2/Customer/addCustomer"));
