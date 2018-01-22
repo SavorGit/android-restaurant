@@ -20,6 +20,7 @@
         <EditText
             android:id="@+id/et_intpu_label"
             android:padding="10dp"
+            android:maxLength="10"
             android:layout_marginRight="50dp"
             android:hint="请手动添加列表中没有的标签"
             android:background="@color/transparent"
