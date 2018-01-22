@@ -298,6 +298,7 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
                 CustomerListBean customerList= mSession.getCustomerList();
                 if(customerList!=null) {
                     cacheList = customerList.getCustomerList();
+                    mSession.setCusListInMemory(customerList);
                 }
 
         // 检查操作失败历史记录如果之前账号与当前账号不一样 清楚操作失败记录
@@ -307,8 +308,6 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
 
         // 如果本地缓存为空或者与当前登录手机号不一致 需要重新缓存
         if((customer_list!=null&&cacheList == null)||(customerList!=null&&!hotelBean.getTel().equals(customerList.getMobile()))) {
-
-
                     for(ContactFormat contactFormat : customer_list) {
                         String name = contactFormat.getName();
                         StringBuilder sb = new StringBuilder();

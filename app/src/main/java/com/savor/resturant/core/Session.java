@@ -255,6 +255,8 @@ public class Session {
     private CustomerListBean customerList;
     private ConAbilityList conAbilityList;
     private boolean isShowImportDialog;
+    /**缓存到内存中的客户列表*/
+    private CustomerListBean cusList;
 
     private Session(Context context) {
 
@@ -1089,6 +1091,18 @@ public class Session {
     public void setCustomerList(CustomerListBean customerList) {
         this.customerList = customerList;
         setObj(P_CUSTOMER_LIST,customerList);
+    }
+
+    /**
+     * 将客户列表缓存到内存中
+     * @param customerList
+     */
+    public void setCusListInMemory(CustomerListBean customerList) {
+        this.cusList = customerList;
+    }
+
+    public CustomerListBean getCusListInMemory() {
+        return cusList;
     }
 
     public void setConAbilityList(ConAbilityList conAbilityList) {

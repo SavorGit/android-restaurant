@@ -148,17 +148,54 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             getCustomerBaseInfo();
             getConRecTopList();
         }else if(contactFormat!=null){
-            String invite_id = mSession.getHotelBean().getInvite_id();
-            String tel = mSession.getHotelBean().getTel();
-            String name = contactFormat.getName();
             String mobile = contactFormat.getMobile();
-            List<String> mobiles = new ArrayList<>();
-            mobiles.add(mobile);
-            String phone = new Gson().toJson(mobiles);
-            AppApi.addCustomer(this,"","","","","",invite_id,tel,name,""
-            ,"",phone,this);
+            ContactFormat cusInMemory = getCusInMemory(mobile);
+            if(cusInMemory!=null&&!TextUtils.isEmpty(cusInMemory.getCustomer_id())) {
+                contactFormat.setCustomer_id(cusInMemory.getCustomer_id());
+                CustomerListBean customerListBean = mSession.getCustomerList();
+                if(customerListBean!=null) {
+                    List<ContactFormat> customerList = customerListBean.getCustomerList();
+                    if(customerList!=null) {
+                        int indexOf = customerList.indexOf(contactFormat);
+                        if(indexOf!=-1) {
+                            ContactFormat contactFormat = customerList.get(indexOf);
+                            contactFormat.setCustomer_id(cusInMemory.getCustomer_id());
+                            mSession.setCustomerList(customerListBean);
+                        }
+                    }
+                }
+                customer_id = cusInMemory.getCustomer_id();
+                getCustomerBaseInfo();
+                getConRecTopList();
+            }else {
+                String invite_id = mSession.getHotelBean().getInvite_id();
+                String tel = mSession.getHotelBean().getTel();
+                String name = contactFormat.getName();
+                List<String> mobiles = new ArrayList<>();
+                mobiles.add(mobile);
+                String phone = new Gson().toJson(mobiles);
+                AppApi.addCustomer(this,"","","","","",invite_id,tel,name,""
+                        ,"",phone,this);
+            }
+
 
         }
+    }
+
+    private ContactFormat getCusInMemory(String mobile) {
+        CustomerListBean cusListInMemory = mSession.getCusListInMemory();
+        if(cusListInMemory!=null) {
+            List<ContactFormat> customerList = cusListInMemory.getCustomerList();
+            if(customerList!=null) {
+                for(ContactFormat contactFormat :customerList) {
+                    if(mobile.equals(contactFormat.getMobile1())||mobile.equals(contactFormat.getMobile())) {
+                        return contactFormat;
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
     private void getDate() {
