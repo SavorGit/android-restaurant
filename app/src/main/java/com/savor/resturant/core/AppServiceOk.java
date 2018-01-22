@@ -271,11 +271,7 @@ public class AppServiceOk {
             @Override
             public void onError(Call call, Exception e) {
                 // TODO Auto-generated method stub
-                if(e.getCause().equals(SocketTimeoutException.class) ){
-                    handler.onError(action, AppApi.ERROR_TIMEOUT);
-                }else {
-                    handler.onError(action, AppApi.ERROR_NETWORK_FAILED);
-                }
+                handler.onError(action, AppApi.ERROR_NETWORK_FAILED);
             }
 
             @Override
