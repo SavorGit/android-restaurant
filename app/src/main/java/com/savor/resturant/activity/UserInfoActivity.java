@@ -48,6 +48,7 @@ import com.savor.resturant.utils.ConstantValues;
 import com.savor.resturant.utils.GlideCircleTransform;
 import com.savor.resturant.utils.OSSClientUtil;
 import com.savor.resturant.widget.ChoosePicDialog;
+import com.savor.resturant.widget.LoadingDialog;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -129,6 +130,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     private List<ConRecBean> TopList = new ArrayList<ConRecBean>();
     private ContactFormat contactFormat;
     private ChineseComparator pinyinComparator;
+    private LoadingDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -361,6 +363,16 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 }
                 break;
             case POST_ADD_SIGNLE_CONSUME_RECORD_JSON:
+                hideLoadingLayout();
+                ConRecBean conRecBean = new ConRecBean();
+                conRecBean.setRecipt(ticketOssUrl);
+                imageList.add(conRecBean);
+                if (imageList != null && imageList.size() > 0) {
+                    la_a.setVisibility(View.GONE);
+                } else {
+                    la_a.setVisibility(View.VISIBLE);
+                }
+                ticketAdapter.notifyDataSetChanged();
                 // finish();
                 break;
 
@@ -398,6 +410,9 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 } else {
                     la_a.setVisibility(View.VISIBLE);
                 }
+            case POST_ADD_SIGNLE_CONSUME_RECORD_JSON:
+                hideLoadingLayout();
+                break;
             default:
                 super.onError(method, obj);
                 break;
@@ -627,6 +642,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         String hotel_id = mSession.getHotelBean().getHotel_id();
         final String objectKey = "log/resource/restaurant/mobile/userlogo/" + hotel_id + "/" + file.getName();
         final OSSClient ossClient = OSSClientUtil.getOSSClient(this);
+        showLoadingLayout();
         // 构造上传请求
         PutObjectRequest put = new PutObjectRequest(ConstantValues.BUCKET_NAME, objectKey, currentImagePath);
         ossClient.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
@@ -679,15 +695,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                         }
                     }
                 });
-                ConRecBean conRecBean = new ConRecBean();
-                conRecBean.setRecipt(ticketOssUrl);
-                imageList.add(conRecBean);
-                if (imageList != null && imageList.size() > 0) {
-                    la_a.setVisibility(View.GONE);
-                } else {
-                    la_a.setVisibility(View.VISIBLE);
-                }
-                ticketAdapter.notifyDataSetChanged();
+
             }
 
             @Override
@@ -696,6 +704,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        hideLoadingLayout();
                         ShowMessage.showToast(UserInfoActivity.this, "小票上传失败");
                     }
                 });
@@ -757,6 +766,17 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         }
     };
 
+    @Override
+    public void showLoadingLayout() {
+        if(loadingDialog==null)
+            loadingDialog = new LoadingDialog(this);
+        loadingDialog.show();
+    }
 
+    @Override
+    public void hideLoadingLayout() {
+        if (loadingDialog!=null&&loadingDialog.isShowing())
+            loadingDialog.dismiss();
+    }
 }
 
