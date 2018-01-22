@@ -8,8 +8,7 @@ import java.util.List;
  * Created by bushlee on 2017/12/26.
  */
 
-public class Customer implements Serializable {
-    private static final long serialVersionUID = -1;
+public class    Customer implements Serializable {
     private String name;
     private String mobile;
     private String mobile1;
@@ -21,7 +20,77 @@ public class Customer implements Serializable {
     private String consume_ability;
     private String consume_ability_id;
     private String remark;
+    private String bill_info;
     private List<CustomerLabel> label = new ArrayList<CustomerLabel>();
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "name='" + name + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", mobile1='" + mobile1 + '\'' +
+                ", customer_id='" + customer_id + '\'' +
+                ", sex='" + sex + '\'' +
+                ", birthday='" + birthday + '\'' +
+                ", birthplace='" + birthplace + '\'' +
+                ", face_url='" + face_url + '\'' +
+                ", consume_ability='" + consume_ability + '\'' +
+                ", consume_ability_id='" + consume_ability_id + '\'' +
+                ", remark='" + remark + '\'' +
+                ", bill_info='" + bill_info + '\'' +
+                ", label=" + label +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Customer customer = (Customer) o;
+
+        if (name != null ? !name.equals(customer.name) : customer.name != null) return false;
+        if (mobile != null ? !mobile.equals(customer.mobile) : customer.mobile != null)
+            return false;
+        if (mobile1 != null ? !mobile1.equals(customer.mobile1) : customer.mobile1 != null)
+            return false;
+        if (customer_id != null ? !customer_id.equals(customer.customer_id) : customer.customer_id != null)
+            return false;
+        if (sex != null ? !sex.equals(customer.sex) : customer.sex != null) return false;
+        if (birthday != null ? !birthday.equals(customer.birthday) : customer.birthday != null)
+            return false;
+        if (birthplace != null ? !birthplace.equals(customer.birthplace) : customer.birthplace != null)
+            return false;
+        if (face_url != null ? !face_url.equals(customer.face_url) : customer.face_url != null)
+            return false;
+        if (consume_ability != null ? !consume_ability.equals(customer.consume_ability) : customer.consume_ability != null)
+            return false;
+        if (consume_ability_id != null ? !consume_ability_id.equals(customer.consume_ability_id) : customer.consume_ability_id != null)
+            return false;
+        if (remark != null ? !remark.equals(customer.remark) : customer.remark != null)
+            return false;
+        if (bill_info != null ? !bill_info.equals(customer.bill_info) : customer.bill_info != null)
+            return false;
+        return label != null ? label.equals(customer.label) : customer.label == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (mobile != null ? mobile.hashCode() : 0);
+        result = 31 * result + (mobile1 != null ? mobile1.hashCode() : 0);
+        result = 31 * result + (customer_id != null ? customer_id.hashCode() : 0);
+        result = 31 * result + (sex != null ? sex.hashCode() : 0);
+        result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
+        result = 31 * result + (birthplace != null ? birthplace.hashCode() : 0);
+        result = 31 * result + (face_url != null ? face_url.hashCode() : 0);
+        result = 31 * result + (consume_ability != null ? consume_ability.hashCode() : 0);
+        result = 31 * result + (consume_ability_id != null ? consume_ability_id.hashCode() : 0);
+        result = 31 * result + (remark != null ? remark.hashCode() : 0);
+        result = 31 * result + (bill_info != null ? bill_info.hashCode() : 0);
+        result = 31 * result + (label != null ? label.hashCode() : 0);
+        return result;
+    }
 
     public String getName() {
         return name;
@@ -111,29 +180,19 @@ public class Customer implements Serializable {
         this.remark = remark;
     }
 
+    public String getBill_info() {
+        return bill_info;
+    }
+
+    public void setBill_info(String bill_info) {
+        this.bill_info = bill_info;
+    }
+
     public List<CustomerLabel> getLabel() {
         return label;
     }
 
     public void setLabel(List<CustomerLabel> label) {
         this.label = label;
-    }
-
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "name='" + name + '\'' +
-                ", mobile='" + mobile + '\'' +
-                ", mobile1='" + mobile1 + '\'' +
-                ", customer_id='" + customer_id + '\'' +
-                ", sex='" + sex + '\'' +
-                ", birthday='" + birthday + '\'' +
-                ", birthplace='" + birthplace + '\'' +
-                ", face_url='" + face_url + '\'' +
-                ", consume_ability='" + consume_ability + '\'' +
-                ", consume_ability_id='" + consume_ability_id + '\'' +
-                ", remark='" + remark + '\'' +
-                ", label=" + label +
-                '}';
     }
 }

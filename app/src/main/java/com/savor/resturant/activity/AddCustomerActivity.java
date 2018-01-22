@@ -187,6 +187,11 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                     mMobileEt.setText(mobile);
                 }
 
+                String bill_info = customerBean.getList().getBill_info();
+                if(!TextUtils.isEmpty(bill_info)) {
+                    mTicketInfoEt.setText(bill_info);
+                }
+
                 break;
             case TYPE_EDIT:
                 mTitleTv.setText("修改客户");
