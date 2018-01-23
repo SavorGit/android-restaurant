@@ -179,6 +179,9 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
                     ticket_url = "";
                     OrderServiceType = "1";
                     upateOrderService();
+                }else {
+                    intent = new Intent(mContext, WelComeSetTextActivity.class);
+                    mContext.startActivity(intent);
                 }
 
                 break;
@@ -188,6 +191,10 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
                     ticket_url = "";
                     OrderServiceType = "2";
                     upateOrderService();
+                }else {
+                    intent = new Intent(mContext, RecommendFoodActivity.class);
+                    intent.putExtra("type", RecommendFoodActivity.OperationType.TYPE_RECOMMEND_FOODS);
+                    mContext.startActivity(intent);
                 }
 
                 break;
@@ -377,6 +384,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
                 if ("1".equals(OrderServiceType)) {
                     intent = new Intent(mContext, WelComeSetTextActivity.class);
                     mContext.startActivity(intent);
+                    is_welcome = "1";
                     wel_type.setBackgroundResource(R.drawable.corner_remote_book_btn);
                     wel_type.setTextColor(context.getResources().getColor(R.color.color_14b2fc));
                     wel_type.setClickable(true);
@@ -385,6 +393,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
                     intent = new Intent(mContext, RecommendFoodActivity.class);
                     intent.putExtra("type", RecommendFoodActivity.OperationType.TYPE_RECOMMEND_FOODS);
                     mContext.startActivity(intent);
+                    is_recfood = "1";
                     tjc_type.setBackgroundResource(R.drawable.corner_remote_book_btn);
                     tjc_type.setTextColor(context.getResources().getColor(R.color.color_14b2fc));
                     tjc_type.setClickable(true);
