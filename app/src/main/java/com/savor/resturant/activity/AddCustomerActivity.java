@@ -112,6 +112,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     private boolean isSaveEditFailed;
     private String name;
     private String mobile;
+    private String customer_id;
 
     public enum CustomerOpType implements Serializable {
         TYPE_ADD,
@@ -135,7 +136,9 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         customerBean = (CustomerBean) getIntent().getSerializableExtra("customer");
         name = getIntent().getStringExtra("name");
         mobile = getIntent().getStringExtra("mobile");
-
+        if(customerBean!=null&&customerBean.getList()!=null&&!TextUtils.isEmpty(customerBean.getList().getCustomer_id())) {
+            customer_id = customerBean.getList().getCustomer_id();
+        }
     }
 
     /**
@@ -222,8 +225,10 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         mMobileEt.setText(usermobile);
 
         String usermobile1 = list.getMobile1();
-        mSeconMobileLayout.setVisibility(View.VISIBLE);
-        mAddBtn.setVisibility(View.GONE);
+        if(!TextUtils.isEmpty(usermobile)&&!TextUtils.isEmpty(usermobile1)) {
+            mSeconMobileLayout.setVisibility(View.VISIBLE);
+            mAddBtn.setVisibility(View.GONE);
+        }
         if(!TextUtils.isEmpty(usermobile1)) {
             mSecondMobileEt.setText(usermobile1);
         }
@@ -688,6 +693,64 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
             case POST_EDIT_CUS_JSON:
                 finish();
                 ShowMessage.showToast(this,"修改成功");
+                CustomerListBean customerListBean = mSession.getCustomerList();
+                List<ContactFormat> cusList = customerListBean.getCustomerList();
+                if(TextUtils.isEmpty(customer_id))
+                    return;
+
+                for(ContactFormat contactFormat:cusList) {
+                    if(customer_id.equals(contactFormat.getCustomer_id())) {
+                        String name = mNameEt.getText().toString();
+                        if(!TextUtils.isEmpty(name)) {
+                            contactFormat.setName(name);
+                        }
+
+                        String mobile = mMobileEt.getText().toString();
+                        if(!TextUtils.isEmpty(mobile)) {
+                            contactFormat.setMobile(mobile);
+                        }
+                        String mobile1 = mSecondMobileEt.getText().toString();
+                        if(!TextUtils.isEmpty(mobile1)) {
+                            contactFormat.setMobile1(mobile1);
+                        }
+
+                        if(!TextUtils.isEmpty(currentImagePath)) {
+                            contactFormat.setFace_url(currentImagePath);
+                        }
+
+                        int checkedRadioButtonId = mSexRG.getCheckedRadioButtonId();
+                        switch (checkedRadioButtonId) {
+                            case R.id.rb_man:
+                                contactFormat.setSex(1);
+                                break;
+                            case R.id.rb_woman:
+                                contactFormat.setSex(2);
+                                break;
+                        }
+                        String ability = mAbilityTv.getText().toString();
+                        if(!TextUtils.isEmpty(ability)) {
+                            contactFormat.setConsume_ability(ability);
+                        }
+
+                        String birthday = mBirthDayTv.getText().toString();
+                        if(!TextUtils.isEmpty(birthday)) {
+                            contactFormat.setBirthday(birthday);
+                        }
+
+                        String place = mBirthPlaceEt.getText().toString();
+                        if(!TextUtils.isEmpty(place)) {
+                            contactFormat.setBirthplace(place);
+                        }
+
+                        String ticketInfo = mTicketInfoEt.getText().toString();
+                        if(!TextUtils.isEmpty(ticketInfo)) {
+                            contactFormat.setBill_info(ticketInfo);
+                        }
+                        break;
+                    }
+                }
+                customerListBean.setCustomerList(cusList);
+                mSession.setCustomerList(customerListBean);
                 break;
             case POST_ADD_CUS_JSON:
                 hideLoadingLayout();
@@ -695,7 +758,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                     AddCustomerResponse response = (AddCustomerResponse) obj;
                     AddCustomerResponse.ListBean list = response.getList();
                     if(list!=null) {
-                        String customer_id = list.getCustomer_id();
+                        customer_id = list.getCustomer_id();
                         currentAddCustomer.setCustomer_id(customer_id);
                         CustomerListBean customerList = mSession.getCustomerList();
                         mSession.setCustomerList(customerList);
