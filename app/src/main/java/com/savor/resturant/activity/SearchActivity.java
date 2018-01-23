@@ -18,11 +18,16 @@ import com.google.gson.Gson;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.contact.MyContactAdapter;
 import com.savor.resturant.bean.ContactFormat;
+import com.savor.resturant.bean.CustomerListBean;
+import com.savor.resturant.bean.ImportInfoResponse;
+import com.savor.resturant.bean.OperationFailedItem;
 import com.savor.resturant.core.AppApi;
+import com.savor.resturant.core.ResponseErrorMessage;
 import com.savor.resturant.utils.ChineseComparator;
 import com.savor.resturant.widget.contact.DividerDecoration;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.savor.resturant.activity.ContactCustomerListActivity.RESULT_CODE_SELECT;
@@ -160,7 +165,48 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
         String importInfo = new Gson().toJson(contactFormats);
         String invitation = mSession.getHotelBean().getInvite_id();
         String tel = mSession.getHotelBean().getTel();
+
+        List<ContactFormat> customerList = mSession.getCustomerList().getCustomerList();
+        if(customerList == null) {
+            customerList = new ArrayList<>();
+        }
+
+        String mobile1 = contactFormat.getMobile1();
+        String mobile = contactFormat.getMobile();
+        if(TextUtils.isEmpty(mobile)&&TextUtils.isEmpty(mobile1)) {
+            ShowMessage.showToast(this,"该客户没有手机号，请手动添加");
+            return;
+        }
+
+        for(ContactFormat cacheContact : customerList){
+
+            String cacheMobile = cacheContact.getMobile();
+            String cacheMobile1 = cacheContact.getMobile1();
+            String name = cacheContact.getName();
+            if(TextUtils.isEmpty(mobile1)) {
+                if(mobile.equals(cacheMobile)||mobile.equals(cacheMobile1)) {
+                    ShowMessage.showToast(this,"与"+name+"的手机号码重复，添加失败");
+                    return;
+                }
+            }else {
+                if(mobile.equals(cacheMobile)||mobile.equals(cacheMobile1)||mobile1.equals(cacheMobile)||mobile1.equals(cacheMobile1)) {
+                    ShowMessage.showToast(this,"与"+name+"的手机号码重复，添加失败");
+                    return;
+                }
+            }
+        }
+
+        contactFormat.setAdded(true);
+        customerList.add(contactFormat);
+        Collections.sort(customerList,pinyinComparator);
+        CustomerListBean cacheListBean = mSession.getCustomerList();
+        cacheListBean.setCustomerList(customerList);
+        mSession.setCustomerList(cacheListBean);
+        contactFormat.setAdded(true);
+        mAdapter.notifyDataSetChanged();
+
         AppApi.importInfoNew(this,importInfo,invitation,tel,this);
+
     }
 
     @Override
@@ -213,7 +259,62 @@ public class SearchActivity extends BaseActivity implements MyContactAdapter.OnA
             case POST_IMPORT_INFO_NEW_JSON:
                 ShowMessage.showToast(this,"导入成功");
                 contactList.get(currentAddPosition).setAdded(true);
+                if(obj instanceof ImportInfoResponse) {
+                    ImportInfoResponse importInfoResponse = (ImportInfoResponse) obj;
+                    List<ContactFormat> customer_list = importInfoResponse.getCustomer_list();
+                    List<ContactFormat> cacheList = mSession.getCustomerList().getCustomerList();
+                    if(customer_list!=null&&customer_list.size()>0) {
+                        if(customer_list!=null) {
+                            for(ContactFormat contactFormat:customer_list) {
+                                int i = cacheList.indexOf(contactFormat);
+                                if(i!=-1) {
+                                    ContactFormat cacheCustomer = cacheList.get(i);
+                                    cacheCustomer.setCustomer_id(contactFormat.getCustomer_id());
+                                    cacheCustomer.setAdded(true);
+                                }else {
+                                    contactFormat.setAdded(true);
+                                    cacheList.add(contactFormat);
+                                }
+
+                                List<ContactFormat> data = mAdapter.getData();
+                                int indexOf = data.indexOf(contactFormat);
+                                if(indexOf!=-1) {
+                                    data.get(indexOf).setAdded(true);
+                                }
+                            }
+
+
+                            CustomerListBean cacheListBean = mSession.getCustomerList();
+                            Collections.sort(cacheList, pinyinComparator);
+                            cacheListBean.setCustomerList(cacheList);
+                            mSession.setCustomerList(cacheListBean);
+                        }
+                    }
+                }
+                hideLoadingLayout();
                 mAdapter.notifyDataSetChanged();
+                break;
+        }
+    }
+
+    @Override
+    public void onError(AppApi.Action method, Object obj) {
+//        super.onError(method, obj);
+        switch (method) {
+            case POST_IMPORT_INFO_NEW_JSON:
+                hideLoadingLayout();
+                if(obj instanceof ResponseErrorMessage) {
+                    ResponseErrorMessage message = (ResponseErrorMessage) obj;
+                    String msg = message.getMessage();
+                    int code = message.getCode();
+                    if(code == 60016) {
+                        ShowMessage.showToast(this,msg);
+                    }else {
+
+                    }
+                }else  {
+
+                }
                 break;
         }
     }

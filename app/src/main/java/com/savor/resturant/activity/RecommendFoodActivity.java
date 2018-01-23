@@ -68,6 +68,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
     private int erroCount;
     private ConstraintLayout mEmptyLayout;
     private TextView mEmptyHintTv;
+    private String erroMsg1;
 
 
     /**
@@ -605,24 +606,6 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
 
         switch (method) {
             case GET_RECOMMEND_PRO_JSON:
-                erroCount++;
-                if(erroCount<3)
-                    return;
-
-                List<RecommendFoodAdvert> selectedList = getSelectedList(mRecommendAdapter.getData());
-                if(method == AppApi.Action.GET_RECOMMEND_PRO_JSON) {
-                    String time;
-                    if(currentProType == TYPE_PRO_MULTI) {
-                        time = "30";
-                    }else {
-                        time = 60*2+"";
-                    }
-                    setLog(selectedList.size()+"","0",time+"","3");
-                }else if(method == AppApi.Action.GET_ADVERT_PRO_JSON) {
-                    setLog(selectedList.size()+"","0","","3");
-                }
-
-                hideLoadingLayout();
                 if(obj instanceof ResponseErrorMessage) {
                     ResponseErrorMessage message = (ResponseErrorMessage) obj;
                     int code = message.getCode();
@@ -646,16 +629,40 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
                                     }
                                 }
                             }
-                            String hint = "您选择的\""+sb.toString()+"\"在电视中不存在，无法进行投屏";
-                            showToast(hint);
+                            erroMsg1 = "您选择的\""+sb.toString()+"\"在电视中不存在，无法进行投屏";
                         }
                     }else{
-                        showToast(msg);
+                        erroMsg1 = msg;
                     }
                 }else if(obj == AppApi.ERROR_TIMEOUT) {
-                    showToast("网络超时，请重试");
+//                    showToast("网络超时，请重试");
                 }else if(obj == AppApi.ERROR_NETWORK_FAILED) {
-                    showToast("网络已断开，请检查");
+//                    showToast("网络已断开，请检查");
+                }
+                erroCount++;
+                if(erroCount<3)
+                    return;
+
+                List<RecommendFoodAdvert> selectedList = getSelectedList(mRecommendAdapter.getData());
+                if(method == AppApi.Action.GET_RECOMMEND_PRO_JSON) {
+                    String time;
+                    if(currentProType == TYPE_PRO_MULTI) {
+                        time = "30";
+                    }else {
+                        time = 60*2+"";
+                    }
+                    setLog(selectedList.size()+"","0",time+"","3");
+                }else if(method == AppApi.Action.GET_ADVERT_PRO_JSON) {
+                    setLog(selectedList.size()+"","0","","3");
+                }
+
+                hideLoadingLayout();
+
+
+                if(!TextUtils.isEmpty(erroMsg1)) {
+                    showToast(erroMsg1);
+                }else {
+                    showToast("网络超时，请重试");
                 }
                 break;
             case GET_ADVERT_PRO_JSON:
