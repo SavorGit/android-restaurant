@@ -208,7 +208,10 @@
             android:name=".activity.ContactCustomerListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".activity.SearchActivity" />
+        <activity android:name=".activity.SearchActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            />
         <activity
             android:name=".activity.AddCustomerActivity"
             android:screenOrientation="portrait"
