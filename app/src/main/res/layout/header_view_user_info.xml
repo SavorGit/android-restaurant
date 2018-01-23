@@ -101,6 +101,21 @@
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/invoice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/birthplace"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="1dp"
+            android:layout_toRightOf="@id/iv_header"
+            android:gravity="center"
+            android:padding="1.5sp"
+            android:text="发票信息："
+            android:textColor="@color/color_label"
+            android:textSize="14sp" />
+
+
+        <TextView
             android:id="@+id/tv_edit_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
