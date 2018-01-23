@@ -222,8 +222,9 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         mMobileEt.setText(usermobile);
 
         String usermobile1 = list.getMobile1();
+        mSeconMobileLayout.setVisibility(View.VISIBLE);
+        mAddBtn.setVisibility(View.GONE);
         if(!TextUtils.isEmpty(usermobile1)) {
-            mSeconMobileLayout.setVisibility(View.VISIBLE);
             mSecondMobileEt.setText(usermobile1);
         }
 
@@ -278,15 +279,15 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void afterTextChanged(Editable s) {
-                String mobile = mMobileEt.getText().toString();
-                String regex = "^1[34578]\\d{9}$";
-                if(!TextUtils.isEmpty(mobile)&&mobile.length()==11) {
-                    boolean matches = mobile.matches(regex);
-                    if(!matches) {
-                        mMobileEt.setText("");
-                        ShowMessage.showToast(AddCustomerActivity.this,"请输入正确的手机号");
-                    }
-                }
+//                String mobile = mMobileEt.getText().toString();
+//                String regex = "^1[34578]\\d{9}$";
+//                if(!TextUtils.isEmpty(mobile)&&mobile.length()==11) {
+//                    boolean matches = mobile.matches(regex);
+//                    if(!matches) {
+//                        mMobileEt.setText("");
+//                        ShowMessage.showToast(AddCustomerActivity.this,"请输入正确的手机号");
+//                    }
+//                }
 
             }
         });
@@ -304,16 +305,16 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void afterTextChanged(Editable s) {
-                String secondMobile = mSecondMobileEt.getText().toString();
-                if(!TextUtils.isEmpty(secondMobile)&&secondMobile.length() == 11) {
-                    String regex = "^1[34578]\\d{9}$";
-                    boolean matches = secondMobile.matches(regex);
-                    if(!matches) {
-                        mSecondMobileEt.setText("");
-                        ShowMessage.showToast(AddCustomerActivity.this,"请输入正确的手机号");
-                        return;
-                    }
-                }
+//                String secondMobile = mSecondMobileEt.getText().toString();
+//                if(!TextUtils.isEmpty(secondMobile)&&secondMobile.length() == 11) {
+//                    String regex = "^1[34578]\\d{9}$";
+//                    boolean matches = secondMobile.matches(regex);
+//                    if(!matches) {
+//                        mSecondMobileEt.setText("");
+//                        ShowMessage.showToast(AddCustomerActivity.this,"请输入正确的手机号");
+//                        return;
+//                    }
+//                }
             }
         });
     }

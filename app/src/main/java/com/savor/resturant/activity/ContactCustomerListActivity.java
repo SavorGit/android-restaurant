@@ -123,6 +123,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         }
 
         initData();
+        refreshSelectStatus();
     }
 
     public void initData() {
@@ -332,15 +333,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         mSelectAllCb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean checked = mSelectAllCb.isChecked();
-                if(checked) {
-                    for(ContactFormat contactFormat:contactFormats) {
-                        contactFormat.setSelected(true);
-                    }
-                }else {
-                    resetList();
-                }
-                adapter.notifyDataSetChanged();
+                refreshSelectStatus();
             }
         });
 
@@ -370,6 +363,18 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
 
 
 
+    }
+
+    private void refreshSelectStatus() {
+        boolean checked = mSelectAllCb.isChecked();
+        if(checked) {
+            for(ContactFormat contactFormat:contactFormats) {
+                contactFormat.setSelected(true);
+            }
+        }else {
+            resetList();
+        }
+        adapter.notifyDataSetChanged();
     }
 
     public void hideSoftKeybord(Activity activity) {
