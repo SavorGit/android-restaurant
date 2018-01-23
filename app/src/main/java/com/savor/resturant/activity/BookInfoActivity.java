@@ -173,15 +173,21 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.wel_type:
             case R.id.wel_lab:
-                ticket_url = "";
-                OrderServiceType = "1";
-                upateOrderService();
+                if (!"1".equals(is_welcome)) {
+                    ticket_url = "";
+                    OrderServiceType = "1";
+                    upateOrderService();
+                }
+
                 break;
             case R.id.tjc_type:
             case R.id.tjc_lab:
-                ticket_url = "";
-                OrderServiceType = "2";
-                upateOrderService();
+                if (!"1".equals(is_recfood)) {
+                    ticket_url = "";
+                    OrderServiceType = "2";
+                    upateOrderService();
+                }
+
                 break;
             case R.id.xp_type:
             case R.id.xp_lab:
