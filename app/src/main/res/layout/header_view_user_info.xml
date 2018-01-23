@@ -5,10 +5,28 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/top_la"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:background="#ece6de"
+        android:layout_height="46dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/app_red_color"
+            android:text="完善客户资料，方便未TA更好的服务"/>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/info_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true">
+        android:layout_below="@id/top_la">
 
         <ImageView
             android:id="@+id/iv_header"
@@ -128,7 +146,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp"
-            android:text="编辑"
+            android:text="去完善"
             android:textColor="@color/colorPrimaryDark" />
     </RelativeLayout>
 

@@ -445,7 +445,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 if (!TextUtils.isEmpty(usermobileStr)) {
                     tel.setText("电话：" + usermobileStr + usermobileStr2);
                 } else {
-                    tel.setText("电话：未填写");
+                    tel.setVisibility(View.GONE);
                 }
 
                 sexStr = customer.getSex();
@@ -466,14 +466,14 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 if (!TextUtils.isEmpty(birthdayStr)) {
                     birthday.setText("生日：" + birthdayStr);
                 } else {
-                    birthday.setText("生日：未填写");
+                    birthday.setVisibility(View.GONE);
                 }
 
                 birthplaceStr = customer.getBirthplace();
                 if (!TextUtils.isEmpty(birthplaceStr)) {
                     birthplace.setText("籍贯：" + birthplaceStr);
                 } else {
-                    birthplace.setText("籍贯：未填写");
+                    birthplace.setVisibility(View.GONE);
                 }
                 face_urlStr = customer.getFace_url();
                 if (!TextUtils.isEmpty(face_urlStr)) {
@@ -486,7 +486,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 if (!TextUtils.isEmpty(consume_abilityStr)) {
                     consume_ability.setText("消费能力：" + consume_abilityStr);
                 } else {
-                    consume_ability.setText("消费能力：未填写");
+                    consume_ability.setVisibility(View.GONE);
                 }
                 remarkStr = customer.getRemark();
                 if (!TextUtils.isEmpty(remarkStr)) {
@@ -499,7 +499,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 if (!TextUtils.isEmpty(bill_info)) {
                     invoice.setText("发票信息："+bill_info);
                 }else {
-                    invoice.setText("发票信息：未提供");
+                    invoice.setVisibility(View.GONE);
                 }
 
                 List<CustomerLabel> labelListl = customer.getLabel();
