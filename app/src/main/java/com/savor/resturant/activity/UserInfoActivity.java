@@ -443,6 +443,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 }
 
                 if (!TextUtils.isEmpty(usermobileStr)) {
+                    tel.setVisibility(View.VISIBLE);
                     tel.setText("电话：" + usermobileStr + usermobileStr2);
                 } else {
                     tel.setVisibility(View.GONE);
@@ -464,6 +465,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
                 birthdayStr = customer.getBirthday();
                 if (!TextUtils.isEmpty(birthdayStr)) {
+                    birthday.setVisibility(View.VISIBLE);
                     birthday.setText("生日：" + birthdayStr);
                 } else {
                     birthday.setVisibility(View.GONE);
@@ -471,6 +473,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
                 birthplaceStr = customer.getBirthplace();
                 if (!TextUtils.isEmpty(birthplaceStr)) {
+                    birthplace.setVisibility(View.VISIBLE);
                     birthplace.setText("籍贯：" + birthplaceStr);
                 } else {
                     birthplace.setVisibility(View.GONE);
@@ -484,6 +487,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 }
                 consume_abilityStr = customer.getConsume_ability();
                 if (!TextUtils.isEmpty(consume_abilityStr)) {
+                    consume_ability.setVisibility(View.VISIBLE);
                     consume_ability.setText("消费能力：" + consume_abilityStr);
                 } else {
                     consume_ability.setVisibility(View.GONE);
@@ -497,6 +501,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
                 String bill_info = customer.getBill_info();
                 if (!TextUtils.isEmpty(bill_info)) {
+                    invoice.setVisibility(View.VISIBLE);
                     invoice.setText("发票信息："+bill_info);
                 }else {
                     invoice.setVisibility(View.GONE);
@@ -533,7 +538,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 ticketAdapter.notifyDataSetChanged();
 
                 if (list != null && list.size() < 10) {
-                    refreshListView.onLoadComplete(false, true);
+                    refreshListView.onLoadComplete(false, false);
                 } else {
                     refreshListView.onLoadComplete(true, false);
                 }
@@ -544,7 +549,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 } else {
                     la_a.setVisibility(View.VISIBLE);
                 }
-                refreshListView.onLoadComplete(false, true);
+                refreshListView.onLoadComplete(false, false);
             }
             max_id = recTopList.getMax_id();
             min_id = recTopList.getMin_id();
@@ -554,7 +559,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             } else {
                 la_a.setVisibility(View.VISIBLE);
             }
-            refreshListView.onLoadComplete(false, true);
+            refreshListView.onLoadComplete(false, false);
         }
 
     }

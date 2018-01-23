@@ -106,7 +106,8 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
         getViews();
         setViews();
         setListeners();
-        init();
+       // init();
+        getOrderDetail();
     }
 
 
@@ -114,6 +115,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
         Intent intent = getIntent();
         if (intent != null) {
             orderListBean = (OrderListBean)intent.getSerializableExtra("orderListBean");
+            customer_id = orderListBean.getCustomer_id();
 
         }
     }
@@ -173,15 +175,28 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.wel_type:
             case R.id.wel_lab:
-                ticket_url = "";
-                OrderServiceType = "1";
-                upateOrderService();
+                if (!"1".equals(is_welcome)) {
+                    ticket_url = "";
+                    OrderServiceType = "1";
+                    upateOrderService();
+                }else {
+                    intent = new Intent(mContext, WelComeSetTextActivity.class);
+                    mContext.startActivity(intent);
+                }
+
                 break;
             case R.id.tjc_type:
             case R.id.tjc_lab:
-                ticket_url = "";
-                OrderServiceType = "2";
-                upateOrderService();
+                if (!"1".equals(is_recfood)) {
+                    ticket_url = "";
+                    OrderServiceType = "2";
+                    upateOrderService();
+                }else {
+                    intent = new Intent(mContext, RecommendFoodActivity.class);
+                    intent.putExtra("type", RecommendFoodActivity.OperationType.TYPE_RECOMMEND_FOODS);
+                    mContext.startActivity(intent);
+                }
+
                 break;
             case R.id.xp_type:
             case R.id.xp_lab:
@@ -369,6 +384,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
                 if ("1".equals(OrderServiceType)) {
                     intent = new Intent(mContext, WelComeSetTextActivity.class);
                     mContext.startActivity(intent);
+                    is_welcome = "1";
                     wel_type.setBackgroundResource(R.drawable.corner_remote_book_btn);
                     wel_type.setTextColor(context.getResources().getColor(R.color.color_14b2fc));
                     wel_type.setClickable(true);
@@ -377,6 +393,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
                     intent = new Intent(mContext, RecommendFoodActivity.class);
                     intent.putExtra("type", RecommendFoodActivity.OperationType.TYPE_RECOMMEND_FOODS);
                     mContext.startActivity(intent);
+                    is_recfood = "1";
                     tjc_type.setBackgroundResource(R.drawable.corner_remote_book_btn);
                     tjc_type.setTextColor(context.getResources().getColor(R.color.color_14b2fc));
                     tjc_type.setClickable(true);
