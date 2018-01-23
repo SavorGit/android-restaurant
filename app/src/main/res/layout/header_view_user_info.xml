@@ -17,7 +17,7 @@
             android:gravity="center"
             android:textSize="15sp"
             android:textColor="@color/app_red_color"
-            android:text="完善客户资料，方便未TA更好的服务"/>
+            android:text="完善客户资料，方便为TA更好的服务"/>
 
 
     </RelativeLayout>
