@@ -90,6 +90,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     private TextView edit_label_remark;
     private TextView tv_add_ticket;
     private TextView la_a;
+    private TextView invoice;
     private String customer_id;
     private CustomerBean customerBean;
     private String usernameStr;
@@ -233,6 +234,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         tv_label_hint = (TextView) headerView.findViewById(R.id.tv_label_hint);
         edit_label = (TextView) headerView.findViewById(R.id.edit_label);
         remark = (TextView) headerView.findViewById(R.id.remark);
+        invoice = (TextView) headerView.findViewById(R.id.invoice);
         edit_label_remark = (TextView) headerView.findViewById(R.id.edit_label_remark);
         tv_add_ticket = (TextView) headerView.findViewById(R.id.tv_add_ticket);
         sex = (ImageView) headerView.findViewById(R.id.sex);
@@ -491,6 +493,13 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                     remark.setText(remarkStr);
                 } else {
                     // remark.setText("");
+                }
+
+                String bill_info = customer.getBill_info();
+                if (!TextUtils.isEmpty(bill_info)) {
+                    invoice.setText("发票信息："+bill_info);
+                }else {
+                    invoice.setText("发票信息：未提供");
                 }
 
                 List<CustomerLabel> labelListl = customer.getLabel();
