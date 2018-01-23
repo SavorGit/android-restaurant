@@ -645,9 +645,18 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
                                     cacheCustomer.setCustomer_id(contactFormat.getCustomer_id());
                                     cacheCustomer.setAdded(true);
                                 }else {
+                                    contactFormat.setAdded(true);
                                     cacheList.add(contactFormat);
                                 }
+
+                                List<ContactFormat> data = adapter.getData();
+                                int indexOf = data.indexOf(contactFormat);
+                                if(indexOf!=-1) {
+                                    data.get(indexOf).setAdded(true);
+                                }
                             }
+
+
                             CustomerListBean cacheListBean = mSession.getCustomerList();
                             Collections.sort(cacheList, pinyinComparator);
                             cacheListBean.setCustomerList(cacheList);
