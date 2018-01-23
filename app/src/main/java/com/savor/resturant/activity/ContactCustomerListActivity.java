@@ -133,6 +133,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
             case CUSTOMER_LIST:
                 contactFormats = mSession.getCustomerList().getCustomerList();
                 if(contactFormats == null||contactFormats.size()==0) {
+                    hideLoadingLayout();
                     showEmptyCustomerHintLayout();
                     return;
                 }
@@ -374,7 +375,9 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
         }else {
             resetList();
         }
-        adapter.notifyDataSetChanged();
+        if(adapter!=null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     public void hideSoftKeybord(Activity activity) {

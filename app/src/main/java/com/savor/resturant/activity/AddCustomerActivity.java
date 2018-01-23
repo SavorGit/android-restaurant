@@ -225,8 +225,10 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         mMobileEt.setText(usermobile);
 
         String usermobile1 = list.getMobile1();
-        mSeconMobileLayout.setVisibility(View.VISIBLE);
-        mAddBtn.setVisibility(View.GONE);
+        if(!TextUtils.isEmpty(usermobile)&&!TextUtils.isEmpty(usermobile1)) {
+            mSeconMobileLayout.setVisibility(View.VISIBLE);
+            mAddBtn.setVisibility(View.GONE);
+        }
         if(!TextUtils.isEmpty(usermobile1)) {
             mSecondMobileEt.setText(usermobile1);
         }
