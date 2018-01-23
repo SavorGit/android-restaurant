@@ -106,7 +106,8 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
         getViews();
         setViews();
         setListeners();
-        init();
+       // init();
+        getOrderDetail();
     }
 
 
@@ -114,6 +115,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
         Intent intent = getIntent();
         if (intent != null) {
             orderListBean = (OrderListBean)intent.getSerializableExtra("orderListBean");
+            customer_id = orderListBean.getCustomer_id();
 
         }
     }
