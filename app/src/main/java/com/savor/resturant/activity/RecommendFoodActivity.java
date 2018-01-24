@@ -69,6 +69,8 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
     private ConstraintLayout mEmptyLayout;
     private TextView mEmptyHintTv;
     private String erroMsg1;
+    /**单个投屏投屏成功时条目*/
+    private RecommendFoodAdvert sucdessItem;
 
 
     /**
@@ -499,6 +501,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
             case GET_RECOMMEND_PRO_JSON:
             case GET_ADVERT_PRO_JSON:
                 hideLoadingLayout();
+                OkHttpUtils.getInstance().getOkHttpClient().dispatcher().cancelAll();
                 List<RecommendFoodAdvert> data = mRecommendAdapter.getData();
                 List<RecommendFoodAdvert> selectedList = getSelectedList(data);
                 if(method == AppApi.Action.GET_RECOMMEND_PRO_JSON) {
@@ -535,6 +538,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
                             break;
                     }
                 }
+
                 erroCount=0;
                 ShowMessage.showToast(this,"投屏成功！");
                 break;
@@ -659,8 +663,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
 
                 hideLoadingLayout();
 
-
-                if(!TextUtils.isEmpty(erroMsg1)) {
+                if(!TextUtils.isEmpty(erroMsg1)){
                     showToast(erroMsg1);
                 }else {
                     showToast("网络超时，请重试");
