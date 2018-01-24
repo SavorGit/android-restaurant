@@ -369,6 +369,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
                 }
             });
         }else {
+            hideLoadingLayout();
             ShowMessage.showToast(this,"请上传客户用餐小票");
         }
 
