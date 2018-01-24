@@ -51,6 +51,7 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
     private int erroCount;
     private LoadingDialog mLoadingDialog;
     private String CurrentTemplateId;
+    private String erroMsg1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -355,23 +356,32 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
         hideLoadingLayout();
         switch (method) {
             case GET_RECOMMEND_PRO_JSON:
-                erroCount++;
-                if(erroCount<3)
-                    return;
+
                 if(obj instanceof ResponseErrorMessage) {
 
                     ResponseErrorMessage message = (ResponseErrorMessage) obj;
                     int code = message.getCode();
                     String msg = message.getMessage();
-                    showToast(msg);
+                    erroMsg1 = msg;
+                    //showToast(msg);
                     errorLog();
 
                 }else if(obj == AppApi.ERROR_TIMEOUT) {
                     //showToast("网络超时，请重试");
-                    //errorLog();
+                   errorLog();
                 }else if(obj == AppApi.ERROR_NETWORK_FAILED) {
                     //showToast("网络已断开，请检查");
                     errorLog();
+                }
+                erroCount++;
+                if(erroCount<3)
+                    return;
+
+                if (!TextUtils.isEmpty(erroMsg1)) {
+                    showToast(erroMsg1);
+                }else {
+                    showToast( "网络超时，请重试");
+
                 }
                 break;
                 default:
