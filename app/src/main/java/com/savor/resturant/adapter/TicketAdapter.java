@@ -66,7 +66,7 @@ public class TicketAdapter extends BaseAdapter {
         }
         String leftUrl = mData.get(position*2).getRecipt();
         final String  lurl = mData.get(position*2).getBigrecipt();
-        Glide.with(mContext).load(leftUrl).centerCrop().placeholder(R.drawable.empty_slide).into(holder.iv_left);
+        Glide.with(mContext).load(lurl).centerCrop().placeholder(R.drawable.empty_slide).into(holder.iv_left);
         holder.iv_left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,7 +79,7 @@ public class TicketAdapter extends BaseAdapter {
             holder.iv_right.setVisibility(View.VISIBLE);
             String righUrl = mData.get(position+1).getRecipt();
             final String  rurl = mData.get(position+1).getBigrecipt();;
-            Glide.with(mContext).load(righUrl).centerCrop().placeholder(R.drawable.empty_slide).into(holder.iv_right);
+            Glide.with(mContext).load(rurl).centerCrop().placeholder(R.drawable.empty_slide).into(holder.iv_right);
 
             holder.iv_right.setOnClickListener(new View.OnClickListener() {
                 @Override
