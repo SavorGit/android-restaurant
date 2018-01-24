@@ -434,6 +434,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void onSingleProBtnClick(RecommendFoodAdvert recommendFoodAdvert) {
+        erroCount = 0;
         currentProType = TYPE_PRO_SINGLE;
         currentFoodAdvert = recommendFoodAdvert;
 
@@ -534,7 +535,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
                             break;
                     }
                 }
-
+                erroCount=0;
                 ShowMessage.showToast(this,"投屏成功！");
                 break;
             case GET_ADVERT_JSON:
@@ -664,6 +665,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
                 }else {
                     showToast("网络超时，请重试");
                 }
+                erroCount = 0;
                 break;
             case GET_ADVERT_PRO_JSON:
                 erroCount++;
