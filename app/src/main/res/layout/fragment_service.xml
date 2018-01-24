@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/color_eeeeee">
+    android:background="#ece6de">
     <include
         android:id="@+id/head_layout"
         layout="@layout/layout_head_title"/>
     <LinearLayout
-        android:background="#e9e5db"
+        android:background="#f5f1ec"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -25,7 +25,6 @@
             android:paddingRight="15dp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:background="#e9e5db"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -36,7 +35,7 @@
         android:layout_weight="1"
         android:id="@+id/category_list"
         android:layout_below="@id/head_layout"
-        android:background="@color/color_eeeeee"
+        android:background="#ece6de"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     <RelativeLayout

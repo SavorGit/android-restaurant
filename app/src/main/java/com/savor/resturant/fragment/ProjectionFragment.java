@@ -124,7 +124,7 @@ public class ProjectionFragment extends BaseFragment implements FunctionAdapter.
         int leftRight = DensityUtil.dip2px(getContext(),5);
         int topBottom = DensityUtil.dip2px(getContext(),15);
 
-        listView.addItemDecoration(new SpacesItemDecoration(leftRight, topBottom, getResources().getColor(R.color.color_eeeeee)));
+        listView.addItemDecoration(new SpacesItemDecoration(leftRight, topBottom, getResources().getColor(R.color.color_ece6de)));
 
         initWIfiHint();
     }
