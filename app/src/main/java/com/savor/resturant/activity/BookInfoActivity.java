@@ -554,26 +554,9 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
 //                                            "",invite_id,"",mobile,name, recipt,usermobile,
 //                                            "",sex,UserInfoActivity.this);
                         }else {
-//                            String lable_id_str = "";
-//                            List<String> labeIds = new ArrayList<>();
-//                            if(labelList.size()>0) {
-//                                for(int i = 0;i<labelList.size();i++) {
-//                                    CustomerLabel label = labelList.get(i);
-//                                    String label_id = label.getLabel_id();
-//                                    labeIds.add(label_id);
-//                                }
-//                                lable_id_str = new Gson().toJson(labeIds);
-//                            }
-                            // 如果客户id不为空 不需要传客户信息
-//                                    AppApi.addSignleConsumeRecord(BookInfoActivity.this,
-//                                            "","","","",customer_id,
-//                                            "",invite_id,"",mobile,orderListBean.getOrder_name(), recipt,orderListBean.getOrder_mobile(),
-//                                            "","",BookInfoActivity.this);
+
                             AppApi.addConsumeRecord(BookInfoActivity.this,customer_id,invite_id,orderListBean.getOrder_id(),mobile,recipt,BookInfoActivity.this);
-//                            AppApi.addSignleConsumeRecord(BookInfoActivity.this,
-//                                    "","","","",customer_id,
-//                                    "",invite_id,lable_id_str,mobile,"李丛", recipt,"15555555555",
-//                                    "","",BookInfoActivity.this);
+;
                         }
                     }
                 });
