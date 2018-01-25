@@ -134,7 +134,7 @@ public class SSDPService extends IntentService {
                     LogUtils.d("savor:ssdp 发现机顶盒广播ip地址--"+boxAddress);
                     if(!TextUtils.isEmpty(boxAddress)) {
                         TvBoxSSDPInfo oldInfo = session.getTvBoxSSDPInfo();
-                        if(oldInfo==null||!String.valueOf(hotelId).equals(oldInfo.getHotelId())) {
+                        if(oldInfo==null||!String.valueOf(hotelId).equals(session.getHotelid())) {
                             TvBoxSSDPInfo tvBoxSSDPInfo = new TvBoxSSDPInfo(TextUtils.isEmpty(type)?"":type.toLowerCase()
                                     ,address,String.valueOf(commandPort),boxAddress,hotelId+"");
                             int hid = session.getHotelid();
