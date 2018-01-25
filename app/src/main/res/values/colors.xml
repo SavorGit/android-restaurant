@@ -124,6 +124,8 @@
     <color name="color_bottom_bg">#F6F2ED</color>
     <color name="color_14b2fc">#14b2fc</color>
     <color name="color_ece6de">#ece6de</color>
+    <color name="color_list_item">#ebebeb</color>
+    <color name="color_lit_item_text">#444444</color>
 
 
 </resources>
