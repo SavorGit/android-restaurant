@@ -247,7 +247,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PhotoShowActivity"
-            android:screenOrientation="portrait" />
+             />
 
 
 
