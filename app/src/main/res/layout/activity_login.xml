@@ -69,7 +69,7 @@
         android:layout_height="40dp"
         android:textSize="13sp"
         android:text="获取验证码"
-        android:textColor="@color/color_fd7a40"
+        android:textColor="@color/white"
         android:gravity="center"
         android:padding="3dp"
         android:background="@drawable/corner_remote_view_click"
