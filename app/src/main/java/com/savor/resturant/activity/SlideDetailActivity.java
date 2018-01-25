@@ -146,7 +146,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
             switch (msg.what) {
                 case UPLOAD_TIMEOUT:
                     closeProgressBarDialog();
-                    showToast("网络错误，请重试");
+                    showToast("电视无法连接，请确认网络和开机状态");
                     break;
                 case TOAST_ERROR_MSG:
                     closeProgressBarDialog();
@@ -1232,6 +1232,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         switch (method) {
             case GET_HOTEL_BOX_JSON:
                 if(obj instanceof List) {
+                    OkHttpUtils.getInstance().getOkHttpClient().dispatcher().cancelAll();
                     List<RoomInfo> roomInfos = (List<RoomInfo>) obj;
                     mSession.setRoomList(roomInfos);
                     for(RoomInfo info : roomInfos) {

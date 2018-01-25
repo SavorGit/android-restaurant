@@ -708,10 +708,16 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                         String mobile = mMobileEt.getText().toString();
                         if(!TextUtils.isEmpty(mobile)) {
                             contactFormat.setMobile(mobile);
+                        }else {
+                            contactFormat.setMobile("");
                         }
+
+
                         String mobile1 = mSecondMobileEt.getText().toString();
                         if(!TextUtils.isEmpty(mobile1)) {
                             contactFormat.setMobile1(mobile1);
+                        }else {
+                            contactFormat.setMobile1("");
                         }
 
                         if(!TextUtils.isEmpty(currentImagePath)) {
