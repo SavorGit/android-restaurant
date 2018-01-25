@@ -48,7 +48,7 @@
             android:layout_toRightOf="@id/iv_header"
             android:gravity="center"
             android:padding="1.5sp"
-            android:text="客户姓名"
+            android:text=""
             android:textColor="@color/color_label"
             android:textSize="14sp" />
 
@@ -72,7 +72,7 @@
             android:layout_toRightOf="@id/iv_header"
             android:gravity="center"
             android:padding="1.5sp"
-            android:text="电话：13910229112"
+            android:text=""
             android:textColor="@color/color_label"
             android:textSize="14sp" />
 
@@ -86,7 +86,7 @@
             android:layout_toRightOf="@id/iv_header"
             android:gravity="center"
             android:padding="1.5sp"
-            android:text="人均消费能力：800"
+            android:text=""
             android:textColor="@color/color_label"
             android:textSize="14sp" />
 
@@ -100,7 +100,7 @@
             android:layout_toRightOf="@id/iv_header"
             android:gravity="center"
             android:padding="1.5sp"
-            android:text="生日："
+            android:text=""
             android:textColor="@color/color_label"
             android:textSize="14sp" />
 
@@ -114,7 +114,7 @@
             android:layout_toRightOf="@id/iv_header"
             android:gravity="center"
             android:padding="1.5sp"
-            android:text="籍贯："
+            android:text=""
             android:textColor="@color/color_label"
             android:textSize="14sp" />
 
@@ -128,7 +128,7 @@
             android:layout_toRightOf="@id/iv_header"
             android:gravity="center"
             android:padding="1.5sp"
-            android:text="发票信息："
+            android:text=""
             android:textColor="@color/color_label"
             android:textSize="14sp" />
 
