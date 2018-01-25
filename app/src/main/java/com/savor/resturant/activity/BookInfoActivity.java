@@ -406,7 +406,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
                     xp_type.setText("已完成");
                 }
                 break;
-            case POST_ADD_SIGNLE_CONSUME_RECORD_JSON:
+            case POST_ADD_CONSUME_RECORD_JSON:
                 upateOrderService();
                 // finish();
                 break;
@@ -565,11 +565,11 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
 //                                lable_id_str = new Gson().toJson(labeIds);
 //                            }
                             // 如果客户id不为空 不需要传客户信息
-                                    AppApi.addSignleConsumeRecord(BookInfoActivity.this,
-                                            "","","","",customer_id,
-                                            "",invite_id,"",mobile,orderListBean.getOrder_name(), recipt,orderListBean.getOrder_mobile(),
-                                            "","",BookInfoActivity.this);
-
+//                                    AppApi.addSignleConsumeRecord(BookInfoActivity.this,
+//                                            "","","","",customer_id,
+//                                            "",invite_id,"",mobile,orderListBean.getOrder_name(), recipt,orderListBean.getOrder_mobile(),
+//                                            "","",BookInfoActivity.this);
+                            AppApi.addConsumeRecord(BookInfoActivity.this,customer_id,invite_id,orderListBean.getOrder_id(),mobile,recipt,BookInfoActivity.this);
 //                            AppApi.addSignleConsumeRecord(BookInfoActivity.this,
 //                                    "","","","",customer_id,
 //                                    "",invite_id,lable_id_str,mobile,"李丛", recipt,"15555555555",
