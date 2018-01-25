@@ -149,6 +149,8 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.POST_LIGHT_LABEL_JSON
                     || action == AppApi.Action.POST_ORDER_DETAIL_JSON
                     || action == AppApi.Action.POST_HOTEL_INFO_JSON
+                    || action == AppApi.Action.POST_ADD_CONSUME_RECORD_JSON
+
 
                     ){
                 int code = rSet.getInt("code");
