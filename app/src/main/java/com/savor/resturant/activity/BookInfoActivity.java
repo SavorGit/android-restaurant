@@ -37,6 +37,7 @@ import com.savor.resturant.utils.OSSClientUtil;
 import com.savor.resturant.widget.ChoosePicDialog;
 import com.savor.resturant.widget.CommonDialog;
 import com.savor.resturant.widget.CommonDialog2;
+import com.savor.resturant.widget.LoadingDialog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -95,6 +96,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
     private TextView wel_lab;
     private TextView tjc_lab;
     private TextView xp_lab;
+    private LoadingDialog mLoadingDialog;
 
 
     @Override
@@ -400,6 +402,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
                     tjc_type.setText("已完成");
 
                 }else if ("3".equals(OrderServiceType)) {
+                    is_expense = 1;
                     xp_type.setBackgroundResource(R.drawable.corner_remote_book_btn);
                     xp_type.setTextColor(context.getResources().getColor(R.color.color_14b2fc));
                     xp_type.setClickable(true);
@@ -407,7 +410,15 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
                 }
                 break;
             case POST_ADD_CONSUME_RECORD_JSON:
-                upateOrderService();
+
+                if (is_expense == 1) {
+
+                }else {
+                    upateOrderService();
+                }
+
+
+
                 // finish();
                 break;
             case POST_ORDER_DETAIL_JSON:
@@ -508,6 +519,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void submit() {
+        //LoadingDialog
 
 //                final String usermobile = mMobileEt.getText().toString();
 //
@@ -520,7 +532,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
 //                    ShowMessage.showToast(this,"请输入客户手机号");
 //                    return;
 //                }
-
+        showLoadingLayout();
         File file = new File(currentImagePath);
         String hotel_id = mSession.getHotelBean().getHotel_id();
         final String objectKey = "log/resource/restaurant/mobile/userlogo/"+hotel_id+"/"+file.getName();
@@ -531,6 +543,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onSuccess(PutObjectRequest putObjectRequest, PutObjectResult putObjectResult) {
+                hideLoadingLayout();
                 ticketOssUrl = ossClient.presignPublicObjectURL(ConstantValues.BUCKET_NAME, objectKey);
                 runOnUiThread(new Runnable() {
                     @Override
@@ -568,6 +581,7 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onFailure(PutObjectRequest putObjectRequest, ClientException e, ServiceException e1) {
+                hideLoadingLayout();
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -594,5 +608,20 @@ public class BookInfoActivity extends BaseActivity implements View.OnClickListen
 
     private void getOrderDetail(){
         AppApi.getOrderDetail(context,hotelBean.getInvite_id(),hotelBean.getTel(),order_id,this);
+    }
+
+    @Override
+    public void showLoadingLayout() {
+        if(mLoadingDialog == null) {
+            mLoadingDialog = new LoadingDialog(this);
+        }
+        mLoadingDialog.show();
+    }
+
+    @Override
+    public void hideLoadingLayout() {
+        if(mLoadingDialog!=null) {
+            mLoadingDialog.dismiss();
+        }
     }
 }
