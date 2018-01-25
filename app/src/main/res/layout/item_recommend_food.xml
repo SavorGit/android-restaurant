@@ -72,7 +72,7 @@
             android:paddingTop="3dp"
             android:paddingBottom="3dp"
             android:text="投屏"
-            android:textColor="@color/color_ff783e"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="15sp"
             tools:layout_editor_absoluteX="147dp"
             tools:layout_editor_absoluteY="200dp"

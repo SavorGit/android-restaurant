@@ -29,7 +29,7 @@
             android:maxEms="12"
             android:maxLines="1"
             android:text="幻灯片名"
-            android:textColor="@color/color_f6f2ed"
+            android:textColor="@color/white"
             android:textSize="@dimen/title_text_size" />
 
         <RelativeLayout
@@ -44,7 +44,7 @@
                 android:id="@+id/iv_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/color_f6f2ed"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:text="编辑" />
 
@@ -52,7 +52,7 @@
                 android:id="@+id/tv_ok"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:text="完成"
                 android:textSize="16sp"
                 android:visibility="gone" />
