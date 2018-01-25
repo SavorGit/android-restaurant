@@ -1,21 +1,34 @@
 package com.savor.resturant.activity;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Process;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.RemoteViews;
 
+import com.common.api.http.callback.FileDownProgress;
+import com.common.api.utils.AppUtils;
 import com.common.api.utils.LogUtils;
 import com.common.api.utils.ShowMessage;
 import com.common.api.widget.customTab.MyTabWidget;
 import com.savor.resturant.R;
 import com.savor.resturant.bean.ContactFormat;
 import com.savor.resturant.bean.OperationFailedItem;
+import com.savor.resturant.bean.UpgradeInfo;
+import com.savor.resturant.core.AppApi;
 import com.savor.resturant.fragment.BookFragment;
 import com.savor.resturant.fragment.CustomerFragment;
 import com.savor.resturant.fragment.MyFragment;
@@ -28,8 +41,14 @@ import com.savor.resturant.service.SSDPService;
 import com.savor.resturant.utils.ActivitiesManager;
 import com.savor.resturant.utils.ConstantValues;
 import com.savor.resturant.utils.GlideImageLoader;
+import com.savor.resturant.utils.STIDUtil;
 import com.savor.resturant.widget.ImportDialog;
+import com.savor.resturant.widget.UpgradeDialog;
 
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class SavorMainActivity extends BaseFragmentActivity implements MyTabWidget.OnTabSelectedListener {
@@ -43,6 +62,16 @@ public class SavorMainActivity extends BaseFragmentActivity implements MyTabWidg
     private MyFragment myFragment;
     private SmallPlatformReciver smallPlatformReciver;
     private long exitTime;
+    private UpgradeInfo upGradeInfo;
+    private UpgradeDialog mUpgradeDialog;
+    private NotificationManager manager;
+    private Notification notif;
+    private final int NOTIFY_DOWNLOAD_FILE=10001;
+    /**是否是自动检查更新，如果不是那就是手动检查提示有版本更新否则不提示*/
+    private boolean ismuteUp = true;
+    /**退出投屏按钮状态，当前展示退出投屏还是去设置*/
+    private int mProBtnType;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +88,12 @@ public class SavorMainActivity extends BaseFragmentActivity implements MyTabWidg
 
         regitsterSmallPlatformReciever();
         startReRequestService();
+        upgrade();
     }
 
+    private void upgrade(){
+        AppApi.Upgrade(mContext,this,mSession.getVersionCode());
+    }
     private void checkShouldShowImportDialog() {
         List<ContactFormat> customerList = mSession.getCustomerList().getCustomerList();
         String is_import_customer = mSession.getHotelBean().getIs_import_customer();
@@ -220,6 +253,161 @@ public class SavorMainActivity extends BaseFragmentActivity implements MyTabWidg
     }
 
 
+    int msg = 0;
+    @Override
+    public void onSuccess(AppApi.Action method, Object obj) {
+        switch (method) {
+            case POST_UPGRADE_JSON:
+                if (obj instanceof UpgradeInfo) {
+                    upGradeInfo = (UpgradeInfo) obj;
+                    if (upGradeInfo != null) {
+                        setUpGrade();
+                    }
+                }
+                break;
+            case TEST_DOWNLOAD_JSON:
+                downLoadAPk(obj);
+                break;
+        }
+    }
+
+    private void setUpGrade(){
+        String upgradeUrl = upGradeInfo.getOss_addr();
+
+        if (!TextUtils.isEmpty(upgradeUrl)) {
+            if (STIDUtil.needUpdate(mSession, upGradeInfo)) {
+//                HashMap<String,String> hashMap = new HashMap<>();
+//                hashMap.put(getString(R.string.home_update),"ensure");
+
+                String[] content = upGradeInfo.getRemark();
+                if (upGradeInfo.getUpdate_type() == 1) {
+                    mUpgradeDialog = new UpgradeDialog(
+                            mContext,
+                            TextUtils.isEmpty(upGradeInfo.getVersion_code()+"")?"":"新版本：V"+upGradeInfo.getVersion_code(),
+                            content,
+                            this.getString(R.string.confirm),
+                            forUpdateListener
+                    );
+                    mUpgradeDialog.show();
+                }else {
+                    mUpgradeDialog = new UpgradeDialog(
+                            mContext,
+                            TextUtils.isEmpty(upGradeInfo.getVersion_code()+"")?"":"新版本：V"+upGradeInfo.getVersion_code(),
+                            content,
+                            this.getString(R.string.cancel),
+                            this.getString(R.string.confirm),
+                            cancelListener,
+                            forUpdateListener
+                    );
+                    mUpgradeDialog.show();
+                }
+
+
+            }else{
+                if (!ismuteUp){
+                    ShowMessage.showToast(mContext, "当前为最新版本");
+                }
+
+            }
+        }else {
+            if (!ismuteUp){
+                ShowMessage.showToast(mContext, "当前为最新版本");
+            }
+        }
+
+
+    }
+
+    private View.OnClickListener forUpdateListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mUpgradeDialog.dismiss();
+            downLoadApk(upGradeInfo.getOss_addr());
+            // downLoadApk("http://download.savorx.cn/app-xiaomi-debug.apk");
+        }
+    };
+
+    private View.OnClickListener cancelListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+//			mMDialog.dismiss();
+            mUpgradeDialog.dismiss();
+        }
+    };
+
+    protected void downLoadApk(String apkUrl) {
+        //测试，记得去掉
+//		apkUrl = "http://test.ailemy.com/mobile/download/aileBuy.apk";
+        if (!mSession.isApkDownloading()){
+            mSession.setApkDownloading(true);
+            // 下载apk包
+            initNotification();
+            AppApi.downApp(mContext,apkUrl, SavorMainActivity.this);
+        }else{
+            ShowMessage.showToast(mContext,"下载中,请稍候");
+        }
+    }
+
+    private void initNotification() {
+        manager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        notif = new Notification();
+        notif.icon = R.drawable.ic_launcher;
+        notif.tickerText = "下载通知";
+        // 通知栏显示所用到的布局文件
+        notif.contentView = new RemoteViews(mContext.getPackageName(),
+                R.layout.download_content_view);
+        notif.contentIntent = PendingIntent.getBroadcast(mContext, 0, new Intent(
+                mContext.getPackageName()+".debug"), PendingIntent.FLAG_CANCEL_CURRENT);
+        // notif.defaults = Notification.DEFAULT_ALL;
+        manager.notify(NOTIFY_DOWNLOAD_FILE, notif);
+    }
+    private void downLoadAPk(Object obj) {
+        if (obj instanceof FileDownProgress) {
+            FileDownProgress fs = (FileDownProgress) obj;
+            long now = fs.getNow();
+            long total = fs.getTotal();
+            if ((int) (((float) now / (float) total) * 100) - msg >= 5) {
+                msg = (int) (((float) now / (float) total) * 100);
+                notif.contentView.setTextViewText(R.id.content_view_text1,
+                        (Integer) msg + "%");
+                notif.contentView.setProgressBar(R.id.content_view_progress,
+                        100, (Integer) msg, false);
+                manager.notify(NOTIFY_DOWNLOAD_FILE, notif);
+            }
+
+        } else if (obj instanceof File) {
+            mSession.setApkDownloading(false);
+            File f = (File) obj;
+            byte[] fRead;
+            String md5Value = null;
+            try {
+                fRead = FileUtils.readFileToByteArray(f);
+                md5Value = AppUtils.getMD5(fRead);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            //比较本地文件版本是否与服务器文件一致，如果一致则启动安装
+            if (md5Value != null && md5Value.equals(upGradeInfo.getMd5())) {
+                //ShowMessage.showToast(this, f.getAbsolutePath());
+                if (manager != null) {
+                    manager.cancel(NOTIFY_DOWNLOAD_FILE);
+                }
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.setDataAndType(Uri.parse("file://" + f.getAbsolutePath()),
+                        "application/vnd.android.package-archive");
+                startActivity(i);
+            } else {
+                if (manager != null) {
+                    manager.cancel(NOTIFY_DOWNLOAD_FILE);
+                }
+                ShowMessage.showToast(mContext, "下载失败");
+                setUpGrade();
+            }
+
+        }
+    }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
