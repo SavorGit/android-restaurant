@@ -199,9 +199,9 @@ public class SlideSettingsDialog implements OnClickListener {
      * 重置单张投屏时间按钮状态
      */
     private void resetSingleTimeBtnStatus() {
-        mThreeSecTv.setTextColor(context.getResources().getColor(R.color.color_red_light));
-        mFiveSecTv.setTextColor(context.getResources().getColor(R.color.color_red_light));
-        mEightSecTv.setTextColor(context.getResources().getColor(R.color.color_red_light));
+        mThreeSecTv.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+        mFiveSecTv.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+        mEightSecTv.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
 
         mThreeSecTv.setBackgroundResource(R.drawable.bg_hollow_corner_red);
         mFiveSecTv.setBackgroundResource(R.drawable.bg_hollow_corner_red);
