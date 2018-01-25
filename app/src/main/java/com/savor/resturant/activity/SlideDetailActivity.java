@@ -1232,6 +1232,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
         switch (method) {
             case GET_HOTEL_BOX_JSON:
                 if(obj instanceof List) {
+                    OkHttpUtils.getInstance().getOkHttpClient().dispatcher().cancelAll();
                     List<RoomInfo> roomInfos = (List<RoomInfo>) obj;
                     mSession.setRoomList(roomInfos);
                     for(RoomInfo info : roomInfos) {

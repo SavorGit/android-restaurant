@@ -153,7 +153,7 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
                     break;
             }
 
-            add.setTextColor(getResources().getColor(R.color.dialog_text_black));
+            add.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
         }else {
             if (TextUtils.isEmpty(name)) {
                 switch (slideType) {
@@ -528,7 +528,7 @@ public class PhotoSelectActivity extends BaseActivity implements InitViews, View
                     break;
             }
 
-            add.setTextColor(getResources().getColor(R.color.head_title_text));
+            add.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
         }
     }
 }
