@@ -108,7 +108,7 @@ public class WelComeSetTextActivity extends BaseActivity implements View.OnClick
     private void checkNextBut(){
         String word = greeting.getText().toString();
         if (!TextUtils.isEmpty(word)) {
-            tv_right.setTextColor(context.getResources().getColor(R.color.color_ff783e));
+            tv_right.setTextColor(context.getResources().getColor(R.color.color_f6f2ed));
             tv_right.setClickable(true);
         }else {
             tv_right.setTextColor(context.getResources().getColor(R.color.color_3e000000));
