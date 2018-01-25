@@ -66,7 +66,7 @@ public class WelComeSetTextActivity extends BaseActivity implements View.OnClick
         tv_center.setText("欢迎词");
         tv_right.setText("下一步");
         tv_right.setVisibility(View.VISIBLE);
-        tv_right.setTextColor(context.getResources().getColor(R.color.color_3e000000));
+        tv_right.setTextColor(context.getResources().getColor(R.color.color_f6f2ed));
     }
 
     @Override
