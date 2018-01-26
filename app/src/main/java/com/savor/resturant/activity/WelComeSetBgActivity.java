@@ -422,7 +422,7 @@ public class WelComeSetBgActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void hideLoadingLayout() {
-        if(mLoadingDialog!=null) {
+        if(mLoadingDialog!=null&&mLoadingDialog.isShowing()&&!isFinishing()) {
             mLoadingDialog.dismiss();
         }
     }

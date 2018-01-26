@@ -636,7 +636,7 @@ public class SpendHistoryAddActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void hideLoadingLayout() {
-        if(mLoadingDialog!=null) {
+        if(mLoadingDialog!=null&&mLoadingDialog.isShowing()&&!isFinishing()) {
             mLoadingDialog.dismiss();
         }
     }

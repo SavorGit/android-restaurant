@@ -789,7 +789,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void hideLoadingLayout() {
-        if (loadingDialog!=null&&loadingDialog.isShowing())
+        if (loadingDialog!=null&&loadingDialog.isShowing()&&!isFinishing())
             loadingDialog.dismiss();
     }
 }

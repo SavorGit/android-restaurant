@@ -98,7 +98,7 @@ public abstract class BaseActivity extends Activity implements ApiRequestListene
 
     @Override
     public void hideLoadingLayout() {
-        if(mProgressDialog!=null&&mProgressDialog.isShowing()) {
+        if(mProgressDialog!=null&&mProgressDialog.isShowing()&&!isFinishing()) {
             mProgressDialog.dismiss();
             mProgressDialog = null;
         }
