@@ -759,7 +759,9 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                 mSession.setCustomerList(customerListBean);
                 break;
             case POST_ADD_CUS_JSON:
-                hideLoadingLayout();
+                if(!isFinishing()) {
+                    hideLoadingLayout();
+                }
                 if(obj instanceof AddCustomerResponse) {
                     AddCustomerResponse response = (AddCustomerResponse) obj;
                     AddCustomerResponse.ListBean list = response.getList();
@@ -787,7 +789,9 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     public void onError(AppApi.Action method, Object obj) {
         switch (method) {
             case POST_EDIT_CUS_JSON:
-                hideLoadingLayout();
+                if(!isFinishing()) {
+                    hideLoadingLayout();
+                }
                 if(obj instanceof ResponseErrorMessage) {
                     ResponseErrorMessage message = (ResponseErrorMessage) obj;
                     int code = message.getCode();
@@ -804,7 +808,9 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                 break;
             case POST_ADD_CUS_JSON:
                 LogUtils.d("savor:add customer failed");
-                hideLoadingLayout();
+                if(!isFinishing()) {
+                    hideLoadingLayout();
+                }
                 if(obj instanceof ResponseErrorMessage) {
                     ResponseErrorMessage message = (ResponseErrorMessage) obj;
                     int code = message.getCode();
@@ -896,5 +902,11 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         if(mLoadingDialog!=null) {
             mLoadingDialog.dismiss();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        hideLoadingLayout();
     }
 }

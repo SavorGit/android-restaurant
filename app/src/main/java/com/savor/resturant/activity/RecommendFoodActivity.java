@@ -783,7 +783,7 @@ public class RecommendFoodActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void hideLoadingLayout() {
-        if(mLoadingDialog!=null) {
+        if(mLoadingDialog!=null&&mLoadingDialog.isShowing()&&!isFinishing()) {
             mLoadingDialog.dismiss();
         }
     }

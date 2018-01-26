@@ -405,7 +405,7 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
 
     @Override
     public void hideLoadingLayout() {
-
+        if(loadingDialog!=null&&loadingDialog.isShowing()&&!isFinishing())
         loadingDialog.dismiss();
     }
 

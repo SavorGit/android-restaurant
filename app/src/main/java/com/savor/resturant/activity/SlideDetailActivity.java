@@ -650,7 +650,7 @@ public class SlideDetailActivity extends BaseActivity implements InitViews, View
                             }
                         }else {
                             settingDialog.dismiss();
-                            showToast("网络已断开，请检查");
+                            showToast("电视无法连接，请确认网络和开机状态");
                         }
 
 //                        mOperationType = TYPE_CONFIRM;
