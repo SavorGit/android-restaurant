@@ -365,16 +365,10 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 }
                 break;
             case POST_ADD_SIGNLE_CONSUME_RECORD_JSON:
-                hideLoadingLayout();
-                ConRecBean conRecBean = new ConRecBean();
-                conRecBean.setRecipt(ticketOssUrl);
-                imageList.add(conRecBean);
-                if (imageList != null && imageList.size() > 0) {
-                    la_a.setVisibility(View.GONE);
-                } else {
-                    la_a.setVisibility(View.VISIBLE);
-                }
-                ticketAdapter.notifyDataSetChanged();
+                max_id = "0";
+                min_id = "0";
+                Rectype = "1";
+                getConRecTopList();
                 // finish();
                 break;
 
