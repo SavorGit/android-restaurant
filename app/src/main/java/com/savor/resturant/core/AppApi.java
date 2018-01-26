@@ -241,6 +241,7 @@ public class AppApi {
         new AppServiceOk(context, Action.TEST_DOWNLOAD_JSON, handler, params).downLoad(url, targetApk);
     }
 
+
     public static void downApp(Context context, String url, ApiRequestListener handler) {
         final HashMap<String, Object> params = new HashMap<String, Object>();
         String target = AppUtils.getPath(context, AppUtils.StorageFile.file);
