@@ -231,13 +231,13 @@ public class ContactCustomerListActivity extends BaseActivity implements View.On
 
             if(phoneNumbers!=null&&phoneNumbers.size()>0) {
                 PhoneNumber phoneNumber = phoneNumbers.get(0);
-                if(phoneNumber!=null&&!TextUtils.isEmpty(phoneNumber.getNormalizedNumber())) {
-                    format.setMobile(phoneNumber.getNormalizedNumber());
+                if(phoneNumber!=null&&!TextUtils.isEmpty(phoneNumber.getNumber())) {
+                    format.setMobile(phoneNumber.getNumber().replaceAll(" ",""));
                 }
                 if(phoneNumbers.size()>=2) {
                     PhoneNumber phoneNumber1 = phoneNumbers.get(1);
-                    if(phoneNumber1!=null&&!TextUtils.isEmpty(phoneNumber1.getNormalizedNumber())) {
-                        format.setMobile1(phoneNumber1.getNormalizedNumber());
+                    if(phoneNumber1!=null&&!TextUtils.isEmpty(phoneNumber1.getNumber())) {
+                        format.setMobile1(phoneNumber1.getNumber().replaceAll(" ",""));
                     }
                 }
             }else {
