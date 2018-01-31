@@ -154,6 +154,12 @@ public class SplashActivity extends BaseActivity {
         registerNetWorkReceiver(mHandler);
         startJettyServer();
         regitsterSmallPlatformReciever();
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mHandler.sendEmptyMessage(SWITCH_HOME);
+            }
+        },1000);
 //        startReRequestService();
     }
 
