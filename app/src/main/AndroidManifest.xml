@@ -192,6 +192,10 @@
             android:name=".activity.WelComeSetTextActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.WelComeSetTextNewActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".activity.WelComeSetBgActivity"
             android:screenOrientation="portrait" />
         <activity
