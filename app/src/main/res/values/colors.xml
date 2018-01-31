@@ -103,7 +103,7 @@
     <color name="color_ff783e">#ff783e</color>
     <color name="color_trans_light">#66000000</color>
     <color name="color_b7b6b2">#b7b6b2</color>
-    <color name="color_333333">#333333</color>
+
     <color name="color_fefefe">#fefefe</color>
     <color name="color_e1dbd4">#e1dbd4</color>
     <color name="app_red_color">#922c3e</color>
@@ -119,6 +119,8 @@
     <color name="color_label">#666666</color>
     <color name="app_gray">#999999</color>
     <color name="color_222222">#222222</color>
+    <color name="color_333333">#333333</color>
+    <color name="color_888888">#888888</color>
     <color name="color_f6f2ed">#f6f2ed</color>
     <color name="color_bottom_text">#616161</color>
     <color name="color_bottom_bg">#F6F2ED</color>
@@ -126,6 +128,7 @@
     <color name="color_ece6de">#ece6de</color>
     <color name="color_list_item">#ebebeb</color>
     <color name="color_lit_item_text">#444444</color>
+    <color name="color_title_text_bg">#EDE6DE</color>
 
 
 </resources>

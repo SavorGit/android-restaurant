@@ -85,7 +85,7 @@ public class ProjectionFragment extends BaseFragment implements FunctionAdapter.
         FunctionItem recommandItem = new FunctionItem();
         recommandItem.setContent("餐厅服务");
         recommandItem.setResId(R.drawable.ico_recommand);
-        recommandItem.setType(FunctionItem.FunctionType.TYPE_RECOMMAND_FOODS);
+        recommandItem.setType(FunctionItem.FunctionType.TYPE_RESTURANT_SERVICE);
         mList.add(recommandItem);
 
 //        FunctionItem advertItem = new FunctionItem();
