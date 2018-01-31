@@ -175,4 +175,9 @@
         <item name="android:taskToBackExitAnimation">@null</item>
 
     </style>
+
+    <style name="SplashTheme" parent="android:Theme.Black.NoTitleBar.Fullscreen">
+        <item name="android:windowBackground">@drawable/ico_splash</item>
+        <item name="android:scaleType">centerCrop</item>
+    </style>
 </resources>

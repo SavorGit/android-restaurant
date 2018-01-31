@@ -84,6 +84,7 @@
             android:value="${UMENG_CHANNEL_VALUE}" />
 
         <activity
+            android:theme="@style/SplashTheme"
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
