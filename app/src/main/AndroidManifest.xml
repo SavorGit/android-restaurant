@@ -199,6 +199,11 @@
             android:name=".activity.WelComeSetBgActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.WelComeSetBgNewActivity"
+            android:screenOrientation="portrait" />
+
+
+        <activity
             android:name=".activity.LinkTvActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysVisible" />

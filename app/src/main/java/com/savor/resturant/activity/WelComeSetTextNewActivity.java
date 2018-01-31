@@ -30,7 +30,7 @@ public class WelComeSetTextNewActivity extends BaseActivity implements View.OnCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.welcome_set_text_layout);
+        setContentView(R.layout.welcome_set_text_new_layout);
         context = this;
         getViews();
         setViews();
