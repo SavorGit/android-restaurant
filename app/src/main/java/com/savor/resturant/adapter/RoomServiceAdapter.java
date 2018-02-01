@@ -26,6 +26,8 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
     private Context mContext;
     private List<RoomInfo> mData;
     private OnItemClickListener onItemClickListener;
+    private OnWelBtnClickListener onWelBtnClickListener;
+    private OnRecommendBtnClickListener onRecommendBtnClickListener;
 
     /**
      * 投屏类型，欢迎词，推荐菜
@@ -79,11 +81,35 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
                 }
             }
         });
+
+        holder.tv_welcome_pro.setTag(position);
+        holder.tv_welcome_pro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = (int) holder.tv_welcome_pro.getTag();
+                RoomInfo clickRoom = mData.get(position);
+                if(onWelBtnClickListener!=null) {
+                    onWelBtnClickListener.onWelBtnClick(clickRoom,ProType.TYPE_WELCOM);
+                }
+            }
+        });
+
+        holder.tv_recommend_pro.setTag(position);
+        holder.tv_recommend_pro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = (int) holder.tv_recommend_pro.getTag();
+                RoomInfo clickRoom = mData.get(position);
+                if(onRecommendBtnClickListener!=null) {
+                    onRecommendBtnClickListener.onRecommendBtnClick(clickRoom,ProType.TYPE_RECOMMEND);
+                }
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return mData == null?0:mData.size();
     }
 
     public class RommServiceHolder extends RecyclerView.ViewHolder {
@@ -109,5 +135,29 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
 
     public void setOnItemClickListener (OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
+    }
+
+    public interface OnWelBtnClickListener {
+        void onWelBtnClick(RoomInfo roomInfo,ProType type);
+    }
+
+    /**
+     * 点击欢迎词投屏
+     * @param onWelBtnClickListener
+     */
+    public void setOnWelBtnClickListener (OnWelBtnClickListener onWelBtnClickListener) {
+        this.onWelBtnClickListener = onWelBtnClickListener;
+    }
+
+    public interface OnRecommendBtnClickListener {
+        void onRecommendBtnClick(RoomInfo roomInfo,ProType type);
+    }
+
+    /**
+     * 点击推荐菜投屏
+     * @param onRecommendBtnClickListener
+     */
+    public void setOnRecommendBtnClickListener (OnRecommendBtnClickListener onRecommendBtnClickListener) {
+        this.onRecommendBtnClickListener = onRecommendBtnClickListener;
     }
 }

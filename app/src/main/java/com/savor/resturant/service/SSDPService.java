@@ -31,8 +31,8 @@ public class SSDPService extends IntentService {
     /**机顶盒组播*/
     private static final String TYPE_SSDP_BOX = "box";
     private static final int PORT_LISTENING = 11900;
-//    private static final String IP_TARGET = "238.255.255.252";
-    private static final String IP_TARGET = "238.255.255.250";
+    private static final String IP_TARGET = "238.255.255.252";
+//    private static final String IP_TARGET = "238.255.255.250";
 
     private static final int DATA_RECEIVE_SIZE = 1024;
 

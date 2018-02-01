@@ -75,7 +75,7 @@
 
         <meta-data
             android:name="app_debug"
-            android:value="0" />
+            android:value="1" />
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="5a1232aa8f4a9d63a4000121" />

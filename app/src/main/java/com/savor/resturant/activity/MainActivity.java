@@ -190,22 +190,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mList.clear();
 
         FunctionItem recommandItem = new FunctionItem();
-        recommandItem.setContent("推荐菜");
+        recommandItem.setContent("餐厅服务");
         recommandItem.setResId(R.drawable.ico_recommand);
-        recommandItem.setType(FunctionItem.FunctionType.TYPE_RECOMMAND_FOODS);
+        recommandItem.setType(FunctionItem.FunctionType.TYPE_RESTURANT_SERVICE);
         mList.add(recommandItem);
 
-        FunctionItem advertItem = new FunctionItem();
-        advertItem.setContent("宣传片");
-        advertItem.setResId(R.drawable.ico_xcp);
-        advertItem.setType(FunctionItem.FunctionType.TYPE_ADVERT);
-        mList.add(advertItem);
-
-        FunctionItem welcomeItem = new FunctionItem();
-        welcomeItem.setContent("欢迎词");
-        welcomeItem.setResId(R.drawable.ico_welcom_word);
-        welcomeItem.setType(FunctionItem.FunctionType.TYPE_WELCOME_WORD);
-        mList.add(welcomeItem);
+//        FunctionItem advertItem = new FunctionItem();
+//        advertItem.setContent("宣传片");
+//        advertItem.setResId(R.drawable.ico_xcp);
+//        advertItem.setType(FunctionItem.FunctionType.TYPE_ADVERT);
+//        mList.add(advertItem);
+//
+//        FunctionItem welcomeItem = new FunctionItem();
+//        welcomeItem.setContent("欢迎词");
+//        welcomeItem.setResId(R.drawable.ico_welcom_word);
+//        welcomeItem.setType(FunctionItem.FunctionType.TYPE_WELCOME_WORD);
+//        mList.add(welcomeItem);
 
         FunctionItem picItem = new FunctionItem();
         picItem.setContent("照片");
@@ -220,7 +220,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mList.add(videoItem);
 
         FunctionAdapter mFunctionAdapter = new FunctionAdapter(this);
-        GridLayoutManager layoutManager = new GridLayoutManager(this,2);
+        GridLayoutManager layoutManager = new GridLayoutManager(this,1);
         layoutManager.setOrientation(GridLayoutManager.VERTICAL);
         listView.setLayoutManager(layoutManager);
         mFunctionAdapter.setData(mList);
@@ -231,7 +231,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         int leftRight = DensityUtil.dip2px(this,5);
         int topBottom = DensityUtil.dip2px(this,15);
 
-        listView.addItemDecoration(new SpacesItemDecoration(leftRight, topBottom, getResources().getColor(R.color.color_eeeeee)));
+        listView.addItemDecoration(new SpacesItemDecoration(leftRight, topBottom, getResources().getColor(R.color.color_ece6de)));
 
         initWIfiHint();
 

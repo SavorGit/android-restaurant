@@ -20,8 +20,8 @@ public class AppApi {
     public static final String APK_DOWNLOAD_FILENAME = "NewApp.apk";
 
     /**云平台php接口*/
-//  public static final String CLOUND_PLATFORM_PHP_URL = "http://devp.mobile.littlehotspot.com/";
- public static final String CLOUND_PLATFORM_PHP_URL = "http://mobile.littlehotspot.com/";
+  public static final String CLOUND_PLATFORM_PHP_URL = "http://devp.mobile.littlehotspot.com/";
+// public static final String CLOUND_PLATFORM_PHP_URL = "http://mobile.littlehotspot.com/";
 
     /**
      * 常用的一些key值 ,签名、时间戳、token、params
@@ -135,10 +135,10 @@ public class AppApi {
         POST_CUSTOMER_EDIT_REMARK_JSON,
         /**获取订单详情*/
         POST_ORDER_DETAIL_JSON,
-
         /**用户登录确认绑定酒楼*/
         POST_HOTEL_INFO_JSON,
-
+        /**推荐菜，欢迎词联播*/
+        GET_WEL_RECOMMEND_JSON,
     }
 
     /**
@@ -195,7 +195,7 @@ public class AppApi {
             put(Action.POST_CUSTOMER_EDIT_REMARK_JSON, formatPhpUrl("Dinnerapp2/Customer/editRemark"));
             put(Action.POST_ORDER_DETAIL_JSON, formatPhpUrl("Dinnerapp2/Order/getOrderDetail"));
             put(Action.POST_HOTEL_INFO_JSON, formatPhpUrl("Dinnerapp/login/getHotelInfo"));
-
+            put(Action.GET_WEL_RECOMMEND_JSON, smallPlatformUrl);
 
         }
     };
@@ -998,6 +998,20 @@ public class AppApi {
         params.put("verify_code", verify_code);
         new AppServiceOk(context,Action.POST_HOTEL_INFO_JSON,handler,params).post();
     }
+
+    /**欢迎词推荐菜投屏*/
+    public static void welRecommendPro(Context context,String url,String boxMac,String templateId,String word,ApiRequestListener handler) {
+//        url = "http://192.168.1.104:8080";
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("deviceId", STIDUtil.getDeviceId(context));
+        params.put("boxMac", boxMac);
+        params.put("deviceName", Build.MODEL);
+        params.put("templateId", templateId);
+        params.put("word", word);
+        new AppServiceOk(context,url+"/small/command/screend/word_recomm",Action.GET_WEL_RECOMMEND_JSON,handler,params).get();
+//        new AppServiceOk(context,"http://"+url+":8080/command/getHotelBox",Action.GET_HOTEL_BOX_JSON,handler,params).get();
+    }
+
     // 超时（网络）异常
     public static final String ERROR_TIMEOUT = "3001";
     // 业务异常
