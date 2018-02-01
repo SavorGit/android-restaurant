@@ -43,6 +43,7 @@ import com.savor.resturant.bean.CustomerListBean;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.HotelMapCache;
 import com.savor.resturant.bean.HotelMapListData;
+import com.savor.resturant.bean.KeyWordBean;
 import com.savor.resturant.bean.OperationFailedItem;
 import com.savor.resturant.bean.PdfInfo;
 import com.savor.resturant.bean.RecommendProHistory;
@@ -258,7 +259,7 @@ public class Session {
     private CustomerListBean customerList;
     private ConAbilityList conAbilityList;
     /**欢迎词*/
-    private String keyWord;
+    private KeyWordBean keyWordBean;
     private boolean isShowImportDialog;
     /**缓存到内存中的客户列表*/
     private CustomerListBean cusList;
@@ -519,8 +520,7 @@ public class Session {
         lastTime = mPreference.loadLongKey(P_APP_LASTSTARTUP,0);
         isFirstPlay = mPreference.loadBooleanKey(P_APP_FIRST_PLAY,true);
         area_id = mPreference.loadStringKey(P_APP_AREA_ID, "");
-        keyWord = mPreference.loadStringKey(P_KEY_WORD, "");
-
+        keyWordBean = (KeyWordBean) getObj(P_KEY_WORD);
         opFailedList = (CopyOnWriteArrayList<OperationFailedItem>) getObj(P_OPERATION_FAILED_LIST);
         setDeviceid(deviceid);
         getApplicationInfo();
@@ -1130,13 +1130,12 @@ public class Session {
         return this.isShowImportDialog;
     }
 
-    public String getKeyWord() {
-        return keyWord;
+    public void setkeyWordBean(KeyWordBean keyWordBean){
+        this.keyWordBean = keyWordBean;
+        setObj(P_KEY_WORD,keyWordBean);
     }
 
-    public void setKeyWord(String keyWord) {
-        this.keyWord = keyWord;
-        writePreference(new Pair<String, Object>(P_KEY_WORD, keyWord));
-
+    public KeyWordBean getKeyWordBean(){
+        return this.keyWordBean;
     }
 }
