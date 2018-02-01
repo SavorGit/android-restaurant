@@ -83,22 +83,22 @@ public class ProjectionFragment extends BaseFragment implements FunctionAdapter.
         mList.clear();
 
         FunctionItem recommandItem = new FunctionItem();
-        recommandItem.setContent("推荐菜");
+        recommandItem.setContent("餐厅服务");
         recommandItem.setResId(R.drawable.ico_recommand);
-        recommandItem.setType(FunctionItem.FunctionType.TYPE_RECOMMAND_FOODS);
+        recommandItem.setType(FunctionItem.FunctionType.TYPE_RESTURANT_SERVICE);
         mList.add(recommandItem);
 
-        FunctionItem advertItem = new FunctionItem();
-        advertItem.setContent("宣传片");
-        advertItem.setResId(R.drawable.ico_xcp);
-        advertItem.setType(FunctionItem.FunctionType.TYPE_ADVERT);
-        mList.add(advertItem);
-
-        FunctionItem welcomeItem = new FunctionItem();
-        welcomeItem.setContent("欢迎词");
-        welcomeItem.setResId(R.drawable.ico_welcom_word);
-        welcomeItem.setType(FunctionItem.FunctionType.TYPE_WELCOME_WORD);
-        mList.add(welcomeItem);
+//        FunctionItem advertItem = new FunctionItem();
+//        advertItem.setContent("宣传片");
+//        advertItem.setResId(R.drawable.ico_xcp);
+//        advertItem.setType(FunctionItem.FunctionType.TYPE_ADVERT);
+//        mList.add(advertItem);
+//
+//        FunctionItem welcomeItem = new FunctionItem();
+//        welcomeItem.setContent("欢迎词");
+//        welcomeItem.setResId(R.drawable.ico_welcom_word);
+//        welcomeItem.setType(FunctionItem.FunctionType.TYPE_WELCOME_WORD);
+//        mList.add(welcomeItem);
 
         FunctionItem picItem = new FunctionItem();
         picItem.setContent("照片");
@@ -113,7 +113,7 @@ public class ProjectionFragment extends BaseFragment implements FunctionAdapter.
         mList.add(videoItem);
 
         FunctionAdapter mFunctionAdapter = new FunctionAdapter(getContext());
-        GridLayoutManager layoutManager = new GridLayoutManager(getContext(),2);
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(),1);
         layoutManager.setOrientation(GridLayoutManager.VERTICAL);
         listView.setLayoutManager(layoutManager);
         mFunctionAdapter.setData(mList);

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.savor.resturant.R;
 import com.savor.resturant.activity.RecommendFoodActivity;
+import com.savor.resturant.activity.ResturantServiceActivity;
 import com.savor.resturant.activity.SlideListActivity;
 import com.savor.resturant.activity.WelComeSetTextActivity;
 import com.savor.resturant.bean.FunctionItem;
@@ -65,6 +66,10 @@ public class FunctionAdapter extends RecyclerView.Adapter<FunctionAdapter.Functi
                     if (String.valueOf(hotelid).equals(hid)) {
                         Intent intent;
                         switch (type) {
+                            case TYPE_RESTURANT_SERVICE:
+                                intent = new Intent(mContext, ResturantServiceActivity.class);
+                                mContext.startActivity(intent);
+                                break;
                             case TYPE_RECOMMAND_FOODS:
                                 intent = new Intent(mContext, RecommendFoodActivity.class);
                                 intent.putExtra("type", RecommendFoodActivity.OperationType.TYPE_RECOMMEND_FOODS);

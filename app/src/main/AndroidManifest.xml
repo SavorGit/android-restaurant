@@ -85,7 +85,8 @@
 
         <activity
             android:name=".activity.SplashActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -194,15 +195,12 @@
         <activity
             android:name=".activity.WelComeSetTextNewActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.WelComeSetBgActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.WelComeSetBgNewActivity"
             android:screenOrientation="portrait" />
-
-
         <activity
             android:name=".activity.LinkTvActivity"
             android:screenOrientation="portrait"
@@ -217,10 +215,10 @@
             android:name=".activity.ContactCustomerListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".activity.SearchActivity"
+        <activity
+            android:name=".activity.SearchActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            />
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".activity.AddCustomerActivity"
             android:screenOrientation="portrait"
@@ -229,47 +227,41 @@
             android:name=".activity.SpendHistoryAddActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".activity.LabelAddActivity"></activity>
-        <activity android:name=".activity.UserLabelAddActivity"></activity>
-
+        <activity android:name=".activity.LabelAddActivity" />
+        <activity android:name=".activity.UserLabelAddActivity" />
         <activity
             android:name=".activity.BookListByDateActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:windowSoftInputMode="stateHidden|adjustPan"
             android:name=".activity.AddBookActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".activity.UserInfoActivity"
             android:screenOrientation="portrait" />
-
         <activity
-            android:windowSoftInputMode="stateHidden|adjustPan"
             android:name=".activity.RoomListActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".activity.AddRemarkActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.BookInfoActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PhotoShowActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-             />
-
-
-
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
-            android:windowSoftInputMode="stateHidden|adjustPan"
             android:name=".activity.UpDateBookActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".activity.ResturantServiceActivity"
             android:screenOrientation="portrait" />
-
-
-
-
-
+        <activity android:name=".activity.Recommend4ServiceActivity"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>

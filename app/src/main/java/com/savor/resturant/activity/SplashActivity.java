@@ -1,19 +1,16 @@
 package com.savor.resturant.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -26,35 +23,24 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.common.api.bitmap.BitmapCommonUtils;
 import com.common.api.utils.AppUtils;
-import com.common.api.utils.FileUtils;
 import com.common.api.utils.LogUtils;
 import com.savor.resturant.R;
 import com.savor.resturant.SavorApplication;
-import com.savor.resturant.bean.AliLogBean;
-import com.savor.resturant.bean.OperationFailedItem;
 import com.savor.resturant.bean.RoomInfo;
 import com.savor.resturant.bean.SmallPlatInfoBySSDP;
 import com.savor.resturant.bean.SmallPlatformByGetIp;
 import com.savor.resturant.bean.StartUpSettingsBean;
 import com.savor.resturant.bean.TvBoxSSDPInfo;
 import com.savor.resturant.core.AppApi;
-import com.savor.resturant.core.Session;
 import com.savor.resturant.presenter.SensePresenter;
 import com.savor.resturant.service.LocalJettyService;
-import com.savor.resturant.service.ReRequestService;
 import com.savor.resturant.service.SSDPService;
-import com.savor.resturant.service.UpLoadLogService;
 import com.savor.resturant.utils.ActivitiesManager;
-import com.savor.resturant.utils.AliLogFileUtil;
 import com.savor.resturant.utils.ImageCacheUtils;
 import com.savor.resturant.utils.ProjectionManager;
 import com.savor.resturant.utils.RecordUtils;
-import com.savor.resturant.utils.STIDUtil;
 import com.savor.resturant.utils.WifiUtil;
 import com.savor.resturant.widget.SplashDialog;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -160,14 +146,20 @@ public class SplashActivity extends BaseActivity {
             finish();
             return;
         }
-        setContentView(R.layout.activity_splash);
-        showSplashVideo();
+//        setContentView(R.layout.activity_splash);
+//        showSplashVideo();
         getViews();
         setViews();
         setListeners();
         registerNetWorkReceiver(mHandler);
         startJettyServer();
         regitsterSmallPlatformReciever();
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mHandler.sendEmptyMessage(SWITCH_HOME);
+            }
+        },1000);
 //        startReRequestService();
     }
 

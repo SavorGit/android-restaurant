@@ -30,8 +30,8 @@
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:layout_weight="1"
         android:id="@+id/category_list"
         android:layout_below="@id/head_layout"
