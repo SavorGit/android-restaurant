@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ public class WelComeSetTextNewActivity extends BaseActivity implements View.OnCl
     private TextView tv_right;
     private EditText greeting;
     private TextView t1,t2,t3,t4,t5;
+    private CheckBox is_default_word;
 
 
     @Override
