@@ -150,8 +150,7 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.POST_ORDER_DETAIL_JSON
                     || action == AppApi.Action.POST_HOTEL_INFO_JSON
                     || action == AppApi.Action.POST_ADD_CONSUME_RECORD_JSON
-
-
+                    || action == AppApi.Action.GET_WEL_RECOMMEND_JSON
                     ){
                 int code = rSet.getInt("code");
                 if(rSet.has("result")) {
@@ -368,6 +367,9 @@ public class ApiResponseFactory {
             case POST_HOTEL_INFO_JSON:
                 result = gson.fromJson(info, new TypeToken<Hotel>() {
                 }.getType());
+                break;
+            case GET_WEL_RECOMMEND_JSON:
+                result = "success";
                 break;
             default:
                 break;
