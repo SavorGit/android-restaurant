@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_eeeeee"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_head_title" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--推荐菜列表-->
+        <include layout="@layout/include_recommend_list" />
+        <include
+            android:id="@+id/empty_layout"
+            layout="@layout/include_empty_layout"
+            android:visibility="gone"
+            />
+        <!--包间列表-->
+        <include
+            layout="@layout/include_room_list"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+</LinearLayout>

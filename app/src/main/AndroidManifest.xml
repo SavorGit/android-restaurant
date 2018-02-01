@@ -256,7 +256,10 @@
             android:name=".activity.UpDateBookActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".activity.ResturantServiceActivity"
+        <activity
+            android:name=".activity.ResturantServiceActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.Recommend4ServiceActivity"
             android:screenOrientation="portrait"
             />
     </application>

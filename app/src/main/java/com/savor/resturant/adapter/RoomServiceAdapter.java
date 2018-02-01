@@ -1,12 +1,16 @@
 package com.savor.resturant.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.savor.resturant.R;
+import com.savor.resturant.activity.Recommend4ServiceActivity;
+import com.savor.resturant.activity.RecommendFoodActivity;
 
 /**
  * 餐厅服务包间列表适配器
@@ -27,7 +31,15 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
 
     @Override
     public void onBindViewHolder(RommServiceHolder holder, int position) {
-
+        holder.ll_recommend_service.setTag(position);
+        holder.ll_recommend_service.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, Recommend4ServiceActivity.class);
+                intent.putExtra("type", RecommendFoodActivity.OperationType.TYPE_RECOMMEND_FOODS);
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -37,8 +49,10 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
 
     public class RommServiceHolder extends RecyclerView.ViewHolder {
 
+        public LinearLayout ll_recommend_service;
         public RommServiceHolder(View itemView) {
             super(itemView);
+            ll_recommend_service = (LinearLayout) itemView.findViewById(R.id.ll_recommend_service);
         }
     }
 

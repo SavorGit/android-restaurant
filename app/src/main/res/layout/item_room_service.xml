@@ -103,6 +103,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
+            android:id="@+id/ll_recommend_service"
             android:paddingLeft="10dp"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
@@ -162,7 +163,7 @@
             android:textStyle="bold"
             android:layout_marginLeft="10dp"
             android:layout_gravity="center_vertical"
-            android:text="退出"
+            android:text="投屏"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
