@@ -137,6 +137,9 @@ public class Session {
     /**消费能力列表*/
     private static final String P_CON_ABILITY_LIST = "p_con_ability_list";
 
+    /**欢迎词*/
+    private static final String P_KEY_WORD= "p_key_word";
+
 
 
     /**
@@ -254,6 +257,8 @@ public class Session {
     private CopyOnWriteArrayList<OperationFailedItem> opFailedList;
     private CustomerListBean customerList;
     private ConAbilityList conAbilityList;
+    /**欢迎词*/
+    private String keyWord;
     private boolean isShowImportDialog;
     /**缓存到内存中的客户列表*/
     private CustomerListBean cusList;
@@ -514,6 +519,7 @@ public class Session {
         lastTime = mPreference.loadLongKey(P_APP_LASTSTARTUP,0);
         isFirstPlay = mPreference.loadBooleanKey(P_APP_FIRST_PLAY,true);
         area_id = mPreference.loadStringKey(P_APP_AREA_ID, "");
+        keyWord = mPreference.loadStringKey(P_KEY_WORD, "");
 
         opFailedList = (CopyOnWriteArrayList<OperationFailedItem>) getObj(P_OPERATION_FAILED_LIST);
         setDeviceid(deviceid);
@@ -628,7 +634,8 @@ public class Session {
 
         if ("".equals(key) ||P_APP_PLATFORM_URL.equals(key)
                 ||P_APP_AREA_ID.equals(key)
-                || P_APP_WAITER_DATA.equals(key)) {
+                || P_APP_WAITER_DATA.equals(key)
+                ||P_KEY_WORD.equals(key)) {
             mPreference.saveStringKey(key, (String) updateItem.second);
         }else if(P_APP_IS_SHOW_GUIDE.equals(key)
                 ||P_APP_FIRST_PLAY.equals(key)
@@ -1121,5 +1128,15 @@ public class Session {
 
     public boolean isShowImportDialog() {
         return this.isShowImportDialog;
+    }
+
+    public String getKeyWord() {
+        return keyWord;
+    }
+
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
+        writePreference(new Pair<String, Object>(P_KEY_WORD, keyWord));
+
     }
 }
