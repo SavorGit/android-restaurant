@@ -55,6 +55,8 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
     public void onBindViewHolder(final RommServiceHolder holder, int position) {
         RoomInfo info = mData.get(position);
         String box_name = info.getBox_name();
+        boolean recommendPlay = info.isRecommendPlay();
+        boolean welPlay = info.isWelPlay();
 
         holder.tv_box_name.setText(box_name);
 
@@ -105,6 +107,29 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
                 }
             }
         });
+
+        holder.tv_recommend_playing.setVisibility(recommendPlay?View.VISIBLE:View.GONE);
+        holder.tv_wel_playing.setVisibility(welPlay?View.VISIBLE:View.GONE);
+
+        if(recommendPlay) {
+            holder.tv_recommend_pro.setTextColor(mContext.getResources().getColor(R.color.white));
+            holder.tv_recommend_pro.setBackgroundResource(R.drawable.bg_pro_btn);
+            holder.tv_recommend_pro.setText("退出");
+        }else {
+            holder.tv_recommend_pro.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
+            holder.tv_recommend_pro.setBackgroundResource(R.drawable.bg_pro_exit_btn);
+            holder.tv_recommend_pro.setText("投屏");
+        }
+
+        if(welPlay) {
+            holder.tv_welcome_pro.setTextColor(mContext.getResources().getColor(R.color.white));
+            holder.tv_welcome_pro.setBackgroundResource(R.drawable.bg_pro_btn);
+            holder.tv_welcome_pro.setText("退出");
+        }else {
+            holder.tv_welcome_pro.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
+            holder.tv_welcome_pro.setBackgroundResource(R.drawable.bg_pro_exit_btn);
+            holder.tv_welcome_pro.setText("投屏");
+        }
     }
 
     @Override
@@ -119,6 +144,8 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
         public TextView tv_welcome_pro;
         public TextView tv_recommend_pro;
         public TextView tv_box_name;
+        public TextView tv_wel_playing;
+        public TextView tv_recommend_playing;
         public RommServiceHolder(View itemView) {
             super(itemView);
             ll_recommend_service = (LinearLayout) itemView.findViewById(R.id.ll_recommend_service);
@@ -126,6 +153,8 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
             tv_welcome_pro = (TextView) itemView.findViewById(R.id.tv_welcome_pro);
             tv_recommend_pro = (TextView) itemView.findViewById(R.id.tv_recommend_pro);
             tv_box_name = (TextView) itemView.findViewById(R.id.tv_box_name);
+            tv_wel_playing = (TextView) itemView.findViewById(R.id.tv_wel_playing);
+            tv_recommend_playing = (TextView) itemView.findViewById(R.id.tv_recommend_playing);
         }
     }
 
