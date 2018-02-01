@@ -89,6 +89,7 @@ public class Recommend4ServiceActivity extends BaseActivity implements View.OnCl
 
     private void handleIntent() {
         currentType = (RecommendFoodActivity.OperationType) getIntent().getSerializableExtra("type");
+        currentRoom = (RoomInfo) getIntent().getSerializableExtra("box");
     }
 
     private void getData() {
@@ -127,13 +128,13 @@ public class Recommend4ServiceActivity extends BaseActivity implements View.OnCl
     }
 
     private void initTitleBar() {
-        mTitleTv.setText("请选择投屏包间");
-        TextPaint tp = mTitleTv.getPaint();
-        tp.setFakeBoldText(true);
-        mTitleTv.setCompoundDrawablesWithIntrinsicBounds(null,null,getResources().getDrawable(R.drawable.ico_arrow_down),null);
-        mTitleTv.setCompoundDrawablePadding(DensityUtil.dip2px(this,10));
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mBackBtn.getLayoutParams();
-        layoutParams.setMargins(DensityUtil.dip2px(this,15),0,0,0);
+        mTitleTv.setText("推荐菜");
+//        TextPaint tp = mTitleTv.getPaint();
+//        tp.setFakeBoldText(true);
+//        mTitleTv.setCompoundDrawablesWithIntrinsicBounds(null,null,getResources().getDrawable(R.drawable.ico_arrow_down),null);
+//        mTitleTv.setCompoundDrawablePadding(DensityUtil.dip2px(this,10));
+//        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mBackBtn.getLayoutParams();
+//        layoutParams.setMargins(DensityUtil.dip2px(this,15),0,0,0);
 
 //        RoomInfo bindRoom = mSession.getBindRoom();
 //        if(bindRoom!=null&&!TextUtils.isEmpty(bindRoom.getBox_name())) {
@@ -193,13 +194,13 @@ public class Recommend4ServiceActivity extends BaseActivity implements View.OnCl
                     finish();
                 }
                 break;
-            case R.id.tv_center:
-                if(!isSelectRommState) {
-                    showRoomList();
-
-                }
-
-                break;
+//            case R.id.tv_center:
+//                if(!isSelectRommState) {
+//                    showRoomList();
+//
+//                }
+//
+//                break;
             case R.id.tv_pro:
                 currentProType = TYPE_PRO_MULTI;
                 startMultiPro();

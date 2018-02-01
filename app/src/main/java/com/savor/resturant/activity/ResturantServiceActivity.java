@@ -1,5 +1,6 @@
 package com.savor.resturant.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,13 +11,18 @@ import android.widget.TextView;
 import com.common.api.utils.DensityUtil;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.RoomServiceAdapter;
+import com.savor.resturant.bean.RoomInfo;
 import com.savor.resturant.widget.decoration.SpacesItemDecoration;
+
+import java.util.List;
+
+import static com.savor.resturant.activity.RecommendFoodActivity.OperationType.TYPE_RECOMMEND_FOODS;
 
 /**
  * 餐厅服务
  * @author hezd 2018/01/30
  */
-public class ResturantServiceActivity extends BaseActivity implements View.OnClickListener {
+public class ResturantServiceActivity extends BaseActivity implements View.OnClickListener, RoomServiceAdapter.OnItemClickListener {
 
     private RecyclerView mRoomListRlv;
     private ImageView mBackBtn;
@@ -60,11 +66,14 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
 
         mRoomListRlv.addItemDecoration(new SpacesItemDecoration(leftRight, topBottom, getResources().getColor(R.color.color_ece6de)));
 
+        List<RoomInfo> roomList = mSession.getRoomList();
+        roomServiceAdapter.setData(roomList);
     }
 
     @Override
     public void setListeners() {
         mBackBtn.setOnClickListener(this);
+        roomServiceAdapter.setOnItemClickListener(this);
     }
 
     @Override
@@ -72,6 +81,21 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
         switch (v.getId()) {
             case R.id.iv_left:
                 finish();
+                break;
+        }
+    }
+
+    @Override
+    public void onItemClick(RoomInfo roomInfo, RoomServiceAdapter.ProType type) {
+        switch (type) {
+            case TYPE_WELCOM:
+
+                break;
+            case TYPE_RECOMMEND:
+                Intent intent = new Intent(this,Recommend4ServiceActivity.class);
+                intent.putExtra("box",roomInfo);
+                intent.putExtra("type",TYPE_RECOMMEND_FOODS);
+                startActivity(intent);
                 break;
         }
     }

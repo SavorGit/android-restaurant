@@ -5,6 +5,7 @@
     android:background="@color/color_bottom_bg"
     android:orientation="vertical">
     <TextView
+        android:id="@+id/tv_box_name"
         android:layout_marginLeft="15dp"
         android:text="凌波仙子"
         android:textSize="20sp"
@@ -22,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
+            android:id="@+id/ll_welcome_item"
             android:paddingLeft="10dp"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
@@ -81,15 +83,16 @@
 
         </LinearLayout>
         <TextView
+            android:id="@+id/tv_welcome_pro"
             android:gravity="center"
-            android:textColor="@color/white"
+            android:textColor="@color/colorPrimaryDark"
             android:padding="15dp"
-            android:background="@drawable/bg_pro_btn"
+            android:background="@drawable/bg_pro_exit_btn"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginLeft="10dp"
             android:layout_gravity="center_vertical"
-            android:text="退出"
+            android:text="投屏"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -155,6 +158,7 @@
 
         </LinearLayout>
         <TextView
+            android:id="@+id/tv_recommend_pro"
             android:gravity="center"
             android:textColor="@color/colorPrimaryDark"
             android:padding="15dp"

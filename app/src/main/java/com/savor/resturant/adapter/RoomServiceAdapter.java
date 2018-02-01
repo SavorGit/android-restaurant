@@ -7,10 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.savor.resturant.R;
 import com.savor.resturant.activity.Recommend4ServiceActivity;
 import com.savor.resturant.activity.RecommendFoodActivity;
+import com.savor.resturant.bean.RoomInfo;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * 餐厅服务包间列表适配器
@@ -19,9 +24,24 @@ import com.savor.resturant.activity.RecommendFoodActivity;
 
 public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.RommServiceHolder> {
     private Context mContext;
+    private List<RoomInfo> mData;
+    private OnItemClickListener onItemClickListener;
+
+    /**
+     * 投屏类型，欢迎词，推荐菜
+     */
+    public enum ProType implements Serializable {
+        TYPE_WELCOM,
+        TYPE_RECOMMEND,
+    }
 
     public RoomServiceAdapter(Context context) {
         this.mContext = context;
+    }
+
+    public void setData(List<RoomInfo> data) {
+        this.mData = data;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -30,14 +50,33 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
     }
 
     @Override
-    public void onBindViewHolder(RommServiceHolder holder, int position) {
+    public void onBindViewHolder(final RommServiceHolder holder, int position) {
+        RoomInfo info = mData.get(position);
+        String box_name = info.getBox_name();
+
+        holder.tv_box_name.setText(box_name);
+
         holder.ll_recommend_service.setTag(position);
         holder.ll_recommend_service.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, Recommend4ServiceActivity.class);
-                intent.putExtra("type", RecommendFoodActivity.OperationType.TYPE_RECOMMEND_FOODS);
-                mContext.startActivity(intent);
+                int position = (int) holder.ll_recommend_service.getTag();
+                RoomInfo clickRoom = mData.get(position);
+                if(onItemClickListener!=null) {
+                    onItemClickListener.onItemClick(clickRoom,ProType.TYPE_RECOMMEND);
+                }
+            }
+        });
+
+        holder.ll_welcome_item.setTag(position);
+        holder.ll_welcome_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = (int) holder.ll_welcome_item.getTag();
+                RoomInfo clickRoom = mData.get(position);
+                if(onItemClickListener!=null) {
+                    onItemClickListener.onItemClick(clickRoom,ProType.TYPE_WELCOM);
+                }
             }
         });
     }
@@ -50,10 +89,25 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
     public class RommServiceHolder extends RecyclerView.ViewHolder {
 
         public LinearLayout ll_recommend_service;
+        public LinearLayout ll_welcome_item;
+        public TextView tv_welcome_pro;
+        public TextView tv_recommend_pro;
+        public TextView tv_box_name;
         public RommServiceHolder(View itemView) {
             super(itemView);
             ll_recommend_service = (LinearLayout) itemView.findViewById(R.id.ll_recommend_service);
+            ll_welcome_item = (LinearLayout) itemView.findViewById(R.id.ll_welcome_item);
+            tv_welcome_pro = (TextView) itemView.findViewById(R.id.tv_welcome_pro);
+            tv_recommend_pro = (TextView) itemView.findViewById(R.id.tv_recommend_pro);
+            tv_box_name = (TextView) itemView.findViewById(R.id.tv_box_name);
         }
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(RoomInfo roomInfo,ProType type);
+    }
+
+    public void setOnItemClickListener (OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 }
