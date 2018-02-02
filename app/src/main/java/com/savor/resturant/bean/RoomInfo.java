@@ -130,7 +130,7 @@ public class RoomInfo implements Serializable {
         isRecommendPlay = recommendPlay;
     }
 
-//    public void startWelcomeTimer(final Context context, int welSec, final int completeSec) {
+//    public void startWelcomeAndRecommendTimer(final Context context, int welSec, final int completeSec) {
 //        if(timer!=null) {
 //            timer.cancel();
 //        }

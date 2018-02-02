@@ -46,8 +46,13 @@ public class RoomService {
         this.roomInfo = roomInfo;
     }
 
-
-    public void startWelcomeTimer(final Context context, int welSec, final int completeSec) {
+    /**
+     * 播放欢迎词和推荐菜（联播）
+     * @param context
+     * @param welSec
+     * @param completeSec
+     */
+    public void startWelcomeAndRecommendTimer(final Context context, int welSec, final int completeSec) {
         if(timer!=null) {
             timer.cancel();
         }
@@ -103,5 +108,38 @@ public class RoomService {
         completetimer.start();
     }
 
+    /**
+     * 播放欢迎词
+     * @param context
+     * @param welSec
+     */
+    public void startWelcomeTimer(final Context context, int welSec) {
+        if(timer!=null) {
+            timer.cancel();
+        }
+        if(completetimer !=null) {
+            completetimer.cancel();
+        }
 
+        roomInfo.setWelPlay(true);
+        roomInfo.setRecommendPlay(false);
+        Intent intent = new Intent(ConstantValues.ACTION_REFRESH_PRO_STATE_DELAYED);
+        context.sendBroadcast(intent);
+
+        timer = new CountDownTimer(welSec*1000, welSec*1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                roomInfo.setWelPlay(false);
+                roomInfo.setRecommendPlay(false);
+                Intent intent = new Intent(ConstantValues.ACTION_REFRESH_PRO_STATE_DELAYED);
+                context.sendBroadcast(intent);
+            }
+        };
+        timer.start();
+    }
 }
