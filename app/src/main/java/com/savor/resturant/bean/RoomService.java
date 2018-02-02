@@ -47,7 +47,7 @@ public class RoomService {
     }
 
 
-    public void startRecommendTimer(final Context context, int welSec, final int completeSec) {
+    public void startWelcomeTimer(final Context context, int welSec, final int completeSec) {
         if(timer!=null) {
             timer.cancel();
         }
@@ -62,18 +62,18 @@ public class RoomService {
 
             @Override
             public void onFinish() {
-                startCompleteTimer(context, completeSec);
+                startRecommendTimer(context, completeSec);
             }
         };
         timer.start();
     }
 
     /**
-     * 延迟指定时间结束投屏
+     * 播放推荐菜
      * @param context
      * @param completeSec
      */
-    public void startCompleteTimer(final Context context, final int completeSec) {
+    public void startRecommendTimer(final Context context, final int completeSec) {
         if(timer!=null) {
             timer.cancel();
         }
@@ -81,7 +81,7 @@ public class RoomService {
             completetimer.cancel();
         }
         roomInfo.setWelPlay(false);
-        roomInfo.setRecommendPlay(false);
+        roomInfo.setRecommendPlay(true);
         Intent intent = new Intent(ConstantValues.ACTION_REFRESH_PRO_STATE_DELAYED);
         context.sendBroadcast(intent);
 
@@ -102,4 +102,6 @@ public class RoomService {
         };
         completetimer.start();
     }
+
+
 }

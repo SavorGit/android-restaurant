@@ -25,6 +25,7 @@ import com.savor.resturant.bean.RoomService;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.ResponseErrorMessage;
 import com.savor.resturant.utils.ConstantValues;
+import com.savor.resturant.widget.CommonDialog;
 import com.savor.resturant.widget.LoadingDialog;
 import com.savor.resturant.widget.decoration.SpacesItemDecoration;
 
@@ -106,11 +107,13 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
             roomService.setRoomInfo(roomList.get(i));
             roomServiceList.add(roomService);
         }
+        mSession.setRoomServiceList(roomServiceList);
         roomServiceAdapter.setData(roomServiceList);
     }
 
     @Override
     public void setListeners() {
+        mRightTv.setOnClickListener(this);
         mBackBtn.setOnClickListener(this);
         roomServiceAdapter.setOnItemClickListener(this);
         roomServiceAdapter.setOnWelBtnClickListener(this);
@@ -120,6 +123,9 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tv_right:
+//                new CommonDialog(this,)
+                break;
             case R.id.iv_left:
                 finish();
                 break;
@@ -128,12 +134,15 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
 
     @Override
     public void onItemClick(RoomService roomInfo, RoomServiceAdapter.ProType type) {
+        Intent intent;
         switch (type) {
             case TYPE_WELCOM:
-
+                intent = new Intent(this,WelComeSetTextNewActivity.class);
+                intent.putExtra("box",roomInfo.getRoomInfo());
+                startActivity(intent);
                 break;
             case TYPE_RECOMMEND:
-                Intent intent = new Intent(this,Recommend4ServiceActivity.class);
+                intent = new Intent(this,Recommend4ServiceActivity.class);
                 intent.putExtra("box",roomInfo.getRoomInfo());
                 intent.putExtra("type",TYPE_RECOMMEND_FOODS);
                 startActivity(intent);
@@ -201,7 +210,7 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
 
     @Override
     public void onRecommendBtnClick(RoomService roomInfo, RoomServiceAdapter.ProType type) {
-        roomInfo.startCompleteTimer(getApplicationContext(),10);
+        roomInfo.startRecommendTimer(getApplicationContext(),10);
     }
 
     @Override
@@ -223,7 +232,7 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
 
     private void recommendPlayDelayed() {
         /************5分钟以后开始播放推荐菜***********/
-        currentRoom.startRecommendTimer(getApplicationContext(),10,10);
+        currentRoom.startWelcomeTimer(getApplicationContext(),10,10);
 //        ProjectionService.startActionRecommend(this,currentRoom);
 //        int requestCode = 0;
 //        try {

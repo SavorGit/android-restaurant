@@ -26,6 +26,7 @@ import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.RecommendFoodAdvert;
 import com.savor.resturant.bean.RecommendProHistory;
 import com.savor.resturant.bean.RoomInfo;
+import com.savor.resturant.bean.RoomService;
 import com.savor.resturant.bean.SmallPlatInfoBySSDP;
 import com.savor.resturant.bean.SmallPlatformByGetIp;
 import com.savor.resturant.bean.TvBoxSSDPInfo;
@@ -492,6 +493,16 @@ public class Recommend4ServiceActivity extends BaseActivity implements View.OnCl
         switch (method) {
             case GET_RECOMMEND_PRO_JSON:
             case GET_ADVERT_PRO_JSON:
+                RoomService roomService = new RoomService();
+                roomService.setRoomInfo(currentRoom);
+
+                List<RoomService> roomServiceList = mSession.getRoomServiceList();
+                if(roomServiceList!=null&&roomServiceList.contains(roomService)) {
+                    int i = roomServiceList.indexOf(roomService);
+                    RoomService currentService = roomServiceList.get(i);
+                    currentService.startRecommendTimer(getApplicationContext(),10);
+                }
+
                 hideLoadingLayout();
                 OkHttpUtils.getInstance().getOkHttpClient().dispatcher().cancelAll();
                 List<RecommendFoodAdvert> data = mRecommendAdapter.getData();

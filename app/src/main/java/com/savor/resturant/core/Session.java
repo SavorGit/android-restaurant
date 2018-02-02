@@ -48,6 +48,7 @@ import com.savor.resturant.bean.OperationFailedItem;
 import com.savor.resturant.bean.PdfInfo;
 import com.savor.resturant.bean.RecommendProHistory;
 import com.savor.resturant.bean.RoomInfo;
+import com.savor.resturant.bean.RoomService;
 import com.savor.resturant.bean.SmallPlatInfoBySSDP;
 import com.savor.resturant.bean.SmallPlatformByGetIp;
 import com.savor.resturant.bean.StartUpSettingsBean;
@@ -263,6 +264,7 @@ public class Session {
     private boolean isShowImportDialog;
     /**缓存到内存中的客户列表*/
     private CustomerListBean cusList;
+    private List<RoomService> roomServiceList;
 
     private Session(Context context) {
 
@@ -1137,5 +1139,13 @@ public class Session {
 
     public KeyWordBean getKeyWordBean(){
         return this.keyWordBean;
+    }
+
+    public void setRoomServiceList(List<RoomService> roomServiceList) {
+        this.roomServiceList = roomServiceList;
+    }
+
+    public List<RoomService> getRoomServiceList() {
+        return roomServiceList;
     }
 }
