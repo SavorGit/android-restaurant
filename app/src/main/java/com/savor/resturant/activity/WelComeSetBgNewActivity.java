@@ -44,6 +44,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
     private TextView tv_center;
     private TextView t1,t2,t3,t4,t5,t6,t7,t8;
     private RelativeLayout bg_l1,bg_l2,bg_l3,bg_l4,bg_l5,bg_l6,bg_l7,bg_l8;
+    private ImageView h1,h2,h3,h4,h5,h6,h7,h8;
     private String keyWord;
     private RecyclerView mRoomListView;
     private RoomListAdapter roomListAdapter;
@@ -98,6 +99,15 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
         bg_l6 = (RelativeLayout) findViewById(R.id.bg_l6);
         bg_l7 = (RelativeLayout) findViewById(R.id.bg_l7);
         bg_l8 = (RelativeLayout) findViewById(R.id.bg_l8);
+        h1 = (ImageView) findViewById(R.id.h1);
+        h2 = (ImageView) findViewById(R.id.h2);
+        h3 = (ImageView) findViewById(R.id.h4);
+        h4 = (ImageView) findViewById(R.id.h4);
+        h5 = (ImageView) findViewById(R.id.h5);
+        h6 = (ImageView) findViewById(R.id.h6);
+        h7 = (ImageView) findViewById(R.id.h7);
+        h8 = (ImageView) findViewById(R.id.h8);
+
 
     }
 
@@ -189,17 +199,85 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
 
 
     private void setPro(String templateId){
-//        if(currentRoom == null) {
-//            initRoomNotSelected();
-//            return;
-//        }
         CurrentTemplateId = templateId;
-//        if(!isSelectRommState) {
-//            showRoomList();
-//        }
+        if ("1".equals(templateId)) {
+            h1.setImageResource(R.drawable.hb_1c);
+            h2.setImageResource(R.drawable.hb_2);
+            h3.setImageResource(R.drawable.hb_3);
+            h4.setImageResource(R.drawable.hb_4);
+            h5.setImageResource(R.drawable.hb_5);
+            h6.setImageResource(R.drawable.hb_6);
+            h7.setImageResource(R.drawable.hb_7);
+            h8.setImageResource(R.drawable.hb_8);
+
+        }else if("2".equals(templateId)){
+            h1.setImageResource(R.drawable.hb_1);
+            h2.setImageResource(R.drawable.hb_2c);
+            h3.setImageResource(R.drawable.hb_3);
+            h4.setImageResource(R.drawable.hb_4);
+            h5.setImageResource(R.drawable.hb_5);
+            h6.setImageResource(R.drawable.hb_6);
+            h7.setImageResource(R.drawable.hb_7);
+            h8.setImageResource(R.drawable.hb_8);
+        }else if("3".equals(templateId)){
+            h1.setImageResource(R.drawable.hb_1);
+            h2.setImageResource(R.drawable.hb_2);
+            h3.setImageResource(R.drawable.hb_3c);
+            h4.setImageResource(R.drawable.hb_4);
+            h5.setImageResource(R.drawable.hb_5);
+            h6.setImageResource(R.drawable.hb_6);
+            h7.setImageResource(R.drawable.hb_7);
+            h8.setImageResource(R.drawable.hb_8);
+        }else if("4".equals(templateId)){
+            h1.setImageResource(R.drawable.hb_1);
+            h2.setImageResource(R.drawable.hb_2);
+            h3.setImageResource(R.drawable.hb_3);
+            h4.setImageResource(R.drawable.hb_4c);
+            h5.setImageResource(R.drawable.hb_5);
+            h6.setImageResource(R.drawable.hb_6);
+            h7.setImageResource(R.drawable.hb_7);
+            h8.setImageResource(R.drawable.hb_8);
+        }else if("5".equals(templateId)){
+            h1.setImageResource(R.drawable.hb_1);
+            h2.setImageResource(R.drawable.hb_2);
+            h3.setImageResource(R.drawable.hb_3);
+            h4.setImageResource(R.drawable.hb_4);
+            h5.setImageResource(R.drawable.hb_5);
+            h6.setImageResource(R.drawable.hb_6);
+            h7.setImageResource(R.drawable.hb_7);
+            h8.setImageResource(R.drawable.hb_8);
+        }else if("6".equals(templateId)){
+            h1.setImageResource(R.drawable.hb_1);
+            h2.setImageResource(R.drawable.hb_2);
+            h3.setImageResource(R.drawable.hb_3);
+            h4.setImageResource(R.drawable.hb_4);
+            h5.setImageResource(R.drawable.hb_5);
+            h6.setImageResource(R.drawable.hb_6c);
+            h7.setImageResource(R.drawable.hb_7);
+            h8.setImageResource(R.drawable.hb_8);
+        }else if("7".equals(templateId)){
+            h1.setImageResource(R.drawable.hb_1);
+            h2.setImageResource(R.drawable.hb_2);
+            h3.setImageResource(R.drawable.hb_3);
+            h4.setImageResource(R.drawable.hb_4);
+            h5.setImageResource(R.drawable.hb_5);
+            h6.setImageResource(R.drawable.hb_6);
+            h7.setImageResource(R.drawable.hb_7c);
+            h8.setImageResource(R.drawable.hb_8);
+        }else if("8".equals(templateId)){
+            h1.setImageResource(R.drawable.hb_1);
+            h2.setImageResource(R.drawable.hb_2);
+            h3.setImageResource(R.drawable.hb_3);
+            h4.setImageResource(R.drawable.hb_4);
+            h5.setImageResource(R.drawable.hb_5);
+            h6.setImageResource(R.drawable.hb_6);
+            h7.setImageResource(R.drawable.hb_7);
+            h8.setImageResource(R.drawable.hb_8c);
+        }
 
     }
 
+    
     private void proWord(String templateId,SmallPlatformByGetIp smallPlatformByGetIp, SmallPlatInfoBySSDP smallPlatInfoBySSDP, TvBoxSSDPInfo tvBoxSSDPInfo){
         erroCount = 0;
         // 1.通过getIp获取的小平台地址进行投屏
