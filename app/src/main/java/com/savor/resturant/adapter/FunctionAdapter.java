@@ -63,7 +63,7 @@ public class FunctionAdapter extends RecyclerView.Adapter<FunctionAdapter.Functi
                 HotelBean loginResponse = Session.get(mContext).getHotelBean();
                 if(loginResponse!=null) {
                     String hid = loginResponse.getHotel_id();
-//                    if (String.valueOf(hotelid).equals(hid)) {
+                    if (String.valueOf(hotelid).equals(hid)) {
                         Intent intent;
                         switch (type) {
                             case TYPE_RESTURANT_SERVICE:
@@ -95,11 +95,11 @@ public class FunctionAdapter extends RecyclerView.Adapter<FunctionAdapter.Functi
                                 mContext.startActivity(intent);
                                 break;
                         }
-//                    }else {
-//                        if(listener!=null) {
-//                            listener.onNoHotelClick();
-//                        }
-//                    }
+                    }else {
+                        if(listener!=null) {
+                            listener.onNoHotelClick();
+                        }
+                    }
                 }else {
                     if(listener!=null) {
                         listener.onNoHotelClick();

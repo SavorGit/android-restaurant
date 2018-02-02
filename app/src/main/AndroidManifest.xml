@@ -259,9 +259,13 @@
         <activity
             android:name=".activity.ResturantServiceActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.Recommend4ServiceActivity"
-            android:screenOrientation="portrait"
-            />
+        <activity
+            android:name=".activity.Recommend4ServiceActivity"
+            android:screenOrientation="portrait" />
+
+        <!--<service-->
+            <!--android:name=".service.ProjectionService"-->
+            <!--android:exported="false"></service>-->
     </application>
 
 </manifest>

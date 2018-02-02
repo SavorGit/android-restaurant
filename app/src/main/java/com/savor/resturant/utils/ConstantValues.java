@@ -50,4 +50,17 @@ public class ConstantValues {
         public static final int TAB_INDEX_SERVICE = 2;
         public static final int TAB_INDEX_MY = 3;
     }
+
+    /*****************广播action***********/
+    /**延迟5分钟后播放推荐菜*/
+    public static final String ACTION_RECOMMEND_PLAY_DELAYED_5MIN = "action_recommend_play_delayed_5min";
+    /**延迟指定时间（推荐菜播放完毕）修改播放状态*/
+    public static final String ACTION_REFRESH_PRO_STATE_DELAYED= "action_refresh_pro_state_delayed";
+
+
+    /*************Intent请求码****************/
+    /**延时5分钟播放推荐菜*/
+    public static final int REQUEST_CODE_RECOMEMND_PLAY_DELAYED = 10000;
+    /**推荐菜播放完毕后刷新播放状态*/
+    public static final int REQUEST_CODE_REFRESH_PRO_STATE_DELAYED = 10001;
 }
