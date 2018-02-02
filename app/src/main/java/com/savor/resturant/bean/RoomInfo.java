@@ -1,5 +1,11 @@
 package com.savor.resturant.bean;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.CountDownTimer;
+
+import com.savor.resturant.utils.ConstantValues;
+
 import java.io.Serializable;
 
 /**
@@ -123,4 +129,53 @@ public class RoomInfo implements Serializable {
     public void setRecommendPlay(boolean recommendPlay) {
         isRecommendPlay = recommendPlay;
     }
+
+//    public void startTimer(final Context context, int welSec, final int completeSec) {
+//        if(timer!=null) {
+//            timer.cancel();
+//        }
+//        timer = new CountDownTimer(welSec*1000, welSec*1000) {
+//            @Override
+//            public void onTick(long millisUntilFinished) {
+//
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                handleCompleteDelayed(context, completeSec);
+//            }
+//        };
+//        timer.start();
+//    }
+//
+//    /**
+//     * 延迟指定时间结束投屏
+//     * @param context
+//     * @param completeSec
+//     */
+//    private void handleCompleteDelayed(final Context context, final int completeSec) {
+//        setWelPlay(false);
+//        setRecommendPlay(true);
+//        Intent intent = new Intent(ConstantValues.ACTION_REFRESH_PRO_STATE_DELAYED);
+//        context.sendBroadcast(intent);
+//        if(completetimer !=null) {
+//            completetimer.cancel();
+//        }
+//        completetimer = new CountDownTimer(completeSec*1000, completeSec*1000) {
+//            @Override
+//            public void onTick(long millisUntilFinished) {
+//
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                setWelPlay(false);
+//                setRecommendPlay(false);
+//
+//                Intent intent = new Intent(ConstantValues.ACTION_REFRESH_PRO_STATE_DELAYED);
+//                context.sendBroadcast(intent);
+//            }
+//        };
+//        completetimer.start();
+//    }
 }

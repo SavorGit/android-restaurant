@@ -13,6 +13,7 @@ import com.savor.resturant.R;
 import com.savor.resturant.activity.Recommend4ServiceActivity;
 import com.savor.resturant.activity.RecommendFoodActivity;
 import com.savor.resturant.bean.RoomInfo;
+import com.savor.resturant.bean.RoomService;
 
 import java.io.Serializable;
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.List;
 
 public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.RommServiceHolder> {
     private Context mContext;
-    private List<RoomInfo> mData;
+    private List<RoomService> mData;
     private OnItemClickListener onItemClickListener;
     private OnWelBtnClickListener onWelBtnClickListener;
     private OnRecommendBtnClickListener onRecommendBtnClickListener;
@@ -41,9 +42,13 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
         this.mContext = context;
     }
 
-    public void setData(List<RoomInfo> data) {
+    public void setData(List<RoomService> data) {
         this.mData = data;
         notifyDataSetChanged();
+    }
+
+    public List<RoomService> getData() {
+        return mData;
     }
 
     @Override
@@ -53,7 +58,8 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
 
     @Override
     public void onBindViewHolder(final RommServiceHolder holder, int position) {
-        RoomInfo info = mData.get(position);
+        RoomService roomService = mData.get(position);
+        RoomInfo info = roomService.getRoomInfo();
         String box_name = info.getBox_name();
         boolean recommendPlay = info.isRecommendPlay();
         boolean welPlay = info.isWelPlay();
@@ -65,7 +71,7 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
             @Override
             public void onClick(View v) {
                 int position = (int) holder.ll_recommend_service.getTag();
-                RoomInfo clickRoom = mData.get(position);
+                RoomService clickRoom = mData.get(position);
                 if(onItemClickListener!=null) {
                     onItemClickListener.onItemClick(clickRoom,ProType.TYPE_RECOMMEND);
                 }
@@ -77,7 +83,7 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
             @Override
             public void onClick(View v) {
                 int position = (int) holder.ll_welcome_item.getTag();
-                RoomInfo clickRoom = mData.get(position);
+                RoomService clickRoom = mData.get(position);
                 if(onItemClickListener!=null) {
                     onItemClickListener.onItemClick(clickRoom,ProType.TYPE_WELCOM);
                 }
@@ -89,7 +95,7 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
             @Override
             public void onClick(View v) {
                 int position = (int) holder.tv_welcome_pro.getTag();
-                RoomInfo clickRoom = mData.get(position);
+                RoomService clickRoom = mData.get(position);
                 if(onWelBtnClickListener!=null) {
                     onWelBtnClickListener.onWelBtnClick(clickRoom,ProType.TYPE_WELCOM);
                 }
@@ -101,7 +107,7 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
             @Override
             public void onClick(View v) {
                 int position = (int) holder.tv_recommend_pro.getTag();
-                RoomInfo clickRoom = mData.get(position);
+                RoomService clickRoom = mData.get(position);
                 if(onRecommendBtnClickListener!=null) {
                     onRecommendBtnClickListener.onRecommendBtnClick(clickRoom,ProType.TYPE_RECOMMEND);
                 }
@@ -159,7 +165,7 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
     }
 
     public interface OnItemClickListener {
-        void onItemClick(RoomInfo roomInfo,ProType type);
+        void onItemClick(RoomService roomInfo,ProType type);
     }
 
     public void setOnItemClickListener (OnItemClickListener onItemClickListener) {
@@ -167,7 +173,7 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
     }
 
     public interface OnWelBtnClickListener {
-        void onWelBtnClick(RoomInfo roomInfo,ProType type);
+        void onWelBtnClick(RoomService roomInfo,ProType type);
     }
 
     /**
@@ -179,7 +185,7 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
     }
 
     public interface OnRecommendBtnClickListener {
-        void onRecommendBtnClick(RoomInfo roomInfo,ProType type);
+        void onRecommendBtnClick(RoomService roomInfo,ProType type);
     }
 
     /**
