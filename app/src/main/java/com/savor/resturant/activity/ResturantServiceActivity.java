@@ -20,6 +20,7 @@ import com.common.api.utils.LogUtils;
 import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.RoomServiceAdapter;
+import com.savor.resturant.bean.KeyWordBean;
 import com.savor.resturant.bean.RoomInfo;
 import com.savor.resturant.bean.RoomService;
 import com.savor.resturant.core.AppApi;
@@ -131,7 +132,11 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
                         new CommonDialog.OnConfirmListener() {
                             @Override
                             public void onConfirm() {
-
+                                KeyWordBean keyWordBean = mSession.getKeyWordBean();
+                                if(keyWordBean!=null) {
+                                    keyWordBean.setKeyWord("欢迎光临，祝您用餐愉快！");
+                                    mSession.setkeyWordBean(keyWordBean);
+                                }
                             }
                         },
                         new CommonDialog.OnCancelListener() {
