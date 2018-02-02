@@ -22,6 +22,7 @@ import com.savor.resturant.adapter.RoomListAdapter;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.KeyWordBean;
 import com.savor.resturant.bean.RoomInfo;
+import com.savor.resturant.bean.RoomService;
 import com.savor.resturant.bean.SmallPlatInfoBySSDP;
 import com.savor.resturant.bean.SmallPlatformByGetIp;
 import com.savor.resturant.bean.TvBoxSSDPInfo;
@@ -46,8 +47,8 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
     private RelativeLayout bg_l1,bg_l2,bg_l3,bg_l4,bg_l5,bg_l6,bg_l7,bg_l8;
     private ImageView h1,h2,h3,h4,h5,h6,h7,h8;
     private String keyWord;
-    private RecyclerView mRoomListView;
-    private RoomListAdapter roomListAdapter;
+//    private RecyclerView mRoomListView;
+//    private RoomListAdapter roomListAdapter;
     //private RoomInfo currentRoom;
     private boolean isSelectRommState;
     private int erroCount;
@@ -82,7 +83,6 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
     public void getViews() {
         iv_left = (ImageView) findViewById(R.id.iv_left);
         tv_center = (TextView) findViewById(R.id.tv_center);
-        mRoomListView = (RecyclerView) findViewById(R.id.rlv_room);
         t1 = (TextView) findViewById(R.id.t1);
         t2 = (TextView) findViewById(R.id.t2);
         t3 = (TextView) findViewById(R.id.t3);
@@ -116,6 +116,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
     public void setViews() {
 //        initTitleBar();
 //        initRoomList();
+        tv_right.setVisibility(View.VISIBLE);
         tv_center.setText("请选择背景");
         if (!TextUtils.isEmpty(keyWord)) {
             t1.setText(keyWord);
@@ -144,7 +145,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
         bg_l7.setOnClickListener(this);
         bg_l8.setOnClickListener(this);
         tv_right.setOnClickListener(this);
-        roomListAdapter.setOnRoomItemClickListener(this);
+       // roomListAdapter.setOnRoomItemClickListener(this);
 
     }
 
@@ -327,52 +328,6 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
 //        currentRoom = bindRoom;
     }
 
-    private void showRoomList() {
-//        if(currentRoom!=null) {
-//            tv_center.setText(currentRoom.getBox_name());
-//        }else {
-//            tv_center.setText("请选择投屏包间");
-//        }
-        mRoomListView.setVisibility(View.VISIBLE);
-        tv_center.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-        iv_left.setImageResource(R.drawable.ico_close);
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.actionsheet_dialog_in);
-        mRoomListView.startAnimation(animation);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                mRoomListView.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-
-        isSelectRommState  = true;
-    }
-    private void initRoomList() {
-        //添加ItemDecoration，item之间的间隔
-        int leftRight = DensityUtil.dip2px(this,15);
-        int topBottom = DensityUtil.dip2px(this,15);
-        GridLayoutManager roomLayoutManager = new GridLayoutManager(this,3);
-        roomLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
-        mRoomListView.setLayoutManager(roomLayoutManager);
-        roomListAdapter = new RoomListAdapter(this);
-        mRoomListView.setAdapter(roomListAdapter);
-        List<RoomInfo> roomList = mSession.getRoomList();
-        mRoomListView.addItemDecoration(new SpacesItemDecoration(leftRight, topBottom, getResources().getColor(R.color.white)));
-        if(roomList!=null && roomList.size()>0) {
-            roomListAdapter.setData(roomList);
-        }
-    }
-
 
     private void toWord(){
         SmallPlatformByGetIp smallPlatformByGetIp = mSession.getmSmallPlatInfoByIp();
@@ -388,37 +343,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
 
     }
 
-    private void hideRommList() {
 
-//        if(currentRoom!=null) {
-//            tv_center.setText(currentRoom.getBox_name());
-//        }else {
-//            tv_center.setText("请选择投屏包间");
-//        }
-//        tv_center.setCompoundDrawablesWithIntrinsicBounds(null,null,getResources().getDrawable(R.drawable.ico_arrow_down),null);
-        iv_left.setImageResource(R.drawable.back);
-
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.actionsheet_dialog_out);
-        mRoomListView.startAnimation(animation);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                mRoomListView.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        isSelectRommState = false;
-        resetRoomList();
-    }
 
     @Override
     public void onSuccess(AppApi.Action method, Object obj) {
@@ -433,6 +358,16 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
                     keyWordBean.setTemplateId(CurrentTemplateId);
                     mSession.setkeyWordBean(keyWordBean);
                 }
+                RoomService roomService = new RoomService();
+                roomService.setRoomInfo(roomInfo);
+
+                List<RoomService> roomServiceList = mSession.getRoomServiceList();
+                if(roomServiceList!=null&&roomServiceList.contains(roomService)) {
+                    int i = roomServiceList.indexOf(roomService);
+                    RoomService currentService = roomServiceList.get(i);
+                    currentService.startWelcomeTimer(getApplicationContext(),60*5);
+                }
+
 
                 AppApi.reportLog(context,
                         hotel.getHotel_id()+"",
@@ -510,7 +445,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
 
     private void initRoomNotSelected() {
         ShowMessage.showToast(this, "请选择包间");
-        showRoomList();
+
     }
 
     @Override
