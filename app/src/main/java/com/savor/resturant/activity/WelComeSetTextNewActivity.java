@@ -72,6 +72,10 @@ public class WelComeSetTextNewActivity extends BaseActivity implements View.OnCl
         tv_right.setText("下一步");
         tv_right.setVisibility(View.VISIBLE);
         tv_right.setTextColor(context.getResources().getColor(R.color.color_f6f2ed));
+        String word = mSession.getKeyWordBean().getKeyWord();
+        if (!TextUtils.isEmpty(word)) {
+            t1.setText(word);
+        }
     }
 
     @Override
