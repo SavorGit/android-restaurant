@@ -64,13 +64,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:id="@+id/tv_wel"
+                    android:maxWidth="180dp"
                     android:textSize="13sp"
                     android:textColor="@color/color_888888"
                     android:singleLine="true"
                     android:ellipsize="end"
-                    android:layout_weight="1"
-                    android:text="欢迎刘总莅临本店，祝您用餐愉快"
-                    android:layout_width="match_parent"
+                    android:text="欢迎光临，祝您用餐愉快祝您用餐愉快"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
                     android:textSize="13sp"
