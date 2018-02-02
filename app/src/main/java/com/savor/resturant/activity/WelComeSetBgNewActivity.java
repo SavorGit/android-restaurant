@@ -117,6 +117,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
 //        initTitleBar();
 //        initRoomList();
         tv_right.setVisibility(View.VISIBLE);
+        tv_right.setText("完成");
         tv_center.setText("请选择背景");
         if (!TextUtils.isEmpty(keyWord)) {
             t1.setText(keyWord);
