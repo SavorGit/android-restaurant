@@ -271,6 +271,9 @@ public class LoginForCodeActivity extends BaseActivity implements View.OnClickLi
                             homeIntent.setDataAndType(data,intent.getType());
                         }
                         startActivity(homeIntent);
+
+                        // 重置播放状态
+
                        // finish();
                         finish();
                     }
