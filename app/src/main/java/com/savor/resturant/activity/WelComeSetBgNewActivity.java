@@ -20,6 +20,7 @@ import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.RoomListAdapter;
 import com.savor.resturant.bean.HotelBean;
+import com.savor.resturant.bean.KeyWordBean;
 import com.savor.resturant.bean.RoomInfo;
 import com.savor.resturant.bean.SmallPlatInfoBySSDP;
 import com.savor.resturant.bean.SmallPlatformByGetIp;
@@ -46,14 +47,15 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
     private String keyWord;
     private RecyclerView mRoomListView;
     private RoomListAdapter roomListAdapter;
-    private RoomInfo currentRoom;
+    //private RoomInfo currentRoom;
     private boolean isSelectRommState;
     private int erroCount;
     private LoadingDialog mLoadingDialog;
     private String CurrentTemplateId;
     private String erroMsg1;
     private String box_mac;
-    private String is;
+    private String is_default;
+    private TextView tv_right;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +72,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
         if (intent != null) {
             keyWord = intent.getStringExtra("keyWord");
             box_mac = intent.getStringExtra("bMac");
+            is_default = intent.getStringExtra("is_default");
         }
     }
 
@@ -86,6 +89,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
         t6 = (TextView) findViewById(R.id.t6);
         t7 = (TextView) findViewById(R.id.t7);
         t8 = (TextView) findViewById(R.id.t8);
+        tv_right = (TextView) findViewById(R.id.tv_right);
         bg_l1 = (RelativeLayout) findViewById(R.id.bg_l1);
         bg_l2 = (RelativeLayout) findViewById(R.id.bg_l2);
         bg_l3 = (RelativeLayout) findViewById(R.id.bg_l3);
@@ -99,8 +103,8 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void setViews() {
-        initTitleBar();
-        initRoomList();
+//        initTitleBar();
+//        initRoomList();
         tv_center.setText("请选择背景");
         if (!TextUtils.isEmpty(keyWord)) {
             t1.setText(keyWord);
@@ -128,6 +132,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
         bg_l6.setOnClickListener(this);
         bg_l7.setOnClickListener(this);
         bg_l8.setOnClickListener(this);
+        tv_right.setOnClickListener(this);
         roomListAdapter.setOnRoomItemClickListener(this);
 
     }
@@ -137,11 +142,12 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.iv_left:
-                if(isSelectRommState) {
-                    hideRommList();
-                }else {
-                    finish();
-                }
+//                if(isSelectRommState) {
+//                    hideRommList();
+//                }else {
+//                    finish();
+//                }
+                finish();
                 break;
             case R.id.bg_l1:
                 setPro("1");
@@ -167,6 +173,9 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
             case R.id.bg_l8:
                 setPro("8");
                 break;
+            case R.id.tv_right:
+                toWord();
+                break;
             case R.id.tv_center:
 //                if(!isSelectRommState) {
 //                    showRoomList();
@@ -185,9 +194,9 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
 //            return;
 //        }
         CurrentTemplateId = templateId;
-        if(!isSelectRommState) {
-            showRoomList();
-        }
+//        if(!isSelectRommState) {
+//            showRoomList();
+//        }
 
     }
 
@@ -198,7 +207,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
             String localIp = smallPlatformByGetIp.getLocalIp();
             String url = "http://"+localIp+":8080";
             showLoadingLayout();
-            AppApi.wordPro(this,url,currentRoom.getBox_mac(),templateId,keyWord,this);
+            AppApi.wordPro(this,url,box_mac,templateId,keyWord,this);
         }else {
             erroCount++;
         }
@@ -208,7 +217,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
             String serverIp = smallPlatInfoBySSDP.getServerIp();
             String url = "http://"+serverIp+":8080";
             showLoadingLayout();
-            AppApi.wordPro(this,url,currentRoom.getBox_mac(),templateId,keyWord,this);
+            AppApi.wordPro(this,url,box_mac,templateId,keyWord,this);
         }else {
             erroCount++;
         }
@@ -218,7 +227,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
             String serverIp = tvBoxSSDPInfo.getServerIp();
             String url = "http://"+serverIp+":8080";
             showLoadingLayout();
-            AppApi.wordPro(this,url,currentRoom.getBox_mac(),templateId,keyWord,this);
+            AppApi.wordPro(this,url,box_mac,templateId,keyWord,this);
         }else {
             erroCount++;
         }
@@ -285,14 +294,18 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
         }
     }
 
-    @Override
-    public void onRoomItemClick(RoomInfo roomInfo) {
-        currentRoom = roomInfo;
+
+    private void toWord(){
         SmallPlatformByGetIp smallPlatformByGetIp = mSession.getmSmallPlatInfoByIp();
         SmallPlatInfoBySSDP smallPlatInfoBySSDP = mSession.getSmallPlatInfoBySSDP();
         TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
         proWord(CurrentTemplateId,smallPlatformByGetIp,smallPlatInfoBySSDP,tvBoxSSDPInfo);
-        hideRommList();
+    }
+    @Override
+    public void onRoomItemClick(RoomInfo roomInfo) {
+       // currentRoom = roomInfo;
+
+        //hideRommList();
 
     }
 
@@ -335,11 +348,18 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
             case GET_WORD_PRO_JSON:
                 HotelBean hotel = mSession.getHotelBean();
                 ShowMessage.showToast(this,"投屏成功！");
+                if ("1".equals(is_default)) {
+                    KeyWordBean keyWordBean = new KeyWordBean();
+                    keyWordBean.setKeyWord(keyWord);
+                    keyWordBean.setTemplateId(CurrentTemplateId);
+                    mSession.setkeyWordBean(keyWordBean);
+                }
+
                 AppApi.reportLog(context,
                         hotel.getHotel_id()+"",
                         "",hotel.getInvite_id(),
                         hotel.getTel(),
-                        currentRoom.getRoom_id(),
+                        box_mac,
                         "1",
                         "1",
                         "120",
@@ -435,7 +455,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
                 hotel.getHotel_id()+"",
                 "",hotel.getInvite_id(),
                 hotel.getTel(),
-                currentRoom.getRoom_id(),
+                box_mac,
                 "1",
                 "0",
                 "120",

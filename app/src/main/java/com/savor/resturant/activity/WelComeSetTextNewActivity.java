@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,6 +28,8 @@ public class WelComeSetTextNewActivity extends BaseActivity implements View.OnCl
     private EditText greeting;
     private TextView t1,t2,t3,t4,t5;
     private CheckBox is_default_word;
+    private String is_default = "1";
+    private String box_mac;
 
 
     @Override
@@ -34,11 +37,18 @@ public class WelComeSetTextNewActivity extends BaseActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome_set_text_new_layout);
         context = this;
+        getMac();
         getViews();
         setViews();
         setListeners();
     }
 
+    private void getMac(){
+        Intent intent = getIntent();
+        if (intent != null) {
+            box_mac = intent.getStringExtra("bMac");
+        }
+    }
     @Override
     public void getViews() {
         iv_left = (ImageView) findViewById(R.id.iv_left);
@@ -50,6 +60,7 @@ public class WelComeSetTextNewActivity extends BaseActivity implements View.OnCl
         t4 = (TextView) findViewById(R.id.t4);
         t5 = (TextView) findViewById(R.id.t5);
         greeting = (EditText) findViewById(R.id.greeting);
+        is_default_word = (CheckBox) findViewById(R.id.is_default_word);
     }
 
     @Override
@@ -92,6 +103,20 @@ public class WelComeSetTextNewActivity extends BaseActivity implements View.OnCl
 
         });
 
+        is_default_word.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,
+                                         boolean isChecked) {
+                // TODO Auto-generated method stub
+                if(isChecked){
+                    //选中
+                    is_default = "1";
+                }else{
+                    //取消选中
+                    is_default = "0";
+                }
+            }
+        });
 
     }
 
@@ -154,7 +179,10 @@ public class WelComeSetTextNewActivity extends BaseActivity implements View.OnCl
         if (!TextUtils.isEmpty(word)) {
             Intent intent = new Intent();
             intent.putExtra("keyWord",word);
-            intent.setClass(WelComeSetTextNewActivity.this,WelComeSetBgActivity.class);
+            intent.putExtra("is_default",is_default);
+            intent.putExtra("bMac",box_mac);
+
+            intent.setClass(WelComeSetTextNewActivity.this,WelComeSetTextNewActivity.class);
             startActivity(intent);
         }
 
