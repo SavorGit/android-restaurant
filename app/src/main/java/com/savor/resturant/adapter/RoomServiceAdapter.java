@@ -3,6 +3,7 @@ package com.savor.resturant.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +13,10 @@ import android.widget.TextView;
 import com.savor.resturant.R;
 import com.savor.resturant.activity.Recommend4ServiceActivity;
 import com.savor.resturant.activity.RecommendFoodActivity;
+import com.savor.resturant.bean.KeyWordBean;
 import com.savor.resturant.bean.RoomInfo;
 import com.savor.resturant.bean.RoomService;
+import com.savor.resturant.core.Session;
 
 import java.io.Serializable;
 import java.util.List;
@@ -29,6 +32,7 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
     private OnItemClickListener onItemClickListener;
     private OnWelBtnClickListener onWelBtnClickListener;
     private OnRecommendBtnClickListener onRecommendBtnClickListener;
+    private final Session session;
 
     /**
      * 投屏类型，欢迎词，推荐菜
@@ -40,6 +44,7 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
 
     public RoomServiceAdapter(Context context) {
         this.mContext = context;
+        session = Session.get(context);
     }
 
     public void setData(List<RoomService> data) {
@@ -136,6 +141,18 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
             holder.tv_welcome_pro.setBackgroundResource(R.drawable.bg_pro_exit_btn);
             holder.tv_welcome_pro.setText("投屏");
         }
+
+        KeyWordBean keyWordBean = session.getKeyWordBean();
+        if(keyWordBean!=null) {
+            String keyWord = keyWordBean.getKeyWord();
+            if(!TextUtils.isEmpty(keyWord)) {
+                holder.tv_wel.setText(keyWord);
+            }else {
+                holder.tv_wel.setText("欢迎光临，祝您用餐愉快！");
+            }
+        }else {
+            holder.tv_wel.setText("欢迎光临，祝您用餐愉快！");
+        }
     }
 
     @Override
@@ -151,6 +168,7 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
         public TextView tv_recommend_pro;
         public TextView tv_box_name;
         public TextView tv_wel_playing;
+        public TextView tv_wel;
         public TextView tv_recommend_playing;
         public RommServiceHolder(View itemView) {
             super(itemView);
@@ -161,6 +179,7 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
             tv_box_name = (TextView) itemView.findViewById(R.id.tv_box_name);
             tv_wel_playing = (TextView) itemView.findViewById(R.id.tv_wel_playing);
             tv_recommend_playing = (TextView) itemView.findViewById(R.id.tv_recommend_playing);
+            tv_wel = (TextView) itemView.findViewById(R.id.tv_wel);
         }
     }
 

@@ -101,14 +101,17 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
         mRoomListRlv.addItemDecoration(new SpacesItemDecoration(leftRight, topBottom, getResources().getColor(R.color.color_ece6de)));
 
         List<RoomInfo> roomList = mSession.getRoomList();
-        List<RoomService> roomServiceList = new ArrayList<>();
-        for(int i=0;i<roomList.size();i++) {
-            RoomService roomService = new RoomService();
-            roomService.setRoomInfo(roomList.get(i));
-            roomServiceList.add(roomService);
+        if(roomList!=null) {
+            List<RoomService> roomServiceList = new ArrayList<>();
+            for(int i=0;i<roomList.size();i++) {
+                RoomService roomService = new RoomService();
+                roomService.setRoomInfo(roomList.get(i));
+                roomServiceList.add(roomService);
+            }
+            mSession.setRoomServiceList(roomServiceList);
+            roomServiceAdapter.setData(roomServiceList);
         }
-        mSession.setRoomServiceList(roomServiceList);
-        roomServiceAdapter.setData(roomServiceList);
+
     }
 
     @Override
