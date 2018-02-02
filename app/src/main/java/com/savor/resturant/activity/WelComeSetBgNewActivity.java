@@ -52,6 +52,8 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
     private LoadingDialog mLoadingDialog;
     private String CurrentTemplateId;
     private String erroMsg1;
+    private String box_mac;
+    private String is;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +69,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
         Intent intent = getIntent();
         if (intent != null) {
             keyWord = intent.getStringExtra("keyWord");
-
+            box_mac = intent.getStringExtra("bMac");
         }
     }
 
