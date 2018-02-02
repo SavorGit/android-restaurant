@@ -22,6 +22,7 @@ import com.savor.resturant.adapter.RoomListAdapter;
 import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.KeyWordBean;
 import com.savor.resturant.bean.RoomInfo;
+import com.savor.resturant.bean.RoomService;
 import com.savor.resturant.bean.SmallPlatInfoBySSDP;
 import com.savor.resturant.bean.SmallPlatformByGetIp;
 import com.savor.resturant.bean.TvBoxSSDPInfo;
@@ -433,6 +434,16 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
                     keyWordBean.setTemplateId(CurrentTemplateId);
                     mSession.setkeyWordBean(keyWordBean);
                 }
+                RoomService roomService = new RoomService();
+                roomService.setRoomInfo(roomInfo);
+
+                List<RoomService> roomServiceList = mSession.getRoomServiceList();
+                if(roomServiceList!=null&&roomServiceList.contains(roomService)) {
+                    int i = roomServiceList.indexOf(roomService);
+                    RoomService currentService = roomServiceList.get(i);
+                    currentService.startWelcomeTimer(getApplicationContext(),10,10);
+                }
+
 
                 AppApi.reportLog(context,
                         hotel.getHotel_id()+"",
