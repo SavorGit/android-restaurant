@@ -130,7 +130,7 @@ public class RoomInfo implements Serializable {
         isRecommendPlay = recommendPlay;
     }
 
-//    public void startTimer(final Context context, int welSec, final int completeSec) {
+//    public void startRecommendTimer(final Context context, int welSec, final int completeSec) {
 //        if(timer!=null) {
 //            timer.cancel();
 //        }
@@ -142,7 +142,7 @@ public class RoomInfo implements Serializable {
 //
 //            @Override
 //            public void onFinish() {
-//                handleCompleteDelayed(context, completeSec);
+//                startCompleteTimer(context, completeSec);
 //            }
 //        };
 //        timer.start();
@@ -153,7 +153,7 @@ public class RoomInfo implements Serializable {
 //     * @param context
 //     * @param completeSec
 //     */
-//    private void handleCompleteDelayed(final Context context, final int completeSec) {
+//    private void startCompleteTimer(final Context context, final int completeSec) {
 //        setWelPlay(false);
 //        setRecommendPlay(true);
 //        Intent intent = new Intent(ConstantValues.ACTION_REFRESH_PRO_STATE_DELAYED);

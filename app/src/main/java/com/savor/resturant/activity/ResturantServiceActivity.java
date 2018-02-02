@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -203,7 +201,7 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
 
     @Override
     public void onRecommendBtnClick(RoomService roomInfo, RoomServiceAdapter.ProType type) {
-
+        roomInfo.startCompleteTimer(getApplicationContext(),10);
     }
 
     @Override
@@ -225,7 +223,7 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
 
     private void recommendPlayDelayed() {
         /************5分钟以后开始播放推荐菜***********/
-        currentRoom.startTimer(getApplicationContext(),10,10);
+        currentRoom.startRecommendTimer(getApplicationContext(),10,10);
 //        ProjectionService.startActionRecommend(this,currentRoom);
 //        int requestCode = 0;
 //        try {

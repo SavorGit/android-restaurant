@@ -46,7 +46,8 @@ public class RoomService {
         this.roomInfo = roomInfo;
     }
 
-    public void startTimer(final Context context, int welSec, final int completeSec) {
+
+    public void startRecommendTimer(final Context context, int welSec, final int completeSec) {
         if(timer!=null) {
             timer.cancel();
         }
@@ -61,7 +62,7 @@ public class RoomService {
 
             @Override
             public void onFinish() {
-                handleCompleteDelayed(context, completeSec);
+                startCompleteTimer(context, completeSec);
             }
         };
         timer.start();
@@ -72,9 +73,15 @@ public class RoomService {
      * @param context
      * @param completeSec
      */
-    private void handleCompleteDelayed(final Context context, final int completeSec) {
+    public void startCompleteTimer(final Context context, final int completeSec) {
+        if(timer!=null) {
+            timer.cancel();
+        }
+        if(completetimer !=null) {
+            completetimer.cancel();
+        }
         roomInfo.setWelPlay(false);
-        roomInfo.setRecommendPlay(true);
+        roomInfo.setRecommendPlay(false);
         Intent intent = new Intent(ConstantValues.ACTION_REFRESH_PRO_STATE_DELAYED);
         context.sendBroadcast(intent);
 
