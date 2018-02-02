@@ -57,6 +57,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
     private String box_mac;
     private String is_default;
     private TextView tv_right;
+    private RoomInfo roomInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +73,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
         Intent intent = getIntent();
         if (intent != null) {
             keyWord = intent.getStringExtra("keyWord");
-            box_mac = intent.getStringExtra("bMac");
+            roomInfo = (RoomInfo)intent.getSerializableExtra("box");
             is_default = intent.getStringExtra("is_default");
         }
     }
@@ -285,7 +286,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
             String localIp = smallPlatformByGetIp.getLocalIp();
             String url = "http://"+localIp+":8080";
             showLoadingLayout();
-            AppApi.wordPro(this,url,box_mac,templateId,keyWord,this);
+            AppApi.wordPro(this,url,roomInfo.getBox_mac(),templateId,keyWord,this);
         }else {
             erroCount++;
         }
@@ -295,7 +296,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
             String serverIp = smallPlatInfoBySSDP.getServerIp();
             String url = "http://"+serverIp+":8080";
             showLoadingLayout();
-            AppApi.wordPro(this,url,box_mac,templateId,keyWord,this);
+            AppApi.wordPro(this,url,roomInfo.getBox_mac(),templateId,keyWord,this);
         }else {
             erroCount++;
         }
@@ -305,7 +306,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
             String serverIp = tvBoxSSDPInfo.getServerIp();
             String url = "http://"+serverIp+":8080";
             showLoadingLayout();
-            AppApi.wordPro(this,url,box_mac,templateId,keyWord,this);
+            AppApi.wordPro(this,url,roomInfo.getBox_mac(),templateId,keyWord,this);
         }else {
             erroCount++;
         }

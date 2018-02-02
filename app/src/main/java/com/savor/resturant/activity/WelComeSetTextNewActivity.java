@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.savor.resturant.R;
+import com.savor.resturant.bean.RoomInfo;
 
 
 /**
@@ -30,6 +31,7 @@ public class WelComeSetTextNewActivity extends BaseActivity implements View.OnCl
     private CheckBox is_default_word;
     private String is_default = "1";
     private String box_mac;
+    private RoomInfo roomInfo;
 
 
     @Override
@@ -47,6 +49,7 @@ public class WelComeSetTextNewActivity extends BaseActivity implements View.OnCl
         Intent intent = getIntent();
         if (intent != null) {
             box_mac = intent.getStringExtra("bMac");
+            roomInfo = (RoomInfo)intent.getSerializableExtra("box");
         }
     }
     @Override
@@ -180,8 +183,7 @@ public class WelComeSetTextNewActivity extends BaseActivity implements View.OnCl
             Intent intent = new Intent();
             intent.putExtra("keyWord",word);
             intent.putExtra("is_default",is_default);
-            intent.putExtra("bMac",box_mac);
-
+            intent.putExtra("box",roomInfo);
             intent.setClass(WelComeSetTextNewActivity.this,WelComeSetTextNewActivity.class);
             startActivity(intent);
         }
