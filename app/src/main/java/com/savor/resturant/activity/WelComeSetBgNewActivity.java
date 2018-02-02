@@ -441,7 +441,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
                 if(roomServiceList!=null&&roomServiceList.contains(roomService)) {
                     int i = roomServiceList.indexOf(roomService);
                     RoomService currentService = roomServiceList.get(i);
-                    currentService.startWelcomeTimer(getApplicationContext(),10,10);
+                    currentService.startWelcomeTimer(getApplicationContext(),60*5);
                 }
 
 
