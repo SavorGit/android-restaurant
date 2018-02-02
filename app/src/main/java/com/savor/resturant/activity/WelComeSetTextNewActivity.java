@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.savor.resturant.R;
+import com.savor.resturant.bean.KeyWordBean;
 import com.savor.resturant.bean.RoomInfo;
 
 
@@ -72,10 +73,16 @@ public class WelComeSetTextNewActivity extends BaseActivity implements View.OnCl
         tv_right.setText("下一步");
         tv_right.setVisibility(View.VISIBLE);
         tv_right.setTextColor(context.getResources().getColor(R.color.color_f6f2ed));
-        String word = mSession.getKeyWordBean().getKeyWord();
-        if (!TextUtils.isEmpty(word)) {
-            t1.setText(word);
+
+        KeyWordBean bean = mSession.getKeyWordBean();
+        if (bean != null) {
+            String word = mSession.getKeyWordBean().getKeyWord();
+            if (!TextUtils.isEmpty(word)) {
+                t1.setText(word);
+            }
         }
+
+
     }
 
     @Override
@@ -188,7 +195,7 @@ public class WelComeSetTextNewActivity extends BaseActivity implements View.OnCl
             intent.putExtra("keyWord",word);
             intent.putExtra("is_default",is_default);
             intent.putExtra("box",roomInfo);
-            intent.setClass(WelComeSetTextNewActivity.this,WelComeSetTextNewActivity.class);
+            intent.setClass(WelComeSetTextNewActivity.this,WelComeSetBgNewActivity.class);
             startActivity(intent);
         }
 
