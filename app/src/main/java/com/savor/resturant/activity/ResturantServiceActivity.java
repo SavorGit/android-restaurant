@@ -127,7 +127,19 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_right:
-//                new CommonDialog(this,)
+                new CommonDialog(this, "所有包间的欢迎词将回复默认状态：\n欢迎光临祝您用餐愉快！",
+                        new CommonDialog.OnConfirmListener() {
+                            @Override
+                            public void onConfirm() {
+
+                            }
+                        },
+                        new CommonDialog.OnCancelListener() {
+                            @Override
+                            public void onCancel() {
+
+                            }
+                        }).show();
                 break;
             case R.id.iv_left:
                 finish();
@@ -235,7 +247,7 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
 
     private void recommendPlayDelayed() {
         /************5分钟以后开始播放推荐菜***********/
-        currentRoom.startWelcomeTimer(getApplicationContext(),10,10);
+        currentRoom.startWelcomeAndRecommendTimer(getApplicationContext(),10,10);
 //        ProjectionService.startActionRecommend(this,currentRoom);
 //        int requestCode = 0;
 //        try {
