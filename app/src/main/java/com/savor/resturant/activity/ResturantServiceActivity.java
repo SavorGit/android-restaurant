@@ -106,6 +106,7 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
             roomService.setRoomInfo(roomList.get(i));
             roomServiceList.add(roomService);
         }
+        mSession.setRoomServiceList(roomServiceList);
         roomServiceAdapter.setData(roomServiceList);
     }
 
@@ -201,7 +202,7 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
 
     @Override
     public void onRecommendBtnClick(RoomService roomInfo, RoomServiceAdapter.ProType type) {
-        roomInfo.startCompleteTimer(getApplicationContext(),10);
+        roomInfo.startRecommendTimer(getApplicationContext(),10);
     }
 
     @Override
@@ -223,7 +224,7 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
 
     private void recommendPlayDelayed() {
         /************5分钟以后开始播放推荐菜***********/
-        currentRoom.startRecommendTimer(getApplicationContext(),10,10);
+        currentRoom.startWelcomeTimer(getApplicationContext(),10,10);
 //        ProjectionService.startActionRecommend(this,currentRoom);
 //        int requestCode = 0;
 //        try {
