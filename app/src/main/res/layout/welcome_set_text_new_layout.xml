@@ -26,9 +26,10 @@
 
     <RelativeLayout
         android:id="@+id/default_word_la"
-        android:layout_width="120dp"
+        android:layout_width="130dp"
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
+        android:layout_marginRight="18dp"
         android:layout_marginTop="8dp"
         android:layout_below="@id/greeting">
 
@@ -39,7 +40,7 @@
             android:textColor="@color/app_text_type"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="上海"
+            android:text="设为默认欢迎词"
             />
 
 
@@ -92,7 +93,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:paddingLeft="4dp"
-        android:text="欢迎李总莅临本店，祝您用餐愉快！"
+        android:text="欢迎光临，祝您用餐愉快！"
         />
     <TextView
         android:id="@+id/t2"
@@ -108,7 +109,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:paddingLeft="4dp"
-        android:text="祝彤彤小宝贝百天快乐！"
+        android:text="祝您生日快乐，天天开心！"
         />
 
     <TextView
@@ -125,7 +126,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:paddingLeft="4dp"
-        android:text="祝韩梅梅女士生日快乐！"
+        android:text="祝您阖家欢乐，幸福美满！"
         />
 
     <TextView
@@ -142,7 +143,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:paddingLeft="4dp"
-        android:text="祝李雷先生与韩梅梅女生新婚快乐！"
+        android:text="祝一帆风顺，心想事成！"
         />
 
     <TextView
@@ -159,7 +160,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:paddingLeft="4dp"
-        android:text="中秋阳澄湖大闸蟹特惠礼包，限时优惠！"
+        android:text="现推出特色伴手礼，限时特惠！"
         />
 
 </RelativeLayout>

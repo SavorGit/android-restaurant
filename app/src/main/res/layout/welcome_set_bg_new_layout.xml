@@ -23,6 +23,7 @@
                 android:layout_marginTop="10dp"
                 >
                 <ImageView
+                    android:id="@+id/h1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/hb_1"/>
@@ -47,6 +48,7 @@
                 android:layout_marginTop="10dp"
                 >
                 <ImageView
+                    android:id="@+id/h2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/hb_2"/>
@@ -71,6 +73,7 @@
                 android:layout_marginTop="10dp"
                 >
                 <ImageView
+                    android:id="@+id/h3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/hb_3"/>
@@ -96,6 +99,7 @@
                 android:layout_marginTop="10dp"
                 >
                 <ImageView
+                    android:id="@+id/h4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/hb_4"/>
@@ -122,6 +126,7 @@
                 android:layout_marginTop="10dp"
                 >
                 <ImageView
+                    android:id="@+id/h5"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/hb_5"/>
@@ -147,6 +152,7 @@
                 android:layout_marginTop="10dp"
                 >
                 <ImageView
+                    android:id="@+id/h6"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/hb_6"/>
@@ -173,6 +179,7 @@
                 android:layout_marginTop="10dp"
                 >
                 <ImageView
+                    android:id="@+id/h7"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/hb_7"/>
@@ -197,6 +204,7 @@
                 android:layout_marginTop="10dp"
                 >
                 <ImageView
+                    android:id="@+id/h8"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/hb_8"/>
