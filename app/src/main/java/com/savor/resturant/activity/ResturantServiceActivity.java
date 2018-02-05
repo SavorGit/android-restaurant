@@ -185,8 +185,12 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
         SmallPlatformByGetIp smallPlatformByGetIp = mSession.getmSmallPlatInfoByIp();
         SmallPlatInfoBySSDP smallPlatInfoBySSDP = mSession.getSmallPlatInfoBySSDP();
         TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
-        showLoadingLayout();
+
         if(welPlay) {
+            ShowMessage.showToast(this,"退出成功");
+            currentRoom.getRoomInfo().setWelPlay(false);
+            currentRoom.getRoomInfo().setRecommendPlay(false);
+            roomServiceAdapter.notifyDataSetChanged();
             stopPro(info, smallPlatformByGetIp, smallPlatInfoBySSDP, tvBoxSSDPInfo);
         }else {
 //            ShowMessage.showToast(this,"投屏成功");
@@ -196,7 +200,7 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
 //            roomServiceAdapter.notifyDataSetChanged();
 //
 //            recommendPlayDelayed();
-
+            showLoadingLayout();
             erroCount = 0;
             // 1.通过getIp获取的小平台地址进行投屏
             if(smallPlatformByGetIp!=null&&!TextUtils.isEmpty(smallPlatformByGetIp.getLocalIp())) {
@@ -285,15 +289,15 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
             AppApi.stopBySmall(this,url,info.getBox_mac(),this);
         }else {
             erroCount++;
-            if(erroCount>=3) {
-                hideLoadingLayout();
-                if(AppUtils.isNetworkAvailable(this)) {
-                    showToast("网络超时，请重试");
-                }else {
-                    showToast("网络已断开，请检查");
-                }
-
-            }
+//            if(erroCount>=3) {
+//                hideLoadingLayout();
+//                if(AppUtils.isNetworkAvailable(this)) {
+//                    showToast("网络超时，请重试");
+//                }else {
+//                    showToast("网络已断开，请检查");
+//                }
+//
+//            }
         }
     }
 
@@ -305,14 +309,20 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
     @Override
     public void onRecommendBtnClick(RoomService roomInfo, RoomServiceAdapter.ProType type) {
 //        roomInfo.startRecommendTimer(getApplicationContext(),10);
+        currentRoom = roomInfo;
         RoomInfo info = roomInfo.getRoomInfo();
         SmallPlatformByGetIp smallPlatformByGetIp = mSession.getmSmallPlatInfoByIp();
         SmallPlatInfoBySSDP smallPlatInfoBySSDP = mSession.getSmallPlatInfoBySSDP();
         TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
-        showLoadingLayout();
+
         if(info.isRecommendPlay()) {
+            ShowMessage.showToast(this,"退出成功");
+            roomInfo.getRoomInfo().setWelPlay(false);
+            roomInfo.getRoomInfo().setRecommendPlay(false);
+            roomServiceAdapter.notifyDataSetChanged();
             stopPro(info, smallPlatformByGetIp, smallPlatInfoBySSDP, tvBoxSSDPInfo);
         }else {
+            showLoadingLayout();
             erroCount = 0;
             // 1.通过getIp获取的小平台地址进行投屏
             if(smallPlatformByGetIp!=null&&!TextUtils.isEmpty(smallPlatformByGetIp.getLocalIp())) {
@@ -358,21 +368,24 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
         super.onSuccess(method, obj);
         switch (method) {
             case GET_RECOMMEND_PRO_JSON:
-                ProResponse proResponse = (ProResponse) obj;
-                String founded_count = proResponse.getFounded_count();
-                int count = 1;
-                try {
-                    count = Integer.valueOf(founded_count);
-                }catch (Exception e) {}
+                hideLoadingLayout();
+                if(obj instanceof ProResponse) {
+                    ProResponse proResponse = (ProResponse) obj;
+                    String founded_count = proResponse.getFounded_count();
+                    int count = 1;
+                    try {
+                        count = Integer.valueOf(founded_count);
+                    }catch (Exception e) {}
 
 
-                int sec = 1;
-                if(count == 1) {
-                    sec = count*20;
-                }else {
-                    sec = count*10;
+                    int sec = 1;
+                    if(count == 1) {
+                        sec = count*20;
+                    }else {
+                        sec = count*10;
+                    }
+                    currentRoom.startRecommendTimer(this,sec);
                 }
-                currentRoom.startRecommendTimer(this,sec);
                 break;
             case GET_STOP_BY_SMALL_JSON:
                 currentRoom.getRoomInfo().setRecommendPlay(false);
@@ -436,8 +449,10 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
     @Override
     public void onError(AppApi.Action method, Object obj) {
         switch (method) {
-            case GET_RECOMMEND_PRO_JSON:
             case GET_STOP_BY_SMALL_JSON:
+            case GET_RECOMMEND_PRO_JSON:
+                hideLoadingLayout();
+                break;
             case GET_WEL_RECOMMEND_JSON:
                 erroCount++;
                 if(obj instanceof ResponseErrorMessage) {

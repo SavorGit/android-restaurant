@@ -278,7 +278,8 @@ public class ApiResponseFactory {
                 result = "success";
                 break;
             case GET_RECOMMEND_PRO_JSON:
-                result = "success";
+                result = gson.fromJson(info, new TypeToken<ProResponse>() {
+                }.getType());
                 break;
             case GET_WORD_PRO_JSON:
                 result = "success";

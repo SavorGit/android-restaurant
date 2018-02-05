@@ -500,7 +500,18 @@ public class Recommend4ServiceActivity extends BaseActivity implements View.OnCl
                 if(roomServiceList!=null&&roomServiceList.contains(roomService)) {
                     int i = roomServiceList.indexOf(roomService);
                     RoomService currentService = roomServiceList.get(i);
-                    currentService.startRecommendTimer(getApplicationContext(),10);
+                    List<RecommendFoodAdvert> selectedList = getSelectedList(mRecommendAdapter.getData());
+                    int count = 1;
+                    if(selectedList!=null) {
+                        count = selectedList.size();
+                    }
+                    int time ;
+                    if(count == 1) {
+                        time = 20;
+                    }else {
+                        time = count*10;
+                    }
+                    currentService.startRecommendTimer(getApplicationContext(),time);
                 }
 
                 hideLoadingLayout();
