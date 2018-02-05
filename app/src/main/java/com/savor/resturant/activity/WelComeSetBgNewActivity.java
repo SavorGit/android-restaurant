@@ -28,6 +28,7 @@ import com.savor.resturant.bean.SmallPlatformByGetIp;
 import com.savor.resturant.bean.TvBoxSSDPInfo;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.ResponseErrorMessage;
+import com.savor.resturant.utils.ActivitiesManager;
 import com.savor.resturant.widget.LoadingDialog;
 import com.savor.resturant.widget.decoration.SpacesItemDecoration;
 
@@ -383,6 +384,9 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
                         keyWord,
                         this
                         );
+                ActivitiesManager.getInstance().popSpecialActivity(WelComeSetTextNewActivity.class);
+                finish();
+
                 break;
 
         }
