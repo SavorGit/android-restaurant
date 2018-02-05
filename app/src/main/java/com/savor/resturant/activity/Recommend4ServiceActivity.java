@@ -555,6 +555,7 @@ public class Recommend4ServiceActivity extends BaseActivity implements View.OnCl
 
                 erroCount=0;
                 ShowMessage.showToast(this,"投屏成功！");
+                finish();
                 break;
             case GET_ADVERT_JSON:
             case GET_RECOMMEND_FOODS_JSON:
