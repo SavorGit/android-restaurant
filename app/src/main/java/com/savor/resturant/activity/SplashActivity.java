@@ -418,6 +418,12 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     public void onError(AppApi.Action method, Object obj) {
+
+        switch (method) {
+            case GET_HOTEL_BOX_JSON:
+
+                break;
+        }
     }
 
     /**

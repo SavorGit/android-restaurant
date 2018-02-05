@@ -38,6 +38,7 @@ import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.ImportInfoResponse;
 import com.savor.resturant.bean.LabelAddRessponse;
 import com.savor.resturant.bean.OrderListBean;
+import com.savor.resturant.bean.ProResponse;
 import com.savor.resturant.bean.RecTopList;
 import com.savor.resturant.bean.RecommendFoodAdvert;
 import com.savor.resturant.bean.RoomInfo;
@@ -151,6 +152,7 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.POST_HOTEL_INFO_JSON
                     || action == AppApi.Action.POST_ADD_CONSUME_RECORD_JSON
                     || action == AppApi.Action.GET_WEL_RECOMMEND_JSON
+                    || action == AppApi.Action.GET_STOP_BY_SMALL_JSON
                     ){
                 int code = rSet.getInt("code");
                 if(rSet.has("result")) {
@@ -369,7 +371,11 @@ public class ApiResponseFactory {
                 }.getType());
                 break;
             case GET_WEL_RECOMMEND_JSON:
-                result = "success";
+                result = gson.fromJson(info, new TypeToken<ProResponse>() {
+                }.getType());
+                break;
+            case GET_STOP_BY_SMALL_JSON:
+                result = info;
                 break;
             default:
                 break;

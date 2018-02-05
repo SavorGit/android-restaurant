@@ -477,6 +477,7 @@ public class Session {
     }
 
     public void setHotelid(int hotelid) {
+        LogUtils.d("savor:hoteid ="+hotelid);
         this.hotelid = hotelid;
     }
 
