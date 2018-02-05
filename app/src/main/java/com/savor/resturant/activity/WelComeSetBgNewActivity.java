@@ -28,6 +28,7 @@ import com.savor.resturant.bean.SmallPlatformByGetIp;
 import com.savor.resturant.bean.TvBoxSSDPInfo;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.ResponseErrorMessage;
+import com.savor.resturant.utils.ActivitiesManager;
 import com.savor.resturant.widget.LoadingDialog;
 import com.savor.resturant.widget.decoration.SpacesItemDecoration;
 
@@ -117,6 +118,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
 //        initTitleBar();
 //        initRoomList();
         tv_right.setVisibility(View.VISIBLE);
+        tv_right.setText("完成");
         tv_center.setText("请选择背景");
         if (!TextUtils.isEmpty(keyWord)) {
             t1.setText(keyWord);
@@ -382,6 +384,9 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
                         keyWord,
                         this
                         );
+                ActivitiesManager.getInstance().popSpecialActivity(WelComeSetTextNewActivity.class);
+                finish();
+
                 break;
 
         }
@@ -421,7 +426,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
                 }
                 break;
                 default:
-                    super.onError(method,obj);
+                    //super.onError(method,obj);
                     break;
         }
     }
