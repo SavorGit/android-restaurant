@@ -450,9 +450,9 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
     public void onError(AppApi.Action method, Object obj) {
         switch (method) {
             case GET_STOP_BY_SMALL_JSON:
-            case GET_RECOMMEND_PRO_JSON:
                 hideLoadingLayout();
                 break;
+            case GET_RECOMMEND_PRO_JSON:
             case GET_WEL_RECOMMEND_JSON:
                 erroCount++;
                 if(obj instanceof ResponseErrorMessage) {
