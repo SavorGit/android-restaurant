@@ -422,7 +422,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
                 }
                 break;
                 default:
-                    super.onError(method,obj);
+                    //super.onError(method,obj);
                     break;
         }
     }
