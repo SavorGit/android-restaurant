@@ -251,7 +251,7 @@ public class Session {
     private TvBoxInfo mTvboxInfo;
 
     private List<Object> requestPool = new ArrayList<>();
-    private List<RoomInfo> roomList;
+    private ArrayList<RoomInfo> roomList;
     private RoomInfo info;
     private AdvertProHistory advertProHistory;
     private RecommendProHistory recommendListHistory;
@@ -1042,12 +1042,12 @@ public class Session {
         return requestPool;
     }
 
-    public void setRoomList(List<RoomInfo> roomInfos) {
+    public void setRoomList(ArrayList<RoomInfo> roomInfos) {
         this.roomList = roomInfos;
 //        setObj(P_ROMM_LIST,roomInfos);
     }
 
-    public List<RoomInfo> getRoomList() {
+    public ArrayList<RoomInfo> getRoomList() {
         return roomList;
     }
 

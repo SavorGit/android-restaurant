@@ -53,6 +53,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import okhttp3.Response;
 
@@ -263,7 +264,7 @@ public class ApiResponseFactory {
                 result = "success";
                 break;
             case GET_HOTEL_BOX_JSON:
-                result = gson.fromJson(info, new TypeToken<List<RoomInfo>>() {
+                result = gson.fromJson(info, new TypeToken<ArrayList<RoomInfo>>() {
                 }.getType());
                 break;
             case GET_RECOMMEND_FOODS_JSON:
