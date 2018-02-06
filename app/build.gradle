@@ -8,8 +8,8 @@ android {
         applicationId "com.savor.resturant"
         minSdkVersion MIN_SDK_VERSION as int
         targetSdkVersion TARGET_SDK_VERSION as int
-        versionCode 2018012901
-        versionName "2.0"
+        versionCode 2018020601
+        versionName "2.1"
 
         flavorDimensions "versionCode"
         multiDexEnabled true

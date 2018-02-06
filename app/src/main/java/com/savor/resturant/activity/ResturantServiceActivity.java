@@ -15,16 +15,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.common.api.okhttp.OkHttpUtils;
+import com.common.api.utils.AppUtils;
 import com.common.api.utils.DensityUtil;
 import com.common.api.utils.LogUtils;
 import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
 import com.savor.resturant.adapter.RoomServiceAdapter;
 import com.savor.resturant.bean.KeyWordBean;
+import com.savor.resturant.bean.ProResponse;
 import com.savor.resturant.bean.RoomInfo;
 import com.savor.resturant.bean.RoomService;
+import com.savor.resturant.bean.SmallPlatInfoBySSDP;
+import com.savor.resturant.bean.SmallPlatformByGetIp;
+import com.savor.resturant.bean.TvBoxSSDPInfo;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.ResponseErrorMessage;
+import com.savor.resturant.utils.ActivitiesManager;
 import com.savor.resturant.utils.ConstantValues;
 import com.savor.resturant.widget.CommonDialog;
 import com.savor.resturant.widget.LoadingDialog;
@@ -174,53 +180,125 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
     public void onWelBtnClick(RoomService roomInfo, RoomServiceAdapter.ProType type) {
         currentRoom = roomInfo;
         resetErrorSettings();
-        ShowMessage.showToast(this,"投屏成功");
-        OkHttpUtils.getInstance().getOkHttpClient().dispatcher().cancelAll();
-        currentRoom.getRoomInfo().setRecommendPlay(false);
-        currentRoom.getRoomInfo().setWelPlay(true);
-        roomServiceAdapter.notifyDataSetChanged();
+        RoomInfo info = currentRoom.getRoomInfo();
+        boolean welPlay = info.isWelPlay();
+        SmallPlatformByGetIp smallPlatformByGetIp = mSession.getmSmallPlatInfoByIp();
+        SmallPlatInfoBySSDP smallPlatInfoBySSDP = mSession.getSmallPlatInfoBySSDP();
+        TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
 
-        recommendPlayDelayed();
-//        String templateId = "1";
-//        String keyWord = "欢迎老六作为年会主唱";
-//        // 1.通过getIp获取的小平台地址进行投屏
-//        SmallPlatInfoBySSDP smallPlatInfoBySSDP = mSession.getSmallPlatInfoBySSDP();
-//        SmallPlatformByGetIp smallPlatformByGetIp = mSession.getmSmallPlatInfoByIp();
-//        TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
-//        if(smallPlatformByGetIp!=null&&!TextUtils.isEmpty(smallPlatformByGetIp.getLocalIp())) {
-//            String localIp = smallPlatformByGetIp.getLocalIp();
-//            String url = "http://"+localIp+":8080";
-//            showLoadingLayout();
-//            AppApi.welRecommendPro(this,url,roomInfo.getBox_mac(),templateId,keyWord,this);
-//        }else {
-//            erroCount++;
-//        }
+        if(welPlay) {
+            ShowMessage.showToast(this,"退出成功");
+            currentRoom.getRoomInfo().setWelPlay(false);
+            currentRoom.getRoomInfo().setRecommendPlay(false);
+            roomServiceAdapter.notifyDataSetChanged();
+            stopPro(info, smallPlatformByGetIp, smallPlatInfoBySSDP, tvBoxSSDPInfo);
+        }else {
+//            ShowMessage.showToast(this,"投屏成功");
+//            OkHttpUtils.getInstance().getOkHttpClient().dispatcher().cancelAll();
+//            currentRoom.getRoomInfo().setRecommendPlay(false);
+//            currentRoom.getRoomInfo().setWelPlay(true);
+//            roomServiceAdapter.notifyDataSetChanged();
 //
-//        // 2.通过小平台ssdp获取小平台地址进行投屏
-//        if(smallPlatInfoBySSDP!=null&&!TextUtils.isEmpty(smallPlatInfoBySSDP.getServerIp())) {
-//            String serverIp = smallPlatInfoBySSDP.getServerIp();
-//            String url = "http://"+serverIp+":8080";
-//            showLoadingLayout();
-//            AppApi.welRecommendPro(this,url,roomInfo.getBox_mac(),templateId,keyWord,this);
-//        }else {
-//            erroCount++;
-//        }
+//            recommendPlayDelayed();
+            showLoadingLayout();
+            erroCount = 0;
+            // 1.通过getIp获取的小平台地址进行投屏
+            if(smallPlatformByGetIp!=null&&!TextUtils.isEmpty(smallPlatformByGetIp.getLocalIp())) {
+                String localIp = smallPlatformByGetIp.getLocalIp();
+                String url = "http://"+localIp+":8080";
+                KeyWordBean keyWordBean = mSession.getKeyWordBean();
+                String templateId = "1";
+                String keyword = "欢迎光临祝您用餐愉快";
+                if(keyWordBean!=null&&!TextUtils.isEmpty(keyWordBean.getTemplateId())&&!TextUtils.isEmpty(keyWordBean.getKeyWord())) {
+                    templateId = keyWordBean.getTemplateId();
+                    keyword = keyWordBean.getKeyWord();
+                }
+                AppApi.welRecommendPro(this,url,info.getBox_mac(),templateId,keyword,this);
+            }else {
+                erroCount++;
+            }
+
+            // 2.通过小平台ssdp获取小平台地址进行投屏
+            if(smallPlatInfoBySSDP!=null&&!TextUtils.isEmpty(smallPlatInfoBySSDP.getServerIp())) {
+                String serverIp = smallPlatInfoBySSDP.getServerIp();
+                String url = "http://"+serverIp+":8080";
+                KeyWordBean keyWordBean = mSession.getKeyWordBean();
+                String templateId = "1";
+                String keyword = "欢迎光临祝您用餐愉快";
+                if(keyWordBean!=null&&!TextUtils.isEmpty(keyWordBean.getTemplateId())&&!TextUtils.isEmpty(keyWordBean.getKeyWord())) {
+                    templateId = keyWordBean.getTemplateId();
+                    keyword = keyWordBean.getKeyWord();
+                }
+                AppApi.welRecommendPro(this,url,info.getBox_mac(),templateId,keyword,this);
+            }else {
+                erroCount++;
+            }
+
+            // 3.通过盒子ssdp获取小平台地址进行投屏
+            if(tvBoxSSDPInfo!=null&&!TextUtils.isEmpty(tvBoxSSDPInfo.getServerIp())) {
+                String serverIp = tvBoxSSDPInfo.getServerIp();
+                String url = "http://"+serverIp+":8080";
+                KeyWordBean keyWordBean = mSession.getKeyWordBean();
+                String templateId = "1";
+                String keyword = "欢迎光临祝您用餐愉快";
+                if(keyWordBean!=null&&!TextUtils.isEmpty(keyWordBean.getTemplateId())&&!TextUtils.isEmpty(keyWordBean.getKeyWord())) {
+                    templateId = keyWordBean.getTemplateId();
+                    keyword = keyWordBean.getKeyWord();
+                }
+                AppApi.welRecommendPro(this,url,info.getBox_mac(),templateId,keyword,this);
+            }else {
+                erroCount++;
+                if(erroCount>=3) {
+                    hideLoadingLayout();
+                    if(AppUtils.isNetworkAvailable(this)) {
+                        showToast("网络超时，请重试");
+                    }else {
+                        showToast("网络已断开，请检查");
+                    }
+
+                }
+            }
+        }
+
+    }
+
+    private void stopPro(RoomInfo info, SmallPlatformByGetIp smallPlatformByGetIp, SmallPlatInfoBySSDP smallPlatInfoBySSDP, TvBoxSSDPInfo tvBoxSSDPInfo) {
+        erroCount = 0;
+        // 1.通过getIp获取的小平台地址进行投屏
+        if(smallPlatformByGetIp!=null&&!TextUtils.isEmpty(smallPlatformByGetIp.getLocalIp())) {
+            String localIp = smallPlatformByGetIp.getLocalIp();
+            String url = "http://"+localIp+":8080";
+            AppApi.stopBySmall(this,url,info.getBox_mac(),this);
+        }else {
+            erroCount++;
+        }
+
+        // 2.通过小平台ssdp获取小平台地址进行投屏
+        if(smallPlatInfoBySSDP!=null&&!TextUtils.isEmpty(smallPlatInfoBySSDP.getServerIp())) {
+            String serverIp = smallPlatInfoBySSDP.getServerIp();
+            String url = "http://"+serverIp+":8080";
+            AppApi.stopBySmall(this,url,info.getBox_mac(),this);
+        }else {
+            erroCount++;
+        }
+
+        // 3.通过盒子ssdp获取小平台地址进行投屏
+        if(tvBoxSSDPInfo!=null&&!TextUtils.isEmpty(tvBoxSSDPInfo.getServerIp())) {
+            String serverIp = tvBoxSSDPInfo.getServerIp();
+            String url = "http://"+serverIp+":8080";
+            AppApi.stopBySmall(this,url,info.getBox_mac(),this);
+        }else {
+            erroCount++;
+//            if(erroCount>=3) {
+//                hideLoadingLayout();
+//                if(AppUtils.isNetworkAvailable(this)) {
+//                    showToast("网络超时，请重试");
+//                }else {
+//                    showToast("网络已断开，请检查");
+//                }
 //
-//        // 3.通过盒子ssdp获取小平台地址进行投屏
-//        if(tvBoxSSDPInfo!=null&&!TextUtils.isEmpty(tvBoxSSDPInfo.getServerIp())) {
-//            String serverIp = tvBoxSSDPInfo.getServerIp();
-//            String url = "http://"+serverIp+":8080";
-//            showLoadingLayout();
-//            AppApi.welRecommendPro(this,url,roomInfo.getBox_mac(),templateId,keyWord,this);
-//        }else {
-//            erroCount++;
-//        }
-//
-//        if(erroCount == 3) {
-//            hideLoadingLayout();
-//            ShowMessage.showToast(this,"投屏失败");
-//            resetErrorSettings();
-//        }
+//            }
+        }
     }
 
     private void resetErrorSettings() {
@@ -230,13 +308,90 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
 
     @Override
     public void onRecommendBtnClick(RoomService roomInfo, RoomServiceAdapter.ProType type) {
-        roomInfo.startRecommendTimer(getApplicationContext(),10);
+//        roomInfo.startRecommendTimer(getApplicationContext(),10);
+        currentRoom = roomInfo;
+        RoomInfo info = roomInfo.getRoomInfo();
+        SmallPlatformByGetIp smallPlatformByGetIp = mSession.getmSmallPlatInfoByIp();
+        SmallPlatInfoBySSDP smallPlatInfoBySSDP = mSession.getSmallPlatInfoBySSDP();
+        TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
+
+        if(info.isRecommendPlay()) {
+            ShowMessage.showToast(this,"退出成功");
+            roomInfo.getRoomInfo().setWelPlay(false);
+            roomInfo.getRoomInfo().setRecommendPlay(false);
+            roomServiceAdapter.notifyDataSetChanged();
+            stopPro(info, smallPlatformByGetIp, smallPlatInfoBySSDP, tvBoxSSDPInfo);
+        }else {
+            showLoadingLayout();
+            erroCount = 0;
+            // 1.通过getIp获取的小平台地址进行投屏
+            if(smallPlatformByGetIp!=null&&!TextUtils.isEmpty(smallPlatformByGetIp.getLocalIp())) {
+                String localIp = smallPlatformByGetIp.getLocalIp();
+                String url = "http://"+localIp+":8080";
+                AppApi.recommendPro(this,url,info.getBox_mac(),10+"","-1",this);
+            }else {
+                erroCount++;
+            }
+
+            // 2.通过小平台ssdp获取小平台地址进行投屏
+            if(smallPlatInfoBySSDP!=null&&!TextUtils.isEmpty(smallPlatInfoBySSDP.getServerIp())) {
+                String serverIp = smallPlatInfoBySSDP.getServerIp();
+                String url = "http://"+serverIp+":8080";
+                AppApi.recommendPro(this,url,info.getBox_mac(),10+"","-1",this);
+            }else {
+                erroCount++;
+            }
+
+            // 3.通过盒子ssdp获取小平台地址进行投屏
+            if(tvBoxSSDPInfo!=null&&!TextUtils.isEmpty(tvBoxSSDPInfo.getServerIp())) {
+                String serverIp = tvBoxSSDPInfo.getServerIp();
+                String url = "http://"+serverIp+":8080";
+                AppApi.recommendPro(this,url,info.getBox_mac(),10+"","-1",this);
+            }else {
+                erroCount++;
+                if(erroCount>=3) {
+                    hideLoadingLayout();
+                    if(AppUtils.isNetworkAvailable(this)) {
+                        showToast("网络超时，请重试");
+                    }else {
+                        showToast("网络已断开，请检查");
+                    }
+
+                }
+            }
+        }
+
     }
 
     @Override
     public void onSuccess(AppApi.Action method, Object obj) {
         super.onSuccess(method, obj);
         switch (method) {
+            case GET_RECOMMEND_PRO_JSON:
+                hideLoadingLayout();
+                if(obj instanceof ProResponse) {
+                    ProResponse proResponse = (ProResponse) obj;
+                    String founded_count = proResponse.getFounded_count();
+                    int count = 1;
+                    try {
+                        count = Integer.valueOf(founded_count);
+                    }catch (Exception e) {}
+
+
+                    int sec = 1;
+                    if(count == 1) {
+                        sec = count*20;
+                    }else {
+                        sec = count*10;
+                    }
+                    currentRoom.startRecommendTimer(this,sec);
+                }
+                break;
+            case GET_STOP_BY_SMALL_JSON:
+                currentRoom.getRoomInfo().setRecommendPlay(false);
+                currentRoom.getRoomInfo().setWelPlay(false);
+                roomServiceAdapter.notifyDataSetChanged();
+                break;
             case GET_WEL_RECOMMEND_JSON:
                 hideLoadingLayout();
                 ShowMessage.showToast(this,"投屏成功");
@@ -245,14 +400,28 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
                 currentRoom.getRoomInfo().setWelPlay(true);
                 roomServiceAdapter.notifyDataSetChanged();
 
-                recommendPlayDelayed();
+                recommendPlayDelayed(obj);
                 break;
         }
     }
 
-    private void recommendPlayDelayed() {
+    private void recommendPlayDelayed(Object object) {
         /************5分钟以后开始播放推荐菜***********/
-        currentRoom.startWelcomeAndRecommendTimer(getApplicationContext(),10,10);
+        ProResponse proResponse = (ProResponse) object;
+        String founded_count = proResponse.getFounded_count();
+        int count = 1;
+        try {
+            count = Integer.valueOf(founded_count);
+        }catch (Exception e) {}
+
+
+        int sec = 1;
+        if(count == 1) {
+            sec = count*20;
+        }else {
+            sec = count*10;
+        }
+        currentRoom.startWelcomeAndRecommendTimer(getApplicationContext(),60*5,sec);
 //        ProjectionService.startActionRecommend(this,currentRoom);
 //        int requestCode = 0;
 //        try {
@@ -280,6 +449,10 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
     @Override
     public void onError(AppApi.Action method, Object obj) {
         switch (method) {
+            case GET_STOP_BY_SMALL_JSON:
+                hideLoadingLayout();
+                break;
+            case GET_RECOMMEND_PRO_JSON:
             case GET_WEL_RECOMMEND_JSON:
                 erroCount++;
                 if(obj instanceof ResponseErrorMessage) {
@@ -296,7 +469,7 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
                     showToast(errorMsg);
                     resetErrorSettings();
                 }else {
-                    showToast("包间电视连接失败，请检查是否开机");
+                    showToast("电视未开机\n请打开电视后操作");
                 }
                 break;
         }

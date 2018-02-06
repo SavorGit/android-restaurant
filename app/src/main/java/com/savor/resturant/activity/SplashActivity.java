@@ -26,6 +26,7 @@ import com.common.api.utils.AppUtils;
 import com.common.api.utils.LogUtils;
 import com.savor.resturant.R;
 import com.savor.resturant.SavorApplication;
+import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.RoomInfo;
 import com.savor.resturant.bean.SmallPlatInfoBySSDP;
 import com.savor.resturant.bean.SmallPlatformByGetIp;
@@ -44,6 +45,7 @@ import com.savor.resturant.widget.SplashDialog;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.savor.resturant.presenter.SensePresenter.SMALL_PLATFORM;
@@ -91,6 +93,7 @@ public class SplashActivity extends BaseActivity {
                     List<Object> requsetPool = mSession.getRequsetPool();
                     requsetPool.clear();
                     mSession.setRequestPool(requsetPool);
+                    mSession.setRoomList(null);
                     mSession.setHotelid(0);
                     LogUtils.d("savor:hotel 网络不可用重置酒店id为0");
                     resetLinkStatus();
@@ -122,6 +125,19 @@ public class SplashActivity extends BaseActivity {
             }
         }
     };
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        ArrayList<RoomInfo> roomList = (ArrayList<RoomInfo>) savedInstanceState.getSerializable("room_list");
+        mSession.setRoomList(roomList);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("room_list",mSession.getRoomList());
+    }
 
     private void resetLinkStatus() {
         MainActivity specialActivity = (MainActivity) ActivitiesManager.getInstance().getSpecialActivity(MainActivity.class);
@@ -369,7 +385,7 @@ public class SplashActivity extends BaseActivity {
         switch (method) {
             case GET_HOTEL_BOX_JSON:
                 if(obj instanceof List) {
-                    List<RoomInfo> roomInfos = (List<RoomInfo>) obj;
+                    ArrayList<RoomInfo> roomInfos = (ArrayList<RoomInfo>) obj;
                     mSession.setRoomList(roomInfos);
                     for(RoomInfo info : roomInfos) {
                         String wifiName = WifiUtil.getWifiName(this);
@@ -418,6 +434,12 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     public void onError(AppApi.Action method, Object obj) {
+
+        switch (method) {
+            case GET_HOTEL_BOX_JSON:
+
+                break;
+        }
     }
 
     /**
@@ -491,7 +513,8 @@ public class SplashActivity extends BaseActivity {
                 List<Object> requsetPool = mSession.getRequsetPool();
                 SmallPlatInfoBySSDP smallPlatInfoBySSDP = mSession.getSmallPlatInfoBySSDP();
                 TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
-                if(smallPlatInfoBySSDP!=null&&!requsetPool.contains(smallPlatInfoBySSDP)) {
+                ArrayList<RoomInfo> roomList = mSession.getRoomList();
+                if(smallPlatInfoBySSDP!=null&&(roomList==null||roomList.size() ==0)) {
                     String serverIp = smallPlatInfoBySSDP.getServerIp();
                     int hotelId = smallPlatInfoBySSDP.getHotelId();
                     String hid = "";

@@ -38,6 +38,7 @@ import com.savor.resturant.bean.HotelBean;
 import com.savor.resturant.bean.ImportInfoResponse;
 import com.savor.resturant.bean.LabelAddRessponse;
 import com.savor.resturant.bean.OrderListBean;
+import com.savor.resturant.bean.ProResponse;
 import com.savor.resturant.bean.RecTopList;
 import com.savor.resturant.bean.RecommendFoodAdvert;
 import com.savor.resturant.bean.RoomInfo;
@@ -52,6 +53,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import okhttp3.Response;
 
@@ -151,6 +153,7 @@ public class ApiResponseFactory {
                     || action == AppApi.Action.POST_HOTEL_INFO_JSON
                     || action == AppApi.Action.POST_ADD_CONSUME_RECORD_JSON
                     || action == AppApi.Action.GET_WEL_RECOMMEND_JSON
+                    || action == AppApi.Action.GET_STOP_BY_SMALL_JSON
                     ){
                 int code = rSet.getInt("code");
                 if(rSet.has("result")) {
@@ -261,7 +264,7 @@ public class ApiResponseFactory {
                 result = "success";
                 break;
             case GET_HOTEL_BOX_JSON:
-                result = gson.fromJson(info, new TypeToken<List<RoomInfo>>() {
+                result = gson.fromJson(info, new TypeToken<ArrayList<RoomInfo>>() {
                 }.getType());
                 break;
             case GET_RECOMMEND_FOODS_JSON:
@@ -276,7 +279,8 @@ public class ApiResponseFactory {
                 result = "success";
                 break;
             case GET_RECOMMEND_PRO_JSON:
-                result = "success";
+                result = gson.fromJson(info, new TypeToken<ProResponse>() {
+                }.getType());
                 break;
             case GET_WORD_PRO_JSON:
                 result = "success";
@@ -369,7 +373,11 @@ public class ApiResponseFactory {
                 }.getType());
                 break;
             case GET_WEL_RECOMMEND_JSON:
-                result = "success";
+                result = gson.fromJson(info, new TypeToken<ProResponse>() {
+                }.getType());
+                break;
+            case GET_STOP_BY_SMALL_JSON:
+                result = info;
                 break;
             default:
                 break;

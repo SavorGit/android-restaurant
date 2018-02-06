@@ -139,6 +139,8 @@ public class AppApi {
         POST_HOTEL_INFO_JSON,
         /**推荐菜，欢迎词联播*/
         GET_WEL_RECOMMEND_JSON,
+        /**通过小平台停止投屏*/
+        GET_STOP_BY_SMALL_JSON,
     }
 
     /**
@@ -196,6 +198,7 @@ public class AppApi {
             put(Action.POST_ORDER_DETAIL_JSON, formatPhpUrl("Dinnerapp2/Order/getOrderDetail"));
             put(Action.POST_HOTEL_INFO_JSON, formatPhpUrl("Dinnerapp/login/getHotelInfo"));
             put(Action.GET_WEL_RECOMMEND_JSON, smallPlatformUrl);
+            put(Action.GET_STOP_BY_SMALL_JSON, smallPlatformUrl);
 
         }
     };
@@ -1009,6 +1012,17 @@ public class AppApi {
         params.put("templateId", templateId);
         params.put("word", word);
         new AppServiceOk(context,url+"/small/command/screend/word_recomm",Action.GET_WEL_RECOMMEND_JSON,handler,params).get();
+//        new AppServiceOk(context,"http://"+url+":8080/command/getHotelBox",Action.GET_HOTEL_BOX_JSON,handler,params).get();
+    }
+
+    /**请求小平台停止投屏*/
+    public static void stopBySmall(Context context,String url,String boxMac,ApiRequestListener handler) {
+//        url = "http://192.168.1.104:8080";
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("deviceId", STIDUtil.getDeviceId(context));
+        params.put("boxMac", boxMac);
+        params.put("deviceName", Build.MODEL);
+        new AppServiceOk(context,url+"/small/command/screend/word_recomm",Action.GET_STOP_BY_SMALL_JSON,handler,params).get();
 //        new AppServiceOk(context,"http://"+url+":8080/command/getHotelBox",Action.GET_HOTEL_BOX_JSON,handler,params).get();
     }
 
