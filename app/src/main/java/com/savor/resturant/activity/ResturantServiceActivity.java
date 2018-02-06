@@ -469,7 +469,7 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
                     showToast(errorMsg);
                     resetErrorSettings();
                 }else {
-                    showToast("包间电视连接失败，请检查是否开机");
+                    showToast("电视未开机\n请打开电视后操作");
                 }
                 break;
         }

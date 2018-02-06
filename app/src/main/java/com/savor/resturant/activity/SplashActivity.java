@@ -93,6 +93,7 @@ public class SplashActivity extends BaseActivity {
                     List<Object> requsetPool = mSession.getRequsetPool();
                     requsetPool.clear();
                     mSession.setRequestPool(requsetPool);
+                    mSession.setRoomList(null);
                     mSession.setHotelid(0);
                     LogUtils.d("savor:hotel 网络不可用重置酒店id为0");
                     resetLinkStatus();
@@ -512,7 +513,8 @@ public class SplashActivity extends BaseActivity {
                 List<Object> requsetPool = mSession.getRequsetPool();
                 SmallPlatInfoBySSDP smallPlatInfoBySSDP = mSession.getSmallPlatInfoBySSDP();
                 TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
-                if(smallPlatInfoBySSDP!=null&&!requsetPool.contains(smallPlatInfoBySSDP)) {
+                ArrayList<RoomInfo> roomList = mSession.getRoomList();
+                if(smallPlatInfoBySSDP!=null&&(roomList==null||roomList.size() ==0)) {
                     String serverIp = smallPlatInfoBySSDP.getServerIp();
                     int hotelId = smallPlatInfoBySSDP.getHotelId();
                     String hid = "";
