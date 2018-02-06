@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:paddingBottom="10dp"
     android:orientation="vertical">
 
     <TextView
@@ -12,12 +13,15 @@
         android:gravity="center"
         android:padding="10dp"
         android:layout_centerHorizontal="true"
-        android:textColor="@color/black"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="17sp"
         android:text="提示" />
 
 
     <TextView
+        android:lineSpacingExtra="10dp"
+        android:layout_marginBottom="20dp"
+        android:minHeight="60dp"
         android:layout_below="@id/ts"
         android:text="展示内容"
         android:gravity="center"
@@ -35,11 +39,16 @@
         android:layout_height="1dp"
         android:background="@color/gray_2" />
     <LinearLayout
+        android:gravity="center"
         android:layout_below="@+id/tv_content"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/left_bg_button"
             android:layout_weight="1"
             android:id="@+id/tv_cancel"
             android:padding="10dp"
@@ -56,13 +65,16 @@
             android:layout_width="1dp"
             android:layout_height="match_parent" />
         <TextView
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/right_bg_button"
             android:layout_weight="1"
             android:id="@+id/tv_confirm"
             android:padding="10dp"
             android:gravity="center"
             android:textSize="16sp"
             android:text="确定"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
