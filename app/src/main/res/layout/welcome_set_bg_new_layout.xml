@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/title_bg">
+    android:background="#dfcbb0">
     <include
         android:id="@+id/head_layout"
         layout="@layout/layout_head_title"/>
@@ -26,7 +26,7 @@
                     android:id="@+id/h1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/hb_1"/>
+                    android:src="@drawable/hb_1c"/>
                 <TextView
                     android:id="@+id/t1"
                     android:layout_width="wrap_content"
