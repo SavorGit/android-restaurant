@@ -28,7 +28,7 @@ public class WelComeSetTextNewActivity extends BaseActivity implements View.OnCl
     private TextView tv_center;
     private TextView tv_right;
     private EditText greeting;
-    private TextView t1,t2,t3,t4,t5;
+    private TextView t1,t2,t3,t4,t5,t0;
     private CheckBox is_default_word;
     private String is_default = "1";
     private String box_mac;
@@ -63,6 +63,7 @@ public class WelComeSetTextNewActivity extends BaseActivity implements View.OnCl
         t3 = (TextView) findViewById(R.id.t3);
         t4 = (TextView) findViewById(R.id.t4);
         t5 = (TextView) findViewById(R.id.t5);
+        t0 = (TextView) findViewById(R.id.t0);
         greeting = (EditText) findViewById(R.id.greeting);
         is_default_word = (CheckBox) findViewById(R.id.is_default_word);
     }
@@ -80,6 +81,9 @@ public class WelComeSetTextNewActivity extends BaseActivity implements View.OnCl
             if (!TextUtils.isEmpty(word)) {
                 t1.setText(word);
                 greeting.setText(word);
+                t0.setVisibility(View.VISIBLE);
+            }else {
+                t0.setVisibility(View.INVISIBLE);
             }
         }
 
