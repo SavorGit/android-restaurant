@@ -107,12 +107,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        LogUtils.d("savor:pro onCreate");
         getViews();
         setViews();
         setListeners();
         regitsterSmallPlatformReciever();
         upgrade();
     }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        LogUtils.d("savor:pro onRestoreInstanceState");
+        restartService();
+    }
+
     /**
      * 注册小平台发现广播
      */
