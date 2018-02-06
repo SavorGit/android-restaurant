@@ -368,6 +368,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
                     int i = roomServiceList.indexOf(roomService);
                     RoomService currentService = roomServiceList.get(i);
                     currentService.startWelcomeTimer(getApplicationContext(),60*5);
+
                 }
 
 
