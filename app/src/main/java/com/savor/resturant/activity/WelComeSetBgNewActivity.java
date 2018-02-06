@@ -54,7 +54,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
     private boolean isSelectRommState;
     private int erroCount;
     private LoadingDialog mLoadingDialog;
-    private String CurrentTemplateId;
+    private String CurrentTemplateId = "1";
     private String erroMsg1;
     private String box_mac;
     private String is_default;
