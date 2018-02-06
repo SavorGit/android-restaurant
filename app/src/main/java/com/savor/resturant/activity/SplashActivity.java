@@ -81,12 +81,7 @@ public class SplashActivity extends BaseActivity {
                 case WifiManager.WIFI_STATE_ENABLED:
                     LogUtils.d("savor:网络变为可用");
                     // 为了解决多次重复发送请求利用延时发送方式
-                    if(ProjectionManager.getInstance().isLookingSSDP()) {
-                        mHandler.removeMessages(MSG_STOP_SSDP);
-                        stopSSdpService();
-                    }
-                    startServerDiscoveryService();
-                    getSmallPlatformUrl();
+                    restartService();
                     break;
                 case WifiManager.WIFI_STATE_DISABLED:
                     mSession.setBindRoom(null);
@@ -125,6 +120,15 @@ public class SplashActivity extends BaseActivity {
             }
         }
     };
+
+    public void restartService() {
+        if(ProjectionManager.getInstance().isLookingSSDP()) {
+            mHandler.removeMessages(MSG_STOP_SSDP);
+            stopSSdpService();
+        }
+        startServerDiscoveryService();
+        getSmallPlatformUrl();
+    }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -201,15 +205,15 @@ public class SplashActivity extends BaseActivity {
 
     }
 
-    private void getSmallPlatformUrl() {
-        //  判断是否获取到小平台地址，如果没有获取到请求云平台（小平台是局域网）获取小平台ip
-        if(AppUtils.isWifiNetwork(this)) {
-            LogUtils.d("savor:sp 当前wifi可用请求getip");
-            AppApi.getSmallPlatformIp(this,this);
-        }else {
-            LogUtils.d("savor:sp 当前wifi状态不可用不请求getip");
-        }
-    }
+//    private void getSmallPlatformUrl() {
+//        //  判断是否获取到小平台地址，如果没有获取到请求云平台（小平台是局域网）获取小平台ip
+//        if(AppUtils.isWifiNetwork(this)) {
+//            LogUtils.d("savor:sp 当前wifi可用请求getip");
+//            AppApi.getSmallPlatformIp(this,this);
+//        }else {
+//            LogUtils.d("savor:sp 当前wifi状态不可用不请求getip");
+//        }
+//    }
 
     private void showSplashVideo() {
         final SplashDialog splashDialog = new SplashDialog(this);
@@ -450,15 +454,15 @@ public class SplashActivity extends BaseActivity {
         this.startService(intent);
     }
 
-    /**组播阻塞方式获取小平台发送的本身地址*/
-    private void startServerDiscoveryService() {
-        LogUtils.d("savor:sp 当前wifi状态接受ssdp");
-        Intent intent = new Intent(this, SSDPService.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startService(intent);
-
-        mHandler.sendEmptyMessageDelayed(MSG_STOP_SSDP,1000*20);
-    }
+//    /**组播阻塞方式获取小平台发送的本身地址*/
+//    private void startServerDiscoveryService() {
+//        LogUtils.d("savor:sp 当前wifi状态接受ssdp");
+//        Intent intent = new Intent(this, SSDPService.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startService(intent);
+//
+//        mHandler.sendEmptyMessageDelayed(MSG_STOP_SSDP,1000*20);
+//    }
 
     @Override
     public void getViews() {

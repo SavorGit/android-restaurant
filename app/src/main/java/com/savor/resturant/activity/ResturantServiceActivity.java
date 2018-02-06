@@ -36,6 +36,7 @@ import com.savor.resturant.widget.CommonDialog;
 import com.savor.resturant.widget.LoadingDialog;
 import com.savor.resturant.widget.decoration.SpacesItemDecoration;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +57,7 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
     private LoadingDialog loadingDialog;
     private String errorMsg;
     private RoomService currentRoom;
+    private ArrayList<RoomInfo> roomList;
 
     public enum ProState {
         STATE_PLAY,
@@ -66,11 +68,36 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resturant_service);
-
+        LogUtils.d("savor:pro onCreate");
         getViews();
         setViews();
         setListeners();
         initProBroadcast();
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        LogUtils.d("savor:pro onRestoreInstanceState");
+        restartService();
+        roomList = (ArrayList<RoomInfo>) savedInstanceState.getSerializable("room_list");
+        mSession.setRoomList(roomList);
+        if(roomList !=null) {
+            List<RoomService> roomServiceList = new ArrayList<>();
+            for(int i = 0; i< roomList.size(); i++) {
+                RoomService roomService = new RoomService();
+                roomService.setRoomInfo(roomList.get(i));
+                roomServiceList.add(roomService);
+            }
+            mSession.setRoomServiceList(roomServiceList);
+            roomServiceAdapter.setData(roomServiceList);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("room_list",roomList);
     }
 
     private void initProBroadcast() {
@@ -107,10 +134,10 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
 
         mRoomListRlv.addItemDecoration(new SpacesItemDecoration(leftRight, topBottom, getResources().getColor(R.color.color_ece6de)));
 
-        List<RoomInfo> roomList = mSession.getRoomList();
-        if(roomList!=null) {
+        roomList = mSession.getRoomList();
+        if(roomList !=null) {
             List<RoomService> roomServiceList = new ArrayList<>();
-            for(int i=0;i<roomList.size();i++) {
+            for(int i = 0; i< roomList.size(); i++) {
                 RoomService roomService = new RoomService();
                 roomService.setRoomInfo(roomList.get(i));
                 roomServiceList.add(roomService);
@@ -134,7 +161,7 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_right:
-                new CommonDialog(this, "所有包间的欢迎词将回复默认状态：\n欢迎光临祝您用餐愉快！",
+                new CommonDialog(this, "所有包间的欢迎词将回复默认状态：\n欢迎光临，祝您用餐愉快！",
                         new CommonDialog.OnConfirmListener() {
                             @Override
                             public void onConfirm() {

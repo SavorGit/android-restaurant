@@ -17,6 +17,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.common.api.utils.AppUtils;
 import com.common.api.utils.LogUtils;
 import com.common.api.utils.ShowMessage;
 import com.common.api.utils.ShowProgressDialog;
@@ -41,6 +42,8 @@ import com.savor.resturant.widget.HotsDialog;
 import com.savor.resturant.widget.LinkingDialog;
 import com.umeng.analytics.MobclickAgent;
 
+import java.util.List;
+
 import static com.savor.resturant.activity.LinkTvActivity.EXRA_TV_BOX;
 import static com.savor.resturant.activity.LinkTvActivity.EXTRA_TV_INFO;
 
@@ -53,6 +56,7 @@ public abstract class BaseActivity extends Activity implements ApiRequestListene
     /**取消检测wifi*/
     private static final int CANCEL_CHECK_WIFI = 0x103;
     private static final int CHECK_WIFI_LINKED = 0x102;
+    private static final int MSG_STOP_SSDP = 0x5;
     protected Session mSession;
     protected Activity mContext;
     private FrameLayout mParentLayout;
@@ -65,6 +69,11 @@ public abstract class BaseActivity extends Activity implements ApiRequestListene
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+                case MSG_STOP_SSDP:
+                    if(ProjectionManager.getInstance().isLookingSSDP()) {
+                        stopSSdpService();
+                    }
+                    break;
                 case CLOSE_SSDP_SERVICE:
                     LogUtils.d("savor:ssdp base超过15s关闭ssdpservice");
                     stopSSdpService();
@@ -250,7 +259,39 @@ public abstract class BaseActivity extends Activity implements ApiRequestListene
 
     @Override
     public void onSuccess(AppApi.Action method, Object obj) {
-
+        switch (method) {
+            case GET_SAMLL_PLATFORMURL_JSON:
+                // 获取小平台地址
+                if(obj instanceof SmallPlatformByGetIp) {
+                    SmallPlatformByGetIp smallPlatformByGetIp = (SmallPlatformByGetIp) obj;
+                    if (smallPlatformByGetIp != null) {
+                        String localIp = smallPlatformByGetIp.getLocalIp();
+                        String hotelId = smallPlatformByGetIp.getHotelId();
+                        // 保存酒店id
+                        try {
+                            Integer hid = Integer.valueOf(hotelId);
+                            if(hid>0) {
+                                mSession.setHotelid(hid);
+                            }
+                        }catch (Exception e) {
+                        }
+                        // 保存云平台获取的小平台信息
+                        if (!TextUtils.isEmpty(localIp)) {
+                            mSession.setSmallPlatInfoByGetIp(smallPlatformByGetIp);
+                        }
+                        if(!TextUtils.isEmpty(hotelId)) {
+                            List<Object> requsetPool = mSession.getRequsetPool();
+                            if(!requsetPool.contains(smallPlatformByGetIp)) {
+                                String url = "http://"+localIp+":8080";
+                                AppApi.getHotelRoomList(this,url,hotelId,this);
+                                requsetPool.add(smallPlatformByGetIp);
+                                mSession.setRequestPool(requsetPool);
+                            }
+                        }
+                    }
+                }
+                break;
+        }
     }
 
     @Override
@@ -317,4 +358,32 @@ public abstract class BaseActivity extends Activity implements ApiRequestListene
         mHandler.removeMessages(CANCEL_CHECK_WIFI);
     }
 
+    /**组播阻塞方式获取小平台发送的本身地址*/
+    protected void startServerDiscoveryService() {
+        LogUtils.d("savor:sp 当前wifi状态接受ssdp");
+        Intent intent = new Intent(this, SSDPService.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startService(intent);
+
+        mHandler.sendEmptyMessageDelayed(MSG_STOP_SSDP,1000*20);
+    }
+
+    protected void getSmallPlatformUrl() {
+        //  判断是否获取到小平台地址，如果没有获取到请求云平台（小平台是局域网）获取小平台ip
+        if(AppUtils.isWifiNetwork(this)) {
+            LogUtils.d("savor:sp 当前wifi可用请求getip");
+            AppApi.getSmallPlatformIp(this,this);
+        }else {
+            LogUtils.d("savor:sp 当前wifi状态不可用不请求getip");
+        }
+    }
+
+    protected void restartService() {
+        if(ProjectionManager.getInstance().isLookingSSDP()) {
+            mHandler.removeMessages(MSG_STOP_SSDP);
+            stopSSdpService();
+        }
+        startServerDiscoveryService();
+        getSmallPlatformUrl();
+    }
 }

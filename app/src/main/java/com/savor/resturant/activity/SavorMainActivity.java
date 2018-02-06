@@ -1,5 +1,6 @@
 package com.savor.resturant.activity;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -77,7 +78,7 @@ public class SavorMainActivity extends BaseFragmentActivity implements MyTabWidg
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_savor_main);
-
+        LogUtils.d("savor:pro onCreate");
 
         supportFragmentManager = getSupportFragmentManager();
         getViews();
@@ -140,15 +141,16 @@ public class SavorMainActivity extends BaseFragmentActivity implements MyTabWidg
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt("tab_index", currentIndex);
         super.onSaveInstanceState(outState);
+        outState.putInt("tab_index", currentIndex);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        LogUtils.d("savor:pro onRestoreInstanceState");
+        restartService();
         currentIndex = savedInstanceState.getInt("tab_index");
-
     }
 
     @Override
