@@ -104,6 +104,7 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConstantValues.ACTION_RECOMMEND_PLAY_DELAYED_5MIN);
         intentFilter.addAction(ConstantValues.ACTION_REFRESH_PRO_STATE_DELAYED);
+        intentFilter.addAction(ConstantValues.ACTION_REFRESH_LIST);
         RoomListRefreshReceiver refreshReceiver = new RoomListRefreshReceiver();
         registerReceiver(refreshReceiver,intentFilter);
     }
@@ -233,12 +234,13 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
             if(smallPlatformByGetIp!=null&&!TextUtils.isEmpty(smallPlatformByGetIp.getLocalIp())) {
                 String localIp = smallPlatformByGetIp.getLocalIp();
                 String url = "http://"+localIp+":8080";
-                KeyWordBean keyWordBean = mSession.getKeyWordBean();
                 String templateId = "1";
                 String keyword = "欢迎光临祝您用餐愉快";
-                if(keyWordBean!=null&&!TextUtils.isEmpty(keyWordBean.getTemplateId())&&!TextUtils.isEmpty(keyWordBean.getKeyWord())) {
-                    templateId = keyWordBean.getTemplateId();
-                    keyword = keyWordBean.getKeyWord();
+                if(!TextUtils.isEmpty(currentRoom.getRoomInfo().getTemplateId())) {
+                    templateId = currentRoom.getRoomInfo().getTemplateId();
+                }
+                if(!TextUtils.isEmpty(currentRoom.getRoomInfo().getWord())) {
+                    keyword = currentRoom.getRoomInfo().getWord();
                 }
                 AppApi.welRecommendPro(this,url,info.getBox_mac(),templateId,keyword,this);
             }else {
@@ -448,7 +450,7 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
         }else {
             sec = count*10;
         }
-        currentRoom.startWelcomeAndRecommendTimer(getApplicationContext(),60*5,sec);
+        currentRoom.startWelcomeAndRecommendTimer(getApplicationContext(),5*60,sec);
 //        ProjectionService.startActionRecommend(this,currentRoom);
 //        int requestCode = 0;
 //        try {

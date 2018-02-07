@@ -30,7 +30,7 @@ public class WelComeSetTextNewActivity extends BaseActivity implements View.OnCl
     private EditText greeting;
     private TextView t1,t2,t3,t4,t5;
     private CheckBox is_default_word;
-    private String is_default = "1";
+    private String is_default = "0";
     private String box_mac;
     private RoomInfo roomInfo;
 

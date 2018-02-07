@@ -29,6 +29,8 @@ public class RoomInfo implements Serializable {
     private boolean isSelected;
     private boolean isWelPlay;
     private  boolean isRecommendPlay;
+    private String templateId = "1";
+    private String word = "欢迎光临，祝您用餐愉快！";
 
     @Override
     public String toString() {
@@ -40,6 +42,8 @@ public class RoomInfo implements Serializable {
                 ", isSelected=" + isSelected +
                 ", isWelPlay=" + isWelPlay +
                 ", isRecommendPlay=" + isRecommendPlay +
+                ", templateId='" + templateId + '\'' +
+                ", word='" + word + '\'' +
                 '}';
     }
 
@@ -130,52 +134,19 @@ public class RoomInfo implements Serializable {
         isRecommendPlay = recommendPlay;
     }
 
-//    public void startWelcomeAndRecommendTimer(final Context context, int welSec, final int completeSec) {
-//        if(timer!=null) {
-//            timer.cancel();
-//        }
-//        timer = new CountDownTimer(welSec*1000, welSec*1000) {
-//            @Override
-//            public void onTick(long millisUntilFinished) {
-//
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                startCompleteTimer(context, completeSec);
-//            }
-//        };
-//        timer.start();
-//    }
-//
-//    /**
-//     * 延迟指定时间结束投屏
-//     * @param context
-//     * @param completeSec
-//     */
-//    private void startCompleteTimer(final Context context, final int completeSec) {
-//        setWelPlay(false);
-//        setRecommendPlay(true);
-//        Intent intent = new Intent(ConstantValues.ACTION_REFRESH_PRO_STATE_DELAYED);
-//        context.sendBroadcast(intent);
-//        if(completetimer !=null) {
-//            completetimer.cancel();
-//        }
-//        completetimer = new CountDownTimer(completeSec*1000, completeSec*1000) {
-//            @Override
-//            public void onTick(long millisUntilFinished) {
-//
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                setWelPlay(false);
-//                setRecommendPlay(false);
-//
-//                Intent intent = new Intent(ConstantValues.ACTION_REFRESH_PRO_STATE_DELAYED);
-//                context.sendBroadcast(intent);
-//            }
-//        };
-//        completetimer.start();
-//    }
+    public String getTemplateId() {
+        return templateId;
+    }
+
+    public void setTemplateId(String templateId) {
+        this.templateId = templateId;
+    }
+
+    public String getWord() {
+        return word;
+    }
+
+    public void setWord(String word) {
+        this.word = word;
+    }
 }

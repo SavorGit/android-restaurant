@@ -68,6 +68,7 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
         String box_name = info.getBox_name();
         boolean recommendPlay = info.isRecommendPlay();
         boolean welPlay = info.isWelPlay();
+        String word = info.getWord();
 
         holder.tv_box_name.setText(box_name);
 
@@ -143,16 +144,41 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
         }
 
         KeyWordBean keyWordBean = session.getKeyWordBean();
-        if(keyWordBean!=null) {
-            String keyWord = keyWordBean.getKeyWord();
-            if(!TextUtils.isEmpty(keyWord)) {
-                holder.tv_wel.setText(keyWord);
+        if(welPlay) {
+            if(!TextUtils.isEmpty(word)) {
+                holder.tv_wel.setText(word);
             }else {
                 holder.tv_wel.setText("欢迎光临，祝您用餐愉快！");
             }
         }else {
-            holder.tv_wel.setText("欢迎光临，祝您用餐愉快！");
+            if(keyWordBean!=null) {
+                String keyWord = keyWordBean.getKeyWord();
+                boolean aDefault = keyWordBean.isDefault();
+                if(!aDefault) {
+                    if(!TextUtils.isEmpty(word)) {
+                        holder.tv_wel.setText(word);
+                    }else {
+                        holder.tv_wel.setText("欢迎光临，祝您用餐愉快！");
+                    }
+                }else {
+                    if(!TextUtils.isEmpty(keyWord)) {
+                        holder.tv_wel.setText(keyWord);
+                        info.setTemplateId(keyWordBean.getTemplateId());
+                        info.setWord(keyWord);
+                    }else {
+                        holder.tv_wel.setText("欢迎光临，祝您用餐愉快！");
+                    }
+                }
+
+            }else {
+                if(!TextUtils.isEmpty(word)) {
+                    holder.tv_wel.setText(word);
+                }else {
+                    holder.tv_wel.setText("欢迎光临，祝您用餐愉快！");
+                }
+            }
         }
+
     }
 
     @Override

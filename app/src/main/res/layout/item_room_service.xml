@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/tv_wel"
-                    android:maxWidth="180dp"
+                    android:maxWidth="160dp"
                     android:textSize="13sp"
                     android:textColor="@color/color_888888"
                     android:singleLine="true"

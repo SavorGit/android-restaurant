@@ -142,4 +142,9 @@ public class RoomService {
         };
         timer.start();
     }
+
+    public void refresh(final Context context) {
+        Intent intent = new Intent(ConstantValues.ACTION_REFRESH_LIST);
+        context.sendBroadcast(intent);
+    }
 }

@@ -332,10 +332,64 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
 
 
     private void toWord(){
-        SmallPlatformByGetIp smallPlatformByGetIp = mSession.getmSmallPlatInfoByIp();
-        SmallPlatInfoBySSDP smallPlatInfoBySSDP = mSession.getSmallPlatInfoBySSDP();
-        TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
-        proWord(CurrentTemplateId,smallPlatformByGetIp,smallPlatInfoBySSDP,tvBoxSSDPInfo);
+        if ("1".equals(is_default)) {// 设置默认欢迎词，刷新列表
+            KeyWordBean keyWordBean = new KeyWordBean();
+            keyWordBean.setDefault(true);
+            keyWordBean.setKeyWord(keyWord);
+            keyWordBean.setTemplateId(CurrentTemplateId);
+            mSession.setkeyWordBean(keyWordBean);
+
+            RoomService roomService = new RoomService();
+            roomService.setRoomInfo(roomInfo);
+
+            List<RoomService> roomServiceList = mSession.getRoomServiceList();
+            if(roomServiceList!=null&&roomServiceList.contains(roomService)) {
+                int i = roomServiceList.indexOf(roomService);
+                RoomService currentService = roomServiceList.get(i);
+                currentService.refresh(this);
+            }
+        }else {// 没设置默认欢迎词，只针对当前包间，判断是否正在播放
+            KeyWordBean keyWordBean = mSession.getKeyWordBean();
+            if(keyWordBean!=null) {
+                keyWordBean.setDefault(false);
+            }
+            RoomService roomService = new RoomService();
+            roomService.setRoomInfo(roomInfo);
+
+            List<RoomService> roomServiceList = mSession.getRoomServiceList();
+            if(roomServiceList!=null&&roomServiceList.contains(roomService)) {
+                int i = roomServiceList.indexOf(roomService);
+                RoomService currentService = roomServiceList.get(i);
+                boolean welPlay = currentService.getRoomInfo().isWelPlay();
+                currentService.getRoomInfo().setWord(keyWord);
+                currentService.getRoomInfo().setTemplateId(CurrentTemplateId);
+                if(!welPlay) {
+                    currentService.refresh(this);
+                }
+            }
+
+        }
+
+
+//        AppApi.reportLog(context,
+//                hotel.getHotel_id()+"",
+//                "",hotel.getInvite_id(),
+//                hotel.getTel(),
+//                box_mac,
+//                "1",
+//                "1",
+//                "120",
+//                "5",
+//                CurrentTemplateId,
+//                keyWord,
+//                this
+//        );
+        ActivitiesManager.getInstance().popSpecialActivity(WelComeSetTextNewActivity.class);
+        finish();
+//        SmallPlatformByGetIp smallPlatformByGetIp = mSession.getmSmallPlatInfoByIp();
+//        SmallPlatInfoBySSDP smallPlatInfoBySSDP = mSession.getSmallPlatInfoBySSDP();
+//        TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
+//        proWord(CurrentTemplateId,smallPlatformByGetIp,smallPlatInfoBySSDP,tvBoxSSDPInfo);
     }
     @Override
     public void onRoomItemClick(RoomInfo roomInfo) {
@@ -354,38 +408,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
             case GET_WORD_PRO_JSON:
                 HotelBean hotel = mSession.getHotelBean();
                 ShowMessage.showToast(this,"投屏成功！");
-                if ("1".equals(is_default)) {
-                    KeyWordBean keyWordBean = new KeyWordBean();
-                    keyWordBean.setKeyWord(keyWord);
-                    keyWordBean.setTemplateId(CurrentTemplateId);
-                    mSession.setkeyWordBean(keyWordBean);
-                }
-                RoomService roomService = new RoomService();
-                roomService.setRoomInfo(roomInfo);
 
-                List<RoomService> roomServiceList = mSession.getRoomServiceList();
-                if(roomServiceList!=null&&roomServiceList.contains(roomService)) {
-                    int i = roomServiceList.indexOf(roomService);
-                    RoomService currentService = roomServiceList.get(i);
-                    currentService.startWelcomeTimer(getApplicationContext(),60*5);
-                }
-
-
-                AppApi.reportLog(context,
-                        hotel.getHotel_id()+"",
-                        "",hotel.getInvite_id(),
-                        hotel.getTel(),
-                        box_mac,
-                        "1",
-                        "1",
-                        "120",
-                        "5",
-                        CurrentTemplateId,
-                        keyWord,
-                        this
-                        );
-                ActivitiesManager.getInstance().popSpecialActivity(WelComeSetTextNewActivity.class);
-                finish();
 
                 break;
 
