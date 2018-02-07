@@ -33,6 +33,7 @@ import com.savor.resturant.bean.TvBoxSSDPInfo;
 import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.ResponseErrorMessage;
 import com.savor.resturant.utils.ConstantValues;
+import com.savor.resturant.utils.WifiUtil;
 import com.savor.resturant.widget.CommonDialog;
 import com.savor.resturant.widget.LoadingDialog;
 import com.savor.resturant.widget.decoration.SpacesItemDecoration;
@@ -72,6 +73,7 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
             }
         }
     };
+    private List<RoomService> roomServiceList;
 
     public enum ProState {
         STATE_PLAY,
@@ -151,16 +153,40 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
 
         roomList = mSession.getRoomList();
         if(roomList !=null) {
-            List<RoomService> roomServiceList = new ArrayList<>();
-            for(int i = 0; i< roomList.size(); i++) {
-                RoomService roomService = new RoomService();
-                roomService.setRoomInfo(roomList.get(i));
-                roomServiceList.add(roomService);
+            initRoomList();
+        }else {
+            SmallPlatformByGetIp smallPlatformByGetIp = mSession.getmSmallPlatInfoByIp();
+            if(smallPlatformByGetIp!=null) {
+                String localIp = smallPlatformByGetIp.getLocalIp();
+                String hotelId = smallPlatformByGetIp.getHotelId();
+                String url = "http://"+localIp+":8080";
+                AppApi.getHotelRoomList(this,url,hotelId,this);
             }
-            mSession.setRoomServiceList(roomServiceList);
-            roomServiceAdapter.setData(roomServiceList);
+
+            TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
+            if(tvBoxSSDPInfo!=null) {
+                String serverIp = tvBoxSSDPInfo.getServerIp();
+                String hotelId = tvBoxSSDPInfo.getHotelId();
+                String hid = "";
+                try {
+                    hid = String.valueOf(hotelId);
+                }catch (Exception e) {}
+                String url = "http://"+serverIp+":8080";
+                AppApi.getHotelRoomList(ResturantServiceActivity.this,url,hid,ResturantServiceActivity.this);
+            }
         }
 
+    }
+
+    private void initRoomList() {
+        roomServiceList = new ArrayList<>();
+        for(int i = 0; i< roomList.size(); i++) {
+            RoomService roomService = new RoomService();
+            roomService.setRoomInfo(roomList.get(i));
+            roomServiceList.add(roomService);
+        }
+        mSession.setRoomServiceList(roomServiceList);
+        roomServiceAdapter.setData(roomServiceList);
     }
 
     @Override
@@ -182,8 +208,11 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
                             public void onConfirm() {
                                 KeyWordBean keyWordBean = mSession.getKeyWordBean();
                                 if(keyWordBean!=null) {
+                                    keyWordBean.setTemplateId("1");
+                                    keyWordBean.setDefault(true);
                                     keyWordBean.setKeyWord("欢迎光临，祝您用餐愉快！");
                                     mSession.setkeyWordBean(keyWordBean);
+                                    roomServiceAdapter.notifyDataSetChanged();
                                 }
                             }
                         },
@@ -342,9 +371,14 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
     }
 
     private void resetErrorSettings() {
-        currentRoom.setWelErrorCount(0);
-        currentRoom.setReErrorCount(0);
-        currentRoom.setStopErrorCount(0);
+        if(roomServiceList!=null&&roomServiceList.size()>0) {
+            for(RoomService roomService: roomServiceList) {
+                roomService.setWelErrorCount(0);
+                roomService.setReErrorCount(0);
+                roomService.setStopErrorCount(0);
+            }
+        }
+
         errorMsg = null;
     }
 
@@ -413,6 +447,21 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
     public void onSuccess(AppApi.Action method, Object obj) {
         super.onSuccess(method, obj);
         switch (method) {
+            case GET_HOTEL_BOX_JSON:
+                if(obj instanceof List) {
+                    ArrayList<RoomInfo> roomInfos = (ArrayList<RoomInfo>) obj;
+                    mSession.setRoomList(roomInfos);
+                    initRoomList();
+                    for(RoomInfo info : roomInfos) {
+                        String wifiName = WifiUtil.getWifiName(this);
+                        if(info.getBox_name().equals(wifiName)) {
+                            mSession.setBindRoom(info);
+                            break;
+                        }
+                    }
+
+                }
+                break;
             case GET_RECOMMEND_PRO_JSON:
                 OkHttpUtils.getInstance().getOkHttpClient().dispatcher().cancelAll();
                 resetErrorSettings();
@@ -510,6 +559,7 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
         }
         if(errotCount <3)
             return;
+        OkHttpUtils.getInstance().getOkHttpClient().dispatcher().cancelAll();
         hideLoadingLayout();
         resetErrorSettings();
         if(!TextUtils.isEmpty(errorMsg)) {
