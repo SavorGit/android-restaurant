@@ -97,7 +97,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
         bg_l8 = (RelativeLayout) findViewById(R.id.bg_l8);
         h1 = (ImageView) findViewById(R.id.h1);
         h2 = (ImageView) findViewById(R.id.h2);
-        h3 = (ImageView) findViewById(R.id.h4);
+        h3 = (ImageView) findViewById(R.id.h3);
         h4 = (ImageView) findViewById(R.id.h4);
         h5 = (ImageView) findViewById(R.id.h5);
         h6 = (ImageView) findViewById(R.id.h6);
