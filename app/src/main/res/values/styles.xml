@@ -180,4 +180,8 @@
         <item name="android:windowBackground">@drawable/ico_splash</item>
         <item name="android:scaleType">centerCrop</item>
     </style>
+    <style name="MyCheckboxStyle" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/checkbox_word_selector</item>
+      </style>
+
 </resources>
