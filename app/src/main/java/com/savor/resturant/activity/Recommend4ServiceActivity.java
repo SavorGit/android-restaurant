@@ -752,6 +752,7 @@ public class Recommend4ServiceActivity extends BaseActivity implements View.OnCl
                     String msg = message.getMessage();
                     if(code == 60007) {
                         mEmptyLayout.setVisibility(View.VISIBLE);
+                        msg = "当前无推荐菜内容，\n请联系小热点工作人员";
                         mEmptyHintTv.setText(msg);
                     }else {
                         showToast(msg);

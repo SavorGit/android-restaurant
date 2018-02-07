@@ -56,6 +56,7 @@ public class ConstantValues {
     public static final String ACTION_RECOMMEND_PLAY_DELAYED_5MIN = "action_recommend_play_delayed_5min";
     /**延迟指定时间（推荐菜播放完毕）修改播放状态*/
     public static final String ACTION_REFRESH_PRO_STATE_DELAYED= "action_refresh_pro_state_delayed";
+    public static final String ACTION_REFRESH_LIST= "action_refresh_list";
 
 
     /*************Intent请求码****************/

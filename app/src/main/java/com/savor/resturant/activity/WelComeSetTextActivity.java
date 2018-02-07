@@ -2,10 +2,7 @@ package com.savor.resturant.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -14,15 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.common.api.utils.ShowMessage;
 import com.savor.resturant.R;
-import com.savor.resturant.bean.HotelBean;
-import com.savor.resturant.core.ApiRequestListener;
-import com.savor.resturant.core.AppApi;
-import com.savor.resturant.core.ResponseErrorMessage;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 /**
