@@ -109,7 +109,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:paddingLeft="4dp"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:text="（默认）"
         />
     <TextView
