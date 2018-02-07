@@ -27,7 +27,7 @@
             android:background="@drawable/onkey_pro_selector"
             android:enabled="false"
             android:gravity="center"
-            android:text="一键投所选内容"
+            android:text="投屏"
             android:textColor="@color/white"
             android:textSize="15sp"
             android:textStyle="bold" />

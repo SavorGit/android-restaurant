@@ -82,6 +82,7 @@ public class SplashActivity extends BaseActivity {
                     LogUtils.d("savor:网络变为可用");
                     // 为了解决多次重复发送请求利用延时发送方式
                     restartService();
+                    sendRefreshStatusReceiver();
                     break;
                 case WifiManager.WIFI_STATE_DISABLED:
                     mSession.setBindRoom(null);
@@ -94,6 +95,7 @@ public class SplashActivity extends BaseActivity {
                     resetLinkStatus();
                     mHandler.removeMessages(MSG_STOP_SSDP);
                     stopSSdpService();
+                    sendRefreshStatusReceiver();
                     mSession.resetPlatform();
                     break;
                 case CHECK_START_UP:
@@ -148,6 +150,14 @@ public class SplashActivity extends BaseActivity {
         if(specialActivity!=null) {
             specialActivity.initWIfiHint();
         }
+
+    }
+
+    private void sendRefreshStatusReceiver() {
+        // 发送发现小平台广播
+        Intent intent = new Intent(SensePresenter.SMALL_PLATFORM);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        sendBroadcast(intent);
     }
 
     private StartUpSettingsBean latestSettingsBean;

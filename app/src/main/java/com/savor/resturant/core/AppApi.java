@@ -1022,7 +1022,7 @@ public class AppApi {
         params.put("deviceId", STIDUtil.getDeviceId(context));
         params.put("boxMac", boxMac);
         params.put("deviceName", Build.MODEL);
-        new AppServiceOk(context,url+"/small/command/screend/word_recomm",Action.GET_STOP_BY_SMALL_JSON,handler,params).get();
+        new AppServiceOk(context,url+"/small/command/screend/stop",Action.GET_STOP_BY_SMALL_JSON,handler,params).get();
 //        new AppServiceOk(context,"http://"+url+":8080/command/getHotelBox",Action.GET_HOTEL_BOX_JSON,handler,params).get();
     }
 

@@ -12,15 +12,29 @@ import com.savor.resturant.utils.ConstantValues;
 
 public class RoomService {
     private RoomInfo roomInfo;
+    private int welErrorCount;
+    private int reErrorCount;
+    private int stopErrorCount;
     private CountDownTimer timer;
     private CountDownTimer completetimer;
-
 
     @Override
     public String toString() {
         return "RoomService{" +
                 "roomInfo=" + roomInfo +
+                ", welErrorCount=" + welErrorCount +
+                ", reErrorCount=" + reErrorCount +
+                ", timer=" + timer +
+                ", completetimer=" + completetimer +
                 '}';
+    }
+
+    public int getStopErrorCount() {
+        return stopErrorCount;
+    }
+
+    public void setStopErrorCount(int stopErrorCount) {
+        this.stopErrorCount = stopErrorCount;
     }
 
     @Override
@@ -44,6 +58,22 @@ public class RoomService {
 
     public void setRoomInfo(RoomInfo roomInfo) {
         this.roomInfo = roomInfo;
+    }
+
+    public int getWelErrorCount() {
+        return welErrorCount;
+    }
+
+    public void setWelErrorCount(int welErrorCount) {
+        this.welErrorCount = welErrorCount;
+    }
+
+    public int getReErrorCount() {
+        return reErrorCount;
+    }
+
+    public void setReErrorCount(int reErrorCount) {
+        this.reErrorCount = reErrorCount;
     }
 
     /**
