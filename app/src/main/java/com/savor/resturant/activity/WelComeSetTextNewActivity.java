@@ -83,7 +83,7 @@ public class WelComeSetTextNewActivity extends BaseActivity implements View.OnCl
                 greeting.setText(word);
                 t0.setVisibility(View.VISIBLE);
             }else {
-                t0.setVisibility(View.INVISIBLE);
+                t0.setVisibility(View.VISIBLE);
             }
         }
 
