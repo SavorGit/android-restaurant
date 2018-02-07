@@ -455,7 +455,10 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
                 if(obj instanceof List) {
                     ArrayList<RoomInfo> roomInfos = (ArrayList<RoomInfo>) obj;
                     mSession.setRoomList(roomInfos);
-                    initRoomList();
+                    roomList = roomInfos;
+                    if(roomList!=null&&roomList.size()>0) {
+                        initRoomList();
+                    }
                     for(RoomInfo info : roomInfos) {
                         String wifiName = WifiUtil.getWifiName(this);
                         if(info.getBox_name().equals(wifiName)) {

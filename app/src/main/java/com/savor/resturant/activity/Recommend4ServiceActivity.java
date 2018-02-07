@@ -227,7 +227,15 @@ public class Recommend4ServiceActivity extends BaseActivity implements View.OnCl
                 proAdvert(vid, smallPlatformByGetIp, smallPlatInfoBySSDP, tvBoxSSDPInfo);
                 break;
             case TYPE_RECOMMEND_FOODS:
-                proRecmmend(vid, smallPlatformByGetIp, smallPlatInfoBySSDP, tvBoxSSDPInfo,30+"");
+                List<RecommendFoodAdvert> selectedList = getSelectedList(mRecommendAdapter.getData());
+                int time = 20;
+                if(selectedList!=null&&selectedList.size()>0) {
+                    int size = selectedList.size();
+                    if(size > 1) {
+                        time = 10;
+                    }
+                }
+                proRecmmend(vid, smallPlatformByGetIp, smallPlatInfoBySSDP, tvBoxSSDPInfo,time+"");
 //                AppApi.recommendPro(this,"",currentRoom.getBox_mac(),1000*30+"",vid,this);
                 break;
         }
