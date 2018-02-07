@@ -232,7 +232,7 @@ public class Recommend4ServiceActivity extends BaseActivity implements View.OnCl
                 if(selectedList!=null&&selectedList.size()>0) {
                     int size = selectedList.size();
                     if(size > 1) {
-                        time = size*10;
+                        time = 10;
                     }
                 }
                 proRecmmend(vid, smallPlatformByGetIp, smallPlatInfoBySSDP, tvBoxSSDPInfo,time+"");
