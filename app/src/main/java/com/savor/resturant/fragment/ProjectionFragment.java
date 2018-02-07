@@ -155,10 +155,11 @@ public class ProjectionFragment extends BaseFragment implements FunctionAdapter.
         if(loginResponse!=null) {
             String hid = loginResponse.getHotel_id();
             if(String.valueOf(hotelid).equals(hid)) {
-                mHintTv.setText("当前连接酒楼\""+loginResponse.getHotel_name()+"\"");
-                mHintTv.setTextColor(getResources().getColor(R.color.color_0da606));
-                mHintTv.setCompoundDrawables(null,null,null,null);
+                mHintTv.setVisibility(View.GONE);
+//                mHintTv.setTextColor(getResources().getColor(R.color.color_0da606));
+//                mHintTv.setCompoundDrawables(null,null,null,null);
             }else {
+                mHintTv.setVisibility(View.VISIBLE);
                 mHintTv.setText("请链接“"+loginResponse.getHotel_name()+"”的wifi后继续操作");
                 mHintTv.setTextColor(getResources().getColor(R.color.color_e43018));
                 mHintTv.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ico_exe_hint),null,null,null);
