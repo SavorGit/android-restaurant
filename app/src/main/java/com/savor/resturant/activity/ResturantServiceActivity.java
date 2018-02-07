@@ -271,7 +271,7 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
                 String localIp = smallPlatformByGetIp.getLocalIp();
                 String url = "http://"+localIp+":8080";
                 String templateId = "1";
-                String keyword = "欢迎光临祝您用餐愉快";
+                String keyword = getString(R.string.welcome_default);
                 if(!TextUtils.isEmpty(currentRoom.getRoomInfo().getTemplateId())) {
                     templateId = currentRoom.getRoomInfo().getTemplateId();
                 }
@@ -289,13 +289,15 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
             if(smallPlatInfoBySSDP!=null&&!TextUtils.isEmpty(smallPlatInfoBySSDP.getServerIp())) {
                 String serverIp = smallPlatInfoBySSDP.getServerIp();
                 String url = "http://"+serverIp+":8080";
-                KeyWordBean keyWordBean = mSession.getKeyWordBean();
                 String templateId = "1";
-                String keyword = "欢迎光临祝您用餐愉快";
-                if(keyWordBean!=null&&!TextUtils.isEmpty(keyWordBean.getTemplateId())&&!TextUtils.isEmpty(keyWordBean.getKeyWord())) {
-                    templateId = keyWordBean.getTemplateId();
-                    keyword = keyWordBean.getKeyWord();
+                String keyword = getString(R.string.welcome_default);
+                if(!TextUtils.isEmpty(currentRoom.getRoomInfo().getTemplateId())) {
+                    templateId = currentRoom.getRoomInfo().getTemplateId();
                 }
+                if(!TextUtils.isEmpty(currentRoom.getRoomInfo().getWord())) {
+                    keyword = currentRoom.getRoomInfo().getWord();
+                }
+
                 AppApi.welRecommendPro(this,url,info.getBox_mac(),templateId,keyword,this);
             }else {
                 int errotCount = currentRoom.getWelErrorCount()+1;
@@ -306,13 +308,15 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
             if(tvBoxSSDPInfo!=null&&!TextUtils.isEmpty(tvBoxSSDPInfo.getServerIp())) {
                 String serverIp = tvBoxSSDPInfo.getServerIp();
                 String url = "http://"+serverIp+":8080";
-                KeyWordBean keyWordBean = mSession.getKeyWordBean();
                 String templateId = "1";
-                String keyword = "欢迎光临祝您用餐愉快";
-                if(keyWordBean!=null&&!TextUtils.isEmpty(keyWordBean.getTemplateId())&&!TextUtils.isEmpty(keyWordBean.getKeyWord())) {
-                    templateId = keyWordBean.getTemplateId();
-                    keyword = keyWordBean.getKeyWord();
+                String keyword = getString(R.string.welcome_default);
+                if(!TextUtils.isEmpty(currentRoom.getRoomInfo().getTemplateId())) {
+                    templateId = currentRoom.getRoomInfo().getTemplateId();
                 }
+                if(!TextUtils.isEmpty(currentRoom.getRoomInfo().getWord())) {
+                    keyword = currentRoom.getRoomInfo().getWord();
+                }
+
                 AppApi.welRecommendPro(this,url,info.getBox_mac(),templateId,keyword,this);
             }else {
                 int errotCount = currentRoom.getWelErrorCount()+1;
