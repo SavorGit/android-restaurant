@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/title_bg">
+    android:background="@color/color_ece6de">
     <include
         android:id="@+id/head_layout"
         layout="@layout/layout_head_title"/>
@@ -40,6 +40,7 @@
             android:textColor="@color/app_text_type"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            style="@style/MyCheckboxStyle"
             android:text="设为默认欢迎词"
             />
 
