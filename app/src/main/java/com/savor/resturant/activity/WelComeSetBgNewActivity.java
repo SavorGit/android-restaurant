@@ -3,13 +3,9 @@ package com.savor.resturant.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,7 +26,6 @@ import com.savor.resturant.core.AppApi;
 import com.savor.resturant.core.ResponseErrorMessage;
 import com.savor.resturant.utils.ActivitiesManager;
 import com.savor.resturant.widget.LoadingDialog;
-import com.savor.resturant.widget.decoration.SpacesItemDecoration;
 
 import java.util.List;
 
@@ -38,8 +33,7 @@ import java.util.List;
 /**
  * 欢迎词文背景置页
  */
-public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClickListener,
-        RoomListAdapter.OnRoomItemClicklistener {
+public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClickListener{
 
     private Context context;
     private ImageView iv_left;
@@ -367,52 +361,9 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
                     currentService.refresh(this);
                 }
             }
-
         }
-
-
-//        AppApi.reportLog(context,
-//                hotel.getHotel_id()+"",
-//                "",hotel.getInvite_id(),
-//                hotel.getTel(),
-//                box_mac,
-//                "1",
-//                "1",
-//                "120",
-//                "5",
-//                CurrentTemplateId,
-//                keyWord,
-//                this
-//        );
         ActivitiesManager.getInstance().popSpecialActivity(WelComeSetTextNewActivity.class);
         finish();
-//        SmallPlatformByGetIp smallPlatformByGetIp = mSession.getmSmallPlatInfoByIp();
-//        SmallPlatInfoBySSDP smallPlatInfoBySSDP = mSession.getSmallPlatInfoBySSDP();
-//        TvBoxSSDPInfo tvBoxSSDPInfo = mSession.getTvBoxSSDPInfo();
-//        proWord(CurrentTemplateId,smallPlatformByGetIp,smallPlatInfoBySSDP,tvBoxSSDPInfo);
-    }
-    @Override
-    public void onRoomItemClick(RoomInfo roomInfo) {
-       // currentRoom = roomInfo;
-
-        //hideRommList();
-
-    }
-
-
-
-    @Override
-    public void onSuccess(AppApi.Action method, Object obj) {
-        hideLoadingLayout();
-        switch (method) {
-            case GET_WORD_PRO_JSON:
-                HotelBean hotel = mSession.getHotelBean();
-                ShowMessage.showToast(this,"投屏成功！");
-
-
-                break;
-
-        }
     }
 
     @Override

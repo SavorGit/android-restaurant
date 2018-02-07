@@ -96,6 +96,22 @@
         android:text="欢迎光临，祝您用餐愉快！"
         />
     <TextView
+        android:id="@+id/t0"
+        android:layout_marginTop="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_la"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="200dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="14sp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:paddingLeft="4dp"
+        android:visibility="invisible"
+        android:text="（默认）"
+        />
+    <TextView
         android:id="@+id/t2"
         android:layout_marginTop="6dp"
         android:layout_width="match_parent"
