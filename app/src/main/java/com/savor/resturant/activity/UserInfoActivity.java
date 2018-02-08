@@ -258,16 +258,16 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
         ticketAdapter.setData(imageList);
         refreshListView.onLoadComplete(true);
-        refreshListView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                refreshListView.onLoadComplete(false);
-//                for(int i = 0;i<5;i++) {
-//                    imageList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515744348&di=df7a8a21f2dc6dca3b840939a1a9da98&imgtype=jpg&er=1&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2Fa50f4bfbfbedab64fe858d27f536afc378311e66.jpg");
-//                }
-                ticketAdapter.notifyDataSetChanged();
-            }
-        }, 3000);
+//        refreshListView.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                refreshListView.onLoadComplete(false);
+////                for(int i = 0;i<5;i++) {
+////                    imageList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515744348&di=df7a8a21f2dc6dca3b840939a1a9da98&imgtype=jpg&er=1&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2Fa50f4bfbfbedab64fe858d27f536afc378311e66.jpg");
+////                }
+//                ticketAdapter.notifyDataSetChanged();
+//            }
+//        }, 3000);
     }
 
     @Override
@@ -527,15 +527,20 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             List<ConRecBean> list = recTopList.getList();
             if (list != null && list.size() > 0) {
                 la_a.setVisibility(View.GONE);
-                imageList.clear();
-                imageList.addAll(list);
+                if("1".equals(Rectype)) {
+                    imageList.clear();
+                    imageList.addAll(list);
+                }else {
+                    imageList.addAll(list);
+                }
+
                 ticketAdapter.notifyDataSetChanged();
 
-                if (list != null && list.size() < 10) {
-                    refreshListView.onLoadComplete(false, false);
-                } else {
+//                if (list != null && list.size() < 10) {
+//                    refreshListView.onLoadComplete(false, false);
+//                } else {
                     refreshListView.onLoadComplete(true, false);
-                }
+//                }
 
             } else {
                 if (imageList != null && imageList.size() > 0) {
@@ -545,8 +550,8 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 }
                 refreshListView.onLoadComplete(false, false);
             }
-            max_id = recTopList.getMax_id();
             min_id = recTopList.getMin_id();
+//            refreshListView.onLoadComplete(false, false);
         } else {
             if (imageList != null && imageList.size() > 0) {
                 la_a.setVisibility(View.GONE);
@@ -770,6 +775,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     PullToRefreshBase.OnLastItemVisibleListener onLastItemVisibleListener = new PullToRefreshBase.OnLastItemVisibleListener() {
         @Override
         public void onLastItemVisible() {
+            Rectype = "2";
             getConRecTopList();
         }
     };

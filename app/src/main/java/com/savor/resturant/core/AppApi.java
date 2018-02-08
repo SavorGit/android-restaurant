@@ -917,7 +917,7 @@ public class AppApi {
         final HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("customer_id", customer_id);
         params.put("invite_id", invite_id);
-        params.put("max_id", max_id);
+//        params.put("max_id", max_id);
         params.put("min_id", min_id);
         params.put("mobile", mobile);
         params.put("type", type);

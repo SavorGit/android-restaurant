@@ -214,7 +214,7 @@
                 android:paddingRight="15dp"
                 android:paddingTop="10dp"
                 android:visibility="gone"
-                android:text="请记录客人喜好" />
+                android:text="请记录客人喜好，方便下次为TA服务" />
         </FrameLayout>
 
 
