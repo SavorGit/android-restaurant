@@ -235,7 +235,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
 
         String face_url = list.getFace_url();
         if(!TextUtils.isEmpty(face_url)) {
-            Glide.with(this).load(face_url).placeholder(R.drawable.empty_slide).transform(new GlideCircleTransform(this)).into(mHeaderIv);
+            Glide.with(this).load(face_url).bitmapTransform(new GlideCircleTransform(this)).placeholder(R.drawable.empty_slide).into(mHeaderIv);
         }
 
         String sex = list.getSex();
@@ -543,6 +543,11 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         List<ContactFormat> customerList = mSession.getCustomerList().getCustomerList();
             switch (type) {
                 case TYPE_EDIT:
+                    if(TextUtils.isEmpty(faceUrl)) {
+                        if(customerBean!=null&&customerBean.getList()!=null&&!TextUtils.isEmpty(customerBean.getList().getFace_url())) {
+                            faceUrl = customerBean.getList().getFace_url();
+                        }
+                    }
                     AppApi.editCustomer(this,bill_info,birthdDay,birthPlace,consume_ability,
                             faceUrl,customerBean.getList().getCustomer_id(),invite_id,tel,name,remark,sex,usermobile,this);
                     String userPhone = currentAddCustomer.getMobile();
