@@ -468,7 +468,15 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         String bill_info = getFormatStr(ticketInfo);
         birthdDay = getFormatStr(birthdDay);
         birthPlace = TextUtils.isEmpty(birthPlace)?"":birthPlace;
-        String consume_ability = currentConAbility == null?"":currentConAbility.getId()+"";
+        String consume_ability = "";
+        if(currentConAbility == null) {
+            if(customerBean!=null&&customerBean.getList()!=null&&!TextUtils.isEmpty(customerBean.getList().getConsume_ability_id())) {
+                consume_ability = customerBean.getList().getConsume_ability_id();
+            }
+        }else {
+            consume_ability = currentConAbility.getId()+"";
+        }
+//        String consume_ability = currentConAbility == null?"":currentConAbility.getId()+"";
 
         String invite_id = mSession.getHotelBean().getInvite_id();
         String tel = mSession.getHotelBean().getTel();

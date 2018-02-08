@@ -330,7 +330,6 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
             KeyWordBean keyWordBean = new KeyWordBean();
             keyWordBean.setDefault(true);
             keyWordBean.setKeyWord(keyWord);
-            keyWordBean.setTemplateId(CurrentTemplateId);
             mSession.setkeyWordBean(keyWordBean);
 
             RoomService roomService = new RoomService();
@@ -340,6 +339,7 @@ public class WelComeSetBgNewActivity extends BaseActivity implements View.OnClic
             if(roomServiceList!=null&&roomServiceList.contains(roomService)) {
                 int i = roomServiceList.indexOf(roomService);
                 RoomService currentService = roomServiceList.get(i);
+                currentService.getRoomInfo().setTemplateId(CurrentTemplateId);
                 currentService.refresh(this);
             }
         }else {// 没设置默认欢迎词，只针对当前包间，判断是否正在播放
