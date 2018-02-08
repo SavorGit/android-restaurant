@@ -129,27 +129,3 @@ dependencies {
     implementation project(':FFmpeg4Android')
     implementation project(':flowlayout-lib')
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
