@@ -214,6 +214,16 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
                     @Override
                     public void onConfirm() {
                         KeyWordBean keyWordBean = mSession.getKeyWordBean();
+                        if(roomServiceList!=null&&roomServiceList.size()>0) {
+                            for(RoomService roomService : roomServiceList) {
+                                roomService.getRoomInfo().setTemplateId("1");
+                                if(keyWordBean!=null&&!TextUtils.isEmpty(keyWordBean.getKeyWord())) {
+                                    roomService.getRoomInfo().setWord(keyWordBean.getKeyWord());
+                                }else {
+                                    roomService.getRoomInfo().setWord(getString(R.string.welcome_default));
+                                }
+                            }
+                        }
                         if(keyWordBean!=null) {
                             keyWordBean.setTemplateId("1");
                             keyWordBean.setDefault(true);
