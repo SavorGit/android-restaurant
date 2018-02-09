@@ -87,14 +87,14 @@ public class SSDPService extends IntentService {
     private void startReceive() {
         WifiManager wm = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
         multicastLock = wm.createMulticastLock("multicastLock");
-//        multicastLock.setReferenceCounted(false);
+        multicastLock.setReferenceCounted(false);
         multicastLock.acquire();
 
         mSocketReceive = null;
 
         try {
             mSocketReceive = new MulticastSocket(PORT_LISTENING);
-            mSocketReceive.setLoopbackMode(true);
+//            mSocketReceive.setLoopbackMode(true);
 //            mSocketReceive.setTimeToLive(0);
 //            mSocketReceive.setSoTimeout(1000*12);
             mSocketReceive.joinGroup(InetAddress.getByName(IP_TARGET));
@@ -140,9 +140,9 @@ public class SSDPService extends IntentService {
                             int hid = session.getHotelid();
                             if(hotelId!=hid) {
                                 session.setHotelid(hotelId);
-                                sendSpFoundReceiver();
                             }
                             session.setTvBoxSSDPInfo(tvBoxSSDPInfo);
+                            sendSpFoundReceiver();
                         }
                     }
                 }else {

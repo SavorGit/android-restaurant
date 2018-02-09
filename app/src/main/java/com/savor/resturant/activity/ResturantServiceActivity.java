@@ -202,26 +202,51 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_right:
-                new CommonDialog(this, "所有包间的欢迎词将回复默认状态：\n欢迎光临，祝您用餐愉快！",
-                        new CommonDialog.OnConfirmListener() {
-                            @Override
-                            public void onConfirm() {
-                                KeyWordBean keyWordBean = mSession.getKeyWordBean();
-                                if(keyWordBean!=null) {
-                                    keyWordBean.setTemplateId("1");
-                                    keyWordBean.setDefault(true);
-                                    keyWordBean.setKeyWord("欢迎光临，祝您用餐愉快！");
-                                    mSession.setkeyWordBean(keyWordBean);
-                                    roomServiceAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        },
-                        new CommonDialog.OnCancelListener() {
-                            @Override
-                            public void onCancel() {
+                KeyWordBean keyWordBean = mSession.getKeyWordBean();
+                String content = "所有包间的欢迎词将恢复默认状态：\n";
+                if(keyWordBean!=null) {
+                    content = content+keyWordBean.getKeyWord();
+                }else {
+                    content = content+"欢迎光临，祝您用餐愉快！";
+                }
 
-                            }
-                        }).show();
+                new CommonDialog(this, "恢复默认欢迎词", content, new CommonDialog.OnConfirmListener() {
+                    @Override
+                    public void onConfirm() {
+                        KeyWordBean keyWordBean = mSession.getKeyWordBean();
+                        if(keyWordBean!=null) {
+                            keyWordBean.setTemplateId("1");
+                            keyWordBean.setDefault(true);
+                            mSession.setkeyWordBean(keyWordBean);
+                            roomServiceAdapter.notifyDataSetChanged();
+                        }else {
+                            keyWordBean = new KeyWordBean();
+                            keyWordBean.setTemplateId("1");
+                            keyWordBean.setDefault(true);
+                            keyWordBean.setKeyWord("欢迎光临，祝您用餐愉快！");
+                            mSession.setkeyWordBean(keyWordBean);
+                            roomServiceAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }, new CommonDialog.OnCancelListener() {
+                    @Override
+                    public void onCancel() {
+
+                    }
+                },"确定").show();
+//                new CommonDialog(this, "恢复默认欢迎词",content,
+//                        new CommonDialog.OnConfirmListener() {
+//                            @Override
+//                            public void onConfirm() {
+//
+//                            }
+//                        },
+//                        new CommonDialog.OnCancelListener() {
+//                            @Override
+//                            public void onCancel() {
+//
+//                            }
+//                        }).show();
                 break;
             case R.id.iv_left:
                 finish();
@@ -324,9 +349,9 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
                 if(errotCount >=3) {
                     hideLoadingLayout();
                     if(AppUtils.isNetworkAvailable(this)) {
-                        showToast("网络超时，请重试");
+                        showToast("电视无法连接，请确认网络和开机状态");
                     }else {
-                        showToast("网络已断开，请检查");
+                        showToast("电视无法连接，请确认网络和开机状态");
                     }
 
                 }
@@ -436,9 +461,9 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
                 if(errorCount >=3) {
                     hideLoadingLayout();
                     if(AppUtils.isNetworkAvailable(this)) {
-                        showToast("网络超时，请重试");
+                        showToast("电视无法连接，请确认网络和开机状态");
                     }else {
-                        showToast("网络已断开，请检查");
+                        showToast("电视无法连接，请确认网络和开机状态");
                     }
 
                 }
@@ -572,7 +597,7 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
         if(!TextUtils.isEmpty(errorMsg)) {
             showToast(errorMsg);
         }else {
-            showToast("电视未开机\n请打开电视后操作");
+            showToast("电视无法连接，请确认网络和开机状态");
         }
     }
 
@@ -593,7 +618,7 @@ public class ResturantServiceActivity extends BaseActivity implements View.OnCli
         if(!TextUtils.isEmpty(errorMsg)) {
             showToast(errorMsg);
         }else {
-            showToast("电视未开机\n请打开电视后操作");
+            showToast("电视无法连接，请确认网络和开机状态");
         }
     }
 

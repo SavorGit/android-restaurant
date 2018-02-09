@@ -61,6 +61,7 @@ public class CommonDialog extends Dialog implements View.OnClickListener {
 //        }
     }
 
+
     public CommonDialog(Context context, String title,String content,OnConfirmListener confirmListener,OnCancelListener cancelListener,String confirm) {
         super(context, R.style.loading_dialog);
         this.title = title;

@@ -235,7 +235,8 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
 
         String face_url = list.getFace_url();
         if(!TextUtils.isEmpty(face_url)) {
-            Glide.with(this).load(face_url).placeholder(R.drawable.empty_slide).transform(new GlideCircleTransform(this)).into(mHeaderIv);
+            Glide.with(this).load(face_url).
+                    into(mHeaderIv);
         }
 
         String sex = list.getSex();
@@ -468,7 +469,15 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         String bill_info = getFormatStr(ticketInfo);
         birthdDay = getFormatStr(birthdDay);
         birthPlace = TextUtils.isEmpty(birthPlace)?"":birthPlace;
-        String consume_ability = currentConAbility == null?"":currentConAbility.getId()+"";
+        String consume_ability = "";
+        if(currentConAbility == null) {
+            if(customerBean!=null&&customerBean.getList()!=null&&!TextUtils.isEmpty(customerBean.getList().getConsume_ability_id())) {
+                consume_ability = customerBean.getList().getConsume_ability_id();
+            }
+        }else {
+            consume_ability = currentConAbility.getId()+"";
+        }
+//        String consume_ability = currentConAbility == null?"":currentConAbility.getId()+"";
 
         String invite_id = mSession.getHotelBean().getInvite_id();
         String tel = mSession.getHotelBean().getTel();
@@ -535,6 +544,11 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         List<ContactFormat> customerList = mSession.getCustomerList().getCustomerList();
             switch (type) {
                 case TYPE_EDIT:
+                    if(TextUtils.isEmpty(faceUrl)) {
+                        if(customerBean!=null&&customerBean.getList()!=null&&!TextUtils.isEmpty(customerBean.getList().getFace_url())) {
+                            faceUrl = customerBean.getList().getFace_url();
+                        }
+                    }
                     AppApi.editCustomer(this,bill_info,birthdDay,birthPlace,consume_ability,
                             faceUrl,customerBean.getList().getCustomer_id(),invite_id,tel,name,remark,sex,usermobile,this);
                     String userPhone = currentAddCustomer.getMobile();

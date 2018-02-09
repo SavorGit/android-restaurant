@@ -163,7 +163,6 @@ public class RoomServiceAdapter extends RecyclerView.Adapter<RoomServiceAdapter.
                 }else {
                     if(!TextUtils.isEmpty(keyWord)) {
                         holder.tv_wel.setText(keyWord);
-                        info.setTemplateId(keyWordBean.getTemplateId());
                         info.setWord(keyWord);
                     }else {
                         holder.tv_wel.setText("欢迎光临，祝您用餐愉快！");

@@ -91,8 +91,11 @@ public class SplashActivity extends BaseActivity {
                     mSession.setRequestPool(requsetPool);
                     mSession.setRoomList(null);
                     mSession.setHotelid(0);
+                    mSession.setSmallPlatInfoByGetIp(null);
+                    mSession.setSmallPlatInfoBySSDP(null);
+                    mSession.setTvBoxSSDPInfo(null);
                     LogUtils.d("savor:hotel 网络不可用重置酒店id为0");
-                    resetLinkStatus();
+                    sendRefreshStatusReceiver();
                     mHandler.removeMessages(MSG_STOP_SSDP);
                     stopSSdpService();
                     sendRefreshStatusReceiver();
@@ -145,13 +148,17 @@ public class SplashActivity extends BaseActivity {
         outState.putSerializable("room_list",mSession.getRoomList());
     }
 
-    private void resetLinkStatus() {
-        MainActivity specialActivity = (MainActivity) ActivitiesManager.getInstance().getSpecialActivity(MainActivity.class);
-        if(specialActivity!=null) {
-            specialActivity.initWIfiHint();
-        }
-
-    }
+//    private void resetLinkStatus() {
+//        MainActivity specialActivity = (MainActivity) ActivitiesManager.getInstance().getSpecialActivity(MainActivity.class);
+//        if(specialActivity!=null) {
+//            specialActivity.initWIfiHint();
+//        }
+//
+//        SavorMainActivity savorMainActivity = (SavorMainActivity) ActivitiesManager.getInstance().getSpecialActivity(MainActivity.class);
+//        if(specialActivity!=null) {
+//            specialActivity.initWIfiHint();
+//        }
+//    }
 
     private void sendRefreshStatusReceiver() {
         // 发送发现小平台广播
@@ -423,7 +430,7 @@ public class SplashActivity extends BaseActivity {
                             Integer hid = Integer.valueOf(hotelId);
                             if(hid>0) {
                                 mSession.setHotelid(hid);
-                                resetLinkStatus();
+                                sendRefreshStatusReceiver();
                             }
                         }catch (Exception e) {
                         }
@@ -531,6 +538,9 @@ public class SplashActivity extends BaseActivity {
                 if(smallPlatInfoBySSDP!=null&&(roomList==null||roomList.size() ==0)) {
                     String serverIp = smallPlatInfoBySSDP.getServerIp();
                     int hotelId = smallPlatInfoBySSDP.getHotelId();
+                    if(mSession.getHotelid() == 0) {
+                        mSession.setHotelid(hotelId);
+                    }
                     String hid = "";
                     try {
                         hid = String.valueOf(hotelId);
@@ -544,6 +554,13 @@ public class SplashActivity extends BaseActivity {
                 if(tvBoxSSDPInfo!=null&&!requsetPool.contains(tvBoxSSDPInfo)) {
                     String serverIp = tvBoxSSDPInfo.getServerIp();
                     String hotelId = tvBoxSSDPInfo.getHotelId();
+                    if(mSession.getHotelid() == 0) {
+                        int id = 0;
+                        try {
+                            id = Integer.valueOf(hotelId);
+                            mSession.setHotelid(id);
+                        }catch (Exception e){}
+                    }
                     String url = "http://"+serverIp+":8080";
                     AppApi.getHotelRoomList(SplashActivity.this,url,hotelId,SplashActivity.this);
                     requsetPool.add(tvBoxSSDPInfo);

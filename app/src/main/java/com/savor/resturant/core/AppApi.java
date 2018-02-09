@@ -20,8 +20,8 @@ public class AppApi {
     public static final String APK_DOWNLOAD_FILENAME = "NewApp.apk";
 
     /**云平台php接口*/
-  public static final String CLOUND_PLATFORM_PHP_URL = "http://devp.mobile.littlehotspot.com/";
-// public static final String CLOUND_PLATFORM_PHP_URL = "http://mobile.littlehotspot.com/";
+//  public static final String CLOUND_PLATFORM_PHP_URL = "http://devp.mobile.littlehotspot.com/";
+ public static final String CLOUND_PLATFORM_PHP_URL = "http://mobile.littlehotspot.com/";
 
     /**
      * 常用的一些key值 ,签名、时间戳、token、params
@@ -917,7 +917,7 @@ public class AppApi {
         final HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("customer_id", customer_id);
         params.put("invite_id", invite_id);
-        params.put("max_id", max_id);
+//        params.put("max_id", max_id);
         params.put("min_id", min_id);
         params.put("mobile", mobile);
         params.put("type", type);
