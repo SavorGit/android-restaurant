@@ -62,7 +62,7 @@
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:paddingBottom="20dp"
-            android:text="选择或输入客人信息后，可以进行标签管理" />
+            android:text="请记录客人喜好，方便下次为TA服务" />
     </FrameLayout>
 
 </LinearLayout>

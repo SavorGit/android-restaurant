@@ -260,6 +260,11 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         if(!TextUtils.isEmpty(birthplace)) {
             mBirthPlaceEt.setText(birthplace);
         }
+
+        String bill_info = list.getBill_info();
+        if(!TextUtils.isEmpty(bill_info)) {
+            mTicketInfoEt.setText(bill_info);
+        }
     }
 
     @Override
