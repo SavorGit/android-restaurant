@@ -80,7 +80,7 @@ public class WelComeSetTextNewActivity extends BaseActivity implements View.OnCl
             String word = mSession.getKeyWordBean().getKeyWord();
             if (!TextUtils.isEmpty(word)) {
                 t1.setText(word);
-                greeting.setText(word);
+                //greeting.setText(word);
                 t0.setVisibility(View.VISIBLE);
             }else {
                 t0.setVisibility(View.VISIBLE);
